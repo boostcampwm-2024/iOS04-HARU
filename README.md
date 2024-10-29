@@ -22,5 +22,5 @@
 | 건강한 코드를 써내는<br>개발자가 되고싶습니다. | 지는거에요?<br>이겨. | 디버깅 다 해줬잖아. | 정상화... 해야겠지? |
 | iOS | iOS | iOS | iOS |
 
-|🏷️ 바로가기|[Wiki](https://github.com/boostcampwm-2024/iOS04-HARU/Wiki)|[팀 노션](https://kyxxn.notion.site/iOS10-12c9adb32626806c900ad008c85e7dcc?pvs=4)|[그라운드 룰](https://github.com/boostcampwm-2024/iOS04HARU/wiki/그라운드-룰)|[컨벤션](https://github.com/boostcampwm-2024/iOS04HARU/wiki/컨벤션)|[회의록](https://www.notion.so/0hooni/05cb406cd61f460ba7294ae3ffa31f7e)|[기획/디자인]()|
+|🏷️ 바로가기|[Wiki](https://github.com/boostcampwm-2024/iOS04-HARU/wiki)|[팀 노션](https://kyxxn.notion.site/iOS10-12c9adb32626806c900ad008c85e7dcc?pvs=4)|[그라운드 룰](https://github.com/boostcampwm-2024/iOS04-HARU/wiki/그라운드-룰)|[컨벤션](https://github.com/boostcampwm-2024/iOS04-HARU/wiki/컨벤션)|[회의록](https://www.notion.so/0hooni/05cb406cd61f460ba7294ae3ffa31f7e)|[기획/디자인]()|
 |:-:|:-:|:-:|:-:|:-:|:-:|:--:|
