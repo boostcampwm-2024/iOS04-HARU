@@ -1,7 +1,5 @@
-# 🌙 하루(HARU)
-> How About Remembering Ur day
->
-> 당신의 하루를 되새겨보세요.
+# 📷 포토게더 - For Together
+> 멀리 떨어진 친구들과 실시간으로 함께 찍고 함께 편집하는 사진 촬영 앱
 
 
 #### 팀원 소개
