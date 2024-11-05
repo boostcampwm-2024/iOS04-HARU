@@ -54,14 +54,38 @@
 		60CB81F92CDA450D00873DD6 /* PhotoGether */ = {
 			isa = PBXGroup;
 			children = (
-				60CB81F22CDA450D00873DD6 /* AppDelegate.swift */,
+				60CB82032CDA499600873DD6 /* App */,
+				60CB82012CDA48D900873DD6 /* Resource */,
+				60CB82002CDA48CE00873DD6 /* Source */,
+			);
+			path = PhotoGether;
+			sourceTree = "<group>";
+		};
+		60CB82002CDA48CE00873DD6 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				60CB81F82CDA450D00873DD6 /* ViewController.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		60CB82012CDA48D900873DD6 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
 				60CB81F32CDA450D00873DD6 /* Assets.xcassets */,
 				60CB81F42CDA450D00873DD6 /* Info.plist */,
 				60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */,
-				60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */,
-				60CB81F82CDA450D00873DD6 /* ViewController.swift */,
 			);
-			path = PhotoGether;
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		60CB82032CDA499600873DD6 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				60CB81F22CDA450D00873DD6 /* AppDelegate.swift */,
+				60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,7 +190,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PhotoGether/Info.plist;
+				INFOPLIST_FILE = PhotoGether/Resource/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -199,7 +223,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PhotoGether/Info.plist;
+				INFOPLIST_FILE = PhotoGether/Resource/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
