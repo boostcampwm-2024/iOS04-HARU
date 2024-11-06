@@ -1,6 +1,8 @@
 import UIKit
+import BaseFeature
+import Combine
 
-public class PhotoRoomViewController: UIViewController {
+public class PhotoRoomViewController: BaseViewController {
     public init() {
         super.init(nibName: nil, bundle: nil)
     }

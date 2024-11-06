@@ -17,6 +17,9 @@
       location = "group:SharePhotoFeature/SharePhotoFeature.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:BaseFeature/BaseFeature.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:FeatureTesting/FeatureTesting.xcodeproj">
    </FileRef>
    <FileRef
