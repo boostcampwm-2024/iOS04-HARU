@@ -20,6 +20,8 @@
 		7B5951532CDB600100B89C85 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951512CDB600100B89C85 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B59517B2CDB62A600B89C85 /* PresentationUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */; };
 		7B59517C2CDB62A600B89C85 /* PresentationUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7B5951D22CDB664300B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */; };
+		7B5951D32CDB664300B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				7B5951D32CDB664300B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				7B5951532CDB600100B89C85 /* BaseFeature.framework in Embed Frameworks */,
 				7B59517C2CDB62A600B89C85 /* PresentationUtility.framework in Embed Frameworks */,
 			);
@@ -71,6 +74,7 @@
 		7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951512CDB600100B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B5951D22CDB664300B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				7B5951522CDB600100B89C85 /* BaseFeature.framework in Frameworks */,
 				7B59517B2CDB62A600B89C85 /* PresentationUtility.framework in Frameworks */,
 			);
@@ -161,6 +166,7 @@
 		055503C32CDB5608004D34EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */,
 				7B5951512CDB600100B89C85 /* BaseFeature.framework */,
 				7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */,
