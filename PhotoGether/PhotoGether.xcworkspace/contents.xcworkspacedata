@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:PresentationUtility/PresentationUtility.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:PhotoGether.xcodeproj">
    </FileRef>
    <FileRef
