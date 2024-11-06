@@ -13,4 +13,7 @@
    <FileRef
       location = "group:EditPhotoRoomFeature/EditPhotoRoomFeature.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:SharePhotoFeature/SharePhotoFeature.xcodeproj">
+   </FileRef>
 </Workspace>
