@@ -13,7 +13,7 @@
 		60CB824C2CDA4BBC00873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB82412CDA4BBC00873DD6 /* LaunchScreen.storyboard */; };
 		60CB824F2CDA4BDB00873DD6 /* PhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */; };
 		60CB82502CDA4BDB00873DD6 /* PhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		60CB82542CDA4C6E00873DD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82222CDA4B7F00873DD6 /* ViewController.swift */; };
+		60CB82542CDA4C6E00873DD6 /* PhotoRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82222CDA4B7F00873DD6 /* PhotoRoomViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +42,7 @@
 
 /* Begin PBXFileReference section */
 		60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		60CB82222CDA4B7F00873DD6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		60CB82222CDA4B7F00873DD6 /* PhotoRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoRoomViewController.swift; sourceTree = "<group>"; };
 		60CB82282CDA4BB000873DD6 /* PhotoRoomFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoRoomFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB823D2CDA4BBC00873DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60CB823E2CDA4BBC00873DD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -100,7 +100,7 @@
 		60CB82232CDA4B7F00873DD6 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				60CB82222CDA4B7F00873DD6 /* ViewController.swift */,
+				60CB82222CDA4B7F00873DD6 /* PhotoRoomViewController.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -256,7 +256,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB82542CDA4C6E00873DD6 /* ViewController.swift in Sources */,
+				60CB82542CDA4C6E00873DD6 /* PhotoRoomViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

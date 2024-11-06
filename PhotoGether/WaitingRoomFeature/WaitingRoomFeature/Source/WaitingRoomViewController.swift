@@ -1,6 +1,6 @@
 import UIKit
 
-public class ViewController: UIViewController {
+public class WaitingRoomViewController: UIViewController {
     public init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -11,6 +11,6 @@ public class ViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        view.backgroundColor = .green
     }
 }
