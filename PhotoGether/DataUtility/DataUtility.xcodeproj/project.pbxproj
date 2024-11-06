@@ -6,93 +6,50 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		60CB83372CDB9DF600873DD6 /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB83362CDB9DEA00873DD6 /* Temp.swift */; };
-		60CB833A2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */; };
-		60CB833B2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		60EB7BBB2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */; };
-		60EB7BBC2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		60F77C1F2CDB9FAC002630F0 /* DataUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */; };
-		60F77C202CDB9FAC002630F0 /* DataUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-/* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		60CB833C2CDB9E1700873DD6 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				60CB833B2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
-				60EB7BBC2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Embed Frameworks */,
-				60F77C202CDB9FAC002630F0 /* DataUtility.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		60CB832A2CDB9DB300873DD6 /* PhotoGetherData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		60CB83362CDB9DEA00873DD6 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
-		60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60F77C092CDB9F8A002630F0 /* DataUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60F77C222CDBA01C002630F0 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		60CB83272CDB9DB300873DD6 /* Frameworks */ = {
+		60F77C062CDB9F8A002630F0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB833A2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Frameworks */,
-				60EB7BBB2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Frameworks */,
-				60F77C1F2CDB9FAC002630F0 /* DataUtility.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		60CB83202CDB9DB300873DD6 = {
+		60F77BFF2CDB9F8A002630F0 = {
 			isa = PBXGroup;
 			children = (
-				60CB83352CDB9DD700873DD6 /* PhotoGetherData */,
-				60CB83382CDB9E1700873DD6 /* Frameworks */,
-				60CB832B2CDB9DB300873DD6 /* Products */,
+				60F77C172CDB9F95002630F0 /* DataUtility */,
+				60F77C0A2CDB9F8A002630F0 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		60CB832B2CDB9DB300873DD6 /* Products */ = {
+		60F77C0A2CDB9F8A002630F0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				60CB832A2CDB9DB300873DD6 /* PhotoGetherData.framework */,
+				60F77C092CDB9F8A002630F0 /* DataUtility.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		60CB83352CDB9DD700873DD6 /* PhotoGetherData */ = {
+		60F77C172CDB9F95002630F0 /* DataUtility */ = {
 			isa = PBXGroup;
 			children = (
-				60CB83362CDB9DEA00873DD6 /* Temp.swift */,
+				60F77C222CDBA01C002630F0 /* Temp.swift */,
 			);
-			path = PhotoGetherData;
-			sourceTree = "<group>";
-		};
-		60CB83382CDB9E1700873DD6 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */,
-				60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */,
-				60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */,
-			);
-			name = Frameworks;
+			path = DataUtility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		60CB83252CDB9DB300873DD6 /* Headers */ = {
+		60F77C042CDB9F8A002630F0 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -102,62 +59,62 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		60CB83292CDB9DB300873DD6 /* PhotoGetherData */ = {
+		60F77C082CDB9F8A002630F0 /* DataUtility */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 60CB83302CDB9DB400873DD6 /* Build configuration list for PBXNativeTarget "PhotoGetherData" */;
+			buildConfigurationList = 60F77C0F2CDB9F8A002630F0 /* Build configuration list for PBXNativeTarget "DataUtility" */;
 			buildPhases = (
-				60CB83252CDB9DB300873DD6 /* Headers */,
-				60CB83262CDB9DB300873DD6 /* Sources */,
-				60CB83272CDB9DB300873DD6 /* Frameworks */,
-				60CB83282CDB9DB300873DD6 /* Resources */,
-				60CB833C2CDB9E1700873DD6 /* Embed Frameworks */,
+				60F77C042CDB9F8A002630F0 /* Headers */,
+				60F77C052CDB9F8A002630F0 /* Sources */,
+				60F77C062CDB9F8A002630F0 /* Frameworks */,
+				60F77C072CDB9F8A002630F0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = PhotoGetherData;
+			name = DataUtility;
 			packageProductDependencies = (
 			);
-			productName = PhotoGetherData;
-			productReference = 60CB832A2CDB9DB300873DD6 /* PhotoGetherData.framework */;
+			productName = DataUtility;
+			productReference = 60F77C092CDB9F8A002630F0 /* DataUtility.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		60CB83212CDB9DB300873DD6 /* Project object */ = {
+		60F77C002CDB9F8A002630F0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
-					60CB83292CDB9DB300873DD6 = {
+					60F77C082CDB9F8A002630F0 = {
 						CreatedOnToolsVersion = 16.0;
+						LastSwiftMigration = 1600;
 					};
 				};
 			};
-			buildConfigurationList = 60CB83242CDB9DB300873DD6 /* Build configuration list for PBXProject "PhotoGetherData" */;
+			buildConfigurationList = 60F77C032CDB9F8A002630F0 /* Build configuration list for PBXProject "DataUtility" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 60CB83202CDB9DB300873DD6;
+			mainGroup = 60F77BFF2CDB9F8A002630F0;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 60CB832B2CDB9DB300873DD6 /* Products */;
+			productRefGroup = 60F77C0A2CDB9F8A002630F0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				60CB83292CDB9DB300873DD6 /* PhotoGetherData */,
+				60F77C082CDB9F8A002630F0 /* DataUtility */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		60CB83282CDB9DB300873DD6 /* Resources */ = {
+		60F77C072CDB9F8A002630F0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -167,21 +124,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		60CB83262CDB9DB300873DD6 /* Sources */ = {
+		60F77C052CDB9F8A002630F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB83372CDB9DF600873DD6 /* Temp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		60CB83312CDB9DB400873DD6 /* Debug */ = {
+		60F77C102CDB9F8A002630F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -202,7 +159,7 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.PhotoGetherData;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.DataUtility;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -211,15 +168,17 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-		60CB83322CDB9DB400873DD6 /* Release */ = {
+		60F77C112CDB9F8A002630F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -240,7 +199,7 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.PhotoGetherData;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.DataUtility;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -254,7 +213,7 @@
 			};
 			name = Release;
 		};
-		60CB83332CDB9DB400873DD6 /* Debug */ = {
+		60F77C122CDB9F8A002630F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -320,7 +279,7 @@
 			};
 			name = Debug;
 		};
-		60CB83342CDB9DB400873DD6 /* Release */ = {
+		60F77C132CDB9F8A002630F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -382,25 +341,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		60CB83242CDB9DB300873DD6 /* Build configuration list for PBXProject "PhotoGetherData" */ = {
+		60F77C032CDB9F8A002630F0 /* Build configuration list for PBXProject "DataUtility" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				60CB83332CDB9DB400873DD6 /* Debug */,
-				60CB83342CDB9DB400873DD6 /* Release */,
+				60F77C122CDB9F8A002630F0 /* Debug */,
+				60F77C132CDB9F8A002630F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		60CB83302CDB9DB400873DD6 /* Build configuration list for PBXNativeTarget "PhotoGetherData" */ = {
+		60F77C0F2CDB9F8A002630F0 /* Build configuration list for PBXNativeTarget "DataUtility" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				60CB83312CDB9DB400873DD6 /* Debug */,
-				60CB83322CDB9DB400873DD6 /* Release */,
+				60F77C102CDB9F8A002630F0 /* Debug */,
+				60F77C112CDB9F8A002630F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 60CB83212CDB9DB300873DD6 /* Project object */;
+	rootObject = 60F77C002CDB9F8A002630F0 /* Project object */;
 }

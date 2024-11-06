@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:DataUtility/DataUtility.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:PhotoGetherNetwork/PhotoGetherNetwork.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:PhotoGetherData/PhotoGetherData.xcodeproj">
    </FileRef>
    <FileRef
