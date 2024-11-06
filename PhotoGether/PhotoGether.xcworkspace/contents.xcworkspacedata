@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:FeatureTesting/FeatureTesting.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:PhotoGether.xcodeproj">
    </FileRef>
    <FileRef
@@ -18,5 +15,11 @@
    </FileRef>
    <FileRef
       location = "group:SharePhotoFeature/SharePhotoFeature.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:FeatureTesting/FeatureTesting.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:DesignSystem/DesignSystem.xcodeproj">
    </FileRef>
 </Workspace>
