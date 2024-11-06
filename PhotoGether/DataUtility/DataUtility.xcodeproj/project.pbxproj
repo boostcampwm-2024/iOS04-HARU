@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7B0318C22CDBA9A10026C613 /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F77C222CDBA01C002630F0 /* Temp.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		60F77C092CDB9F8A002630F0 /* DataUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60F77C222CDBA01C002630F0 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B0318C22CDBA9A10026C613 /* Temp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

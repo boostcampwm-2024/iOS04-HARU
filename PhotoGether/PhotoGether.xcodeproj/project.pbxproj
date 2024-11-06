@@ -96,6 +96,7 @@
 			buildConfigurationList = 60CB81ED2CDA442900873DD6 /* Build configuration list for PBXNativeTarget "PhotoGether" */;
 			buildPhases = (
 				60CB81D62CDA442700873DD6 /* Sources */,
+				7B0318C02CDBA6FF0026C613 /* SwiftLint */,
 				60CB81D72CDA442700873DD6 /* Frameworks */,
 				60CB81D82CDA442700873DD6 /* Resources */,
 			);
@@ -134,6 +135,9 @@
 			);
 			mainGroup = 60CB81D12CDA442700873DD6;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60CB81DB2CDA442700873DD6 /* Products */;
 			projectDirPath = "";
@@ -155,6 +159,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7B0318C02CDBA6FF0026C613 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Scripts/SwiftLintRunScript.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		60CB81D62CDA442700873DD6 /* Sources */ = {
@@ -189,6 +214,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoGether/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "포토게더";
@@ -223,6 +250,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoGether/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "포토게더";
@@ -392,6 +421,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.57.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 60CB81D22CDA442700873DD6 /* Project object */;
 }

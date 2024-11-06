@@ -1,0 +1,30 @@
+# .swiftlint.yml
+
+# 일반적인 설정
+opt_in_rules:
+  # 강제 언래핑 시 경고
+  - force_unwrapping
+
+# 강제 캐스팅 시 경고
+force_cast:
+    warning
+
+# 강제 try 시 경고
+force_try:
+    warning
+
+disabled_rules:
+  - trailing_whitespace
+  - file_length
+
+# 중괄호 앞 띄어쓰기 안할 시 경고
+opening_brace:
+  severity: warning # 명시적으로 선언
+
+# 2연속 줄바꿈 제한
+vertical_whitespace:
+  severity: warning
+
+# 코드 글자 수 한 줄당 120자 제한
+line_length:
+  warning: 120
