@@ -11,8 +11,8 @@
 		60CB82482CDA4BBC00873DD6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82442CDA4BBC00873DD6 /* SceneDelegate.swift */; };
 		60CB824A2CDA4BBC00873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB823E2CDA4BBC00873DD6 /* Assets.xcassets */; };
 		60CB824C2CDA4BBC00873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB82412CDA4BBC00873DD6 /* LaunchScreen.storyboard */; };
-		60CB824F2CDA4BDB00873DD6 /* CameraFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB820E2CDA4B5E00873DD6 /* CameraFeature.framework */; };
-		60CB82502CDA4BDB00873DD6 /* CameraFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB820E2CDA4B5E00873DD6 /* CameraFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60CB824F2CDA4BDB00873DD6 /* PhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */; };
+		60CB82502CDA4BDB00873DD6 /* PhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60CB82542CDA4C6E00873DD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82222CDA4B7F00873DD6 /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,7 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				60CB82502CDA4BDB00873DD6 /* CameraFeature.framework in Embed Frameworks */,
+				60CB82502CDA4BDB00873DD6 /* PhotoRoomFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,9 +41,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		60CB820E2CDA4B5E00873DD6 /* CameraFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CameraFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB82222CDA4B7F00873DD6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		60CB82282CDA4BB000873DD6 /* CameraFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		60CB82282CDA4BB000873DD6 /* PhotoRoomFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoRoomFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB823D2CDA4BBC00873DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60CB823E2CDA4BBC00873DD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		60CB823F2CDA4BBC00873DD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB824F2CDA4BDB00873DD6 /* CameraFeature.framework in Frameworks */,
+				60CB824F2CDA4BDB00873DD6 /* PhotoRoomFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,8 +73,8 @@
 		60CB82042CDA4B5E00873DD6 = {
 			isa = PBXGroup;
 			children = (
-				60CB821C2CDA4B7800873DD6 /* CameraFeature */,
-				60CB82462CDA4BBC00873DD6 /* CameraFeatureDemo */,
+				60CB821C2CDA4B7800873DD6 /* PhotoRoomFeature */,
+				60CB82462CDA4BBC00873DD6 /* PhotoRoomFeatureDemo */,
 				60CB824E2CDA4BDB00873DD6 /* Frameworks */,
 				60CB820F2CDA4B5E00873DD6 /* Products */,
 			);
@@ -83,18 +83,18 @@
 		60CB820F2CDA4B5E00873DD6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				60CB820E2CDA4B5E00873DD6 /* CameraFeature.framework */,
-				60CB82282CDA4BB000873DD6 /* CameraFeatureDemo.app */,
+				60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */,
+				60CB82282CDA4BB000873DD6 /* PhotoRoomFeatureDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		60CB821C2CDA4B7800873DD6 /* CameraFeature */ = {
+		60CB821C2CDA4B7800873DD6 /* PhotoRoomFeature */ = {
 			isa = PBXGroup;
 			children = (
 				60CB82232CDA4B7F00873DD6 /* Source */,
 			);
-			path = CameraFeature;
+			path = PhotoRoomFeature;
 			sourceTree = "<group>";
 		};
 		60CB82232CDA4B7F00873DD6 /* Source */ = {
@@ -105,13 +105,13 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		60CB82462CDA4BBC00873DD6 /* CameraFeatureDemo */ = {
+		60CB82462CDA4BBC00873DD6 /* PhotoRoomFeatureDemo */ = {
 			isa = PBXGroup;
 			children = (
 				60CB82562CDA4DAE00873DD6 /* App */,
 				60CB82552CDA4DA200873DD6 /* Resource */,
 			);
-			path = CameraFeatureDemo;
+			path = PhotoRoomFeatureDemo;
 			sourceTree = "<group>";
 		};
 		60CB824E2CDA4BDB00873DD6 /* Frameworks */ = {
@@ -153,9 +153,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		60CB820D2CDA4B5E00873DD6 /* CameraFeature */ = {
+		60CB820D2CDA4B5E00873DD6 /* PhotoRoomFeature */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 60CB82142CDA4B5E00873DD6 /* Build configuration list for PBXNativeTarget "CameraFeature" */;
+			buildConfigurationList = 60CB82142CDA4B5E00873DD6 /* Build configuration list for PBXNativeTarget "PhotoRoomFeature" */;
 			buildPhases = (
 				60CB82092CDA4B5E00873DD6 /* Headers */,
 				60CB820A2CDA4B5E00873DD6 /* Sources */,
@@ -166,16 +166,16 @@
 			);
 			dependencies = (
 			);
-			name = CameraFeature;
+			name = PhotoRoomFeature;
 			packageProductDependencies = (
 			);
 			productName = CameraFeature;
-			productReference = 60CB820E2CDA4B5E00873DD6 /* CameraFeature.framework */;
+			productReference = 60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		60CB82272CDA4BB000873DD6 /* CameraFeatureDemo */ = {
+		60CB82272CDA4BB000873DD6 /* PhotoRoomFeatureDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 60CB823A2CDA4BB100873DD6 /* Build configuration list for PBXNativeTarget "CameraFeatureDemo" */;
+			buildConfigurationList = 60CB823A2CDA4BB100873DD6 /* Build configuration list for PBXNativeTarget "PhotoRoomFeatureDemo" */;
 			buildPhases = (
 				60CB82242CDA4BB000873DD6 /* Sources */,
 				60CB82252CDA4BB000873DD6 /* Frameworks */,
@@ -187,11 +187,11 @@
 			dependencies = (
 				60CB82522CDA4BDB00873DD6 /* PBXTargetDependency */,
 			);
-			name = CameraFeatureDemo;
+			name = PhotoRoomFeatureDemo;
 			packageProductDependencies = (
 			);
 			productName = CameraFeatureDemo;
-			productReference = 60CB82282CDA4BB000873DD6 /* CameraFeatureDemo.app */;
+			productReference = 60CB82282CDA4BB000873DD6 /* PhotoRoomFeatureDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -212,7 +212,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 60CB82082CDA4B5E00873DD6 /* Build configuration list for PBXProject "CameraFeature" */;
+			buildConfigurationList = 60CB82082CDA4B5E00873DD6 /* Build configuration list for PBXProject "PhotoRoomFeature" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -226,8 +226,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				60CB820D2CDA4B5E00873DD6 /* CameraFeature */,
-				60CB82272CDA4BB000873DD6 /* CameraFeatureDemo */,
+				60CB820D2CDA4B5E00873DD6 /* PhotoRoomFeature */,
+				60CB82272CDA4BB000873DD6 /* PhotoRoomFeatureDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -274,7 +274,7 @@
 /* Begin PBXTargetDependency section */
 		60CB82522CDA4BDB00873DD6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 60CB820D2CDA4B5E00873DD6 /* CameraFeature */;
+			target = 60CB820D2CDA4B5E00873DD6 /* PhotoRoomFeature */;
 			targetProxy = 60CB82512CDA4BDB00873DD6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -306,6 +306,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -317,10 +318,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.CameraFeature;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -339,6 +344,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -350,10 +356,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.CameraFeature;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -491,7 +501,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CameraFeatureDemo/Resource/Info.plist;
+				INFOPLIST_FILE = PhotoRoomFeatureDemo/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -523,7 +533,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CameraFeatureDemo/Resource/Info.plist;
+				INFOPLIST_FILE = PhotoRoomFeatureDemo/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -549,7 +559,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		60CB82082CDA4B5E00873DD6 /* Build configuration list for PBXProject "CameraFeature" */ = {
+		60CB82082CDA4B5E00873DD6 /* Build configuration list for PBXProject "PhotoRoomFeature" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				60CB82172CDA4B5E00873DD6 /* Debug */,
@@ -558,7 +568,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		60CB82142CDA4B5E00873DD6 /* Build configuration list for PBXNativeTarget "CameraFeature" */ = {
+		60CB82142CDA4B5E00873DD6 /* Build configuration list for PBXNativeTarget "PhotoRoomFeature" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				60CB82152CDA4B5E00873DD6 /* Debug */,
@@ -567,7 +577,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		60CB823A2CDA4BB100873DD6 /* Build configuration list for PBXNativeTarget "CameraFeatureDemo" */ = {
+		60CB823A2CDA4BB100873DD6 /* Build configuration list for PBXNativeTarget "PhotoRoomFeatureDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				60CB823B2CDA4BB100873DD6 /* Debug */,

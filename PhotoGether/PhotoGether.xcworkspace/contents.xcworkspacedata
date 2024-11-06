@@ -5,6 +5,6 @@
       location = "group:PhotoGether.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:CameraFeature/CameraFeature.xcodeproj">
+      location = "group:CameraFeature/PhotoRoomFeature.xcodeproj">
    </FileRef>
 </Workspace>

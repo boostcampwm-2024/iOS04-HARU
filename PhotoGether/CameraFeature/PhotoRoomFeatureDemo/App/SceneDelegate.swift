@@ -1,5 +1,5 @@
 import UIKit
-import CameraFeature
+import PhotoRoomFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
