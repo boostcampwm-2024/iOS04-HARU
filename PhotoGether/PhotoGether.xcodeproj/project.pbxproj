@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		053985F62CDCA03F00E709AC /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 053985F52CDCA03F00E709AC /* Secrets.xcconfig */; };
 		60CB81FA2CDA450D00873DD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F22CDA450D00873DD6 /* AppDelegate.swift */; };
 		60CB81FB2CDA450D00873DD6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */; };
 		60CB81FC2CDA450D00873DD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F82CDA450D00873DD6 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		053985F52CDCA03F00E709AC /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		60CB81DA2CDA442700873DD6 /* PhotoGether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoGether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB81F22CDA450D00873DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60CB81F32CDA450D00873DD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				60CB81F32CDA450D00873DD6 /* Assets.xcassets */,
 				60CB81F42CDA450D00873DD6 /* Info.plist */,
 				60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */,
+				053985F52CDCA03F00E709AC /* Secrets.xcconfig */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 			files = (
 				60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */,
 				60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */,
+				053985F62CDCA03F00E709AC /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +288,7 @@
 		};
 		60CB81F02CDA442900873DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 053985F52CDCA03F00E709AC /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -348,6 +353,7 @@
 		};
 		60CB81F12CDA442900873DD6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 053985F52CDCA03F00E709AC /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

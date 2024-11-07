@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		60EB7BB92CDB9ED000018E94 /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EB7BB72CDB9ED000018E94 /* Temp.swift */; };
+		053985F22CDC9DFB00E709AC /* WebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985F12CDC9DFB00E709AC /* WebSocketClient.swift */; };
+		053985F42CDC9E7700E709AC /* WebSocketProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985F32CDC9E7700E709AC /* WebSocketProviderDelegate.swift */; };
 		60F77C1B2CDB9FA1002630F0 /* DataUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; };
 		60F77C1C2CDB9FA1002630F0 /* DataUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -27,8 +28,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		053985F12CDC9DFB00E709AC /* WebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClient.swift; sourceTree = "<group>"; };
+		053985F32CDC9E7700E709AC /* WebSocketProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketProviderDelegate.swift; sourceTree = "<group>"; };
 		60EB7BAA2CDB9EBD00018E94 /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		60EB7BB72CDB9ED000018E94 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
 		60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -64,7 +66,8 @@
 		60EB7BB82CDB9ED000018E94 /* PhotoGetherNetwork */ = {
 			isa = PBXGroup;
 			children = (
-				60EB7BB72CDB9ED000018E94 /* Temp.swift */,
+				053985F32CDC9E7700E709AC /* WebSocketProviderDelegate.swift */,
+				053985F12CDC9DFB00E709AC /* WebSocketClient.swift */,
 			);
 			path = PhotoGetherNetwork;
 			sourceTree = "<group>";
@@ -160,7 +163,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60EB7BB92CDB9ED000018E94 /* Temp.swift in Sources */,
+				053985F42CDC9E7700E709AC /* WebSocketProviderDelegate.swift in Sources */,
+				053985F22CDC9DFB00E709AC /* WebSocketClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
