@@ -12,6 +12,7 @@
 		60CB81FC2CDA450D00873DD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F82CDA450D00873DD6 /* ViewController.swift */; };
 		60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F32CDA450D00873DD6 /* Assets.xcassets */; };
 		60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */; };
+		7B031B142CDC79F40026C613 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B031B132CDC79F40026C613 /* WebRTC */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B031B142CDC79F40026C613 /* WebRTC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +108,7 @@
 			);
 			name = PhotoGether;
 			packageProductDependencies = (
+				7B031B132CDC79F40026C613 /* WebRTC */,
 			);
 			productName = PhotoGether;
 			productReference = 60CB81DA2CDA442700873DD6 /* PhotoGether.app */;
@@ -137,6 +140,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				7B031B122CDC79F40026C613 /* XCRemoteSwiftPackageReference "WebRTC" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60CB81DB2CDA442700873DD6 /* Products */;
@@ -431,7 +435,23 @@
 				minimumVersion = 0.57.0;
 			};
 		};
+		7B031B122CDC79F40026C613 /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 130.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7B031B132CDC79F40026C613 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7B031B122CDC79F40026C613 /* XCRemoteSwiftPackageReference "WebRTC" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 60CB81D22CDA442700873DD6 /* Project object */;
 }
