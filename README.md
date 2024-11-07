@@ -1,6 +1,7 @@
 # 📷 포토게더 - For Together
 > 멀리 떨어진 친구들과 실시간으로 함께 찍고 편집하는 사진 촬영 앱
 
+![목업 배너](https://github.com/user-attachments/assets/c743749b-a16f-4673-921e-3ac335a80e30)
 
 #### 팀원 소개
 
