@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "PhotoGetherServer",
     platforms: [
-       .macOS(.v13)
+        .macOS(.v13), .iOS(.v16)
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
