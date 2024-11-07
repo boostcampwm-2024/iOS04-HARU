@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		053985F22CDC9DFB00E709AC /* WebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985F12CDC9DFB00E709AC /* WebSocketClient.swift */; };
 		053985F42CDC9E7700E709AC /* WebSocketClientDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985F32CDC9E7700E709AC /* WebSocketClientDelegate.swift */; };
+		053985F82CDCA4E100E709AC /* SignalingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985F72CDCA4E100E709AC /* SignalingClient.swift */; };
 		60F77C1B2CDB9FA1002630F0 /* DataUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; };
 		60F77C1C2CDB9FA1002630F0 /* DataUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		053985F12CDC9DFB00E709AC /* WebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClient.swift; sourceTree = "<group>"; };
 		053985F32CDC9E7700E709AC /* WebSocketClientDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClientDelegate.swift; sourceTree = "<group>"; };
+		053985F72CDCA4E100E709AC /* SignalingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClient.swift; sourceTree = "<group>"; };
 		60EB7BAA2CDB9EBD00018E94 /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -66,6 +68,7 @@
 		60EB7BB82CDB9ED000018E94 /* PhotoGetherNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				053985F72CDCA4E100E709AC /* SignalingClient.swift */,
 				053985F32CDC9E7700E709AC /* WebSocketClientDelegate.swift */,
 				053985F12CDC9DFB00E709AC /* WebSocketClient.swift */,
 			);
@@ -164,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				053985F42CDC9E7700E709AC /* WebSocketClientDelegate.swift in Sources */,
+				053985F82CDCA4E100E709AC /* SignalingClient.swift in Sources */,
 				053985F22CDC9DFB00E709AC /* WebSocketClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
