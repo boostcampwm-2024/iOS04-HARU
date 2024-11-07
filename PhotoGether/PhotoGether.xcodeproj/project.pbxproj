@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		053985F62CDCA03F00E709AC /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 053985F52CDCA03F00E709AC /* Secrets.xcconfig */; };
 		053986052CDCAC3000E709AC /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */; };
 		053986062CDCAC3000E709AC /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60CB81FA2CDA450D00873DD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F22CDA450D00873DD6 /* AppDelegate.swift */; };
@@ -16,6 +15,7 @@
 		60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F32CDA450D00873DD6 /* Assets.xcassets */; };
 		60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */; };
 		7B031B142CDC79F40026C613 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B031B132CDC79F40026C613 /* WebRTC */; };
+		7B031B372CDCDC920026C613 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7B031B362CDCDC920026C613 /* Secrets.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,7 +33,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		053985F52CDCA03F00E709AC /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB81DA2CDA442700873DD6 /* PhotoGether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoGether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB81F22CDA450D00873DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +41,7 @@
 		60CB81F52CDA450D00873DD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		60CB81F82CDA450D00873DD6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7B031B362CDCDC920026C613 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +106,7 @@
 				60CB81F32CDA450D00873DD6 /* Assets.xcassets */,
 				60CB81F42CDA450D00873DD6 /* Info.plist */,
 				60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */,
-				053985F52CDCA03F00E709AC /* Secrets.xcconfig */,
+				7B031B362CDCDC920026C613 /* Secrets.xcconfig */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -188,9 +188,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B031B372CDCDC920026C613 /* Secrets.xcconfig in Resources */,
 				60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */,
 				60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */,
-				053985F62CDCA03F00E709AC /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +316,6 @@
 		};
 		60CB81F02CDA442900873DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 053985F52CDCA03F00E709AC /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -381,7 +380,6 @@
 		};
 		60CB81F12CDA442900873DD6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 053985F52CDCA03F00E709AC /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
