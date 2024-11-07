@@ -7,8 +7,8 @@ public final class WebSocketClient: NSObject {
     
     init(url: URL) {
         self.url = url
-        
     }
+    
     func connect() {
         let urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         let socket = urlSession.webSocketTask(with: url)
