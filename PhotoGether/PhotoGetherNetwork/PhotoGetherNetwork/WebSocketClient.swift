@@ -5,11 +5,11 @@ public final class WebSocketClient: NSObject {
     private let url: URL
     private var socket: URLSessionWebSocketTask?
     
-    init(url: URL) {
+    public init(url: URL) {
         self.url = url
     }
     
-    func connect() {
+    public func connect() {
         let urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         let socket = urlSession.webSocketTask(with: url)
         socket.resume()
@@ -17,7 +17,7 @@ public final class WebSocketClient: NSObject {
         self.readMessage()
     }
     
-    func send(data: Data) {
+    public func send(data: Data) {
         self.socket?.send(.data(data)) { _ in }
     }
     
@@ -29,6 +29,7 @@ public final class WebSocketClient: NSObject {
             case .success(.data(let data)):
                 self.delegate?.webSocket(self, didReceiveData: data)
                 self.readMessage()
+                print("hello")
                 
             case .success:
                 debugPrint("Warning: Expected to receive data format but received a string. Check the websocket server config.")

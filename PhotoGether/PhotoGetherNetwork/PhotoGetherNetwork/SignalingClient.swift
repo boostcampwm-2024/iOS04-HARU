@@ -1,29 +1,29 @@
 import Foundation
 import WebRTC
 
-protocol SignalClientDelegate: AnyObject {
+public protocol SignalClientDelegate: AnyObject {
     func signalClientDidConnect(_ signalClient: SignalingClient)
     func signalClientDidDisconnect(_ signalClient: SignalingClient)
     func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription)
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate)
 }
 
-final class SignalingClient {
+final public class SignalingClient {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     private let webSocket: WebSocketClient
-    weak var delegate: SignalClientDelegate?
+    public weak var delegate: SignalClientDelegate?
     
-    init(webSocket: WebSocketClient) {
+    public init(webSocket: WebSocketClient) {
         self.webSocket = webSocket
     }
     
-    func connect() {
+    public func connect() {
         self.webSocket.delegate = self
         self.webSocket.connect()
     }
     
-    func send(sdp rtcSdp: RTCSessionDescription) {
+    public func send(sdp rtcSdp: RTCSessionDescription) {
         let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp))
         do {
             let dataMessage = try self.encoder.encode(message)
@@ -35,7 +35,7 @@ final class SignalingClient {
         }
     }
     
-    func send(candidate rtcIceCandidate: RTCIceCandidate) {
+    public func send(candidate rtcIceCandidate: RTCIceCandidate) {
         let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate))
         do {
             let dataMessage = try self.encoder.encode(message)
@@ -48,11 +48,11 @@ final class SignalingClient {
 }
 
 extension SignalingClient: WebSocketClientDelegate {
-    func webSocketDidConnect(_ webSocket: WebSocketClient) {
+    public func webSocketDidConnect(_ webSocket: WebSocketClient) {
         self.delegate?.signalClientDidConnect(self)
     }
     
-    func webSocketDidDisconnect(_ webSocket: WebSocketClient) {
+    public func webSocketDidDisconnect(_ webSocket: WebSocketClient) {
         self.delegate?.signalClientDidDisconnect(self)
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
@@ -61,7 +61,7 @@ extension SignalingClient: WebSocketClientDelegate {
         }
     }
     
-    func webSocket(_ webSocket: WebSocketClient, didReceiveData data: Data) {
+    public func webSocket(_ webSocket: WebSocketClient, didReceiveData data: Data) {
         let message: SignalingMessage
         
         do {
