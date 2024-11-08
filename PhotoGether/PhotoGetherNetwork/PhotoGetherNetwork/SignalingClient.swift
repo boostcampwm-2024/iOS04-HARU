@@ -1,13 +1,6 @@
 import Foundation
 import WebRTC
 
-public protocol SignalClientDelegate: AnyObject {
-    func signalClientDidConnect(_ signalClient: SignalingClient)
-    func signalClientDidDisconnect(_ signalClient: SignalingClient)
-    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription)
-    func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate)
-}
-
 final public class SignalingClient {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
@@ -27,10 +20,8 @@ final public class SignalingClient {
         let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp))
         do {
             let dataMessage = try self.encoder.encode(message)
-            
             self.webSocket.send(data: dataMessage)
-        }
-        catch {
+        } catch {
             debugPrint("Warning: Could not encode sdp: \(error)")
         }
     }
@@ -40,8 +31,7 @@ final public class SignalingClient {
         do {
             let dataMessage = try self.encoder.encode(message)
             self.webSocket.send(data: dataMessage)
-        }
-        catch {
+        } catch {
             debugPrint("Warning: Could not encode candidate: \(error)")
         }
     }
@@ -63,11 +53,9 @@ extension SignalingClient: WebSocketClientDelegate {
     
     public func webSocket(_ webSocket: WebSocketClient, didReceiveData data: Data) {
         let message: SignalingMessage
-        
         do {
             message = try self.decoder.decode(SignalingMessage.self, from: data)
-        }
-        catch {
+        } catch {
             debugPrint("Warning: Could not decode incoming message: \(error)")
             return
         }

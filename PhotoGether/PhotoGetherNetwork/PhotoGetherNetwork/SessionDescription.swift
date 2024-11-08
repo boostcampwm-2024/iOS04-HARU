@@ -1,7 +1,7 @@
 import Foundation
 import WebRTC
 
-enum SdpType: String, Codable {
+public enum SdpType: String, Codable {
     case offer, prAnswer, answer, rollback
     
     var rtcSdpType: RTCSdpType {
@@ -14,7 +14,7 @@ enum SdpType: String, Codable {
     }
 }
 
-struct SessionDescription: Codable {
+public struct SessionDescription: Codable {
     let sdp: String
     let type: SdpType
     
