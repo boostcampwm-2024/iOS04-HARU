@@ -13,11 +13,9 @@ func routes(_ app: Application) throws {
         // 클라이언트로부터 데이터를 수신할 때 호출
         client.onBinary { client, data in
             print("Received binary data of size: \(data.readableBytes)")
-            connectedClients.forEach { connection in
-                if connection !== client {
-                    connection.send(data)
-                }
-            }
+            connectedClients
+                .filter { $0 !== client }
+                .forEach { $0.send(data) }
         }
 
         // 클라이언트가 연결을 종료할 때 호출
