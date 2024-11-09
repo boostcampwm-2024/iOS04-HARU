@@ -8,51 +8,51 @@
       location = "group:DataLayer"
       name = "DataLayer">
       <FileRef
-         location = "group:../PhotoGetherNetwork/PhotoGetherNetwork.xcodeproj">
+         location = "group:PhotoGetherNetwork/PhotoGetherNetwork.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../DataUtility/DataUtility.xcodeproj">
+         location = "group:DataUtility/DataUtility.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../PhotoGetherData/PhotoGetherData.xcodeproj">
+         location = "group:PhotoGetherData/PhotoGetherData.xcodeproj">
       </FileRef>
    </Group>
    <Group
       location = "group:DomainLayer"
       name = "DomainLayer">
       <FileRef
-         location = "group:../DomainUtility/DomainUtility.xcodeproj">
+         location = "group:DomainUtility/DomainUtility.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../PhotoGetherDomain/PhotoGetherDomain.xcodeproj">
+         location = "group:PhotoGetherDomain/PhotoGetherDomain.xcodeproj">
       </FileRef>
    </Group>
    <Group
       location = "group:PresentationLayer"
       name = "PresentationLayer">
       <FileRef
-         location = "group:../BaseFeature/BaseFeature.xcodeproj">
+         location = "group:BaseFeature/BaseFeature.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../WaitingRoomFeature/WaitingRoomFeature.xcodeproj">
+         location = "group:WaitingRoomFeature/WaitingRoomFeature.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../PhotoRoomFeature/PhotoRoomFeature.xcodeproj">
+         location = "group:PhotoRoomFeature/PhotoRoomFeature.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../EditPhotoRoomFeature/EditPhotoRoomFeature.xcodeproj">
+         location = "group:EditPhotoRoomFeature/EditPhotoRoomFeature.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../SharePhotoFeature/SharePhotoFeature.xcodeproj">
+         location = "group:SharePhotoFeature/SharePhotoFeature.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../FeatureTesting/FeatureTesting.xcodeproj">
+         location = "group:FeatureTesting/FeatureTesting.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../DesignSystem/DesignSystem.xcodeproj">
+         location = "group:DesignSystem/DesignSystem.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:../PresentationUtility/PresentationUtility.xcodeproj">
+         location = "group:PresentationUtility/PresentationUtility.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>
