@@ -12,6 +12,7 @@
 		60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */; };
 		60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E062CE1E87000A5C26D /* UIImage+.swift */; };
 		60F33E132CE1ED6400A5C26D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60F33E122CE1ED6400A5C26D /* SnapKit */; };
+		60F33E152CE21EFA00A5C26D /* PTGMicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E142CE21EFA00A5C26D /* PTGMicButton.swift */; };
 		7B59512B2CDB5BB500B89C85 /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +21,7 @@
 		05F6467C2CE2062A00694897 /* PTGPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGPrimaryButton.swift; sourceTree = "<group>"; };
 		60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGGrayButton.swift; sourceTree = "<group>"; };
 		60F33E062CE1E87000A5C26D /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
+		60F33E142CE21EFA00A5C26D /* PTGMicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGMicButton.swift; sourceTree = "<group>"; };
 		7B59511B2CDB5A7000B89C85 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignSystem.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,6 +57,7 @@
 		7B5951262CDB5A7700B89C85 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				60F33E142CE21EFA00A5C26D /* PTGMicButton.swift */,
 				60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */,
 				05A7EFCB2CE1FF0C00DAEAAA /* PTGCircleButton.swift */,
 				05F6467C2CE2062A00694897 /* PTGPrimaryButton.swift */,
@@ -163,6 +166,7 @@
 				05A7EFCC2CE1FF0C00DAEAAA /* PTGCircleButton.swift in Sources */,
 				60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */,
 				60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */,
+				60F33E152CE21EFA00A5C26D /* PTGMicButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
