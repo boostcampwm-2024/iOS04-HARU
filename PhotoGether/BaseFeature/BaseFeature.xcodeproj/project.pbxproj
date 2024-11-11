@@ -7,10 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60F33E1B2CE22DAE00A5C26D /* UIControl+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E1A2CE22DAE00A5C26D /* UIControl+Publisher.swift */; };
+		60F33E1D2CE22DB900A5C26D /* UIButton+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E1C2CE22DB900A5C26D /* UIButton+Publisher.swift */; };
 		7B5951552CDB601900B89C85 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951442CDB5E7100B89C85 /* BaseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		60F33E1A2CE22DAE00A5C26D /* UIControl+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Publisher.swift"; sourceTree = "<group>"; };
+		60F33E1C2CE22DB900A5C26D /* UIButton+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Publisher.swift"; sourceTree = "<group>"; };
 		7B5951382CDB5E5500B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951442CDB5E7100B89C85 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -26,9 +30,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60F33E192CE22D8B00A5C26D /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				60F33E1A2CE22DAE00A5C26D /* UIControl+Publisher.swift */,
+				60F33E1C2CE22DB900A5C26D /* UIButton+Publisher.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		7B59512E2CDB5E5500B89C85 = {
 			isa = PBXGroup;
 			children = (
+				60F33E192CE22D8B00A5C26D /* Extension */,
 				7B5951432CDB5E6E00B89C85 /* BaseFeature */,
 				7B5951392CDB5E5500B89C85 /* Products */,
 			);
@@ -131,6 +145,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60F33E1B2CE22DAE00A5C26D /* UIControl+Publisher.swift in Sources */,
+				60F33E1D2CE22DB900A5C26D /* UIButton+Publisher.swift in Sources */,
 				7B5951552CDB601900B89C85 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,6 +169,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -164,10 +181,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.BaseFeature;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -186,6 +207,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -197,10 +219,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.BaseFeature;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
