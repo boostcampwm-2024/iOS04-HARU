@@ -8,14 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */; };
-		60F33E072CE1E87000A5C26D /* PTGIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E062CE1E87000A5C26D /* PTGIcon.swift */; };
+		60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E062CE1E87000A5C26D /* UIImage+.swift */; };
 		60F33E132CE1ED6400A5C26D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60F33E122CE1ED6400A5C26D /* SnapKit */; };
 		7B59512B2CDB5BB500B89C85 /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGGrayButton.swift; sourceTree = "<group>"; };
-		60F33E062CE1E87000A5C26D /* PTGIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGIcon.swift; sourceTree = "<group>"; };
+		60F33E062CE1E87000A5C26D /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		7B59511B2CDB5A7000B89C85 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignSystem.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,7 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */,
-				60F33E062CE1E87000A5C26D /* PTGIcon.swift */,
+				60F33E062CE1E87000A5C26D /* UIImage+.swift */,
 				7B5951292CDB5AA700B89C85 /* Resource */,
 			);
 			path = DesignSystem;
@@ -153,7 +153,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60F33E072CE1E87000A5C26D /* PTGIcon.swift in Sources */,
+				60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */,
 				60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
