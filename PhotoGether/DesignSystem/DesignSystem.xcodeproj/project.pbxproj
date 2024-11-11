@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05A7EFCC2CE1FF0C00DAEAAA /* PTGCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A7EFCB2CE1FF0C00DAEAAA /* PTGCircleButton.swift */; };
 		60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */; };
 		60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E062CE1E87000A5C26D /* UIImage+.swift */; };
 		60F33E132CE1ED6400A5C26D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60F33E122CE1ED6400A5C26D /* SnapKit */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05A7EFCB2CE1FF0C00DAEAAA /* PTGCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCircleButton.swift; sourceTree = "<group>"; };
 		60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGGrayButton.swift; sourceTree = "<group>"; };
 		60F33E062CE1E87000A5C26D /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		7B59511B2CDB5A7000B89C85 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */,
+				05A7EFCB2CE1FF0C00DAEAAA /* PTGCircleButton.swift */,
 				60F33E062CE1E87000A5C26D /* UIImage+.swift */,
 				7B5951292CDB5AA700B89C85 /* Resource */,
 			);
@@ -153,6 +156,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05A7EFCC2CE1FF0C00DAEAAA /* PTGCircleButton.swift in Sources */,
 				60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */,
 				60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */,
 			);
@@ -164,7 +168,7 @@
 		7B5951222CDB5A7000B89C85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -204,7 +208,7 @@
 		7B5951232CDB5A7000B89C85 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
