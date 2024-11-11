@@ -38,7 +38,7 @@ public final class PTGCircleButton: UIButton {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        self.layer.cornerRadius = self.bounds.width / 2
+        layer.cornerRadius = bounds.width / 2
     }
 }
 
