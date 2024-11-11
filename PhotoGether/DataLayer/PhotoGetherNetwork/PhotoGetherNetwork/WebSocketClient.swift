@@ -29,10 +29,9 @@ public final class WebSocketClient: NSObject {
             case .success(.data(let data)):
                 self.delegate?.webSocket(self, didReceiveData: data)
                 self.readMessage()
-                print("hello")
                 
             case .success:
-                debugPrint("Warning: Expected to receive data format but received a string. Check the websocket server config.")
+                debugPrint("데이터 형식이 맞지 않습니다.")
                 self.readMessage()
 
             case .failure:
@@ -48,12 +47,21 @@ public final class WebSocketClient: NSObject {
     }
 }
 
-extension WebSocketClient: URLSessionWebSocketDelegate, URLSessionDelegate  {
-    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+extension WebSocketClient: URLSessionWebSocketDelegate, URLSessionDelegate {
+    public func urlSession(
+        _ session: URLSession,
+        webSocketTask: URLSessionWebSocketTask,
+        didOpenWithProtocol protocol: String?
+    ) {
         self.delegate?.webSocketDidConnect(self)
     }
     
-    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+    public func urlSession(
+        _ session: URLSession,
+        webSocketTask: URLSessionWebSocketTask,
+        didCloseWith closeCode: URLSessionWebSocketTask.CloseCode,
+        reason: Data?
+    ) {
         self.disconnect()
     }
 }
