@@ -1,7 +1,7 @@
 import UIKit
 import SnapKit
 
-public class PTGGrayButton: UIButton {
+public final class PTGGrayButton: UIButton {
     private let type: PTGGrayButtonType
     private let stackView = UIStackView()
     private let grayButtonImage = UIImageView()
