@@ -4,23 +4,23 @@ import WebRTC
 final public class SignalingClient {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
-    private let webSocket: WebSocketClient
-    public weak var delegate: SignalClientDelegate?
+    private let webSocketClient: WebSocketClient
+    public weak var delegate: SignalingClientDelegate?
     
-    public init(webSocket: WebSocketClient) {
-        self.webSocket = webSocket
+    public init(webSocketClient: WebSocketClient) {
+        self.webSocketClient = webSocketClient
     }
     
     public func connect() {
-        self.webSocket.delegate = self
-        self.webSocket.connect()
+        self.webSocketClient.delegate = self
+        self.webSocketClient.connect()
     }
     
     public func send(sdp rtcSdp: RTCSessionDescription) {
         let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp))
         do {
             let dataMessage = try self.encoder.encode(message)
-            self.webSocket.send(data: dataMessage)
+            self.webSocketClient.send(data: dataMessage)
         } catch {
             debugPrint("Warning: Could not encode sdp: \(error)")
         }
@@ -30,7 +30,7 @@ final public class SignalingClient {
         let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate))
         do {
             let dataMessage = try self.encoder.encode(message)
-            self.webSocket.send(data: dataMessage)
+            self.webSocketClient.send(data: dataMessage)
         } catch {
             debugPrint("Warning: Could not encode candidate: \(error)")
         }
@@ -46,8 +46,8 @@ extension SignalingClient: WebSocketClientDelegate {
         self.delegate?.signalClientDidDisconnect(self)
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            debugPrint("Trying to reconnect to signaling server...")
-            self.webSocket.connect()
+            debugPrint("Signaling server 재연결 시도 중...")
+            self.webSocketClient.connect()
         }
     }
     
@@ -56,7 +56,7 @@ extension SignalingClient: WebSocketClientDelegate {
         do {
             message = try self.decoder.decode(SignalingMessage.self, from: data)
         } catch {
-            debugPrint("Warning: Could not decode incoming message: \(error)")
+            debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(error)")
             return
         }
         

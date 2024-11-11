@@ -13,7 +13,7 @@ public final class WebRTCClient: NSObject {
     }()
     
     weak var delegate: WebRTCClientDelegate?
-    private let peerConnection: RTCPeerConnection
+    let peerConnection: RTCPeerConnection
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
     private let mediaConstraints = [
         kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
@@ -95,6 +95,10 @@ extension WebRTCClient {
     
     func set(remoteSdp: RTCSessionDescription, completion: @escaping (Error?) -> Void) {
         self.peerConnection.setRemoteDescription(remoteSdp, completionHandler: completion)
+    }
+    
+    func set(localSdp: RTCSessionDescription, completion: @escaping (Error?) -> Void) {
+        self.peerConnection.setLocalDescription(localSdp, completionHandler: completion)
     }
     
     func set(remoteCandidate: RTCIceCandidate, completion: @escaping (Error?) -> Void) {
@@ -267,7 +271,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
         _ peerConnection: RTCPeerConnection,
         didGenerate candidate: RTCIceCandidate
     ) {
-        self.delegate?.webRTCClient(self, didDiscoverLocalCandidate: candidate)
+        self.delegate?.webRTCClient(self, didGenerateLocalCandidate: candidate)
     }
     
     public func peerConnection(
