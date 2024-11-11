@@ -7,13 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7B5951282CDB5A9500B89C85 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951272CDB5A7B00B89C85 /* Untitled.swift */; };
+		60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */; };
+		60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E062CE1E87000A5C26D /* UIImage+.swift */; };
+		60F33E132CE1ED6400A5C26D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60F33E122CE1ED6400A5C26D /* SnapKit */; };
 		7B59512B2CDB5BB500B89C85 /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGGrayButton.swift; sourceTree = "<group>"; };
+		60F33E062CE1E87000A5C26D /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		7B59511B2CDB5A7000B89C85 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B5951272CDB5A7B00B89C85 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 		7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignSystem.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -22,6 +25,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60F33E132CE1ED6400A5C26D /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,7 +51,8 @@
 		7B5951262CDB5A7700B89C85 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				7B5951272CDB5A7B00B89C85 /* Untitled.swift */,
+				60F33DFB2CE1A91300A5C26D /* PTGGrayButton.swift */,
+				60F33E062CE1E87000A5C26D /* UIImage+.swift */,
 				7B5951292CDB5AA700B89C85 /* Resource */,
 			);
 			path = DesignSystem;
@@ -89,6 +94,7 @@
 			);
 			name = DesignSystem;
 			packageProductDependencies = (
+				60F33E122CE1ED6400A5C26D /* SnapKit */,
 			);
 			productName = DesignSystem;
 			productReference = 7B59511B2CDB5A7000B89C85 /* DesignSystem.framework */;
@@ -105,6 +111,7 @@
 				TargetAttributes = {
 					7B59511A2CDB5A7000B89C85 = {
 						CreatedOnToolsVersion = 16.0;
+						LastSwiftMigration = 1600;
 					};
 				};
 			};
@@ -117,6 +124,9 @@
 			);
 			mainGroup = 7B5951112CDB5A7000B89C85;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				60F33E112CE1ED6400A5C26D /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7B59511C2CDB5A7000B89C85 /* Products */;
 			projectDirPath = "";
@@ -143,7 +153,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B5951282CDB5A9500B89C85 /* Untitled.swift in Sources */,
+				60F33E072CE1E87000A5C26D /* UIImage+.swift in Sources */,
+				60F33DFC2CE1A91300A5C26D /* PTGGrayButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +165,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -165,6 +177,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -176,10 +189,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.DesignSystem;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -187,6 +205,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -198,6 +217,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -209,10 +229,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.DesignSystem;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -363,6 +387,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		60F33E112CE1ED6400A5C26D /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		60F33E122CE1ED6400A5C26D /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60F33E112CE1ED6400A5C26D /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7B5951122CDB5A7000B89C85 /* Project object */;
 }
