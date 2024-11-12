@@ -23,6 +23,7 @@
 		7BB6408D2CE336620090E35C /* SessionDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640802CE335370090E35C /* SessionDescription.swift */; };
 		7BB6408E2CE3366A0090E35C /* IceCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640812CE335370090E35C /* IceCandidate.swift */; };
 		7BB6408F2CE336740090E35C /* SignalingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640822CE335370090E35C /* SignalingMessage.swift */; };
+		7BB640912CE337270090E35C /* WebSocketCilent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640902CE336E00090E35C /* WebSocketCilent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,7 @@
 		7BB640862CE335480090E35C /* SignalingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClient.swift; sourceTree = "<group>"; };
 		7BB640872CE335480090E35C /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
 		7BB6408A2CE335590090E35C /* WebSocketClientDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClientDelegate.swift; sourceTree = "<group>"; };
+		7BB640902CE336E00090E35C /* WebSocketCilent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketCilent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 		7B5951B82CDB653E00B89C85 /* PhotoGetherDomainInterface */ = {
 			isa = PBXGroup;
 			children = (
+				7BB640902CE336E00090E35C /* WebSocketCilent.swift */,
 				7BB6408C2CE335CC0090E35C /* Protocol */,
 				7BB6407F2CE3352C0090E35C /* Model */,
 			);
@@ -360,6 +363,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BB640912CE337270090E35C /* WebSocketCilent.swift in Sources */,
 				7BB6407D2CE3330C0090E35C /* WebRTCClientDelegate.swift in Sources */,
 				7BB6407E2CE3330C0090E35C /* SignalingClientDelegate.swift in Sources */,
 				7BB6408B2CE335590090E35C /* WebSocketClientDelegate.swift in Sources */,
