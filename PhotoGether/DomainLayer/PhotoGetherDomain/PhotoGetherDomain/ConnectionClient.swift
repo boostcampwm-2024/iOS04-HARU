@@ -1,5 +1,6 @@
 import Foundation
 import WebRTC
+import PhotoGetherDomainInterface
 
 public final class ConnectionClient {
     private let signalClient: SignalingClient

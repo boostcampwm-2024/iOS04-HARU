@@ -1,5 +1,6 @@
 import Foundation
 import WebRTC
+import PhotoGetherDomainInterface
 
 public final class WebRTCClient: NSObject {
     private static let peerConnectionFactory: RTCPeerConnectionFactory = {
