@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		053DC8512CE32A8800DC9F35 /* EditPhotoHostBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053DC8502CE32A8800DC9F35 /* EditPhotoHostBottomView.swift */; };
+		053DC8532CE32AE900DC9F35 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; };
+		053DC8542CE32AE900DC9F35 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60CB829B2CDB509200873DD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82912CDB509200873DD6 /* AppDelegate.swift */; };
 		60CB829C2CDB509200873DD6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82982CDB509200873DD6 /* SceneDelegate.swift */; };
 		60CB829E2CDB509200873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB82922CDB509200873DD6 /* Assets.xcassets */; };
 		60CB82A02CDB509200873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB82952CDB509200873DD6 /* LaunchScreen.storyboard */; };
-		60CB82A62CDB519500873DD6 /* EditPhotoRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82A42CDB514F00873DD6 /* EditPhotoRoomViewController.swift */; };
+		60CB82A62CDB519500873DD6 /* EditPhotoRoomHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */; };
 		60CB82A82CDB522900873DD6 /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; };
 		60CB82A92CDB522900873DD6 /* EditPhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B59510C2CDB598600B89C85 /* FeatureTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510B2CDB598600B89C85 /* FeatureTesting.framework */; };
@@ -54,6 +57,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7B5951D02CDB658400B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
+				053DC8542CE32AE900DC9F35 /* DesignSystem.framework in Embed Frameworks */,
 				7B59514F2CDB5FFC00B89C85 /* BaseFeature.framework in Embed Frameworks */,
 				7B5951792CDB62A200B89C85 /* PresentationUtility.framework in Embed Frameworks */,
 			);
@@ -63,6 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		053DC8502CE32A8800DC9F35 /* EditPhotoHostBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoHostBottomView.swift; sourceTree = "<group>"; };
+		053DC8522CE32AE900DC9F35 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EditPhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB827C2CDB508C00873DD6 /* EditPhotoRoomFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EditPhotoRoomFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB82912CDB509200873DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -70,7 +76,7 @@
 		60CB82932CDB509200873DD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60CB82942CDB509200873DD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60CB82982CDB509200873DD6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		60CB82A42CDB514F00873DD6 /* EditPhotoRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoRoomViewController.swift; sourceTree = "<group>"; };
+		60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoRoomHostViewController.swift; sourceTree = "<group>"; };
 		7B59510B2CDB598600B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59514D2CDB5FFC00B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951772CDB62A200B89C85 /* PresentationUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B5951CF2CDB658400B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
+				053DC8532CE32AE900DC9F35 /* DesignSystem.framework in Frameworks */,
 				7B59514E2CDB5FFC00B89C85 /* BaseFeature.framework in Frameworks */,
 				7B5951782CDB62A200B89C85 /* PresentationUtility.framework in Frameworks */,
 			);
@@ -158,7 +165,8 @@
 		60CB82A52CDB514F00873DD6 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				60CB82A42CDB514F00873DD6 /* EditPhotoRoomViewController.swift */,
+				60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */,
+				053DC8502CE32A8800DC9F35 /* EditPhotoHostBottomView.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -166,6 +174,7 @@
 		60CB82A72CDB522900873DD6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				053DC8522CE32AE900DC9F35 /* DesignSystem.framework */,
 				7B5951CE2CDB658400B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B5951772CDB62A200B89C85 /* PresentationUtility.framework */,
 				7B59514D2CDB5FFC00B89C85 /* BaseFeature.framework */,
@@ -291,7 +300,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB82A62CDB519500873DD6 /* EditPhotoRoomViewController.swift in Sources */,
+				053DC8512CE32A8800DC9F35 /* EditPhotoHostBottomView.swift in Sources */,
+				60CB82A62CDB519500873DD6 /* EditPhotoRoomHostViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +339,7 @@
 		60CB82682CDB4FC500873DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -367,7 +377,7 @@
 		60CB82692CDB4FC500873DD6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
