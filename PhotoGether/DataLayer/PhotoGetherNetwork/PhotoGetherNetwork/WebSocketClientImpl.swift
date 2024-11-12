@@ -1,6 +1,7 @@
 import Foundation
+import PhotoGetherDomainInterface
 
-public final class WebSocketClient: NSObject {
+public final class WebSocketClientImpl: NSObject, WebSocketClient {
     public var delegate: WebSocketClientDelegate?
     private let url: URL
     private var socket: URLSessionWebSocketTask?
@@ -47,7 +48,7 @@ public final class WebSocketClient: NSObject {
     }
 }
 
-extension WebSocketClient: URLSessionWebSocketDelegate, URLSessionDelegate {
+extension WebSocketClientImpl: URLSessionWebSocketDelegate, URLSessionDelegate {
     public func urlSession(
         _ session: URLSession,
         webSocketTask: URLSessionWebSocketTask,
