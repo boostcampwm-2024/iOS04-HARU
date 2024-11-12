@@ -18,8 +18,6 @@
 		7B59510A2CDB597D00B89C85 /* FeatureTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951082CDB597D00B89C85 /* FeatureTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B59514A2CDB5FF700B89C85 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951492CDB5FF700B89C85 /* BaseFeature.framework */; };
 		7B59514B2CDB5FF700B89C85 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951492CDB5FF700B89C85 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7B5951752CDB629F00B89C85 /* PresentationUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951742CDB629F00B89C85 /* PresentationUtility.framework */; };
-		7B5951762CDB629F00B89C85 /* PresentationUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951742CDB629F00B89C85 /* PresentationUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951CC2CDB657500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951CB2CDB657500B89C85 /* PhotoGetherDomainInterface.framework */; };
 		7B5951CD2CDB657500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951CB2CDB657500B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -55,7 +53,6 @@
 			files = (
 				7B5951CD2CDB657500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				7B59514B2CDB5FF700B89C85 /* BaseFeature.framework in Embed Frameworks */,
-				7B5951762CDB629F00B89C85 /* PresentationUtility.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,7 +81,6 @@
 			files = (
 				7B5951CC2CDB657500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				7B59514A2CDB5FF700B89C85 /* BaseFeature.framework in Frameworks */,
-				7B5951752CDB629F00B89C85 /* PresentationUtility.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

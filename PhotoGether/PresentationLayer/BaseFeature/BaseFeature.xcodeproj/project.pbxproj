@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		60F33E1B2CE22DAE00A5C26D /* UIControl+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E1A2CE22DAE00A5C26D /* UIControl+Publisher.swift */; };
-		60F33E1D2CE22DB900A5C26D /* UIButton+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F33E1C2CE22DB900A5C26D /* UIButton+Publisher.swift */; };
+		7B1745422CE350DE00E01D1A /* UIButton+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17453F2CE350DE00E01D1A /* UIButton+Publisher.swift */; };
+		7B1745432CE350DE00E01D1A /* UIControl+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1745402CE350DE00E01D1A /* UIControl+Publisher.swift */; };
 		7B5951552CDB601900B89C85 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951442CDB5E7100B89C85 /* BaseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		60F33E1A2CE22DAE00A5C26D /* UIControl+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Publisher.swift"; sourceTree = "<group>"; };
-		60F33E1C2CE22DB900A5C26D /* UIButton+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Publisher.swift"; sourceTree = "<group>"; };
+		7B17453F2CE350DE00E01D1A /* UIButton+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Publisher.swift"; sourceTree = "<group>"; };
+		7B1745402CE350DE00E01D1A /* UIControl+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Publisher.swift"; sourceTree = "<group>"; };
 		7B5951382CDB5E5500B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951442CDB5E7100B89C85 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -30,11 +30,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		60F33E192CE22D8B00A5C26D /* Extension */ = {
+		7B1745412CE350DE00E01D1A /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				60F33E1A2CE22DAE00A5C26D /* UIControl+Publisher.swift */,
-				60F33E1C2CE22DB900A5C26D /* UIButton+Publisher.swift */,
+				7B17453F2CE350DE00E01D1A /* UIButton+Publisher.swift */,
+				7B1745402CE350DE00E01D1A /* UIControl+Publisher.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -42,7 +42,6 @@
 		7B59512E2CDB5E5500B89C85 = {
 			isa = PBXGroup;
 			children = (
-				60F33E192CE22D8B00A5C26D /* Extension */,
 				7B5951432CDB5E6E00B89C85 /* BaseFeature */,
 				7B5951392CDB5E5500B89C85 /* Products */,
 			);
@@ -59,6 +58,7 @@
 		7B5951432CDB5E6E00B89C85 /* BaseFeature */ = {
 			isa = PBXGroup;
 			children = (
+				7B1745412CE350DE00E01D1A /* Extension */,
 				7B5951442CDB5E7100B89C85 /* BaseViewController.swift */,
 			);
 			path = BaseFeature;
@@ -145,8 +145,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60F33E1B2CE22DAE00A5C26D /* UIControl+Publisher.swift in Sources */,
-				60F33E1D2CE22DB900A5C26D /* UIButton+Publisher.swift in Sources */,
+				7B1745422CE350DE00E01D1A /* UIButton+Publisher.swift in Sources */,
+				7B1745432CE350DE00E01D1A /* UIControl+Publisher.swift in Sources */,
 				7B5951552CDB601900B89C85 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

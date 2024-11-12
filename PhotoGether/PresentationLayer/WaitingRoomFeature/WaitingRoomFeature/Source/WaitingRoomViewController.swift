@@ -1,5 +1,4 @@
 import UIKit
-import WebRTC
 
 // TODO: WebSocket에 접속한다
 // TODO: constraint를 지정해준다(비디오, 오디오)
