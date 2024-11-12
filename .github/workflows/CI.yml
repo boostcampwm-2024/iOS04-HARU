@@ -2,7 +2,7 @@ name: CI 🧐
 
 on:
   push:
-    branches: [ "develop", "main", "feature/#22-github-action-ci" ]
+    branches: [ "develop", "main"]
   pull_request:
     branches: [ "develop" ]
 
