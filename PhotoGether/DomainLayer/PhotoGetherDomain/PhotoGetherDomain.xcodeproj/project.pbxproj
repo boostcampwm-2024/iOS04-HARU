@@ -7,13 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7B5951942CDB64C900B89C85 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951932CDB64C200B89C85 /* Untitled.swift */; };
-		7B5951B92CDB653E00B89C85 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951B72CDB653E00B89C85 /* Untitled.swift */; };
+		05E553EA2CDB9C4A00B70645 /* DomainUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E553E92CDB9C4A00B70645 /* DomainUtility.framework */; };
+		05E553EB2CDB9C4A00B70645 /* DomainUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05E553E92CDB9C4A00B70645 /* DomainUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951BC2CDB654000B89C85 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951BA2CDB654000B89C85 /* Untitled.swift */; };
 		7B5951BE2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; };
 		7B5951BF2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951C32CDB655B00B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; };
 		7B5951C42CDB655B00B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7BB640702CE332AC0090E35C /* ConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB6406F2CE332AC0090E35C /* ConnectionClient.swift */; };
+		7BB6407D2CE3330C0090E35C /* WebRTCClientDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB6407C2CE3330C0090E35C /* WebRTCClientDelegate.swift */; };
+		7BB6407E2CE3330C0090E35C /* SignalingClientDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB6407B2CE3330C0090E35C /* SignalingClientDelegate.swift */; };
+		7BB640882CE335480090E35C /* SignalingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640862CE335480090E35C /* SignalingClient.swift */; };
+		7BB640892CE335480090E35C /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640872CE335480090E35C /* WebRTCClient.swift */; };
+		7BB6408B2CE335590090E35C /* WebSocketClientDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB6408A2CE335590090E35C /* WebSocketClientDelegate.swift */; };
+		7BB6408D2CE336620090E35C /* SessionDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640802CE335370090E35C /* SessionDescription.swift */; };
+		7BB6408E2CE3366A0090E35C /* IceCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640812CE335370090E35C /* IceCandidate.swift */; };
+		7BB6408F2CE336740090E35C /* SignalingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB640822CE335370090E35C /* SignalingMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,11 +70,18 @@
 /* Begin PBXFileReference section */
 		05E553E92CDB9C4A00B70645 /* DomainUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951872CDB647A00B89C85 /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B5951932CDB64C200B89C85 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 		7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951A72CDB64F800B89C85 /* PhotoGetherDomainTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherDomainTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B5951B72CDB653E00B89C85 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 		7B5951BA2CDB654000B89C85 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
+		7BB6406F2CE332AC0090E35C /* ConnectionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionClient.swift; sourceTree = "<group>"; };
+		7BB6407B2CE3330C0090E35C /* SignalingClientDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClientDelegate.swift; sourceTree = "<group>"; };
+		7BB6407C2CE3330C0090E35C /* WebRTCClientDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClientDelegate.swift; sourceTree = "<group>"; };
+		7BB640802CE335370090E35C /* SessionDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDescription.swift; sourceTree = "<group>"; };
+		7BB640812CE335370090E35C /* IceCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceCandidate.swift; sourceTree = "<group>"; };
+		7BB640822CE335370090E35C /* SignalingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingMessage.swift; sourceTree = "<group>"; };
+		7BB640862CE335480090E35C /* SignalingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClient.swift; sourceTree = "<group>"; };
+		7BB640872CE335480090E35C /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
+		7BB6408A2CE335590090E35C /* WebSocketClientDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClientDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +135,9 @@
 		7B5951922CDB648400B89C85 /* PhotoGetherDomain */ = {
 			isa = PBXGroup;
 			children = (
-				7B5951932CDB64C200B89C85 /* Untitled.swift */,
+				7BB6406F2CE332AC0090E35C /* ConnectionClient.swift */,
+				7BB640862CE335480090E35C /* SignalingClient.swift */,
+				7BB640872CE335480090E35C /* WebRTCClient.swift */,
 			);
 			path = PhotoGetherDomain;
 			sourceTree = "<group>";
@@ -127,7 +145,8 @@
 		7B5951B82CDB653E00B89C85 /* PhotoGetherDomainInterface */ = {
 			isa = PBXGroup;
 			children = (
-				7B5951B72CDB653E00B89C85 /* Untitled.swift */,
+				7BB6408C2CE335CC0090E35C /* Protocol */,
+				7BB6407F2CE3352C0090E35C /* Model */,
 			);
 			path = PhotoGetherDomainInterface;
 			sourceTree = "<group>";
@@ -146,6 +165,26 @@
 				05E553E92CDB9C4A00B70645 /* DomainUtility.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7BB6407F2CE3352C0090E35C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7BB640802CE335370090E35C /* SessionDescription.swift */,
+				7BB640812CE335370090E35C /* IceCandidate.swift */,
+				7BB640822CE335370090E35C /* SignalingMessage.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7BB6408C2CE335CC0090E35C /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				7BB6408A2CE335590090E35C /* WebSocketClientDelegate.swift */,
+				7BB6407B2CE3330C0090E35C /* SignalingClientDelegate.swift */,
+				7BB6407C2CE3330C0090E35C /* WebRTCClientDelegate.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,7 +350,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B5951942CDB64C900B89C85 /* Untitled.swift in Sources */,
+				7BB640882CE335480090E35C /* SignalingClient.swift in Sources */,
+				7BB640892CE335480090E35C /* WebRTCClient.swift in Sources */,
+				7BB640702CE332AC0090E35C /* ConnectionClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +360,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B5951B92CDB653E00B89C85 /* Untitled.swift in Sources */,
+				7BB6407D2CE3330C0090E35C /* WebRTCClientDelegate.swift in Sources */,
+				7BB6407E2CE3330C0090E35C /* SignalingClientDelegate.swift in Sources */,
+				7BB6408B2CE335590090E35C /* WebSocketClientDelegate.swift in Sources */,
+				7BB6408D2CE336620090E35C /* SessionDescription.swift in Sources */,
+				7BB6408F2CE336740090E35C /* SignalingMessage.swift in Sources */,
+				7BB6408E2CE3366A0090E35C /* IceCandidate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
