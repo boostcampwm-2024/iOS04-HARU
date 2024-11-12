@@ -90,6 +90,4 @@ extension ConnectionClient: WebRTCClientDelegate {
     ) {
         // TODO: 수신된 데이터를 처리하는 곳
     }
-    
-    
 }
