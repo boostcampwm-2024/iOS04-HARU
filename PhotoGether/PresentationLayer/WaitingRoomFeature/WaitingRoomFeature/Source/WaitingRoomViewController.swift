@@ -32,11 +32,6 @@ import WebRTC
 // NativeWebSocket(URLSessionWebSocketTask).send(URLSessionWebSocketTask.data) 해주고 끝난다
 
 public class WaitingRoomViewController: UIViewController {
-    private let mediaConstrains = [kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
-                                   kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue]
-    
-    
-    
     public init() {
         super.init(nibName: nil, bundle: nil)
     }
