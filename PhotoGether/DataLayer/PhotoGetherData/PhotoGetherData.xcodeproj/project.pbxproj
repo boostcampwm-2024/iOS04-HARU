@@ -12,8 +12,6 @@
 		60CB833B2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60EB7BBB2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */; };
 		60EB7BBC2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		60F77C1F2CDB9FAC002630F0 /* DataUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */; };
-		60F77C202CDB9FAC002630F0 /* DataUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,7 +23,6 @@
 			files = (
 				60CB833B2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				60EB7BBC2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Embed Frameworks */,
-				60F77C202CDB9FAC002630F0 /* DataUtility.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,7 +44,6 @@
 			files = (
 				60CB833A2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				60EB7BBB2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Frameworks */,
-				60F77C1F2CDB9FAC002630F0 /* DataUtility.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

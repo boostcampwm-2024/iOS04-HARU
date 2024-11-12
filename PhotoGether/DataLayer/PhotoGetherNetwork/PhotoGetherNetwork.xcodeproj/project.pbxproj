@@ -13,27 +13,11 @@
 		053985FA2CDCA54700E709AC /* SignalingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985F92CDCA54700E709AC /* SignalingMessage.swift */; };
 		053986012CDCA8DB00E709AC /* SessionDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985FF2CDCA8DB00E709AC /* SessionDescription.swift */; };
 		053986022CDCA8DB00E709AC /* IceCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053986002CDCA8DB00E709AC /* IceCandidate.swift */; };
-		60F77C1B2CDB9FA1002630F0 /* DataUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; };
-		60F77C1C2CDB9FA1002630F0 /* DataUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B031B392CDE34210026C613 /* SignalingClientDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B031B382CDE34210026C613 /* SignalingClientDelegate.swift */; };
 		7B031B3B2CDE34B00026C613 /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B031B3A2CDE34AB0026C613 /* WebRTCClient.swift */; };
 		7B031B3D2CDE34C10026C613 /* WebRTCClientDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B031B3C2CDE34C10026C613 /* WebRTCClientDelegate.swift */; };
 		7B41B45F2CE219CB008D8ADA /* ConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B41B45E2CE219AF008D8ADA /* ConnectionClient.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		60F77C1D2CDB9FA1002630F0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				60F77C1C2CDB9FA1002630F0 /* DataUtility.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		053985F12CDC9DFB00E709AC /* WebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClient.swift; sourceTree = "<group>"; };
@@ -55,7 +39,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60F77C1B2CDB9FA1002630F0 /* DataUtility.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,7 +108,6 @@
 				60EB7BA62CDB9EBD00018E94 /* Sources */,
 				60EB7BA72CDB9EBD00018E94 /* Frameworks */,
 				60EB7BA82CDB9EBD00018E94 /* Resources */,
-				60F77C1D2CDB9FA1002630F0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

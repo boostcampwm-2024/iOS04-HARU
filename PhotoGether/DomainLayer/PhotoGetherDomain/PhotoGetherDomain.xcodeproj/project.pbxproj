@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05E553EA2CDB9C4A00B70645 /* DomainUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E553E92CDB9C4A00B70645 /* DomainUtility.framework */; };
-		05E553EB2CDB9C4A00B70645 /* DomainUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05E553E92CDB9C4A00B70645 /* DomainUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951942CDB64C900B89C85 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951932CDB64C200B89C85 /* Untitled.swift */; };
 		7B5951B92CDB653E00B89C85 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951B72CDB653E00B89C85 /* Untitled.swift */; };
 		7B5951BC2CDB654000B89C85 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951BA2CDB654000B89C85 /* Untitled.swift */; };
@@ -43,7 +41,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7B5951BF2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
-				05E553EB2CDB9C4A00B70645 /* DomainUtility.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,7 +74,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B5951BE2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
-				05E553EA2CDB9C4A00B70645 /* DomainUtility.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
