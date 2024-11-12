@@ -20,7 +20,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let signalingClient = SignalingClient(webSocket: webSocketClient)
         
         signalingClient.connect()
-        
-        webSocketClient.send(data: Data("Hello, world!".utf8))
     }
 }
