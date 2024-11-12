@@ -45,7 +45,7 @@ public final class PTGGrayButton: UIButton {
         stackView.distribution = .equalSpacing
         stackView.spacing = 8
         
-        grayButtonImage.image = UIImage.load(name: type.image)
+        grayButtonImage.image = type.image
         grayButtonImage.contentMode = .scaleAspectFit
         grayButtonImage.tintColor = .white
         
@@ -69,12 +69,12 @@ public extension PTGGrayButton {
             }
         }
         
-        var image: String {
+        var image: UIImage {
             switch self {
             case .frame:
-                return "frameIcon"
+                return PTGImage.frameIcon.image
             case .sticker:
-                return "stickerIcon"
+                return PTGImage.stickerIcon.image
             }
         }
     }
