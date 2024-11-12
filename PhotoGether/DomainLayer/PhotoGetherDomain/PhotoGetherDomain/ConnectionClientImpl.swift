@@ -2,14 +2,14 @@ import Foundation
 import WebRTC
 import PhotoGetherDomainInterface
 
-public final class ConnectionClient {
-    private let signalClient: SignalingClient
-    private let webRTCClient: WebRTCClient
+public final class ConnectionClientImpl {
+    private let signalClient: SignalingClientImpl
+    private let webRTCClient: WebRTCClientImpl
     
     // TODO: 영상 정보
     // TODO: 음성 정보
     
-    public init(signalClient: SignalingClient, webRTCClient: WebRTCClient) {
+    public init(signalClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
         self.signalClient = signalClient
         self.webRTCClient = webRTCClient
         
@@ -30,7 +30,7 @@ public final class ConnectionClient {
     
 }
 
-extension ConnectionClient: SignalingClientDelegate {
+extension ConnectionClientImpl: SignalingClientDelegate {
     public func signalClientDidConnect(
         _ signalingClient: SignalingClient
     ) {
@@ -69,7 +69,7 @@ extension ConnectionClient: SignalingClientDelegate {
     }
 }
 
-extension ConnectionClient: WebRTCClientDelegate {
+extension ConnectionClientImpl: WebRTCClientDelegate {
     /// SDP 가 생성되면 LocalCandidate 가 생성되기 시작 (가능한 경로만큼 생성됨)
     public func webRTCClient(
         _ client: WebRTCClient,

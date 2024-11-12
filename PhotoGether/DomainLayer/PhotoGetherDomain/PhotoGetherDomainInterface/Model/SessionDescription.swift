@@ -4,7 +4,7 @@ import WebRTC
 public enum SdpType: String, Codable {
     case offer, prAnswer, answer, rollback
     
-    var rtcSdpType: RTCSdpType {
+    public var rtcSdpType: RTCSdpType {
         switch self {
         case .offer:    return .offer
         case .answer:   return .answer
@@ -15,10 +15,10 @@ public enum SdpType: String, Codable {
 }
 
 public struct SessionDescription: Codable {
-    let sdp: String
-    let type: SdpType
+    public let sdp: String
+    public let type: SdpType
     
-    init(from rtcSessionDescription: RTCSessionDescription) {
+    public init(from rtcSessionDescription: RTCSessionDescription) {
         self.sdp = rtcSessionDescription.sdp
         
         switch rtcSessionDescription.type {
@@ -31,7 +31,7 @@ public struct SessionDescription: Codable {
         }
     }
     
-    var rtcSessionDescription: RTCSessionDescription {
+    public var rtcSessionDescription: RTCSessionDescription {
         return RTCSessionDescription(type: self.type.rtcSdpType, sdp: self.sdp)
     }
 }

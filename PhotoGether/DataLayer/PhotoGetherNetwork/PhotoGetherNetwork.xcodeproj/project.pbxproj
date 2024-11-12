@@ -8,26 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		053985F22CDC9DFB00E709AC /* WebSocketClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053985F12CDC9DFB00E709AC /* WebSocketClientImpl.swift */; };
-		60F77C1B2CDB9FA1002630F0 /* DataUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; };
-		60F77C1C2CDB9FA1002630F0 /* DataUtility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60F77C1A2CDB9FA1002630F0 /* DataUtility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7BEDEC352CE33C7E00F107B9 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BEDEC342CE33C7E00F107B9 /* PhotoGetherDomainInterface.framework */; };
-		7BEDEC362CE33C7E00F107B9 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7BEDEC342CE33C7E00F107B9 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		60F77C1D2CDB9FA1002630F0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				7BEDEC362CE33C7E00F107B9 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
-				60F77C1C2CDB9FA1002630F0 /* DataUtility.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		053985F12CDC9DFB00E709AC /* WebSocketClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClientImpl.swift; sourceTree = "<group>"; };
@@ -42,7 +24,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BEDEC352CE33C7E00F107B9 /* PhotoGetherDomainInterface.framework in Frameworks */,
-				60F77C1B2CDB9FA1002630F0 /* DataUtility.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

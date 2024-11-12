@@ -1,12 +1,12 @@
 import Foundation
 
-enum SignalingMessage {
+public enum SignalingMessage {
     case sdp(SessionDescription)
     case candidate(IceCandidate)
 }
 
 extension SignalingMessage: Codable {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(String.self, forKey: .type)
         switch type {
@@ -19,7 +19,7 @@ extension SignalingMessage: Codable {
         }
     }
     
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .sdp(let sessionDescription):
@@ -31,7 +31,7 @@ extension SignalingMessage: Codable {
         }
     }
     
-    enum DecodeError: Error {
+    public enum DecodeError: Error {
         case unknownType
     }
     

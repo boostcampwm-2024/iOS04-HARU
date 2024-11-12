@@ -2,7 +2,7 @@ import Foundation
 import WebRTC
 import PhotoGetherDomainInterface
 
-public final class WebRTCClient: NSObject {
+public final class WebRTCClientImpl: NSObject, WebRTCClient {
     private static let peerConnectionFactory: RTCPeerConnectionFactory = {
         RTCInitializeSSL()
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
@@ -39,7 +39,7 @@ public final class WebRTCClient: NSObject {
             ]
         )
         
-        guard let peerConnection = WebRTCClient.peerConnectionFactory.peerConnection(
+        guard let peerConnection = WebRTCClientImpl.peerConnectionFactory.peerConnection(
             with: config,
             constraints: constraints,
             delegate: nil
@@ -59,7 +59,7 @@ public final class WebRTCClient: NSObject {
 }
 
 // MARK: SDP
-extension WebRTCClient {
+extension WebRTCClientImpl {
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constraints = RTCMediaConstraints(
             mandatoryConstraints: self.mediaConstraints,
@@ -108,7 +108,7 @@ extension WebRTCClient {
 }
 
 // MARK: Video/Audio/Data
-extension WebRTCClient {
+extension WebRTCClientImpl {
     func startCaptureLocalVideo(renderer: RTCVideoRenderer) {
         guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
         guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
@@ -183,10 +183,10 @@ extension WebRTCClient {
             mandatoryConstraints: nil,
             optionalConstraints: nil
         )
-        let audioSource = WebRTCClient.peerConnectionFactory.audioSource(
+        let audioSource = WebRTCClientImpl.peerConnectionFactory.audioSource(
             with: audioConstraints
         )
-        let audioTrack = WebRTCClient.peerConnectionFactory.audioTrack(
+        let audioTrack = WebRTCClientImpl.peerConnectionFactory.audioTrack(
             with: audioSource,
             trackId: "audio0"
         )
@@ -194,11 +194,11 @@ extension WebRTCClient {
     }
     
     private func createVideoTrack() -> RTCVideoTrack {
-        let videoSource = WebRTCClient.peerConnectionFactory.videoSource()
+        let videoSource = WebRTCClientImpl.peerConnectionFactory.videoSource()
         
         self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
         
-        let videoTrack = WebRTCClient.peerConnectionFactory.videoTrack(
+        let videoTrack = WebRTCClientImpl.peerConnectionFactory.videoTrack(
             with: videoSource,
             trackId: "video0"
         )
@@ -225,7 +225,7 @@ extension WebRTCClient {
 }
 
 // MARK: PeerConnectionDelegate
-extension WebRTCClient: RTCPeerConnectionDelegate {
+extension WebRTCClientImpl: RTCPeerConnectionDelegate {
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didChange stateChanged: RTCSignalingState
@@ -292,7 +292,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
 }
 
 // MARK: Audio control
-extension WebRTCClient {
+extension WebRTCClientImpl {
     func muteAudio() {
         self.setAudioEnabled(false)
     }
@@ -313,7 +313,7 @@ extension WebRTCClient {
 }
 
 // MARK: DataChannelDelegate
-extension WebRTCClient: RTCDataChannelDelegate {
+extension WebRTCClientImpl: RTCDataChannelDelegate {
     public func dataChannelDidChangeState(
         _ dataChannel: RTCDataChannel
     ) {
