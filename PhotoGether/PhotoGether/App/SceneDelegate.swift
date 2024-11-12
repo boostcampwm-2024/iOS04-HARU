@@ -1,5 +1,7 @@
 import UIKit
 import PhotoGetherNetwork
+import PhotoGetherDomain
+import PhotoGetherDomainInterface
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -16,8 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let baseURLString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
         
-        let webSocketClient = WebSocketClient(url: URL(string: baseURLString)!)
-        let signalingClient = SignalingClient(webSocket: webSocketClient)
+        let webSocketClient: WebSocketClient = WebSocketClientImpl(url: URL(string: baseURLString)!)
+        let signalingClient: SignalingClient = SignalingClientImpl(webSocketClient: webSocketClient)
         
         signalingClient.connect()
     }

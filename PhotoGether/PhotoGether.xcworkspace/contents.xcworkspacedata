@@ -11,18 +11,12 @@
          location = "group:PhotoGetherNetwork/PhotoGetherNetwork.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:DataUtility/DataUtility.xcodeproj">
-      </FileRef>
-      <FileRef
          location = "group:PhotoGetherData/PhotoGetherData.xcodeproj">
       </FileRef>
    </Group>
    <Group
       location = "group:DomainLayer"
       name = "DomainLayer">
-      <FileRef
-         location = "group:DomainUtility/DomainUtility.xcodeproj">
-      </FileRef>
       <FileRef
          location = "group:PhotoGetherDomain/PhotoGetherDomain.xcodeproj">
       </FileRef>
@@ -50,9 +44,6 @@
       </FileRef>
       <FileRef
          location = "group:DesignSystem/DesignSystem.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:PresentationUtility/PresentationUtility.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>
