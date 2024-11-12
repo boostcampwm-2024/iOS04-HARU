@@ -1,0 +1,48 @@
+name: CI 🧐
+
+on:
+  push:
+    branches: [ "develop", "main", "feature/#22-github-action-ci" ]
+  pull_request:
+    branches: [ "develop" ]
+
+env:
+  SECRET_XCCONFIG_PATH : PhotoGether/PhotoGether/Resource/Secrets.xcconfig
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and Test default scheme using any available iPhone simulator
+    runs-on: macos-latest
+
+    steps:
+      - name: ✅ Checkout
+        uses: actions/checkout@v4
+
+      - name: ✅ List Xcode installations
+        run: sudo ls -1 /Applications | grep "Xcode"
+
+      - name: ✅ Select XCode 16.0
+        run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+
+      - name: ✅ Show Xcode version
+        run: |
+          sudo xcodebuild -version
+        
+      - name: ✅ Show swift version
+        run: swift --version
+
+      - name: ✅ Install SwiftLint
+        run: brew install swiftlint
+
+      - name: ✅ Make `Secrets.xcconfig`
+        run: |
+          touch ${{ env.SECRET_XCCONFIG_PATH }}
+          echo "" > ${{ env.SECRET_XCCONFIG_PATH }}
+      
+      - name: 🛠 Start xcode build
+        run: |
+          xcodebuild -workspace ./PhotoGether/PhotoGether.xcworkspace -scheme PhotoGether -destination 'platform=iOS Simulator,name=iPhone 16 Pro'
