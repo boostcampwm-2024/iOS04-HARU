@@ -48,7 +48,7 @@ jobs:
       - name: 🏷️ Cache SPM
         uses: actions/cache@v3
         with:
-          path: ${{ CACHED_SPM_DEPENDENCY_PATH }}
+          path: ${{ env.CACHED_SPM_DEPENDENCY_PATH }}
           key: ${{ runner.os }}-spm-${{ hashFiles('PhotoGether.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
@@ -56,7 +56,7 @@ jobs:
       - name: 🏷️ Cache DerivedData
         uses: actions/cache@v3
         with:
-          path: ${{ DERIVED_DATA_PATH }}
+          path: ${{ env.DERIVED_DATA_PATH }}
           key: ${{ runner.os }}-iOS_derived_data-xcode_16.0
           restore-keys: |
             ${{ runner.os }}-iOS_derived_data-
@@ -67,6 +67,6 @@ jobs:
           WORKSPACE_PATH: ./PhotoGether/PhotoGether.xcworkspace
         run: >
           xcodebuild 
-          -workspace ${{ WORKSPACE_PATH }} 
+          -workspace ${{ env.WORKSPACE_PATH }} 
           -scheme PhotoGether 
           -destination 'platform=iOS Simulator,OS=16.0,name=iPhone 16 Pro'
