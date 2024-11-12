@@ -62,11 +62,11 @@ jobs:
             ${{ runner.os }}-iOS_derived_data-
       
       
-      - name: 🛠 Start xcode build iOS 16.0 on iPhone 16 Pro
+      - name: 🛠 Start xcode build iOS 18.0 on iPhone 16 Pro
         env:
           WORKSPACE_PATH: ./PhotoGether/PhotoGether.xcworkspace
         run: >
           xcodebuild 
           -workspace ${{ env.WORKSPACE_PATH }} 
           -scheme PhotoGether 
-          -destination 'platform=iOS Simulator,OS=16.0,name=iPhone 16 Pro'
+          -destination 'platform=iOS Simulator,OS=18.0,name=iPhone 16 Pro'
