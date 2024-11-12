@@ -7,14 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		053986052CDCAC3000E709AC /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */; };
+		053986062CDCAC3000E709AC /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0584AAC22CDEF91800ED923C /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0584AAC12CDEF91800ED923C /* Secrets.xcconfig */; };
 		60CB81FA2CDA450D00873DD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F22CDA450D00873DD6 /* AppDelegate.swift */; };
 		60CB81FB2CDA450D00873DD6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */; };
 		60CB81FC2CDA450D00873DD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F82CDA450D00873DD6 /* ViewController.swift */; };
 		60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F32CDA450D00873DD6 /* Assets.xcassets */; };
 		60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */; };
+		7B031B142CDC79F40026C613 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B031B132CDC79F40026C613 /* WebRTC */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		053986072CDCAC3000E709AC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				053986062CDCAC3000E709AC /* PhotoGetherNetwork.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0584AAC12CDEF91800ED923C /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		60CB81DA2CDA442700873DD6 /* PhotoGether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoGether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB81F22CDA450D00873DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60CB81F32CDA450D00873DD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -29,16 +49,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B031B142CDC79F40026C613 /* WebRTC in Frameworks */,
+				053986052CDCAC3000E709AC /* PhotoGetherNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		053986032CDCAC3000E709AC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		60CB81D12CDA442700873DD6 = {
 			isa = PBXGroup;
 			children = (
 				60CB81F92CDA450D00873DD6 /* PhotoGether */,
+				053986032CDCAC3000E709AC /* Frameworks */,
 				60CB81DB2CDA442700873DD6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -75,6 +106,7 @@
 				60CB81F32CDA450D00873DD6 /* Assets.xcassets */,
 				60CB81F42CDA450D00873DD6 /* Info.plist */,
 				60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */,
+				0584AAC12CDEF91800ED923C /* Secrets.xcconfig */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -99,6 +131,7 @@
 				7B0318C02CDBA6FF0026C613 /* SwiftLint */,
 				60CB81D72CDA442700873DD6 /* Frameworks */,
 				60CB81D82CDA442700873DD6 /* Resources */,
+				053986072CDCAC3000E709AC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -106,6 +139,7 @@
 			);
 			name = PhotoGether;
 			packageProductDependencies = (
+				7B031B132CDC79F40026C613 /* WebRTC */,
 			);
 			productName = PhotoGether;
 			productReference = 60CB81DA2CDA442700873DD6 /* PhotoGether.app */;
@@ -137,6 +171,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				7B031B122CDC79F40026C613 /* XCRemoteSwiftPackageReference "WebRTC" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60CB81DB2CDA442700873DD6 /* Products */;
@@ -153,6 +188,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0584AAC22CDEF91800ED923C /* Secrets.xcconfig in Resources */,
 				60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */,
 				60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -280,6 +316,7 @@
 		};
 		60CB81F02CDA442900873DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0584AAC12CDEF91800ED923C /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -344,6 +381,7 @@
 		};
 		60CB81F12CDA442900873DD6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0584AAC12CDEF91800ED923C /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -431,7 +469,23 @@
 				minimumVersion = 0.57.0;
 			};
 		};
+		7B031B122CDC79F40026C613 /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 130.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7B031B132CDC79F40026C613 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7B031B122CDC79F40026C613 /* XCRemoteSwiftPackageReference "WebRTC" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 60CB81D22CDA442700873DD6 /* Project object */;
 }
