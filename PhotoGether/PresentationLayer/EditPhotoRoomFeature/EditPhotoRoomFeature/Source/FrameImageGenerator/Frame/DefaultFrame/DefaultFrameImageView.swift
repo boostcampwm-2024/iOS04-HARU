@@ -1,6 +1,6 @@
 import UIKit
 
-final class DefaultBlackFrameImageView: FrameImageView {
+final class DefaultFrameImageView: FrameImageView {
     override init(images: [UIImage]) {
         super.init(images: images)
         setupConstraints()
@@ -48,7 +48,7 @@ final class DefaultBlackFrameImageView: FrameImageView {
     }
 }
 
-private extension DefaultBlackFrameImageView {
+private extension DefaultFrameImageView {
     enum LayoutPosition {
         case single, pair, trio, quad
         

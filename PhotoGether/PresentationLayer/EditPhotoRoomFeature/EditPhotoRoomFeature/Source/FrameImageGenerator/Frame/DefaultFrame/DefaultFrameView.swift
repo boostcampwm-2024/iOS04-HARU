@@ -1,12 +1,14 @@
 import UIKit
 import DesignSystem
 
-final class DefaultBlackFrameView: FrameView {
-    private let frameImageView: DefaultBlackFrameImageView
+final class DefaultFrameView: FrameView {
+    private let frameImageView: DefaultFrameImageView
     private let label = UILabel()
+    private let frameColor: FrameColor
     
-    init(images: [UIImage]) {
-        self.frameImageView = DefaultBlackFrameImageView(images: images)
+    init(images: [UIImage], color: FrameColor) {
+        self.frameImageView = DefaultFrameImageView(images: images)
+        self.frameColor = color
         super.init()
         addViews()
         setupConstraints()
@@ -35,10 +37,25 @@ final class DefaultBlackFrameView: FrameView {
     }
     
     override func configureUI() {
-        backgroundColor = PTGColor.gray10.color
+        backgroundColor = frameColor.color
         
         label.text = "PhotoGether"
         label.font = .systemFont(ofSize: 36, weight: .bold)
         label.textColor = PTGColor.primaryGreen.color
+    }
+}
+
+extension DefaultFrameView {
+    enum FrameColor {
+        case black, white
+        
+        var color: UIColor {
+            switch self {
+            case .black:
+                return PTGColor.gray85.color
+            case .white:
+                return PTGColor.gray10.color
+            }
+        }
     }
 }

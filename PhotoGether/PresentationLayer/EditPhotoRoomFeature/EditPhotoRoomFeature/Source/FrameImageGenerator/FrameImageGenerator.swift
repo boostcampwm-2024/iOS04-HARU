@@ -25,7 +25,9 @@ public final class FrameImageGeneratorImpl: FrameImageGenerator {
     private func makeFrameView() -> FrameViewRenderable {
         switch frameType {
         case .defaultBlack:
-            return DefaultBlackFrameView(images: images)
+            return DefaultFrameView(images: images, color: .black)
+        case .defaultWhite:
+            return DefaultFrameView(images: images, color: .white)
         }
     }
     
@@ -40,4 +42,5 @@ public final class FrameImageGeneratorImpl: FrameImageGenerator {
 
 public enum FrameType {
     case defaultBlack
+    case defaultWhite
 }
