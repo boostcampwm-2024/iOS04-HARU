@@ -38,7 +38,8 @@ final public class SignalingClientImpl: SignalingClient {
     }
 }
 
-extension SignalingClientImpl: WebSocketClientDelegate {
+// MARK: WebSocketClientDelegate
+extension SignalingClientImpl {
     public func webSocketDidConnect(_ webSocket: WebSocketClient) {
         self.delegate?.signalClientDidConnect(self)
     }
@@ -66,6 +67,9 @@ extension SignalingClientImpl: WebSocketClientDelegate {
             self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
         case .sdp(let sessionDescription):
             self.delegate?.signalClient(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
+        @unknown default:
+            debugPrint("Unknown Message Type: \(message)")
+            return
         }
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 import WebRTC
 
-public protocol SignalingClient {
+public protocol SignalingClient: WebSocketClientDelegate {
     var delegate: SignalingClientDelegate? { get }
     
     func connect()
