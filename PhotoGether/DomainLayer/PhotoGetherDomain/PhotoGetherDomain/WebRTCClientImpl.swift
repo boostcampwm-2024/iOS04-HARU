@@ -137,6 +137,7 @@ extension WebRTCClientImpl {
         self.localVideoTrack?.add(renderer)
     }
     
+    /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
         self.remoteVideoTrack?.add(renderer)
     }

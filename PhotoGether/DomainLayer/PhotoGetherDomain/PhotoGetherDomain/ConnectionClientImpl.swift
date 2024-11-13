@@ -6,7 +6,7 @@ public final class ConnectionClientImpl {
     private let signalClient: SignalingClientImpl
     private let webRTCClient: WebRTCClientImpl
     
-    // TODO: 영상 정보
+    public let remoteVideoView: UIView = RTCMTLVideoView()
     // TODO: 음성 정보
     
     public init(signalClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
@@ -18,6 +18,8 @@ public final class ConnectionClientImpl {
         
         // 서버 자동 연결
         self.connect()
+        
+        self.bindRemoteVideo()
     }
     
     public func connect() {
@@ -28,6 +30,11 @@ public final class ConnectionClientImpl {
         self.webRTCClient.sendData(data)
     }
     
+    /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
+    private func bindRemoteVideo() {
+        guard let remoteVideoView = remoteVideoView as? RTCMTLVideoView else { return }
+        self.webRTCClient.renderRemoteVideo(to: remoteVideoView)
+    }
 }
 
 extension ConnectionClientImpl: SignalingClientDelegate {
