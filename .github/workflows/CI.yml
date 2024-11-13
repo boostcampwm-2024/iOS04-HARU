@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    name: ✅ CI
+    name: ✅ build
     runs-on: macos-latest
 
     steps:
