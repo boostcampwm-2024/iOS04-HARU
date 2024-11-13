@@ -26,7 +26,7 @@ public final class WebRTCClientImpl: NSObject, WebRTCClient {
     private var localDataChannel: RTCDataChannel?
     private var remoteDataChannel: RTCDataChannel?
     
-    required init(iceServers: [String]) {
+    public required init(iceServers: [String]) {
         let config = RTCConfiguration()
         config.iceServers = [RTCIceServer(urlStrings: iceServers)]
         config.sdpSemantics = .unifiedPlan
