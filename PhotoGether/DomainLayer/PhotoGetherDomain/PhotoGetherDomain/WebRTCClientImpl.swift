@@ -59,7 +59,7 @@ public final class WebRTCClientImpl: NSObject, WebRTCClient {
 }
 
 // MARK: SDP
-extension WebRTCClientImpl {
+public extension WebRTCClientImpl {
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constraints = RTCMediaConstraints(
             mandatoryConstraints: self.mediaConstraints,
@@ -108,7 +108,7 @@ extension WebRTCClientImpl {
 }
 
 // MARK: Video/Audio/Data
-extension WebRTCClientImpl {
+public extension WebRTCClientImpl {
     func startCaptureLocalVideo(renderer: RTCVideoRenderer) {
         guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
         guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
@@ -225,8 +225,29 @@ extension WebRTCClientImpl {
     }
 }
 
+// MARK: Audio control
+public extension WebRTCClientImpl {
+    func muteAudio() {
+        self.setAudioEnabled(false)
+    }
+    
+    func unmuteAudio() {
+        self.setAudioEnabled(true)
+    }
+    
+    private func setAudioEnabled(_ isEnabled: Bool) {
+        setTrackEnabled(RTCAudioTrack.self, isEnabled: isEnabled)
+    }
+    
+    private func setTrackEnabled<T: RTCMediaStreamTrack>(_ type: T.Type, isEnabled: Bool) {
+        peerConnection.transceivers
+            .compactMap { return $0.sender.track as? T }
+            .forEach { $0.isEnabled = isEnabled }
+    }
+}
+
 // MARK: PeerConnectionDelegate
-extension WebRTCClientImpl: RTCPeerConnectionDelegate {
+extension WebRTCClientImpl {
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didChange stateChanged: RTCSignalingState
@@ -292,29 +313,8 @@ extension WebRTCClientImpl: RTCPeerConnectionDelegate {
     }
 }
 
-// MARK: Audio control
-extension WebRTCClientImpl {
-    func muteAudio() {
-        self.setAudioEnabled(false)
-    }
-    
-    func unmuteAudio() {
-        self.setAudioEnabled(true)
-    }
-    
-    private func setAudioEnabled(_ isEnabled: Bool) {
-        setTrackEnabled(RTCAudioTrack.self, isEnabled: isEnabled)
-    }
-    
-    private func setTrackEnabled<T: RTCMediaStreamTrack>(_ type: T.Type, isEnabled: Bool) {
-        peerConnection.transceivers
-            .compactMap { return $0.sender.track as? T }
-            .forEach { $0.isEnabled = isEnabled }
-    }
-}
-
 // MARK: DataChannelDelegate
-extension WebRTCClientImpl: RTCDataChannelDelegate {
+extension WebRTCClientImpl {
     public func dataChannelDidChangeState(
         _ dataChannel: RTCDataChannel
     ) {
