@@ -3,28 +3,31 @@ import WebRTC
 import PhotoGetherDomainInterface
 
 public final class ConnectionClientImpl: ConnectionClient {
-    private let signalClient: SignalingClientImpl
+    private let signalingClient: SignalingClientImpl
     private let webRTCClient: WebRTCClientImpl
     
     public var remoteVideoView: UIView = RTCMTLVideoView()
+    public var localVideoView: UIView = RTCMTLVideoView()
     // TODO: 음성 정보
     
-    public init(signalClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
-        self.signalClient = signalClient
+    public init(signalingClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
+        self.signalingClient = signalingClient
         self.webRTCClient = webRTCClient
         
-        self.signalClient.delegate = self
+        self.signalingClient.delegate = self
         self.webRTCClient.delegate = self
         
         // 서버 자동 연결
         self.connect()
         
+        // VideoTrack과 나와 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
         self.bindRemoteVideo()
+        self.bindLocalVideo()
     }
     
-    public func sendOffer(offer: RTCSessionDescription) {
+    public func sendOffer() {
         self.webRTCClient.offer { sdp in
-            self.signalClient.send(sdp: sdp)
+            self.signalingClient.send(sdp: sdp)
         }
     }
     
@@ -33,13 +36,18 @@ public final class ConnectionClientImpl: ConnectionClient {
     }
     
     private func connect() {
-        self.signalClient.connect()
+        self.signalingClient.connect()
     }
     
     /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
     private func bindRemoteVideo() {
         guard let remoteVideoView = remoteVideoView as? RTCMTLVideoView else { return }
         self.webRTCClient.renderRemoteVideo(to: remoteVideoView)
+    }
+    
+    private func bindLocalVideo() {
+        guard let localVideoView = localVideoView as? RTCMTLVideoView else { return }
+        self.webRTCClient.startCaptureLocalVideo(renderer: localVideoView)
     }
 }
 
@@ -70,7 +78,7 @@ extension ConnectionClientImpl {
             guard self.webRTCClient.peerConnection.localDescription == nil else { return }
             
             self.webRTCClient.answer { sdp in
-                self.signalClient.send(sdp: sdp)
+                self.signalingClient.send(sdp: sdp)
             }
         }
     }
@@ -90,7 +98,7 @@ extension ConnectionClientImpl {
         _ client: WebRTCClient,
         didGenerateLocalCandidate candidate: RTCIceCandidate
     ) {
-        self.signalClient.send(candidate: candidate)
+        self.signalingClient.send(candidate: candidate)
     }
     
     public func webRTCClient(
