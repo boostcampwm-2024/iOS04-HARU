@@ -1,7 +1,7 @@
 import UIKit
 import DesignSystem
 
-class CanvasScrollView: UIScrollView {
+final class CanvasScrollView: UIScrollView {
     private let image = PTGImage.sampleImage.image
     private let imageView = UIImageView()
     
