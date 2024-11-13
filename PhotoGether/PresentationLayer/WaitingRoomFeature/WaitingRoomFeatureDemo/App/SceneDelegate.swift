@@ -15,6 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let urlString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
         let url = URL(string: urlString)!
+        debugPrint("SignalingServer URL: \(url)")
         let webScoketClient = WebSocketClientImpl(url: url)
         let signalingClient = SignalingClientImpl(webSocketClient: webScoketClient)
         let webRTCClient = WebRTCClientImpl(iceServers: ["stun:stun.l.google.com:19302",
@@ -23,7 +24,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                                          "stun:stun3.l.google.com:19302",
                                                          "stun:stun4.l.google.com:19302"])
         let connectionClient = ConnectionClientImpl(signalingClient: signalingClient, webRTCClient: webRTCClient)
-            
         
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = WaitingRoomViewController(connectionClient: connectionClient)
