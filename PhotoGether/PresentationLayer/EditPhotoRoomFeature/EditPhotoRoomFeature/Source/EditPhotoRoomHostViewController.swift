@@ -1,11 +1,10 @@
 import UIKit
 import BaseFeature
 
-public class EditPhotoRoomHostViewController: BaseViewController {
+public class EditPhotoRoomHostViewController: BaseViewController, UIScrollViewDelegate {
     private let bottomView = EditPhotoHostBottomView()
     private let navigationView = UIView()
-    private let canvasView = UIScrollView()
-    private let contentView = UIView()
+    private let canvasScrollView = CanvasScrollView()
     
     public init() {
         super.init(nibName: nil, bundle: nil)
@@ -20,16 +19,21 @@ public class EditPhotoRoomHostViewController: BaseViewController {
         
         addViews()
         setupConstraints()
-        // configureUI()
+        configureUI()
         temp()
     }
     
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        canvasScrollView.setupZoomScale()
+        canvasScrollView.contentCentering()
+    }
+    
     public override func addViews() {
-        [navigationView, canvasView, bottomView].forEach {
+        [navigationView, canvasScrollView, bottomView].forEach {
             view.addSubview($0)
         }
-        
-        canvasView.addSubview(contentView)
     }
     
     public override func setupConstraints() {
@@ -39,16 +43,10 @@ public class EditPhotoRoomHostViewController: BaseViewController {
             $0.height.equalTo(48)
         }
         
-        canvasView.snp.makeConstraints {
+        canvasScrollView.snp.makeConstraints {
             $0.top.equalTo(navigationView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(bottomView.snp.top)
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.width.equalTo(1000)
-            $0.height.equalTo(1000)
-            $0.center.equalToSuperview()
         }
         
         bottomView.snp.makeConstraints {
@@ -68,8 +66,6 @@ public class EditPhotoRoomHostViewController: BaseViewController {
         
         navigationView.backgroundColor = .yellow
         bottomView.backgroundColor = .yellow
-        
-        canvasView.backgroundColor = .red
-        contentView.backgroundColor = .blue
+        canvasScrollView.backgroundColor = .red
     }
 }

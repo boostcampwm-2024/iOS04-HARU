@@ -10,6 +10,7 @@
 		053DC8512CE32A8800DC9F35 /* EditPhotoHostBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053DC8502CE32A8800DC9F35 /* EditPhotoHostBottomView.swift */; };
 		053DC8532CE32AE900DC9F35 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; };
 		053DC8542CE32AE900DC9F35 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05C297562CE391FF00108687 /* CanvasScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C297552CE391FF00108687 /* CanvasScrollView.swift */; };
 		60B03BDF2CE3810200A7C748 /* FrameImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B03BDE2CE3810200A7C748 /* FrameImageGenerator.swift */; };
 		60B03BE22CE43FAF00A7C748 /* FrameImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B03BE12CE43FAF00A7C748 /* FrameImageView.swift */; };
 		60B03BE42CE43FE200A7C748 /* DefaultFrameImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B03BE32CE43FE200A7C748 /* DefaultFrameImageView.swift */; };
@@ -73,6 +74,8 @@
 /* Begin PBXFileReference section */
 		053DC8502CE32A8800DC9F35 /* EditPhotoHostBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoHostBottomView.swift; sourceTree = "<group>"; };
 		053DC8522CE32AE900DC9F35 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+
+		05C297552CE391FF00108687 /* CanvasScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasScrollView.swift; sourceTree = "<group>"; };
 		60B03BDE2CE3810200A7C748 /* FrameImageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameImageGenerator.swift; sourceTree = "<group>"; };
 		60B03BE12CE43FAF00A7C748 /* FrameImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameImageView.swift; sourceTree = "<group>"; };
 		60B03BE32CE43FE200A7C748 /* DefaultFrameImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFrameImageView.swift; sourceTree = "<group>"; };
@@ -213,8 +216,9 @@
 		60CB82A52CDB514F00873DD6 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */,
+				05C297552CE391FF00108687 /* CanvasScrollView.swift */,
 				053DC8502CE32A8800DC9F35 /* EditPhotoHostBottomView.swift */,
+				60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */,
 				60B03BE02CE43F8200A7C748 /* FrameImageGenerator */,
 			);
 			path = Source;
@@ -349,6 +353,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05C297562CE391FF00108687 /* CanvasScrollView.swift in Sources */,
 				60B03BED2CE47D8400A7C748 /* FrameView.swift in Sources */,
 				60B03BE22CE43FAF00A7C748 /* FrameImageView.swift in Sources */,
 				053DC8512CE32A8800DC9F35 /* EditPhotoHostBottomView.swift in Sources */,
