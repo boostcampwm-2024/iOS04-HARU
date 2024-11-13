@@ -22,12 +22,18 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.bindRemoteVideo()
     }
     
-    public func connect() {
-        self.signalClient.connect()
+    public func sendOffer(offer: RTCSessionDescription) {
+        self.webRTCClient.offer { sdp in
+            self.signalClient.send(sdp: sdp)
+        }
     }
     
     public func sendData(data: Data) {
         self.webRTCClient.sendData(data)
+    }
+    
+    private func connect() {
+        self.signalClient.connect()
     }
     
     /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
