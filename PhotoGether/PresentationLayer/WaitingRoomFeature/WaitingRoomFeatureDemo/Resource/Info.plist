@@ -19,5 +19,12 @@
 			</array>
 		</dict>
 	</dict>
+	<key>BASE_URL</key>
+	<string>$(BASE_URL)</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
