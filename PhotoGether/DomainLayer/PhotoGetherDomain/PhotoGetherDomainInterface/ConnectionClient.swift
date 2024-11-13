@@ -3,7 +3,8 @@ import WebRTC
 
 public protocol ConnectionClient: SignalingClientDelegate, WebRTCClientDelegate {
     var remoteVideoView: UIView { get }
+    var localVideoView: UIView { get }
     
-    func sendOffer(offer: RTCSessionDescription)
+    func sendOffer()
     func sendData(data: Data)
 }
