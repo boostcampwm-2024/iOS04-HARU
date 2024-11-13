@@ -1,7 +1,20 @@
+import BaseFeature
+import DesignSystem
+import PhotoGetherDomainInterface
+import SnapKit
 import UIKit
 
-public class WaitingRoomViewController: UIViewController {
-    public init() {
+public class WaitingRoomViewController: BaseViewController {
+    let connectionClient: ConnectionClient
+    let offerButton = UIButton()
+    let localVideoView: UIView
+    let remoteVideoView: UIView
+    
+    public init(connectionClient: ConnectionClient) {
+        self.connectionClient = connectionClient
+        self.localVideoView = connectionClient.localVideoView
+        self.remoteVideoView = connectionClient.remoteVideoView
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -11,6 +24,58 @@ public class WaitingRoomViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
+        
+        addViews()
+        setupConstraints()
+        configureUI()
+        setActions()
+    }
+    
+    public override func addViews() {
+        [offerButton, localVideoView, remoteVideoView].forEach { subView in
+            view.addSubview(subView)
+        }
+    }
+    
+    public override func setupConstraints() {
+        offerButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(20)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(100)
+            $0.height.equalTo(60)
+        }
+        
+        localVideoView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(191)
+            $0.height.equalTo(290)
+            $0.trailing.equalTo(view.snp.centerX).offset(-5.5)
+        }
+        
+        remoteVideoView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(191)
+            $0.height.equalTo(290)
+            $0.leading.equalTo(view.snp.centerX).offset(5.5)
+        }
+    }
+    
+    public override func configureUI() {
+        view.backgroundColor = .white
+        
+        offerButton.setTitle("Offer", for: .normal)
+        offerButton.setTitleColor(.white, for: .normal)
+        offerButton.layer.cornerRadius = 10
+        offerButton.backgroundColor = .black
+        
+        localVideoView.backgroundColor = PTGColor.gray50.color
+        
+        remoteVideoView.backgroundColor = PTGColor.gray50.color
+    }
+    
+    private func setActions() {
+        offerButton.addAction(UIAction { [weak self] _ in
+            self?.connectionClient.sendOffer()
+        }, for: .touchUpInside)
     }
 }
