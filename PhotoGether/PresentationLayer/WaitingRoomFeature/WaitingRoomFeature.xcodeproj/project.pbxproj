@@ -16,13 +16,12 @@
 		601379A42CDB4BD600CA430A /* WaitingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601379A22CDB4B9A00CA430A /* WaitingRoomViewController.swift */; };
 		60348F2F2CE48F02002D1CEE /* PhotoGetherDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F2D2CE48F02002D1CEE /* PhotoGetherDomain.framework */; };
 		60348F302CE48F02002D1CEE /* PhotoGetherDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F2D2CE48F02002D1CEE /* PhotoGetherDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		60348F312CE48F02002D1CEE /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F2E2CE48F02002D1CEE /* PhotoGetherDomainInterface.framework */; };
-		60348F322CE48F02002D1CEE /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F2E2CE48F02002D1CEE /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60348F342CE49013002D1CEE /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F332CE49013002D1CEE /* PhotoGetherNetwork.framework */; };
 		60348F352CE49013002D1CEE /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F332CE49013002D1CEE /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60348F372CE49068002D1CEE /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 60348F362CE49068002D1CEE /* Secrets.xcconfig */; };
 		60348F392CE49627002D1CEE /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F382CE49627002D1CEE /* DesignSystem.framework */; };
 		60348F3A2CE49627002D1CEE /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F382CE49627002D1CEE /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7B17455F2CE49EB100E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B17455E2CE49EB100E01D1A /* WebRTC */; };
 		7B5951062CDB597600B89C85 /* FeatureTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951052CDB597600B89C85 /* FeatureTesting.framework */; };
 		7B5951072CDB597600B89C85 /* FeatureTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951052CDB597600B89C85 /* FeatureTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951462CDB5FF200B89C85 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951452CDB5FF200B89C85 /* BaseFeature.framework */; };
@@ -50,7 +49,6 @@
 			files = (
 				7B5951072CDB597600B89C85 /* FeatureTesting.framework in Embed Frameworks */,
 				6013799E2CDB4B4500CA430A /* WaitingRoomFeature.framework in Embed Frameworks */,
-				60348F322CE48F02002D1CEE /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				60348F302CE48F02002D1CEE /* PhotoGetherDomain.framework in Embed Frameworks */,
 				60348F352CE49013002D1CEE /* PhotoGetherNetwork.framework in Embed Frameworks */,
 			);
@@ -107,9 +105,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B17455F2CE49EB100E01D1A /* WebRTC in Frameworks */,
 				7B5951062CDB597600B89C85 /* FeatureTesting.framework in Frameworks */,
 				6013799D2CDB4B4500CA430A /* WaitingRoomFeature.framework in Frameworks */,
-				60348F312CE48F02002D1CEE /* PhotoGetherDomainInterface.framework in Frameworks */,
 				60348F2F2CE48F02002D1CEE /* PhotoGetherDomain.framework in Frameworks */,
 				60348F342CE49013002D1CEE /* PhotoGetherNetwork.framework in Frameworks */,
 			);
@@ -247,6 +245,7 @@
 			);
 			name = WaitingRoomFeatureDemo;
 			packageProductDependencies = (
+				7B17455E2CE49EB100E01D1A /* WebRTC */,
 			);
 			productName = WaitingRoomFeatureDemo;
 			productReference = 601379742CDB4A7C00CA430A /* WaitingRoomFeatureDemo.app */;
@@ -279,6 +278,9 @@
 			);
 			mainGroup = 601379582CDB49EB00CA430A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7B17455D2CE49EB100E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 601379632CDB49EB00CA430A /* Products */;
 			projectDirPath = "";
@@ -647,6 +649,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7B17455D2CE49EB100E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 130.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7B17455E2CE49EB100E01D1A /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7B17455D2CE49EB100E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 601379592CDB49EB00CA430A /* Project object */;
 }
