@@ -9,6 +9,7 @@ final class CanvasScrollView: UIScrollView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        delegate = self
         addViews()
         setupConstraints()
         configureUI()
@@ -32,18 +33,14 @@ final class CanvasScrollView: UIScrollView {
     }
     
     private func configureUI() {
-        imageView.image = image
-        imageView.tintColor = .white
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = .blue
-        
-        delegate = self
         isScrollEnabled = true
         maximumZoomScale = 3
         bouncesZoom = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
+        
+        imageView.image = image
+        imageView.contentMode = .scaleAspectFit
     }
     
     func contentCentering() {
