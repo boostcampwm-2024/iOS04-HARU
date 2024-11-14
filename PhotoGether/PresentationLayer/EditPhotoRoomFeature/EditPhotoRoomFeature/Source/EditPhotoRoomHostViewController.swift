@@ -2,15 +2,17 @@ import UIKit
 import Combine
 import BaseFeature
 
-    private var viewModel = EditPhotoRoomHostViewModel()
-    private let input = PassthroughSubject<EditPhotoRoomHostViewModel.Input, Never>()
-    
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoHostBottomView()
     
-    public init() {
+    private let input = PassthroughSubject<EditPhotoRoomHostViewModel.Input, Never>()
+    
+    private let viewModel: EditPhotoRoomHostViewModel
+    
+    public init(viewModel: EditPhotoRoomHostViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -67,7 +69,6 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     public func bindInput() {
         bottomView.stickerButtonTapped
             .sink { [weak self] in
-                print("didTap sticker Button")
                 self?.input.send(.stickerButtonDidTap)
             }
             .store(in: &cancellables)

@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-final class EditPhotoRoomHostViewModel {
+public final class EditPhotoRoomHostViewModel {
     enum Input {
         case stickerButtonDidTap
     }
@@ -12,6 +12,8 @@ final class EditPhotoRoomHostViewModel {
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
+    
+    public init() { }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] in
