@@ -78,6 +78,8 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func generateRectangle() {
-        print("hello")
+        let rectangle = UIView(frame: .init(origin: CGPoint(x: 30, y: 40), size: CGSize(width: 40, height: 40)))
+        rectangle.backgroundColor = .cyan
+        canvasScrollView.imageView.addSubview(rectangle)
     }
 }
