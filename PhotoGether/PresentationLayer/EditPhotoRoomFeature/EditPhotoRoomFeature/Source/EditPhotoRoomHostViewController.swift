@@ -2,6 +2,7 @@ import UIKit
 import BaseFeature
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure, UIScrollViewDelegate {
+    private var viewModel = EditPhotoRoomHostViewModel()
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoHostBottomView()
@@ -20,6 +21,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         addViews()
         setupConstraints()
         configureUI()
+        bindInput()
         bindOutput()
         temp()
     }
@@ -59,12 +61,29 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     
     public func configureUI() { }
     
-    public func bindInput() { }
+    public func bindInput() {
+        let input = EditPhotoRoomHostViewModel.Input(
+            didStickerButtonTapped: bottomView.stickerButtonTapped
+        )
+        
+        viewModel.bind(input: input)
+    }
     
     public func bindOutput() {
-        bottomView.stickerButtonTapped
-            .sink { [weak self] _ in
-                self?.generateRectangle()
+        let output = viewModel.bindOutput()
+        
+        output.rectangle
+            .sink { [weak self] in
+                guard let self else { return }
+                let rectangle = UIView(
+                    frame: CGRect(
+                        origin: $0.position,
+                        size: $0.size
+                    )
+                )
+                rectangle.backgroundColor = .cyan
+                
+                canvasScrollView.imageView.addSubview(rectangle)
             }
             .store(in: &cancellables)
     }
@@ -75,11 +94,5 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         navigationView.backgroundColor = .yellow
         bottomView.backgroundColor = .yellow
         canvasScrollView.backgroundColor = .red
-    }
-    
-    private func generateRectangle() {
-        let rectangle = UIView(frame: .init(origin: CGPoint(x: 30, y: 40), size: CGSize(width: 40, height: 40)))
-        rectangle.backgroundColor = .cyan
-        canvasScrollView.imageView.addSubview(rectangle)
     }
 }
