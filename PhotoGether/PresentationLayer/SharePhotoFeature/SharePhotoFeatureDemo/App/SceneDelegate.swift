@@ -1,8 +1,8 @@
-import UIKit
-import SharePhotoFeature
+import DesignSystem
 import EditPhotoRoomFeature
 import PhotoGetherDomainInterface
-import DesignSystem
+import SharePhotoFeature
+import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
