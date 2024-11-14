@@ -17,12 +17,12 @@ concurrency:
 
 jobs:
   build:
-    name: ✅ CI
-    runs-on: macos-latest
+    name: ✅ build
+    runs-on: macos-15
 
     steps:
       - name: 🏷️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: 🏷️ List Xcode installations
         run: sudo ls -1 /Applications | grep "Xcode"
