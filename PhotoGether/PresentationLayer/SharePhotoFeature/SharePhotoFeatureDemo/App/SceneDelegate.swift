@@ -30,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // MARK: EditPhotoRoom -> SharePhotoRoom
         let imageData = image.pngData() ?? Data()
-        let component = SharePhotoComponent(image: imageData)
+        let component = SharePhotoComponent(imageData: imageData)
         let sharePhotoViewModel = SharePhotoViewModel(component: component)
         let sharePhotoViewController = SharePhotoViewController(viewModel: sharePhotoViewModel)
         

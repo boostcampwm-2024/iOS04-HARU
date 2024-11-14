@@ -1,9 +1,9 @@
 import Foundation
 
 public struct SharePhotoComponent {
-    public let image: Data
+    public let photoData: Data
     
-    public init(image: Data) {
-        self.image = image
+    public init(imageData: Data) {
+        self.photoData = imageData
     }
 }
