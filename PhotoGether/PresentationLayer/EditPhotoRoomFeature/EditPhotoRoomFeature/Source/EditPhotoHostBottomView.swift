@@ -5,8 +5,8 @@ final class EditPhotoHostBottomView: UIView {
     // TODO: 추후 internal or tapPublisher만 참조할 수 있도록
     private let stackView = UIStackView()
     private let frameButton = PTGGrayButton(type: .frame)
-    private let nextButton = UIButton()
     private let stickerButton = PTGGrayButton(type: .sticker)
+    private let nextButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

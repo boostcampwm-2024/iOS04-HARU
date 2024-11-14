@@ -2,9 +2,9 @@ import UIKit
 import BaseFeature
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure, UIScrollViewDelegate {
-    private let bottomView = EditPhotoHostBottomView()
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
+    private let bottomView = EditPhotoHostBottomView()
     
     public init() {
         super.init(nibName: nil, bundle: nil)
