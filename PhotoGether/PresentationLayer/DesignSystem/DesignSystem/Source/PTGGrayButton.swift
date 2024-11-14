@@ -44,6 +44,7 @@ public final class PTGGrayButton: UIButton {
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         stackView.spacing = 8
+        stackView.isUserInteractionEnabled = false
         
         grayButtonImage.image = type.image
         grayButtonImage.contentMode = .scaleAspectFit
