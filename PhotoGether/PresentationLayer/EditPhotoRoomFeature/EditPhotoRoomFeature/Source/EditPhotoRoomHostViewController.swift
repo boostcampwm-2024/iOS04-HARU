@@ -62,7 +62,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     public func bindInput() { }
     
     public func bindOutput() {
-        bottomView.frameButtonTapped
+        bottomView.stickerButtonTapped
             .sink { [weak self] _ in
                 self?.generateRectangle()
             }
