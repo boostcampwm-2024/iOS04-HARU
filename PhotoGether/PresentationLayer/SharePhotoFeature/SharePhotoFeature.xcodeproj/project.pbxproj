@@ -14,6 +14,9 @@
 		055503C22CDB55F5004D34EB /* SharePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055503C02CDB5589004D34EB /* SharePhotoViewController.swift */; };
 		055503C42CDB5608004D34EB /* SharePhotoFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 055503882CDB54AF004D34EB /* SharePhotoFeature.framework */; };
 		055503C52CDB5608004D34EB /* SharePhotoFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 055503882CDB54AF004D34EB /* SharePhotoFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60B03BF12CE4CE3100A7C748 /* SharePhotoBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B03BF02CE4CE3100A7C748 /* SharePhotoBottomView.swift */; };
+		60B03BF32CE4CEDC00A7C748 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; };
+		60B03BF42CE4CEDC00A7C748 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B59510F2CDB598E00B89C85 /* FeatureTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */; };
 		7B5951102CDB598E00B89C85 /* FeatureTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951522CDB600100B89C85 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951512CDB600100B89C85 /* BaseFeature.framework */; };
@@ -51,6 +54,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				60B03BF42CE4CEDC00A7C748 /* DesignSystem.framework in Embed Frameworks */,
 				7B5951D32CDB664300B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				7B5951532CDB600100B89C85 /* BaseFeature.framework in Embed Frameworks */,
 			);
@@ -68,6 +72,8 @@
 		055503B02CDB5500004D34EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		055503B42CDB5500004D34EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		055503C02CDB5589004D34EB /* SharePhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoViewController.swift; sourceTree = "<group>"; };
+		60B03BF02CE4CE3100A7C748 /* SharePhotoBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoBottomView.swift; sourceTree = "<group>"; };
+		60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951512CDB600100B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60B03BF32CE4CEDC00A7C748 /* DesignSystem.framework in Frameworks */,
 				7B5951D22CDB664300B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				7B5951522CDB600100B89C85 /* BaseFeature.framework in Frameworks */,
 			);
@@ -155,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				055503C02CDB5589004D34EB /* SharePhotoViewController.swift */,
+				60B03BF02CE4CE3100A7C748 /* SharePhotoBottomView.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -162,6 +170,7 @@
 		055503C32CDB5608004D34EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */,
 				7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */,
 				7B5951512CDB600100B89C85 /* BaseFeature.framework */,
@@ -287,6 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60B03BF12CE4CE3100A7C748 /* SharePhotoBottomView.swift in Sources */,
 				055503C22CDB55F5004D34EB /* SharePhotoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,7 +335,7 @@
 		0555038F2CDB54AF004D34EB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -363,7 +373,7 @@
 		055503902CDB54AF004D34EB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
