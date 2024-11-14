@@ -59,13 +59,13 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     private func generateRectangle() {
-        let x = Int.random(in: 10..<100)
-        let y = Int.random(in: 10..<100)
+        let rarax = Int.random(in: 10..<100)
+        let raray = Int.random(in: 10..<100)
         let width = Int.random(in: 10..<100)
         let height = Int.random(in: 10..<100)
         
         let rectangle = Rectangle(
-            position: CGPoint(x: x, y: y),
+            position: CGPoint(x: rarax, y: raray),
             size: CGSize(width: width, height: height)
         )
 
