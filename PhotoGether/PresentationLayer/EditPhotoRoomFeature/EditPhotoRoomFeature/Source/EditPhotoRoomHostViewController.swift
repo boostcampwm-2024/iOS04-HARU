@@ -1,12 +1,18 @@
 import UIKit
+import Combine
 import BaseFeature
 
-public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure, UIScrollViewDelegate {
-    private let bottomView = EditPhotoHostBottomView()
+public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
+    private let bottomView = EditPhotoHostBottomView()
     
-    public init() {
+    private let input = PassthroughSubject<EditPhotoRoomHostViewModel.Input, Never>()
+    
+    private let viewModel: EditPhotoRoomHostViewModel
+    
+    public init(viewModel: EditPhotoRoomHostViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -20,6 +26,8 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         addViews()
         setupConstraints()
         configureUI()
+        bindInput()
+        bindOutput()
         temp()
     }
     
@@ -56,9 +64,26 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         }
     }
     
-    // TODO: 디자인 시스템에 컬러 에셋 추가 후 구현 예정
-    public func configureUI() {
+    public func configureUI() { }
+    
+    public func bindInput() {
+        bottomView.stickerButtonTapped
+            .sink { [weak self] in
+                self?.input.send(.stickerButtonDidTap)
+            }
+            .store(in: &cancellables)
+    }
+    
+    public func bindOutput() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
+        output.sink { [weak self] in
+            switch $0 {
+            case .rectangle(let rect):
+                self?.generateRectangle(rect: rect)
+            }
+        }
+        .store(in: &cancellables)
     }
     
     func temp() {
@@ -67,5 +92,17 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         navigationView.backgroundColor = .yellow
         bottomView.backgroundColor = .yellow
         canvasScrollView.backgroundColor = .red
+    }
+    
+    private func generateRectangle(rect: Rectangle) {
+        let view = UIView(
+            frame: CGRect(
+                origin: rect.position,
+                size: rect.size
+            )
+        )
+        
+        view.backgroundColor = .white
+        canvasScrollView.imageView.addSubview(view)
     }
 }
