@@ -53,7 +53,8 @@ final class EditPhotoHostBottomView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         
-        nextButton.backgroundColor = .green
+        nextButton.backgroundColor = PTGColor.primaryGreen.color
         nextButton.setImage(PTGImage.chevronRightBlack.image, for: .normal)
+        nextButton.layer.cornerRadius = 8
     }
 }

@@ -56,7 +56,6 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         }
     }
     
-    // TODO: 디자인 시스템에 컬러 에셋 추가 후 구현 예정
     public func configureUI() {
         
     }
