@@ -3,7 +3,7 @@ import Combine
 import DesignSystem
 import UIKit
 
-public class SharePhotoViewController: BaseViewController {
+public class SharePhotoViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let photoView = UIImageView()
     private let bottomView = SharePhotoBottomView()
@@ -25,13 +25,13 @@ public class SharePhotoViewController: BaseViewController {
         bindOutput()
     }
     
-    public override func addViews() {
+    public func addViews() {
         [navigationView, photoView, bottomView].forEach {
             view.addSubview($0)
         }
     }
     
-    public override func setupConstraints() {
+    public func setupConstraints() {
         navigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
@@ -52,7 +52,7 @@ public class SharePhotoViewController: BaseViewController {
     }
     
     // MARK: Image가 원래는 바인딩 되어야 함
-    public override func configureUI() {
+    public func configureUI() {
         view.backgroundColor = PTGColor.gray90.color
         
         photoView.image = PTGImage.frameIcon.image
@@ -60,7 +60,7 @@ public class SharePhotoViewController: BaseViewController {
         photoView.contentMode = .scaleAspectFit
     }
     
-    public override func bindOutput() {
+    public func bindOutput() {
         bottomView.shareButtonTapped
             .sink { [weak self] _ in
                 self?.showShareSheet()

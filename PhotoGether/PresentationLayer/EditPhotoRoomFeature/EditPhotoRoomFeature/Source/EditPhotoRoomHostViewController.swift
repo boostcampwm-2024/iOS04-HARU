@@ -1,7 +1,7 @@
 import UIKit
 import BaseFeature
 
-public class EditPhotoRoomHostViewController: BaseViewController, UIScrollViewDelegate {
+public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure, UIScrollViewDelegate {
     private let bottomView = EditPhotoHostBottomView()
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
@@ -30,13 +30,13 @@ public class EditPhotoRoomHostViewController: BaseViewController, UIScrollViewDe
         canvasScrollView.contentCentering()
     }
     
-    public override func addViews() {
+    public func addViews() {
         [navigationView, canvasScrollView, bottomView].forEach {
             view.addSubview($0)
         }
     }
     
-    public override func setupConstraints() {
+    public func setupConstraints() {
         navigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
@@ -57,7 +57,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, UIScrollViewDe
     }
     
     // TODO: 디자인 시스템에 컬러 에셋 추가 후 구현 예정
-    public override func configureUI() {
+    public func configureUI() {
         
     }
     
