@@ -28,7 +28,7 @@ jobs:
         run: sudo ls -1 /Applications | grep "Xcode"
 
       - name: 🏷️ Select XCode 16.0
-        run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_16.0.app
 
       - name: 🏷️ Show Xcode version
         run: |
