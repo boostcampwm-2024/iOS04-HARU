@@ -2,10 +2,10 @@ import UIKit
 import Combine
 import BaseFeature
 
-public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure, UIScrollViewDelegate {
     private var viewModel = EditPhotoRoomHostViewModel()
     private let input = PassthroughSubject<EditPhotoRoomHostViewModel.Input, Never>()
     
+public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoHostBottomView()
