@@ -4,7 +4,7 @@ import PhotoGetherDomainInterface
 import SnapKit
 import UIKit
 
-public class WaitingRoomViewController: BaseViewController {
+public class WaitingRoomViewController: BaseViewController, ViewControllerConfigure {
     let connectionClient: ConnectionClient
     let offerButton = UIButton()
     let localVideoView: UIView
@@ -31,13 +31,13 @@ public class WaitingRoomViewController: BaseViewController {
         setActions()
     }
     
-    public override func addViews() {
+    public func addViews() {
         [offerButton, localVideoView, remoteVideoView].forEach { subView in
             view.addSubview(subView)
         }
     }
     
-    public override func setupConstraints() {
+    public func setupConstraints() {
         offerButton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(20)
             $0.centerX.equalToSuperview()
@@ -60,7 +60,7 @@ public class WaitingRoomViewController: BaseViewController {
         }
     }
     
-    public override func configureUI() {
+    public func configureUI() {
         view.backgroundColor = .white
         
         offerButton.setTitle("Offer", for: .normal)

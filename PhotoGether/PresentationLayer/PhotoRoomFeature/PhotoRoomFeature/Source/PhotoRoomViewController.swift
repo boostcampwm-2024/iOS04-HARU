@@ -2,7 +2,7 @@ import UIKit
 import BaseFeature
 import Combine
 
-public class PhotoRoomViewController: BaseViewController {
+public class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
     public init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -15,4 +15,11 @@ public class PhotoRoomViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .blue
     }
+    
+    public func addViews() { }
+    
+    public func setupConstraints() { }
+    
+    public func configureUI() { }
+    
 }
