@@ -20,6 +20,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         addViews()
         setupConstraints()
         configureUI()
+        bindOutput()
         temp()
     }
     
@@ -56,8 +57,16 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         }
     }
     
-    public func configureUI() {
-        
+    public func configureUI() { }
+    
+    public func bindInput() { }
+    
+    public func bindOutput() {
+        bottomView.frameButtonTapped
+            .sink { [weak self] _ in
+                self?.generateRectangle()
+            }
+            .store(in: &cancellables)
     }
     
     func temp() {
@@ -66,5 +75,9 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         navigationView.backgroundColor = .yellow
         bottomView.backgroundColor = .yellow
         canvasScrollView.backgroundColor = .red
+    }
+    
+    private func generateRectangle() {
+        print("hello")
     }
 }

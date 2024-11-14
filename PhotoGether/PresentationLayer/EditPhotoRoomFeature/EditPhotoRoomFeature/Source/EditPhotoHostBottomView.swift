@@ -1,4 +1,5 @@
 import UIKit
+import Combine
 import DesignSystem
 
 final class EditPhotoHostBottomView: UIView {
@@ -7,6 +8,10 @@ final class EditPhotoHostBottomView: UIView {
     private let frameButton = PTGGrayButton(type: .frame)
     private let stickerButton = PTGGrayButton(type: .sticker)
     private let nextButton = UIButton()
+    
+    var frameButtonTapped: AnyPublisher<Void, Never> {
+        return frameButton.tapPublisher
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
