@@ -7,4 +7,5 @@ public protocol ConnectionClient: SignalingClientDelegate, WebRTCClientDelegate 
     
     func sendOffer()
     func sendData(data: Data)
+    func captureVideo() -> [UIImage]
 }

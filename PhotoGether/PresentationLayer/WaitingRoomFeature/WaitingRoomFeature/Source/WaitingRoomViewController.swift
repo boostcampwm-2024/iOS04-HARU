@@ -1,5 +1,6 @@
 import BaseFeature
 import DesignSystem
+import EditPhotoRoomFeature
 import PhotoGetherDomainInterface
 import SnapKit
 import UIKit
@@ -7,8 +8,9 @@ import UIKit
 public class WaitingRoomViewController: BaseViewController, ViewControllerConfigure {
     let connectionClient: ConnectionClient
     let offerButton = UIButton()
+    let captureButton = UIButton()
     let localVideoView: UIView
-    let remoteVideoView: UIView
+    var remoteVideoView: UIView
     
     public init(connectionClient: ConnectionClient) {
         self.connectionClient = connectionClient
@@ -32,7 +34,7 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
     }
     
     public func addViews() {
-        [offerButton, localVideoView, remoteVideoView].forEach { subView in
+        [offerButton, localVideoView, remoteVideoView, captureButton].forEach { subView in
             view.addSubview(subView)
         }
     }
@@ -40,7 +42,14 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
     public func setupConstraints() {
         offerButton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(20)
-            $0.centerX.equalToSuperview()
+            $0.centerX.equalToSuperview().offset(100)
+            $0.width.equalTo(100)
+            $0.height.equalTo(60)
+        }
+        
+        captureButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(20)
+            $0.centerX.equalToSuperview().offset(-100)
             $0.width.equalTo(100)
             $0.height.equalTo(60)
         }
@@ -68,6 +77,11 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
         offerButton.layer.cornerRadius = 10
         offerButton.backgroundColor = .black
         
+        captureButton.setTitle("Capture", for: .normal)
+        captureButton.setTitleColor(.white, for: .normal)
+        captureButton.layer.cornerRadius = 10
+        captureButton.backgroundColor = .black
+        
         localVideoView.backgroundColor = PTGColor.gray50.color
         
         remoteVideoView.backgroundColor = PTGColor.gray50.color
@@ -76,6 +90,13 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
     private func setActions() {
         offerButton.addAction(UIAction { [weak self] _ in
             self?.connectionClient.sendOffer()
+        }, for: .touchUpInside)
+        
+        captureButton.addAction(UIAction { [weak self] _ in
+            guard let self else { return }
+            
+            let images = self.connectionClient.captureVideo()
+            let frameImageGenerator = FrameImageGeneratorImpl(images: images)
         }, for: .touchUpInside)
     }
 }

@@ -6,8 +6,8 @@ public final class ConnectionClientImpl: ConnectionClient {
     private let signalingClient: SignalingClientImpl
     private let webRTCClient: WebRTCClientImpl
     
-    public var remoteVideoView: UIView = RTCMTLVideoView()
-    public var localVideoView: UIView = RTCMTLVideoView()
+    public var remoteVideoView: UIView = CapturableVideoView()
+    public var localVideoView: UIView = CapturableVideoView()
     // TODO: 음성 정보
     
     public init(signalingClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
@@ -33,6 +33,16 @@ public final class ConnectionClientImpl: ConnectionClient {
     
     public func sendData(data: Data) {
         self.webRTCClient.sendData(data)
+    }
+    
+    public func captureVideo() -> [UIImage] {
+        guard let localVideoView = self.remoteVideoView as? CapturableVideoView,
+              let remoteVideoView = self.localVideoView as? CapturableVideoView else { return [] }
+        
+        guard let localImage = localVideoView.capturedImage,
+              let remoteImage = remoteVideoView.capturedImage else { return [] }
+        
+        return [localImage, remoteImage]
     }
     
     private func connect() {
