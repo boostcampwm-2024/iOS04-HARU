@@ -14,8 +14,7 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.signalingClient = signalingClient
         self.webRTCClient = webRTCClient
         
-        self.signalingClient.delegate = self
-        self.webRTCClient.delegate = self
+        self.setDelegate()
         
         // 서버 자동 연결
         self.connect()
@@ -23,6 +22,11 @@ public final class ConnectionClientImpl: ConnectionClient {
         // VideoTrack과 나와 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
         self.bindRemoteVideo()
         self.bindLocalVideo()
+    }
+    
+    private func setDelegate() {
+        self.signalingClient.delegate = self
+        self.webRTCClient.delegate = self
     }
     
     public func sendOffer() {
