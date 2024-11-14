@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05729E012CE59967005F6994 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 05729E002CE59967005F6994 /* Secrets.xcconfig */; };
 		60CB82472CDA4BBC00873DD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB823D2CDA4BBC00873DD6 /* AppDelegate.swift */; };
 		60CB82482CDA4BBC00873DD6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82442CDA4BBC00873DD6 /* SceneDelegate.swift */; };
 		60CB824A2CDA4BBC00873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB823E2CDA4BBC00873DD6 /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05729E002CE59967005F6994 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		60CB820E2CDA4B5E00873DD6 /* PhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB82222CDA4B7F00873DD6 /* PhotoRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoRoomViewController.swift; sourceTree = "<group>"; };
 		60CB82282CDA4BB000873DD6 /* PhotoRoomFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoRoomFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +156,7 @@
 		60CB82552CDA4DA200873DD6 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				05729E002CE59967005F6994 /* Secrets.xcconfig */,
 				60CB823E2CDA4BBC00873DD6 /* Assets.xcassets */,
 				60CB823F2CDA4BBC00873DD6 /* Info.plist */,
 				60CB82412CDA4BBC00873DD6 /* LaunchScreen.storyboard */,
@@ -277,6 +280,7 @@
 			files = (
 				60CB824A2CDA4BBC00873DD6 /* Assets.xcassets in Resources */,
 				60CB824C2CDA4BBC00873DD6 /* LaunchScreen.storyboard in Resources */,
+				05729E012CE59967005F6994 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
