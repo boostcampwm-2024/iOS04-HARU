@@ -2,36 +2,40 @@ import Foundation
 import Combine
 
 final class EditPhotoRoomHostViewModel {
-    struct Input {
-        let didStickerButtonTapped: AnyPublisher<Void, Never>
+    enum Input {
+        case stickerButtonDidTap
     }
 
-    struct Output {
-        let rectangle: AnyPublisher<Rectangle, Never>
+    enum Output {
+        case rectangle(rect: Rectangle)
     }
     
-    private let rectangleSubject = PassthroughSubject<Rectangle, Never>()
     private var cancellables = Set<AnyCancellable>()
+    private var output = PassthroughSubject<Output, Never>()
     
-    func bind(input: Input) {
-        input.didStickerButtonTapped
-            .sink { [weak self]  in
-                guard let self else { return }
-                self.generateRectangle()
+    func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+        input.sink { [weak self] in
+            switch $0 {
+            case .stickerButtonDidTap:
+                self?.generateRectangle()
             }
-            .store(in: &cancellables)
-    }
-    
-    func bindOutput() -> Output {
-        return Output(rectangle: rectangleSubject.eraseToAnyPublisher())
-    }
-    
-    func generateRectangle() {
-        let rectangle = Rectangle(
-            position: CGPoint(x: 30, y: 40),
-            size: CGSize(width: 30, height: 30)
-        )
+        }
+        .store(in: &cancellables)
         
-        rectangleSubject.send(rectangle)
+        return output.eraseToAnyPublisher()
+    }
+    
+    private func generateRectangle() {
+        let x = Int.random(in: 10..<100)
+        let y = Int.random(in: 10..<100)
+        let width = Int.random(in: 10..<100)
+        let height = Int.random(in: 10..<100)
+        
+        let rectangle = Rectangle(
+            position: CGPoint(x: x, y: y),
+            size: CGSize(width: width, height: height)
+        )
+
+        output.send(.rectangle(rect: rectangle))
     }
 }

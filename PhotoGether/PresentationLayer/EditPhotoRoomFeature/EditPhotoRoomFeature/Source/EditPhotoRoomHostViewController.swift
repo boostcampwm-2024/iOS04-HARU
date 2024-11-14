@@ -1,8 +1,11 @@
 import UIKit
+import Combine
 import BaseFeature
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure, UIScrollViewDelegate {
     private var viewModel = EditPhotoRoomHostViewModel()
+    private let input = PassthroughSubject<EditPhotoRoomHostViewModel.Input, Never>()
+    
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoHostBottomView()
@@ -62,30 +65,24 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     public func configureUI() { }
     
     public func bindInput() {
-        let input = EditPhotoRoomHostViewModel.Input(
-            didStickerButtonTapped: bottomView.stickerButtonTapped
-        )
-        
-        viewModel.bind(input: input)
+        bottomView.stickerButtonTapped
+            .sink { [weak self] in
+                print("didTap sticker Button")
+                self?.input.send(.stickerButtonDidTap)
+            }
+            .store(in: &cancellables)
     }
     
     public func bindOutput() {
-        let output = viewModel.bindOutput()
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.rectangle
-            .sink { [weak self] in
-                guard let self else { return }
-                let rectangle = UIView(
-                    frame: CGRect(
-                        origin: $0.position,
-                        size: $0.size
-                    )
-                )
-                rectangle.backgroundColor = .cyan
-                
-                canvasScrollView.imageView.addSubview(rectangle)
+        output.sink { [weak self] in
+            switch $0 {
+            case .rectangle(let rect):
+                self?.generateRectangle(rect: rect)
             }
-            .store(in: &cancellables)
+        }
+        .store(in: &cancellables)
     }
     
     func temp() {
@@ -94,5 +91,17 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         navigationView.backgroundColor = .yellow
         bottomView.backgroundColor = .yellow
         canvasScrollView.backgroundColor = .red
+    }
+    
+    private func generateRectangle(rect: Rectangle) {
+        let view = UIView(
+            frame: CGRect(
+                origin: rect.position,
+                size: rect.size
+            )
+        )
+        
+        view.backgroundColor = .white
+        canvasScrollView.imageView.addSubview(view)
     }
 }
