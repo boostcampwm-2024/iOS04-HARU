@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		60348F2C2CE47B8C002D1CEE /* ConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60348F2B2CE47B8C002D1CEE /* ConnectionClient.swift */; };
+		60791E092CE59F4A00F95789 /* SharePhotoComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60791E082CE59F4A00F95789 /* SharePhotoComponent.swift */; };
 		7B1745462CE3599600E01D1A /* SignalingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1745452CE3599600E01D1A /* SignalingClient.swift */; };
 		7B1745482CE3599E00E01D1A /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1745472CE3599E00E01D1A /* WebRTCClient.swift */; };
 		7B1745512CE35CD500E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B1745502CE35CD500E01D1A /* WebRTC */; };
@@ -73,6 +74,7 @@
 /* Begin PBXFileReference section */
 		05E553E92CDB9C4A00B70645 /* DomainUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60348F2B2CE47B8C002D1CEE /* ConnectionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionClient.swift; sourceTree = "<group>"; };
+		60791E082CE59F4A00F95789 /* SharePhotoComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoComponent.swift; sourceTree = "<group>"; };
 		7B1745452CE3599600E01D1A /* SignalingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClient.swift; sourceTree = "<group>"; };
 		7B1745472CE3599E00E01D1A /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
 		7B5951872CDB647A00B89C85 /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +121,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60791E072CE59EF000F95789 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				60791E082CE59F4A00F95789 /* SharePhotoComponent.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
 		7B59517D2CDB647A00B89C85 = {
 			isa = PBXGroup;
 			children = (
@@ -153,12 +163,13 @@
 		7B5951B82CDB653E00B89C85 /* PhotoGetherDomainInterface */ = {
 			isa = PBXGroup;
 			children = (
+				7BB6408C2CE335CC0090E35C /* Protocol */,
+				7BB6407F2CE3352C0090E35C /* Model */,
+				60791E072CE59EF000F95789 /* Component */,
 				7BB640902CE336E00090E35C /* WebSocketClient.swift */,
 				7B1745452CE3599600E01D1A /* SignalingClient.swift */,
 				7B1745472CE3599E00E01D1A /* WebRTCClient.swift */,
 				60348F2B2CE47B8C002D1CEE /* ConnectionClient.swift */,
-				7BB6408C2CE335CC0090E35C /* Protocol */,
-				7BB6407F2CE3352C0090E35C /* Model */,
 			);
 			path = PhotoGetherDomainInterface;
 			sourceTree = "<group>";
@@ -384,6 +395,7 @@
 				7BB6408B2CE335590090E35C /* WebSocketClientDelegate.swift in Sources */,
 				7B1745482CE3599E00E01D1A /* WebRTCClient.swift in Sources */,
 				7BB6408D2CE336620090E35C /* SessionDescription.swift in Sources */,
+				60791E092CE59F4A00F95789 /* SharePhotoComponent.swift in Sources */,
 				7BB6408F2CE336740090E35C /* SignalingMessage.swift in Sources */,
 				7BB6408E2CE3366A0090E35C /* IceCandidate.swift in Sources */,
 			);

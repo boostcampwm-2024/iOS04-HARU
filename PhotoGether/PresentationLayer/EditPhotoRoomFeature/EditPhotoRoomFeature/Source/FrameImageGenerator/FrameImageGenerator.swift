@@ -19,6 +19,7 @@ public final class FrameImageGeneratorImpl: FrameImageGenerator {
     
     public init(images: [UIImage]) {
         self.images = images
+        self.frameView = makeFrameView()
     }
     
     // MARK: 전략 패턴으로 프레임 추가 구성 (ex. DefaultWhiteFrameView)
