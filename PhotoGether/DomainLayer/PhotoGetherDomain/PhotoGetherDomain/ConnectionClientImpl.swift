@@ -1,6 +1,7 @@
 import Foundation
 import WebRTC
 import PhotoGetherDomainInterface
+import Combine
 
 public final class ConnectionClientImpl: ConnectionClient {
     private let signalingClient: SignalingClientImpl
@@ -9,6 +10,8 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var remoteVideoView: UIView = CapturableVideoView()
     public var localVideoView: UIView = CapturableVideoView()
     // TODO: 음성 정보
+    
+    public var dataReceivedSubject = PassthroughSubject<Data, Never>()
     
     public init(signalingClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
         self.signalingClient = signalingClient
@@ -127,5 +130,6 @@ extension ConnectionClientImpl {
         didReceiveData data: Data
     ) {
         // TODO: 수신된 데이터를 처리하는 곳
+        self.dataReceivedSubject.send(data)
     }
 }
