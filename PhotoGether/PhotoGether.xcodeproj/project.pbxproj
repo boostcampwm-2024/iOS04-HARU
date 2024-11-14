@@ -15,6 +15,25 @@
 		60CB81FC2CDA450D00873DD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F82CDA450D00873DD6 /* ViewController.swift */; };
 		60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F32CDA450D00873DD6 /* Assets.xcassets */; };
 		60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */; };
+		60EDB5DE2CE6116F0077F20F /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5DD2CE6116F0077F20F /* BaseFeature.framework */; };
+		60EDB5DF2CE6116F0077F20F /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5DD2CE6116F0077F20F /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5E12CE611730077F20F /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E02CE611730077F20F /* DesignSystem.framework */; };
+		60EDB5E22CE611730077F20F /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E02CE611730077F20F /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5E42CE611780077F20F /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E32CE611780077F20F /* EditPhotoRoomFeature.framework */; };
+		60EDB5E52CE611780077F20F /* EditPhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E32CE611780077F20F /* EditPhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5E72CE6117D0077F20F /* WaitingRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E62CE6117D0077F20F /* WaitingRoomFeature.framework */; };
+		60EDB5E82CE6117D0077F20F /* WaitingRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E62CE6117D0077F20F /* WaitingRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5EA2CE611890077F20F /* PhotoGetherDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E92CE611890077F20F /* PhotoGetherDomain.framework */; };
+		60EDB5EB2CE611890077F20F /* PhotoGetherDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5E92CE611890077F20F /* PhotoGetherDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5F02CE611990077F20F /* SharePhotoFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5EF2CE611990077F20F /* SharePhotoFeature.framework */; };
+		60EDB5F12CE611990077F20F /* SharePhotoFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5EF2CE611990077F20F /* SharePhotoFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5F32CE6119F0077F20F /* WaitingRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5F22CE6119F0077F20F /* WaitingRoomFeature.framework */; };
+		60EDB5F42CE6119F0077F20F /* WaitingRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5F22CE6119F0077F20F /* WaitingRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5F62CE611A80077F20F /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5F52CE611A80077F20F /* PhotoGetherNetwork.framework */; };
+		60EDB5F72CE611A80077F20F /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5F52CE611A80077F20F /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5F92CE611AD0077F20F /* PhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5F82CE611AD0077F20F /* PhotoRoomFeature.framework */; };
+		60EDB5FA2CE611AD0077F20F /* PhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5F82CE611AD0077F20F /* PhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB5FD2CE62D040077F20F /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 60EDB5FC2CE62D040077F20F /* WebRTC */; };
 		7B17454A2CE35AE100E01D1A /* PhotoGetherDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */; };
 		7B17454B2CE35AE100E01D1A /* PhotoGetherDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B17454D2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */; };
@@ -28,9 +47,18 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				60EDB5EB2CE611890077F20F /* PhotoGetherDomain.framework in Embed Frameworks */,
+				60EDB5F12CE611990077F20F /* SharePhotoFeature.framework in Embed Frameworks */,
+				60EDB5F72CE611A80077F20F /* PhotoGetherNetwork.framework in Embed Frameworks */,
+				60EDB5DF2CE6116F0077F20F /* BaseFeature.framework in Embed Frameworks */,
 				7B17454E2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
+				60EDB5E22CE611730077F20F /* DesignSystem.framework in Embed Frameworks */,
+				60EDB5FA2CE611AD0077F20F /* PhotoRoomFeature.framework in Embed Frameworks */,
+				60EDB5E52CE611780077F20F /* EditPhotoRoomFeature.framework in Embed Frameworks */,
 				7B17454B2CE35AE100E01D1A /* PhotoGetherDomain.framework in Embed Frameworks */,
 				053986062CDCAC3000E709AC /* PhotoGetherNetwork.framework in Embed Frameworks */,
+				60EDB5F42CE6119F0077F20F /* WaitingRoomFeature.framework in Embed Frameworks */,
+				60EDB5E82CE6117D0077F20F /* WaitingRoomFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,6 +75,16 @@
 		60CB81F52CDA450D00873DD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		60CB81F82CDA450D00873DD6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		60EDB5DD2CE6116F0077F20F /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5E02CE611730077F20F /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5E32CE611780077F20F /* EditPhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EditPhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5E62CE6117D0077F20F /* WaitingRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WaitingRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5E92CE611890077F20F /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5EC2CE611910077F20F /* PhotoGetherData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5EF2CE611990077F20F /* SharePhotoFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SharePhotoFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5F22CE6119F0077F20F /* WaitingRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WaitingRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5F52CE611A80077F20F /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB5F82CE611AD0077F20F /* PhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -56,9 +94,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60EDB5FD2CE62D040077F20F /* WebRTC in Frameworks */,
+				60EDB5EA2CE611890077F20F /* PhotoGetherDomain.framework in Frameworks */,
+				60EDB5F02CE611990077F20F /* SharePhotoFeature.framework in Frameworks */,
+				60EDB5F62CE611A80077F20F /* PhotoGetherNetwork.framework in Frameworks */,
+				60EDB5DE2CE6116F0077F20F /* BaseFeature.framework in Frameworks */,
 				053986052CDCAC3000E709AC /* PhotoGetherNetwork.framework in Frameworks */,
+				60EDB5E12CE611730077F20F /* DesignSystem.framework in Frameworks */,
+				60EDB5F92CE611AD0077F20F /* PhotoRoomFeature.framework in Frameworks */,
+				60EDB5E42CE611780077F20F /* EditPhotoRoomFeature.framework in Frameworks */,
 				7B17454D2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework in Frameworks */,
 				7B17454A2CE35AE100E01D1A /* PhotoGetherDomain.framework in Frameworks */,
+				60EDB5F32CE6119F0077F20F /* WaitingRoomFeature.framework in Frameworks */,
+				60EDB5E72CE6117D0077F20F /* WaitingRoomFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +116,16 @@
 		053986032CDCAC3000E709AC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				60EDB5F82CE611AD0077F20F /* PhotoRoomFeature.framework */,
+				60EDB5F52CE611A80077F20F /* PhotoGetherNetwork.framework */,
+				60EDB5F22CE6119F0077F20F /* WaitingRoomFeature.framework */,
+				60EDB5EF2CE611990077F20F /* SharePhotoFeature.framework */,
+				60EDB5EC2CE611910077F20F /* PhotoGetherData.framework */,
+				60EDB5E92CE611890077F20F /* PhotoGetherDomain.framework */,
+				60EDB5E62CE6117D0077F20F /* WaitingRoomFeature.framework */,
+				60EDB5E32CE611780077F20F /* EditPhotoRoomFeature.framework */,
+				60EDB5E02CE611730077F20F /* DesignSystem.framework */,
+				60EDB5DD2CE6116F0077F20F /* BaseFeature.framework */,
 				7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */,
 				7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */,
 				053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */,
@@ -149,6 +207,7 @@
 			);
 			name = PhotoGether;
 			packageProductDependencies = (
+				60EDB5FC2CE62D040077F20F /* WebRTC */,
 			);
 			productName = PhotoGether;
 			productReference = 60CB81DA2CDA442700873DD6 /* PhotoGether.app */;
@@ -180,6 +239,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				60EDB5FB2CE62D040077F20F /* XCRemoteSwiftPackageReference "WebRTC" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60CB81DB2CDA442700873DD6 /* Products */;
@@ -264,6 +324,8 @@
 				INFOPLIST_FILE = PhotoGether/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "포토게더";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) 카메라 권한이 필요합니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(PRODUCT_NAME) 마이크 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -300,6 +362,8 @@
 				INFOPLIST_FILE = PhotoGether/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "포토게더";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) 카메라 권한이 필요합니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(PRODUCT_NAME) 마이크 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -469,6 +533,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		60EDB5FB2CE62D040077F20F /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 130.0.0;
+			};
+		};
 		7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/SwiftLint";
@@ -478,6 +550,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		60EDB5FC2CE62D040077F20F /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60EDB5FB2CE62D040077F20F /* XCRemoteSwiftPackageReference "WebRTC" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 60CB81D22CDA442700873DD6 /* Project object */;
 }

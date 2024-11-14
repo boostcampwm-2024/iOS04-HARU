@@ -39,7 +39,7 @@ final class CanvasScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         
-        imageView.image = image
+//        imageView.image = image
         imageView.contentMode = .scaleAspectFit
     }
     

@@ -1,6 +1,9 @@
-import UIKit
-import Combine
 import BaseFeature
+import Combine
+import DesignSystem
+import PhotoGetherDomainInterface
+import SharePhotoFeature
+import UIKit
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -28,7 +31,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         configureUI()
         bindInput()
         bindOutput()
-        temp()
+//        temp()
     }
     
     public override func viewDidLayoutSubviews() {
@@ -64,12 +67,31 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         }
     }
     
-    public func configureUI() { }
+    public func configureUI() {
+        view.backgroundColor = PTGColor.gray90.color
+        
+        navigationView.backgroundColor = .clear
+        bottomView.backgroundColor = .clear
+        canvasScrollView.backgroundColor = .clear
+        canvasScrollView.imageView.image = viewModel.generateFrameImage()
+    }
     
     public func bindInput() {
+        bottomView.frameButtonTapped
+            .sink { [weak self] in
+                self?.input.send(.frameButtonDidTap)
+            }
+            .store(in: &cancellables)
+        
         bottomView.stickerButtonTapped
             .sink { [weak self] in
                 self?.input.send(.stickerButtonDidTap)
+            }
+            .store(in: &cancellables)
+        
+        bottomView.nextButtonTapped
+            .sink { [weak self] in
+                self?.input.send(.nextButtonDidTap)
             }
             .store(in: &cancellables)
     }
@@ -81,6 +103,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             switch $0 {
             case .rectangle(let rect):
                 self?.generateRectangle(rect: rect)
+            case .frameImage(let image):
+                self?.canvasScrollView.imageView.image = image
+            case .showSharePhoto:
+                self?.showSharePhoto()
             }
         }
         .store(in: &cancellables)
@@ -104,5 +130,22 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         
         view.backgroundColor = .white
         canvasScrollView.imageView.addSubview(view)
+    }
+    
+    private func showSharePhoto() {
+        guard let imageData = captureCanvasScrollImageView().pngData() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func captureCanvasScrollImageView() -> UIImage {
+        let imageView = canvasScrollView.imageView
+        let renderer = UIGraphicsImageRenderer(size: imageView.frame.size)
+        let capturedImage = renderer.image { context in
+            imageView.layer.render(in: context.cgContext)
+        }
+        return capturedImage
     }
 }

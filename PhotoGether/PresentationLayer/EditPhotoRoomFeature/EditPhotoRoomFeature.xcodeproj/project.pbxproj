@@ -225,9 +225,9 @@
 				05C297552CE391FF00108687 /* CanvasScrollView.swift */,
 				053DC8502CE32A8800DC9F35 /* EditPhotoHostBottomView.swift */,
 				60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */,
+				05ACF4852CE5C6DC00FBA206 /* EditPhotoRoomHostViewModel.swift */,
 				60B03BE02CE43F8200A7C748 /* FrameImageGenerator */,
 				05ACF4832CE5C6AB00FBA206 /* Rectangle.swift */,
-				05ACF4852CE5C6DC00FBA206 /* EditPhotoRoomHostViewModel.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";

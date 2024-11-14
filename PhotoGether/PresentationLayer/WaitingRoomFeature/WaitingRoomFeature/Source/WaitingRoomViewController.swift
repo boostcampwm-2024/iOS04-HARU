@@ -96,7 +96,12 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
             guard let self else { return }
             
             let images = self.connectionClient.captureVideo()
+            print("imagesCount: \(images.count)")
             let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+            let viewModel = EditPhotoRoomHostViewModel(frameImageGenerator: frameImageGenerator)
+            let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
+            self.connectionClient.sendData(data: images.first!.pngData()!)
+            navigationController?.pushViewController(viewController, animated: true)
         }, for: .touchUpInside)
     }
 }

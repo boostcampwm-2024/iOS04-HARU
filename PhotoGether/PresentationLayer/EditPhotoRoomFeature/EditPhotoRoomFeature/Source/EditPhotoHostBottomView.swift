@@ -9,8 +9,16 @@ final class EditPhotoHostBottomView: UIView {
     private let stickerButton = PTGGrayButton(type: .sticker)
     private let nextButton = UIButton()
     
+    var frameButtonTapped: AnyPublisher<Void, Never> {
+        return frameButton.tapPublisher
+    }
+    
     var stickerButtonTapped: AnyPublisher<Void, Never> {
         return stickerButton.tapPublisher
+    }
+    
+    var nextButtonTapped: AnyPublisher<Void, Never> {
+        return nextButton.tapPublisher
     }
     
     override init(frame: CGRect) {
