@@ -1,6 +1,12 @@
 import UIKit
 
+fileprivate typealias DataSource = ParticipantsCollectionViewDataSource
+
 public final class ParticipantsCollectionViewController: UICollectionViewController {
+    public lazy var dataSource = DataSource.create(
+        collectionView: self.collectionView
+    )
+    
     public init() {
         let layout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: layout)
@@ -17,30 +23,6 @@ public final class ParticipantsCollectionViewController: UICollectionViewControl
             ParticipantsCollectionViewCell.self,
             forCellWithReuseIdentifier: ParticipantsCollectionViewCell.reuseIdentifier
         )
-    }
-
-    public override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-
-    public override func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        return 4
-    }
-
-    public override func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ParticipantsCollectionViewCell.reuseIdentifier,
-            for: indexPath
-        )
-        // TODO: Cell Configuration needed
-        return cell
     }
 }
 
