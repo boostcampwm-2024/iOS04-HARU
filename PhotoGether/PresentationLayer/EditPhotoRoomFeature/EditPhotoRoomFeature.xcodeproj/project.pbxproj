@@ -28,6 +28,10 @@
 		60CB82A62CDB519500873DD6 /* EditPhotoRoomHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */; };
 		60CB82A82CDB522900873DD6 /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; };
 		60CB82A92CDB522900873DD6 /* EditPhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB6002CE632AC0077F20F /* SharePhotoFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5FF2CE632AC0077F20F /* SharePhotoFeature.framework */; };
+		60EDB6012CE632AC0077F20F /* SharePhotoFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB5FF2CE632AC0077F20F /* SharePhotoFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60EDB6032CE632BF0077F20F /* SharePhotoFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB6022CE632BF0077F20F /* SharePhotoFeature.framework */; };
+		60EDB6042CE632BF0077F20F /* SharePhotoFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EDB6022CE632BF0077F20F /* SharePhotoFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B59510C2CDB598600B89C85 /* FeatureTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510B2CDB598600B89C85 /* FeatureTesting.framework */; };
 		7B59510D2CDB598600B89C85 /* FeatureTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510B2CDB598600B89C85 /* FeatureTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B59514E2CDB5FFC00B89C85 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59514D2CDB5FFC00B89C85 /* BaseFeature.framework */; };
@@ -55,6 +59,7 @@
 			files = (
 				7B59510D2CDB598600B89C85 /* FeatureTesting.framework in Embed Frameworks */,
 				60CB82A92CDB522900873DD6 /* EditPhotoRoomFeature.framework in Embed Frameworks */,
+				60EDB6012CE632AC0077F20F /* SharePhotoFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,6 +70,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				60EDB6042CE632BF0077F20F /* SharePhotoFeature.framework in Embed Frameworks */,
 				7B5951D02CDB658400B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				053DC8542CE32AE900DC9F35 /* DesignSystem.framework in Embed Frameworks */,
 				7B59514F2CDB5FFC00B89C85 /* BaseFeature.framework in Embed Frameworks */,
@@ -96,6 +102,8 @@
 		60CB82942CDB509200873DD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60CB82982CDB509200873DD6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		60CB82A42CDB514F00873DD6 /* EditPhotoRoomHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoRoomHostViewController.swift; sourceTree = "<group>"; };
+		60EDB5FF2CE632AC0077F20F /* SharePhotoFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SharePhotoFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EDB6022CE632BF0077F20F /* SharePhotoFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SharePhotoFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59510B2CDB598600B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59514D2CDB5FFC00B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951772CDB62A200B89C85 /* PresentationUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60EDB6032CE632BF0077F20F /* SharePhotoFeature.framework in Frameworks */,
 				7B5951CF2CDB658400B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				053DC8532CE32AE900DC9F35 /* DesignSystem.framework in Frameworks */,
 				7B59514E2CDB5FFC00B89C85 /* BaseFeature.framework in Frameworks */,
@@ -119,6 +128,7 @@
 			files = (
 				7B59510C2CDB598600B89C85 /* FeatureTesting.framework in Frameworks */,
 				60CB82A82CDB522900873DD6 /* EditPhotoRoomFeature.framework in Frameworks */,
+				60EDB6002CE632AC0077F20F /* SharePhotoFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +245,8 @@
 		60CB82A72CDB522900873DD6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				60EDB6022CE632BF0077F20F /* SharePhotoFeature.framework */,
+				60EDB5FF2CE632AC0077F20F /* SharePhotoFeature.framework */,
 				053DC8522CE32AE900DC9F35 /* DesignSystem.framework */,
 				7B5951CE2CDB658400B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B5951772CDB62A200B89C85 /* PresentationUtility.framework */,

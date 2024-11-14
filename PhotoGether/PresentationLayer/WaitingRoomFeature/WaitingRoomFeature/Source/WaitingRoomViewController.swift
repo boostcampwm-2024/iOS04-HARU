@@ -100,8 +100,26 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
             let frameImageGenerator = FrameImageGeneratorImpl(images: images)
             let viewModel = EditPhotoRoomHostViewModel(frameImageGenerator: frameImageGenerator)
             let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
-            self.connectionClient.sendData(data: images.first!.pngData()!)
+            let datas = images.map { $0.pngData() }
+            let jsonData = try! JSONEncoder().encode(datas)
+            self.connectionClient.sendData(data: jsonData)
             navigationController?.pushViewController(viewController, animated: true)
         }, for: .touchUpInside)
+        
+        connectionClient.dataReceivedSubject
+            .sink { [weak self] imageData in
+                let array = try! JSONDecoder().decode([Data].self, from: imageData)
+                var images: [UIImage] = []
+                array.forEach { images.append(UIImage(data: $0) ?? UIImage()) }
+                let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+                let viewModel = EditPhotoRoomHostViewModel(frameImageGenerator: frameImageGenerator)
+                print("images: \(images.count)")
+                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }.store(in: &cancellables)
+    }
+    
+    private func showNextView() {
+        
     }
 }
