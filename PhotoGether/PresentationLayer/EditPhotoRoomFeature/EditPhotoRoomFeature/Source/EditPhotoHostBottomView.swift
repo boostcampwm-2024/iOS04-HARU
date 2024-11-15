@@ -1,12 +1,17 @@
 import UIKit
+import Combine
 import DesignSystem
 
 final class EditPhotoHostBottomView: UIView {
     // TODO: 추후 internal or tapPublisher만 참조할 수 있도록
     private let stackView = UIStackView()
     private let frameButton = PTGGrayButton(type: .frame)
-    private let nextButton = UIButton()
     private let stickerButton = PTGGrayButton(type: .sticker)
+    private let nextButton = UIButton()
+    
+    var stickerButtonTapped: AnyPublisher<Void, Never> {
+        return stickerButton.tapPublisher
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,7 +58,8 @@ final class EditPhotoHostBottomView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         
-        nextButton.backgroundColor = .green
+        nextButton.backgroundColor = PTGColor.primaryGreen.color
         nextButton.setImage(PTGImage.chevronRightBlack.image, for: .normal)
+        nextButton.layer.cornerRadius = 8
     }
 }

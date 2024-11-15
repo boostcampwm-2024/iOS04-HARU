@@ -182,7 +182,7 @@
 			mainGroup = 60CB81D12CDA442700873DD6;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */,
+				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60CB81DB2CDA442700873DD6 /* Products */;
@@ -473,6 +473,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 130.0.0;
+			};
+		};
 		7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stasel/WebRTC";

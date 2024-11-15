@@ -14,6 +14,7 @@
 		055503C22CDB55F5004D34EB /* SharePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055503C02CDB5589004D34EB /* SharePhotoViewController.swift */; };
 		055503C42CDB5608004D34EB /* SharePhotoFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 055503882CDB54AF004D34EB /* SharePhotoFeature.framework */; };
 		055503C52CDB5608004D34EB /* SharePhotoFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 055503882CDB54AF004D34EB /* SharePhotoFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60791E0B2CE59FC000F95789 /* SharePhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60791E0A2CE59FC000F95789 /* SharePhotoViewModel.swift */; };
 		60B03BF12CE4CE3100A7C748 /* SharePhotoBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B03BF02CE4CE3100A7C748 /* SharePhotoBottomView.swift */; };
 		60B03BF32CE4CEDC00A7C748 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; };
 		60B03BF42CE4CEDC00A7C748 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -72,6 +73,7 @@
 		055503B02CDB5500004D34EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		055503B42CDB5500004D34EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		055503C02CDB5589004D34EB /* SharePhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoViewController.swift; sourceTree = "<group>"; };
+		60791E0A2CE59FC000F95789 /* SharePhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoViewModel.swift; sourceTree = "<group>"; };
 		60B03BF02CE4CE3100A7C748 /* SharePhotoBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoBottomView.swift; sourceTree = "<group>"; };
 		60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				055503C02CDB5589004D34EB /* SharePhotoViewController.swift */,
+				60791E0A2CE59FC000F95789 /* SharePhotoViewModel.swift */,
 				60B03BF02CE4CE3100A7C748 /* SharePhotoBottomView.swift */,
 			);
 			path = Source;
@@ -296,6 +299,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60791E0B2CE59FC000F95789 /* SharePhotoViewModel.swift in Sources */,
 				60B03BF12CE4CE3100A7C748 /* SharePhotoBottomView.swift in Sources */,
 				055503C22CDB55F5004D34EB /* SharePhotoViewController.swift in Sources */,
 			);
