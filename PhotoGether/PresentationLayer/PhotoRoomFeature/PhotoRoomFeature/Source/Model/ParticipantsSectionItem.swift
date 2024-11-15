@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ParticipantsSectionItem: Hashable, Equatable {
+public struct ParticipantsSectionItem {
     public private(set) var nickname: String
     public let videoID: Int
     private let identifier = UUID()
@@ -15,12 +15,12 @@ public struct ParticipantsSectionItem: Hashable, Equatable {
     }
 }
 
-public extension ParticipantsSectionItem {
-    func hash(into hasher: inout Hasher) {
+extension ParticipantsSectionItem: Hashable, Equatable {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
     }
 
-    static func == (lhs: ParticipantsSectionItem, rhs: ParticipantsSectionItem) -> Bool {
+    public static func == (lhs: ParticipantsSectionItem, rhs: ParticipantsSectionItem) -> Bool {
         lhs.identifier == rhs.identifier
     }
 }
