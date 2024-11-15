@@ -56,7 +56,7 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
 }
 
 extension ParticipantsCollectionViewCell {
-    enum Constants {
+    private enum Constants {
         static let nicknameLabelWidth: CGFloat = 40
         static let nicknameLabelHeight: CGFloat = 20
         static let nicknameLabelTopSpacing: CGFloat = 8
