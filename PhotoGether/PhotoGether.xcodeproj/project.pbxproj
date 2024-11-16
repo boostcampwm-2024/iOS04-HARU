@@ -9,12 +9,6 @@
 /* Begin PBXBuildFile section */
 		053986052CDCAC3000E709AC /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */; };
 		053986062CDCAC3000E709AC /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		0584AAC22CDEF91800ED923C /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0584AAC12CDEF91800ED923C /* Secrets.xcconfig */; };
-		60CB81FA2CDA450D00873DD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F22CDA450D00873DD6 /* AppDelegate.swift */; };
-		60CB81FB2CDA450D00873DD6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */; };
-		60CB81FC2CDA450D00873DD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB81F82CDA450D00873DD6 /* ViewController.swift */; };
-		60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F32CDA450D00873DD6 /* Assets.xcassets */; };
-		60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */; };
 		7B17454A2CE35AE100E01D1A /* PhotoGetherDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */; };
 		7B17454B2CE35AE100E01D1A /* PhotoGetherDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B17454D2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */; };
@@ -40,17 +34,31 @@
 
 /* Begin PBXFileReference section */
 		053986042CDCAC3000E709AC /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0584AAC12CDEF91800ED923C /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		60CB81DA2CDA442700873DD6 /* PhotoGether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoGether.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		60CB81F22CDA450D00873DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		60CB81F32CDA450D00873DD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		60CB81F42CDA450D00873DD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		60CB81F52CDA450D00873DD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		60CB81F82CDA450D00873DD6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7B17462A2CE8E94100E01D1A /* Exceptions for "PhotoGether" folder in "PhotoGether" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resource/Info.plist,
+			);
+			target = 60CB81D92CDA442700873DD6 /* PhotoGether */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7B1746222CE8E94100E01D1A /* PhotoGether */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7B17462A2CE8E94100E01D1A /* Exceptions for "PhotoGether" folder in "PhotoGether" target */,
+			);
+			path = PhotoGether;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		60CB81D72CDA442700873DD6 /* Frameworks */ = {
@@ -80,7 +88,7 @@
 		60CB81D12CDA442700873DD6 = {
 			isa = PBXGroup;
 			children = (
-				60CB81F92CDA450D00873DD6 /* PhotoGether */,
+				7B1746222CE8E94100E01D1A /* PhotoGether */,
 				053986032CDCAC3000E709AC /* Frameworks */,
 				60CB81DB2CDA442700873DD6 /* Products */,
 			);
@@ -92,44 +100,6 @@
 				60CB81DA2CDA442700873DD6 /* PhotoGether.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		60CB81F92CDA450D00873DD6 /* PhotoGether */ = {
-			isa = PBXGroup;
-			children = (
-				60CB82032CDA499600873DD6 /* App */,
-				60CB82012CDA48D900873DD6 /* Resource */,
-				60CB82002CDA48CE00873DD6 /* Source */,
-			);
-			path = PhotoGether;
-			sourceTree = "<group>";
-		};
-		60CB82002CDA48CE00873DD6 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				60CB81F82CDA450D00873DD6 /* ViewController.swift */,
-			);
-			path = Source;
-			sourceTree = "<group>";
-		};
-		60CB82012CDA48D900873DD6 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				60CB81F32CDA450D00873DD6 /* Assets.xcassets */,
-				60CB81F42CDA450D00873DD6 /* Info.plist */,
-				60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */,
-				0584AAC12CDEF91800ED923C /* Secrets.xcconfig */,
-			);
-			path = Resource;
-			sourceTree = "<group>";
-		};
-		60CB82032CDA499600873DD6 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				60CB81F22CDA450D00873DD6 /* AppDelegate.swift */,
-				60CB81F72CDA450D00873DD6 /* SceneDelegate.swift */,
-			);
-			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +118,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7B1746222CE8E94100E01D1A /* PhotoGether */,
 			);
 			name = PhotoGether;
 			packageProductDependencies = (
@@ -182,7 +155,6 @@
 			mainGroup = 60CB81D12CDA442700873DD6;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60CB81DB2CDA442700873DD6 /* Products */;
@@ -199,9 +171,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0584AAC22CDEF91800ED923C /* Secrets.xcconfig in Resources */,
-				60CB81FD2CDA450D00873DD6 /* Assets.xcassets in Resources */,
-				60CB81FF2CDA450D00873DD6 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,24 +203,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB81FA2CDA450D00873DD6 /* AppDelegate.swift in Sources */,
-				60CB81FB2CDA450D00873DD6 /* SceneDelegate.swift in Sources */,
-				60CB81FC2CDA450D00873DD6 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		60CB81F62CDA450D00873DD6 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				60CB81F52CDA450D00873DD6 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		60CB81EE2CDA442900873DD6 /* Debug */ = {
@@ -328,7 +283,8 @@
 		};
 		60CB81F02CDA442900873DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0584AAC12CDEF91800ED923C /* Secrets.xcconfig */;
+			baseConfigurationReferenceAnchor = 7B1746222CE8E94100E01D1A /* PhotoGether */;
+			baseConfigurationReferenceRelativePath = Resource/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -393,7 +349,8 @@
 		};
 		60CB81F12CDA442900873DD6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0584AAC12CDEF91800ED923C /* Secrets.xcconfig */;
+			baseConfigurationReferenceAnchor = 7B1746222CE8E94100E01D1A /* PhotoGether */;
+			baseConfigurationReferenceRelativePath = Resource/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -473,14 +430,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stasel/WebRTC";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 130.0.0;
-			};
-		};
 		7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stasel/WebRTC";

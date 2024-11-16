@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		60CB83372CDB9DF600873DD6 /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB83362CDB9DEA00873DD6 /* Temp.swift */; };
 		60CB833A2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */; };
 		60CB833B2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60EB7BBB2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */; };
@@ -31,11 +30,18 @@
 
 /* Begin PBXFileReference section */
 		60CB832A2CDB9DB300873DD6 /* PhotoGetherData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		60CB83362CDB9DEA00873DD6 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
 		60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7B1746302CE8E96E00E01D1A /* PhotoGetherData */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PhotoGetherData;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		60CB83272CDB9DB300873DD6 /* Frameworks */ = {
@@ -53,7 +59,7 @@
 		60CB83202CDB9DB300873DD6 = {
 			isa = PBXGroup;
 			children = (
-				60CB83352CDB9DD700873DD6 /* PhotoGetherData */,
+				7B1746302CE8E96E00E01D1A /* PhotoGetherData */,
 				60CB83382CDB9E1700873DD6 /* Frameworks */,
 				60CB832B2CDB9DB300873DD6 /* Products */,
 			);
@@ -65,14 +71,6 @@
 				60CB832A2CDB9DB300873DD6 /* PhotoGetherData.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		60CB83352CDB9DD700873DD6 /* PhotoGetherData */ = {
-			isa = PBXGroup;
-			children = (
-				60CB83362CDB9DEA00873DD6 /* Temp.swift */,
-			);
-			path = PhotoGetherData;
 			sourceTree = "<group>";
 		};
 		60CB83382CDB9E1700873DD6 /* Frameworks */ = {
@@ -111,6 +109,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7B1746302CE8E96E00E01D1A /* PhotoGetherData */,
 			);
 			name = PhotoGetherData;
 			packageProductDependencies = (
@@ -167,7 +168,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB83372CDB9DF600873DD6 /* Temp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,23 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		60F33E132CE1ED6400A5C26D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60F33E122CE1ED6400A5C26D /* SnapKit */; };
-		7B49E5BC2CE3227B001D3331 /* PTGColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B49E5B72CE3227B001D3331 /* PTGColor.swift */; };
-		7B49E5BD2CE3227B001D3331 /* PTGPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B49E5BA2CE3227B001D3331 /* PTGPrimaryButton.swift */; };
-		7B49E5BE2CE3227B001D3331 /* PTGCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B49E5B62CE3227B001D3331 /* PTGCircleButton.swift */; };
-		7B49E5BF2CE3227B001D3331 /* PTGGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B49E5B82CE3227B001D3331 /* PTGGrayButton.swift */; };
-		7B49E5C02CE3227B001D3331 /* PTGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B49E5B92CE3227B001D3331 /* PTGImage.swift */; };
-		7B59512B2CDB5BB500B89C85 /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7B49E5B62CE3227B001D3331 /* PTGCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCircleButton.swift; sourceTree = "<group>"; };
-		7B49E5B72CE3227B001D3331 /* PTGColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGColor.swift; sourceTree = "<group>"; };
-		7B49E5B82CE3227B001D3331 /* PTGGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGGrayButton.swift; sourceTree = "<group>"; };
-		7B49E5B92CE3227B001D3331 /* PTGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGImage.swift; sourceTree = "<group>"; };
-		7B49E5BA2CE3227B001D3331 /* PTGPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGPrimaryButton.swift; sourceTree = "<group>"; };
 		7B59511B2CDB5A7000B89C85 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignSystem.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7B17471E2CE8EA1C00E01D1A /* DesignSystem */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		7B5951182CDB5A7000B89C85 /* Frameworks */ = {
@@ -38,22 +34,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7B49E5BB2CE3227B001D3331 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				7B49E5B72CE3227B001D3331 /* PTGColor.swift */,
-				7B49E5B92CE3227B001D3331 /* PTGImage.swift */,
-				7B49E5B62CE3227B001D3331 /* PTGCircleButton.swift */,
-				7B49E5B82CE3227B001D3331 /* PTGGrayButton.swift */,
-				7B49E5BA2CE3227B001D3331 /* PTGPrimaryButton.swift */,
-			);
-			path = Source;
-			sourceTree = "<group>";
-		};
 		7B5951112CDB5A7000B89C85 = {
 			isa = PBXGroup;
 			children = (
-				7B5951262CDB5A7700B89C85 /* DesignSystem */,
+				7B17471E2CE8EA1C00E01D1A /* DesignSystem */,
 				7B59511C2CDB5A7000B89C85 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,23 +48,6 @@
 				7B59511B2CDB5A7000B89C85 /* DesignSystem.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		7B5951262CDB5A7700B89C85 /* DesignSystem */ = {
-			isa = PBXGroup;
-			children = (
-				7B49E5BB2CE3227B001D3331 /* Source */,
-				7B5951292CDB5AA700B89C85 /* Resource */,
-			);
-			path = DesignSystem;
-			sourceTree = "<group>";
-		};
-		7B5951292CDB5AA700B89C85 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				7B59512A2CDB5BB500B89C85 /* DesignSystem.xcassets */,
-			);
-			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -108,6 +75,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7B17471E2CE8EA1C00E01D1A /* DesignSystem */,
 			);
 			name = DesignSystem;
 			packageProductDependencies = (
@@ -159,7 +129,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B59512B2CDB5BB500B89C85 /* DesignSystem.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,11 +139,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B49E5BC2CE3227B001D3331 /* PTGColor.swift in Sources */,
-				7B49E5BD2CE3227B001D3331 /* PTGPrimaryButton.swift in Sources */,
-				7B49E5BE2CE3227B001D3331 /* PTGCircleButton.swift in Sources */,
-				7B49E5BF2CE3227B001D3331 /* PTGGrayButton.swift in Sources */,
-				7B49E5C02CE3227B001D3331 /* PTGImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

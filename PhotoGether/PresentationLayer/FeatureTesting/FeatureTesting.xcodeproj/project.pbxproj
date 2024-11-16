@@ -15,7 +15,6 @@
 		7B5950FD2CDB590C00B89C85 /* SharePhotoFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F62CDB590C00B89C85 /* SharePhotoFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5950FE2CDB590C00B89C85 /* WaitingRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F72CDB590C00B89C85 /* WaitingRoomFeature.framework */; };
 		7B5950FF2CDB590C00B89C85 /* WaitingRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F72CDB590C00B89C85 /* WaitingRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7B5951042CDB593300B89C85 /* PhotoRoomViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5951032CDB593300B89C85 /* PhotoRoomViewControllerMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,8 +40,15 @@
 		7B5950F52CDB590C00B89C85 /* PhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5950F62CDB590C00B89C85 /* SharePhotoFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SharePhotoFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5950F72CDB590C00B89C85 /* WaitingRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WaitingRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B5951032CDB593300B89C85 /* PhotoRoomViewControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoRoomViewControllerMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7B1747142CE8EA1800E01D1A /* FeatureTesting */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FeatureTesting;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		7B5950E42CDB58F000B89C85 /* Frameworks */ = {
@@ -62,7 +68,7 @@
 		7B5950DD2CDB58F000B89C85 = {
 			isa = PBXGroup;
 			children = (
-				7B5950F22CDB58F700B89C85 /* FeatureTesting */,
+				7B1747142CE8EA1800E01D1A /* FeatureTesting */,
 				7B5950F32CDB590C00B89C85 /* Frameworks */,
 				7B5950E82CDB58F000B89C85 /* Products */,
 			);
@@ -74,14 +80,6 @@
 				7B5950E72CDB58F000B89C85 /* FeatureTesting.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		7B5950F22CDB58F700B89C85 /* FeatureTesting */ = {
-			isa = PBXGroup;
-			children = (
-				7B5951032CDB593300B89C85 /* PhotoRoomViewControllerMock.swift */,
-			);
-			path = FeatureTesting;
 			sourceTree = "<group>";
 		};
 		7B5950F32CDB590C00B89C85 /* Frameworks */ = {
@@ -121,6 +119,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7B1747142CE8EA1800E01D1A /* FeatureTesting */,
 			);
 			name = FeatureTesting;
 			packageProductDependencies = (
@@ -177,7 +178,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B5951042CDB593300B89C85 /* PhotoRoomViewControllerMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
