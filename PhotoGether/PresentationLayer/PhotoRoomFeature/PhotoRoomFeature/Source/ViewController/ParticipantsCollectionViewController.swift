@@ -21,7 +21,7 @@ public final class ParticipantsCollectionViewController: UICollectionViewControl
         
         self.collectionView!.register(
             ParticipantsCollectionViewCell.self,
-            forCellWithReuseIdentifier: ParticipantsCollectionViewCell.reuseIdentifier
+            forCellWithReuseIdentifier: ParticipantsCollectionViewCell.identifier
         )
     }
 }

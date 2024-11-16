@@ -2,9 +2,7 @@ import UIKit
 import BaseFeature
 import DesignSystem
 
-public final class ParticipantsCollectionViewCell: UICollectionViewCell {
-    public static let reuseIdentifier = "\(ParticipantsCollectionViewCell.self)"
-    
+public final class ParticipantsCollectionViewCell: UICollectionViewCell {    
     private let nicknameLabel = UILabel()
     private var videoView = UIView()
     

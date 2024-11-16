@@ -20,7 +20,7 @@ public final class ParticipantsCollectionViewDataSource: UICollectionViewDiffabl
         indexPath: IndexPath
     ) -> UICollectionViewCell? {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ParticipantsCollectionViewCell.reuseIdentifier,
+            withReuseIdentifier: ParticipantsCollectionViewCell.identifier,
             for: indexPath
         ) as? ParticipantsCollectionViewCell else {
             return UICollectionViewCell()
