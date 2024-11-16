@@ -182,8 +182,7 @@
 			mainGroup = 60CB81D12CDA442700873DD6;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */,
-				7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */,
+				7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60CB81DB2CDA442700873DD6 /* Products */;
@@ -211,6 +210,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		7B0318C02CDBA6FF0026C613 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -473,12 +473,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7B0318C12CDBA8A30026C613 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+		7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/SwiftLint";
+			repositoryURL = "https://github.com/stasel/WebRTC";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.57.0;
+				minimumVersion = 130.0.0;
 			};
 		};
 		7B17458D2CE6189000E01D1A /* XCRemoteSwiftPackageReference "WebRTC" */ = {
