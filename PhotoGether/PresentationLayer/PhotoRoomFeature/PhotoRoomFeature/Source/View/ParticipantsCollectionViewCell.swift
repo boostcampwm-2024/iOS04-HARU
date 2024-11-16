@@ -1,6 +1,6 @@
 import UIKit
 import BaseFeature
-import SnapKit
+import DesignSystem
 
 public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     public static let reuseIdentifier = "\(ParticipantsCollectionViewCell.self)"
