@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "wand.and.stars.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
