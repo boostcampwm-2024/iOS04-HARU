@@ -1,8 +1,11 @@
 import UIKit
 import BaseFeature
 import Combine
+import DesignSystem
 
 public class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
+    let photoHostBottomView = PhotoHostBottomView()
+    
     public init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -13,13 +16,24 @@ public class PhotoRoomViewController: BaseViewController, ViewControllerConfigur
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        view.backgroundColor = .black
+        
+        addViews()
+        setupConstraints()
+        configureUI()
     }
     
-    public func addViews() { }
+    public func addViews() {
+        view.addSubview(photoHostBottomView)
+    }
     
-    public func setupConstraints() { }
+    public func setupConstraints() {
+        photoHostBottomView.snp.makeConstraints {
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(68)
+        }
+    }
     
     public func configureUI() { }
-    
 }
