@@ -10,6 +10,6 @@ struct StickerEntity: Equatable {
     let point: CGPoint
     let size: CGSize
     let scale: CGFloat
-    let owner: String
+    let owner: String?
     let latestUpdated: Date
 }
