@@ -19,30 +19,55 @@ final class EventQueue {
 }
 
 final class EventHub {
-    let manager = EventManager()
+    private let eventManager = EventManager()
     private var eventQueue = EventQueue() // TODO: 추후 Priority queue로 변경
     
+    private var cancellables = Set<AnyCancellable>()
     
-    func checkMangerIsFree() {
-        if manager.currentEvent == nil {
-            manager.work(event: queue.popLast()!)
-        }
+    init() {
+        bind()
+    }
+    
+    private func bind() {
+        eventQueue.popablePublisher.combineLatest(eventManager.callEventPublisher)
+            .filter { $0 && $1 } // MARK: (Queue에 보낼게 남아있다) && (매니저가 비어있다) -> 보낸다
+            .sink { [weak self] popable, call in
+                guard let currentEvent = self?.eventQueue.popLast() else {
+                    debugPrint("popLast 에러")
+                    return
+                }
+                self?.eventManager.work(event: currentEvent)
+            }
+            .store(in: &cancellables)
+        
+        eventManager.resultEventPublihser
+            .sink { eventEntity in
+                // MARK: ConnectionClient에게 보내기
+            }
+            .store(in: &cancellables)
+    }
+    
     func push(event: EventEntity) {
         eventQueue.push(event: event)
     }
 }
 
 final class EventManager {
-    var currentEvent: EventEntity? = nil
-    var isObejctDeleted: [UUID: Bool] = [:]
-    var stickerDictionary: [UUID: StickerEntity] = [:]
+    // MARK: 네이밍 좀 고민
+    let callEventPublisher = CurrentValueSubject<Bool, Never>(true)
+    let resultEventPublihser = PassthroughSubject<EventEntity, Never>()
+    
+    private var isObejctDeleted: [UUID: Bool] = [:]
+    private var stickerDictionary: [UUID: StickerEntity] = [:]
     
     func work(event: EventEntity) {
+        callEventPublisher.send(false)
         switch event.type {
         case .create: createEvent(by: event)
         case .delete: deleteEvent(by: event)
         case .update: updateEvent(to: event)
         }
+        callEventPublisher.send(true)
     }
     
     private func createEvent(by event: EventEntity) {
