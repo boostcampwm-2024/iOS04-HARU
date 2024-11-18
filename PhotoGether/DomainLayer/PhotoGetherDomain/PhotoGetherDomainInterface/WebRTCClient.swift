@@ -2,6 +2,9 @@ import Foundation
 import WebRTC
 
 public protocol WebRTCClient: RTCPeerConnectionDelegate, RTCDataChannelDelegate {
+    var delegate: WebRTCClientDelegate? { get set }
+    var peerConnection: RTCPeerConnection { get }
+    
     // MARK: SDP
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void)
     func answer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void)
