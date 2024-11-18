@@ -1,16 +1,34 @@
 import Foundation
+import Combine
+
+final class EventQueue {
+    private var queue = [EventEntity]()
+    
+    let popablePublisher = PassthroughSubject<Bool, Never>()
+    
+    func push(event: EventEntity) {
+        queue.append(event)
+        queue.sort { $0.timeStamp > $1.timeStamp }
+        popablePublisher.send(true)
+    }
+    
+    func popLast() -> EventEntity? {
+        let popLast = queue.popLast()
+        return popLast
+    }
+}
 
 final class EventHub {
-    // TODO: 추후 Priority queue로 변경
-    var queue: [EventEntity] = []
     let manager = EventManager()
+    private var eventQueue = EventQueue() // TODO: 추후 Priority queue로 변경
     
-    func push(event: EventEntity) { queue.append(event) }
     
     func checkMangerIsFree() {
         if manager.currentEvent == nil {
             manager.work(event: queue.popLast()!)
         }
+    func push(event: EventEntity) {
+        eventQueue.push(event: event)
     }
 }
 
