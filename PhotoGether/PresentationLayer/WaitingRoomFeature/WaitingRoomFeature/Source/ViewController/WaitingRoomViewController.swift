@@ -4,7 +4,7 @@ import PhotoGetherDomainInterface
 import SnapKit
 import UIKit
 
-public class WaitingRoomViewController: BaseViewController, ViewControllerConfigure {
+public final class WaitingRoomViewController: BaseViewController, ViewControllerConfigure {
     let connectionClient: ConnectionClient
     let offerButton = UIButton()
     let localVideoView: UIView
