@@ -1,16 +1,19 @@
 import Foundation
 import WebRTC
 import PhotoGetherDomainInterface
+import Combine
 
 public final class ConnectionClientImpl: ConnectionClient {
-    private let signalingClient: SignalingClientImpl
-    private let webRTCClient: WebRTCClientImpl
+    private let signalingClient: SignalingClient
+    private let webRTCClient: WebRTCClient
+    
+    public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
     public var remoteVideoView: UIView = RTCMTLVideoView()
     public var localVideoView: UIView = RTCMTLVideoView()
     // TODO: 음성 정보
     
-    public init(signalingClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
+    public init(signalingClient: SignalingClient, webRTCClient: WebRTCClient) {
         self.signalingClient = signalingClient
         self.webRTCClient = webRTCClient
         
@@ -107,11 +110,12 @@ extension ConnectionClientImpl {
     ) {
         // TODO: 피어커넥션 연결 상태 변경에 따른 처리
     }
-    
+
+    /// peerConnection의 remoteDataChannel 에 데이터가 수신되면 호출됨
     public func webRTCClient(
         _ client: WebRTCClient,
         didReceiveData data: Data
     ) {
-        // TODO: 수신된 데이터를 처리하는 곳
+        receivedDataPublisher.send(data)
     }
 }
