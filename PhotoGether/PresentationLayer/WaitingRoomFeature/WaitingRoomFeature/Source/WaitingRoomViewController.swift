@@ -1,9 +1,8 @@
+import UIKit
+import Combine
 import BaseFeature
 import DesignSystem
 import PhotoGetherDomainInterface
-import SnapKit
-import UIKit
-import Combine
 
 public class WaitingRoomViewController: BaseViewController, ViewControllerConfigure {
     let connectionClient: ConnectionClient
@@ -30,8 +29,6 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
         setupConstraints()
         configureUI()
         setActions()
-        bind()
-        connectionClient.sendData(data: "Hello!!!".data(using: .utf8)!)
     }
     
     public func addViews() {
@@ -80,11 +77,5 @@ public class WaitingRoomViewController: BaseViewController, ViewControllerConfig
         offerButton.addAction(UIAction { [weak self] _ in
             self?.connectionClient.sendOffer()
         }, for: .touchUpInside)
-    }
-    
-    private func bind() {
-        connectionClient.testDataPublisher.sink { [weak self] data in
-            print("✅ didReceiveData!!", data)
-        }.store(in: &cancellables)
     }
 }
