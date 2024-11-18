@@ -6,7 +6,7 @@ final public class SignalingClientImpl: SignalingClient {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     private var webSocketClient: WebSocketClient
-    public weak var delegate: SignalingClientDelegate?
+    public var delegate: SignalingClientDelegate?
     
     public init(webSocketClient: WebSocketClient) {
         self.webSocketClient = webSocketClient

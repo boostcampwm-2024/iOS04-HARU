@@ -13,7 +13,7 @@ public final class WebRTCClientImpl: NSObject, WebRTCClient {
         )
     }()
     
-    public weak var delegate: WebRTCClientDelegate?
+    public var delegate: WebRTCClientDelegate?
     public var peerConnection: RTCPeerConnection
     
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
