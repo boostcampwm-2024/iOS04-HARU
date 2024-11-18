@@ -1,15 +1,18 @@
 import UIKit
 import DesignSystem
 
-class PhotoHostBottomView: UIView {
+class PhotoRoomBottomView: UIView {
     private let filterButton = UIButton()
     private let switchCameraButton = UIButton()
-    private let cameraButton = CameraButton()
+    private let cameraButton: CameraButton
+    private let isHost: Bool
     
     // MARK: init
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(isHost: Bool) {
+        self.isHost = isHost
+        self.cameraButton = CameraButton(isHost: isHost)
+        super.init(frame: .zero)
         
         addViews()
         setupConstraints()

@@ -4,7 +4,7 @@ import Combine
 import DesignSystem
 
 public class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
-    let photoHostBottomView = PhotoHostBottomView()
+    let photoHostBottomView = PhotoRoomBottomView(isHost: false)
     
     public init() {
         super.init(nibName: nil, bundle: nil)
