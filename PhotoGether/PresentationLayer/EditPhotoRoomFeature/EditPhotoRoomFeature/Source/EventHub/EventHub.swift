@@ -72,84 +72,56 @@ final class EventManager {
     
     private func createEvent(by event: EventEntity) {
         guard isObejctDeleted[event.entity.id] == nil else {
-            // TODO: 실패한 경우를 대비한 return이 필요
+            debugPrint("Create event 실패")
             return
         }
         guard stickerDictionary[event.entity.id] == nil else {
-            // TODO: 실패한 경우를 대비한 return이 필요
+            debugPrint("Create event 실패")
             return
         }
         
         stickerDictionary[event.entity.id] = event.entity
         isObejctDeleted[event.entity.id] = false
+        
+        resultEventPublihser.send(event)
     }
     
     private func deleteEvent(by event: EventEntity) {
-        guard isObejctDeleted[event.entity.id] == false else {
-            // TODO: 실패한 경우를 대비한 return이 필요
-            return
-        }
-        
-        guard let oldSticker = stickerDictionary[event.entity.id] else {
-            // TODO: 실패한 경우를 대비한 return이 필요
-            return
-        }
-        
-        // MARK: 이건 말도 안됨
-        guard let newOwner = event.entity.owner else { return }
-        
-        // MARK: Old, NewOwner가 nil이 아닐 때
-        if let oldOwner = oldSticker.owner {
-            if oldOwner == newOwner {
-                // MARK: Old,New Owner가 서로 같을 때
-                stickerDictionary[event.entity.id] = nil
-                isObejctDeleted[event.entity.id] = true
-                
-                return
-            } else {
-                // MARK: Old,New Owner가 서로 다를 때
-                // TODO: 그냥 적용 못할 때 -> oldSticker를 전파 해줘야된다.
-                
-                return
-            }
-        }
-        // MARK: OldOwner가 nil일 때
+        guard isObejctDeleted[event.entity.id] == false,            // 이미 지워진 객체를 지우려 할 때
+              let oldSticker = stickerDictionary[event.entity.id]   // 해당 스티커가 없을 때(전파 받기 전에 지워짐)
         else {
+            // 이미 처리된 상황이기에 아무 처리를 하지 않아도 문제가 없음
+            debugPrint("A/B 삭제 경쟁 상황에서 이미 처리된 삭제를 요청함")
+            return
+        }
+        
+        guard let newOwner = event.entity.owner else { return }
+
+        if oldSticker.owner == nil || oldSticker.owner == newOwner {
+            // OldOwner가 nil이거나 Old,New Owner가 서로 같을 때
             stickerDictionary[event.entity.id] = nil
             isObejctDeleted[event.entity.id] = true
+            
+            resultEventPublihser.send(event)
         }
     }
     
     private func updateEvent(to event: EventEntity) {
-        guard isObejctDeleted[event.entity.id] == false else {
-            // TODO: 실패한 경우를 대비한 return이 필요
-            return
-        }
-        guard let oldSticker = stickerDictionary[event.entity.id] else {
-            // TODO: 실패한 경우를 대비한 return이 필요
-            return
-        }
-        
-        // MARK: 이건 말도 안됨
-        guard let newOwner = event.entity.owner else { return }
-        
-        // MARK: Old, NewOwner가 nil이 아닐 때
-        if let oldOwner = oldSticker.owner {
-            if oldOwner == newOwner {
-                // MARK: Old,New Owner가 서로 같을 때
-                stickerDictionary[event.entity.id] = event.entity
-                
-                return
-            } else {
-                // MARK: Old,New Owner가 서로 다를 때
-                // TODO: 그냥 적용 못할 때 -> oldSticker를 전파 해줘야된다.
-                
-                return
-            }
-        }
-        // MARK: OldOwner가 nil일 때
+        guard isObejctDeleted[event.entity.id] == false,            // 이미 지워진 객체를 업데이트 하려 할 때
+              let oldSticker = stickerDictionary[event.entity.id]   // 해당 스티커가 없을 때(전파 받기 전에 지워짐)
         else {
+            // 이미 처리된 상황이기에 아무 처리를 하지 않아도 문제가 없음
+            debugPrint("A/B 경쟁 상황에서 이미 삭제된 객체의 업데이트를 요청함")
+            return
+        }
+        
+        guard let newOwner = event.entity.owner else { return }
+
+        if oldSticker.owner == nil || oldSticker.owner == newOwner {
+            // OldOwner가 nil이거나 Old,New Owner가 서로 같을 때
             stickerDictionary[event.entity.id] = event.entity
+
+            resultEventPublihser.send(event)
         }
     }
 }
