@@ -1,8 +1,8 @@
+import UIKit
+import Combine
 import BaseFeature
 import DesignSystem
 import PhotoGetherDomainInterface
-import SnapKit
-import UIKit
 
 public class WaitingRoomViewController: BaseViewController, ViewControllerConfigure {
     let connectionClient: ConnectionClient
