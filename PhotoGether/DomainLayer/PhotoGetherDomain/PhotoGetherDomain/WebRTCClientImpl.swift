@@ -13,8 +13,9 @@ public final class WebRTCClientImpl: NSObject, WebRTCClient {
         )
     }()
     
-    weak var delegate: WebRTCClientDelegate?
-    let peerConnection: RTCPeerConnection
+    public weak var delegate: WebRTCClientDelegate?
+    public var peerConnection: RTCPeerConnection
+    
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
     private let mediaConstraints = [
         kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,

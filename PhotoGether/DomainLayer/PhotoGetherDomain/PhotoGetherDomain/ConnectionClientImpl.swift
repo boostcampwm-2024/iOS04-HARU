@@ -3,14 +3,14 @@ import WebRTC
 import PhotoGetherDomainInterface
 
 public final class ConnectionClientImpl: ConnectionClient {
-    private let signalingClient: SignalingClientImpl
-    private let webRTCClient: WebRTCClientImpl
+    private let signalingClient: SignalingClient
+    private let webRTCClient: WebRTCClient
     
     public var remoteVideoView: UIView = RTCMTLVideoView()
     public var localVideoView: UIView = RTCMTLVideoView()
     // TODO: 음성 정보
     
-    public init(signalingClient: SignalingClientImpl, webRTCClient: WebRTCClientImpl) {
+    public init(signalingClient: SignalingClient, webRTCClient: WebRTCClient) {
         self.signalingClient = signalingClient
         self.webRTCClient = webRTCClient
         
