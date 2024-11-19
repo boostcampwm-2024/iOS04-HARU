@@ -8,11 +8,11 @@ public final class EditPhotoRoomHostViewModel {
     }
 
     enum Output {
-        case rectangle(rect: Rectangle)
+        case sticker(data: Data)
     }
     
     private let fetchStickerListUseCase: FetchStickerListUseCase
-    private let stickerList = PassthroughSubject<[Data], Never>()
+    private var stickerList: [Data] = []
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -22,6 +22,7 @@ public final class EditPhotoRoomHostViewModel {
     ) {
         self.fetchStickerListUseCase = fetchStickerListUseCase
         bind()
+        
     }
     
     private func bind() {
@@ -32,7 +33,7 @@ public final class EditPhotoRoomHostViewModel {
         input.sink { [weak self] in
             switch $0 {
             case .stickerButtonDidTap:
-                self?.generateRectangle()
+                self?.addStickerToCanvas()
             }
         }
         .store(in: &cancellables)
@@ -43,22 +44,12 @@ public final class EditPhotoRoomHostViewModel {
     private func fetchStickerList() {
         fetchStickerListUseCase.execute()
             .sink { [weak self] datas in
-                self?.stickerList.send(datas)
+                self?.stickerList = datas
             }
             .store(in: &cancellables)
     }
     
-    private func generateRectangle() {
-        let randomX = Int.random(in: 10..<100)
-        let randomY = Int.random(in: 10..<100)
-        let width = Int.random(in: 10..<100)
-        let height = Int.random(in: 10..<100)
-        
-        let rectangle = Rectangle(
-            position: CGPoint(x: randomX, y: randomY),
-            size: CGSize(width: width, height: height)
-        )
-
-        output.send(.rectangle(rect: rectangle))
+    private func addStickerToCanvas() {
+        output.send(.sticker(data: stickerList.randomElement()!))
     }
 }
