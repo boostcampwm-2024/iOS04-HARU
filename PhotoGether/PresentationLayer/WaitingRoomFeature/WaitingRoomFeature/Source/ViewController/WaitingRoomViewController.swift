@@ -52,7 +52,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     }
     
     public func configureUI() {
-        participantsCollectionViewController.collectionView.backgroundColor = PTGColor.gray60.color
+        participantsCollectionViewController.collectionView.backgroundColor = PTGColor.gray90.color
     }
     
     private func setActions() {

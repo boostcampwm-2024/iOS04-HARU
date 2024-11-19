@@ -48,7 +48,8 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     }
     
     private func configureUI() {
-        backgroundColor = .yellow
+        backgroundColor = PTGColor.gray50.color
+        
         nicknameLabel.font = .systemFont(ofSize: 11)
         nicknameLabel.setKern()
         nicknameLabel.textColor = .white.withAlphaComponent(0.8)
