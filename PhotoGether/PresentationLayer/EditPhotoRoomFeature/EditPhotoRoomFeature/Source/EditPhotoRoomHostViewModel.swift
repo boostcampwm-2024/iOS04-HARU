@@ -22,7 +22,6 @@ public final class EditPhotoRoomHostViewModel {
     ) {
         self.fetchStickerListUseCase = fetchStickerListUseCase
         bind()
-        
     }
     
     private func bind() {
