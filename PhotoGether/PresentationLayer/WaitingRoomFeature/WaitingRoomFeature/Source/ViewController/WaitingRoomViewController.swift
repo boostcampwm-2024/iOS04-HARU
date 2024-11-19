@@ -28,7 +28,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         addViews()
         setupConstraints()
         configureUI()
-        setActions()
+        bindOutput()
         setDummy()
     }
     
@@ -56,7 +56,20 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         participantsCollectionViewController.collectionView.backgroundColor = PTGColor.gray90.color
     }
     
-    private func setActions() {
+    private func createInput() -> WaitingRoomViewModel.Input {
+        return WaitingRoomViewModel.Input(
+            micMuteButtonDidTap: waitingRoomView.micButton.tapPublisher,
+            shareButtonDidTap: waitingRoomView.shareButton.tapPublisher,
+            startButtonDidTap: waitingRoomView.startButton.tapPublisher
+        )
+    }
+    
+    public func bindOutput() {
+        let output = viewModel.transform(input: createInput())
+        
+        output.navigateToPhotoRoom.sink { _ in
+            print("navigateToPhotoRoom 버튼이 눌렸어요!")
+        }.store(in: &cancellables)
     }
     
     private func setDummy() {
