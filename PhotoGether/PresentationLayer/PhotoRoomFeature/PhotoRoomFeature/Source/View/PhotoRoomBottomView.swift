@@ -61,11 +61,11 @@ class PhotoRoomBottomView: UIView {
         switchCameraButton.setImage(PTGImage.switchIcon.image, for: .normal)
     }
     
-    func SetCameraButtonTimer(_ count: Int) {
+    func setCameraButtonTimer(_ count: Int) {
         cameraButton.configureTimer(count)
     }
     
-    func StopCameraButtonTimer() {
+    func stopCameraButtonTimer() {
         cameraButton.stopTimer()
     }
 }
