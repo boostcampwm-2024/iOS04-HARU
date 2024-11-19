@@ -4,7 +4,7 @@ import DesignSystem
 final class WaitingRoomView: UIView {
     let bottomBarView = UIView()
     let micButton = PTGMicButton(micState: .on)
-    let shareButton = PTGCircleButton(type: .share)
+    let shareButton = PTGCircleButton(type: .link)
     let startButton = PTGPrimaryButton()
     
     init() {
