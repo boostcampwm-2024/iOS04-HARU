@@ -69,11 +69,11 @@ public class PhotoRoomViewController: BaseViewController, ViewControllerConfigur
     }
     
     public func bindInput() {
-        // MARK: Host에 필요한 Input만 guard문 아래에
-        guard isHost else { return }
-        
         photoRoomBottomView.cameraButtonTapped
-            .sink { [weak self] _ in
+            .filter { [weak self] in
+                return self?.isHost ?? false
+            }
+            .sink { [weak self] in
                 self?.input.send(.cameraButtonTapped)
             }
             .store(in: &cancellables)
