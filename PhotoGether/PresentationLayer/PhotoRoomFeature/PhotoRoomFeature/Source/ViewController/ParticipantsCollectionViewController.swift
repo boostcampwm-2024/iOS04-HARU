@@ -18,7 +18,7 @@ public final class ParticipantsCollectionViewController: UICollectionViewControl
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.collectionView!.register(
             ParticipantsCollectionViewCell.self,
             forCellWithReuseIdentifier: ParticipantsCollectionViewCell.identifier
@@ -32,7 +32,8 @@ extension ParticipantsCollectionViewController: UICollectionViewDelegateFlowLayo
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let itemWidth = (view.frame.width - Constants.horizontalSpacing - Constants.itemSpacing) / 2
+        let horizotalSpacing = Constants.sectionLeadingSpacing + Constants.sectionTrailingSpacing
+        let itemWidth = (view.frame.width - horizotalSpacing - Constants.itemSpacing) / 2
         let itemHeight = itemWidth * Constants.sizeMultiplier
         
         return CGSize(width: itemWidth, height: itemHeight)
@@ -43,7 +44,7 @@ extension ParticipantsCollectionViewController: UICollectionViewDelegateFlowLayo
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        Constants.lineSpacing
+        Constants.itemSpacing
     }
     
     public func collectionView(
@@ -53,13 +54,22 @@ extension ParticipantsCollectionViewController: UICollectionViewDelegateFlowLayo
     ) -> CGFloat {
         Constants.itemSpacing
     }
+    
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        UIEdgeInsets(top: Constants.sectionTopSpacing, left: Constants.sectionLeadingSpacing, bottom: 0, right: Constants.sectionTrailingSpacing)
+    }
 }
 
 extension ParticipantsCollectionViewController {
     enum Constants {
         static let sizeMultiplier: CGFloat = 290 / 179 // 피그마 디자인에 따른 세로/가로 비율입니다.
-        static let horizontalSpacing: CGFloat = 12
+        static let sectionTopSpacing: CGFloat = 44
+        static let sectionLeadingSpacing: CGFloat = 12
+        static let sectionTrailingSpacing: CGFloat = 12
         static let itemSpacing: CGFloat = 11
-        static let lineSpacing: CGFloat = 11
     }
 }
