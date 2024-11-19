@@ -43,6 +43,10 @@ public final class ParticipantsCollectionViewDataSource: UICollectionViewDiffabl
         case 3: tempImage = PTGImage.temp4.image
         default: tempImage = PTGImage.temp1.image
         }
-        return UIImageView(image: tempImage)
+        let tempImageView = UIImageView(image: tempImage)
+        tempImageView.contentMode = .scaleAspectFill
+        tempImageView.clipsToBounds = true
+        
+        return tempImageView
     }
 }
