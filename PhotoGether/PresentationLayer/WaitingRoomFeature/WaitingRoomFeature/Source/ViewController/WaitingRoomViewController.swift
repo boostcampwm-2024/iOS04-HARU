@@ -44,8 +44,9 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     
     public func setupConstraints() {
         let collectionView = participantsCollectionViewController.view!
+        let topOffset: CGFloat = APP_HEIGHT() > 667 ? 44 : 0 // 최소사이즈 기기 SE2 기준
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(topOffset)
             $0.bottom.equalTo(waitingRoomView.bottomBarView.snp.top)
             $0.horizontalEdges.equalToSuperview()
         }

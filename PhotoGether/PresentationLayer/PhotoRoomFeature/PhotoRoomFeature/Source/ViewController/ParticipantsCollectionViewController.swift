@@ -60,14 +60,13 @@ extension ParticipantsCollectionViewController: UICollectionViewDelegateFlowLayo
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        UIEdgeInsets(top: Constants.sectionTopSpacing, left: Constants.sectionLeadingSpacing, bottom: 0, right: Constants.sectionTrailingSpacing)
+        UIEdgeInsets(top: 0, left: Constants.sectionLeadingSpacing, bottom: 0, right: Constants.sectionTrailingSpacing)
     }
 }
 
 extension ParticipantsCollectionViewController {
     enum Constants {
         static let sizeMultiplier: CGFloat = 290 / 179 // 피그마 디자인에 따른 세로/가로 비율입니다.
-        static let sectionTopSpacing: CGFloat = 44
         static let sectionLeadingSpacing: CGFloat = 12
         static let sectionTrailingSpacing: CGFloat = 12
         static let itemSpacing: CGFloat = 11
