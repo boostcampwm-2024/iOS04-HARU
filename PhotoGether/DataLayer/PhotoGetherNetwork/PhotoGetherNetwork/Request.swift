@@ -20,7 +20,10 @@ public enum Request {
             .eraseToAnyPublisher()
     }
     
-    public static func requestVoid<E: EndPoint>(_ endPoint: E, queue: DispatchQueue = .main) -> AnyPublisher<Void, any Error> {
+    public static func requestVoid<E: EndPoint>(
+        _ endPoint: E,
+        queue: DispatchQueue = .main
+    ) -> AnyPublisher<Void, any Error> {
         return URLSession.shared.dataTaskPublisher(for: endPoint.request())
             .timeout(.seconds(10), scheduler: RunLoop.main)
             .map { output in
@@ -95,8 +98,7 @@ private extension Request {
         // Response Body 출력
         print("\n====================[ Response Body ]====================\n")
         if let bodyString = String(data: output.data, encoding: .utf8) {
-//            print("\(bodyString)")
-            print("count:\(bodyString.count)")
+            print("\(bodyString)")
         } else {
             print("Unable to encode utf8")
         }
