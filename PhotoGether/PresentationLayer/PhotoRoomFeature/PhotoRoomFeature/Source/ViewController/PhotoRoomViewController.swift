@@ -37,12 +37,11 @@ public class PhotoRoomViewController: BaseViewController, ViewControllerConfigur
     
     public func addViews() {
         self.addChild(participantsViewController)
+        participantsViewController.didMove(toParent: self)
         
         [navigationView, participantsViewController.view, photoRoomBottomView].forEach {
             view.addSubview($0)
         }
-        
-        participantsViewController.didMove(toParent: self)
     }
     
     public func setupConstraints() {
