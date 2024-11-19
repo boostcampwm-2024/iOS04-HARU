@@ -1,7 +1,7 @@
 import Combine
 import Foundation
 
-class PhotoRoomViewModel {
+final class PhotoRoomViewModel {
     private var cancellables = Set<AnyCancellable>()
     private var timerCount: Int = 3
     

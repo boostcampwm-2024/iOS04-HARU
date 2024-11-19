@@ -3,7 +3,7 @@ import BaseFeature
 import Combine
 import DesignSystem
 
-public class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
+public final class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let participantsViewController = ParticipantsCollectionViewController()
     private let photoRoomBottomView: PhotoRoomBottomView

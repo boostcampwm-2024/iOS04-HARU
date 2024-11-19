@@ -2,7 +2,7 @@ import UIKit
 import Combine
 import DesignSystem
 
-class PhotoRoomBottomView: UIView {
+final class PhotoRoomBottomView: UIView {
     private let filterButton = UIButton()
     private let switchCameraButton = UIButton()
     private let cameraButton: CameraButton
