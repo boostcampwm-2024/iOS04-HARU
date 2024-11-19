@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import PhotoGetherDomainInterface
 
 public final class EditPhotoRoomHostViewModel {
     enum Input {
@@ -10,10 +11,22 @@ public final class EditPhotoRoomHostViewModel {
         case rectangle(rect: Rectangle)
     }
     
+    private let fetchStickerListUseCase: FetchStickerListUseCase
+    private let stickerList = PassthroughSubject<[Data], Never>()
+    
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
-    public init() { }
+    public init(
+        fetchStickerListUseCase: FetchStickerListUseCase
+    ) {
+        self.fetchStickerListUseCase = fetchStickerListUseCase
+        bind()
+    }
+    
+    private func bind() {
+        fetchStickerList()  // 처음 한번 부르고 부터는 재호출을 안하도록
+    }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] in
@@ -25,6 +38,14 @@ public final class EditPhotoRoomHostViewModel {
         .store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
+    }
+    
+    private func fetchStickerList() {
+        fetchStickerListUseCase.execute()
+            .sink { [weak self] datas in
+                self?.stickerList.send(datas)
+            }
+            .store(in: &cancellables)
     }
     
     private func generateRectangle() {
