@@ -57,10 +57,14 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     }
     
     private func createInput() -> WaitingRoomViewModel.Input {
+        let startButtonTapPublisher = waitingRoomView.startButton.tapPublisher
+            .throttle(for: .seconds(1), scheduler: RunLoop.main, latest: false)
+            .eraseToAnyPublisher()
+        
         return WaitingRoomViewModel.Input(
             micMuteButtonDidTap: waitingRoomView.micButton.tapPublisher,
             shareButtonDidTap: waitingRoomView.shareButton.tapPublisher,
-            startButtonDidTap: waitingRoomView.startButton.tapPublisher
+            startButtonDidTap: startButtonTapPublisher
         )
     }
     
