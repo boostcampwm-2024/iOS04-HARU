@@ -16,7 +16,7 @@ public final class WaitingRoomViewModel {
     }
     
     private var cancellables = Set<AnyCancellable>()
-    private let connectionClient: ConnectionClient
+    let connectionClient: ConnectionClient
     
     public init(connectionClient: ConnectionClient) {
         self.connectionClient = connectionClient
