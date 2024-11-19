@@ -85,9 +85,9 @@ public class PhotoRoomViewController: BaseViewController, ViewControllerConfigur
         output.sink { [weak self] in
             switch $0 {
             case .timer(let count):
-                self?.photoRoomBottomView.SetCameraButtonTimer(count)
+                self?.photoRoomBottomView.setCameraButtonTimer(count)
             case .timerCompleted:
-                self?.photoRoomBottomView.StopCameraButtonTimer()
+                self?.photoRoomBottomView.stopCameraButtonTimer()
             }
         }
         .store(in: &cancellables)
