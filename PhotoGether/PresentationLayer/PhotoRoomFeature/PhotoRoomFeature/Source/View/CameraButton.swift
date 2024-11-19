@@ -4,6 +4,7 @@ import DesignSystem
 final class CameraButton: UIButton {
     private let innerCircle = UIView()
     private let innerEllipsis = UIImageView()
+    private let timerLabel = UILabel()
     private let isHost: Bool
     
     // MARK: init
@@ -24,7 +25,7 @@ final class CameraButton: UIButton {
     }
     
     private func addViews() {
-        [innerCircle, innerEllipsis].forEach { addSubview($0) }
+        [innerCircle, innerEllipsis, timerLabel].forEach { addSubview($0) }
     }
     
     private func setupContstraints() {
@@ -38,6 +39,11 @@ final class CameraButton: UIButton {
             $0.height.equalTo(Constants.ellipsisHeight)
             $0.center.equalToSuperview()
         }
+        
+        timerLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.height.equalTo(22)
+        }
     }
     
     private func configureUI() {
@@ -50,6 +56,23 @@ final class CameraButton: UIButton {
         
         innerEllipsis.isHidden = isHost
         innerEllipsis.image = PTGImage.ellipsisIcon.image
+        
+        timerLabel.text = "3"
+        timerLabel.textAlignment = .center
+        timerLabel.textColor = .white
+        timerLabel.font = .systemFont(ofSize: Constants.timerLabelFontSize, weight: .semibold)
+        timerLabel.isHidden = true
+    }
+    
+    func configureTimer(_ count: Int) {
+        innerCircle.isHidden = true
+        timerLabel.isHidden = false
+        timerLabel.text = "\(count)"
+    }
+    
+    func stopTimer() {
+        innerCircle.isHidden = false
+        timerLabel.isHidden = true
     }
     
     // MARK: 터치 시 카메라 버튼 색상 변경
@@ -62,7 +85,7 @@ final class CameraButton: UIButton {
         self.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             self.innerCircle.backgroundColor = .white
-        }, for: [.touchCancel, .touchUpOutside])
+        }, for: [.touchCancel, .touchUpOutside, .touchUpInside])
     }
     
     override func layoutSubviews() {
@@ -79,6 +102,8 @@ extension CameraButton {
         fileprivate static let innerCircleSize: CGFloat = 52
         fileprivate static let ellipsisWidth: CGFloat = 34
         fileprivate static let ellipsisHeight: CGFloat = 6
+        fileprivate static let timerLabelSize: CGFloat = 22
+        fileprivate static let timerLabelFontSize: CGFloat = 28
         
         static let buttonSize: CGFloat = 64
     }

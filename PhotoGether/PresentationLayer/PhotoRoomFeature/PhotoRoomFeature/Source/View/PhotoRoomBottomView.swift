@@ -1,4 +1,5 @@
 import UIKit
+import Combine
 import DesignSystem
 
 class PhotoRoomBottomView: UIView {
@@ -7,8 +8,13 @@ class PhotoRoomBottomView: UIView {
     private let cameraButton: CameraButton
     private let isHost: Bool
     
-    // MARK: init
+    var cameraButtonTapped: AnyPublisher<Void, Never> {
+        cameraButton.tapPublisher
+            .throttle(for: .seconds(Constants.throttleTime), scheduler: RunLoop.main, latest: false)
+            .eraseToAnyPublisher()
+    }
     
+    // MARK: init
     init(isHost: Bool) {
         self.isHost = isHost
         self.cameraButton = CameraButton(isHost: isHost)
@@ -31,15 +37,15 @@ class PhotoRoomBottomView: UIView {
     
     private func setupConstraints() {
         filterButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(Constants.iconButtonSize)
             $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(53)
+            $0.leading.equalToSuperview().offset(Constants.bottomLeadingSpacing)
         }
         
         switchCameraButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(Constants.iconButtonSize)
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(53)
+            $0.trailing.equalToSuperview().inset(Constants.bottomTrailingSpacing)
         }
         
         cameraButton.snp.makeConstraints {
@@ -50,7 +56,25 @@ class PhotoRoomBottomView: UIView {
     
     private func configureUI() {
         filterButton.setImage(PTGImage.filterIcon.image, for: .normal)
+        filterButton.imageView?.tintColor = isHost ? .white : PTGColor.gray85.color
         
         switchCameraButton.setImage(PTGImage.switchIcon.image, for: .normal)
+    }
+    
+    func SetCameraButtonTimer(_ count: Int) {
+        cameraButton.configureTimer(count)
+    }
+    
+    func StopCameraButtonTimer() {
+        cameraButton.stopTimer()
+    }
+}
+
+extension PhotoRoomBottomView {
+    private enum Constants {
+        static let iconButtonSize: CGFloat = 40
+        static let bottomLeadingSpacing: CGFloat = 53
+        static let bottomTrailingSpacing: CGFloat = 53
+        static let throttleTime: CGFloat = 4
     }
 }
