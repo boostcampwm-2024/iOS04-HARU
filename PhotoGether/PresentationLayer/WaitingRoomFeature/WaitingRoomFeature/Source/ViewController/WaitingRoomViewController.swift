@@ -60,10 +60,10 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     
     private func setDummy() {
         let dummyData = [
-            ParticipantsSectionItem(videoID: 0, nickname: "host"),
-            ParticipantsSectionItem(videoID: 0, nickname: "guest2"),
-            ParticipantsSectionItem(videoID: 0, nickname: "guest3"),
-            ParticipantsSectionItem(videoID: 0, nickname: "guest4")
+            ParticipantsSectionItem(videoID: 0, nickname: "h"),
+            ParticipantsSectionItem(videoID: 0, nickname: ""),
+            ParticipantsSectionItem(videoID: 0, nickname: "guest322"),
+            ParticipantsSectionItem(videoID: 0, nickname: "guest444232328787873")
         ]
         var snapshot = participantsCollectionViewController.dataSource.snapshot()
         snapshot.appendSections([0])
