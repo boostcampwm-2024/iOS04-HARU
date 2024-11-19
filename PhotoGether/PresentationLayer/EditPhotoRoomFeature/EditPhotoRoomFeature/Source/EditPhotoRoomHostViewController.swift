@@ -95,10 +95,12 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func renderSticker(data: Data) {
-        let rect = calculateCenterPosition(imageSize: 60)
+        let imageSize: CGFloat = 60
+        let rect = calculateCenterPosition(imageSize: imageSize)
+        let stickerImageView = UIImageView(frame: rect)
+        let stickerImage = UIImage(data: data)
         
-        let stickerImageView = UIView(frame: rect)
-        stickerImageView.backgroundColor = .cyan
+        stickerImageView.image = stickerImage
         
         canvasScrollView.imageView.addSubview(stickerImageView)
     }
@@ -118,17 +120,5 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             width: size,
             height: size
         )
-    }
-    
-    private func generateRectangle(rect: Rectangle) {
-        let view = UIView(
-            frame: CGRect(
-                origin: rect.position,
-                size: rect.size
-            )
-        )
-        
-        view.backgroundColor = .white
-        canvasScrollView.imageView.addSubview(view)
     }
 }
