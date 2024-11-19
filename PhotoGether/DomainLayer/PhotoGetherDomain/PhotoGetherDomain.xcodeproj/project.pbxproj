@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		603C68CF2CEC51EC00BE7AF9 /* PhotoGetherDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951872CDB647A00B89C85 /* PhotoGetherDomain.framework */; platformFilter = ios; };
+		603C68D52CEC529000BE7AF9 /* PhotoGetherDomainTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951A72CDB64F800B89C85 /* PhotoGetherDomainTesting.framework */; platformFilter = ios; };
+		603C68D62CEC529000BE7AF9 /* PhotoGetherDomainTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951A72CDB64F800B89C85 /* PhotoGetherDomainTesting.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B1745512CE35CD500E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B1745502CE35CD500E01D1A /* WebRTC */; };
 		7B5951BE2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; };
 		7B5951BF2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -15,6 +18,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		603C68D02CEC51EC00BE7AF9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B59517E2CDB647A00B89C85 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5951862CDB647A00B89C85;
+			remoteInfo = PhotoGetherDomain;
+		};
+		603C68D72CEC529000BE7AF9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B59517E2CDB647A00B89C85 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B5951A62CDB64F800B89C85;
+			remoteInfo = PhotoGetherDomainTesting;
+		};
 		7B5951C02CDB655500B89C85 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B59517E2CDB647A00B89C85 /* Project object */;
@@ -32,6 +49,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		603C68D92CEC529100BE7AF9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				603C68D62CEC529000BE7AF9 /* PhotoGetherDomainTesting.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7B5951C22CDB655500B89C85 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -58,12 +86,19 @@
 
 /* Begin PBXFileReference section */
 		05E553E92CDB9C4A00B70645 /* DomainUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		603C68C02CEC4C3400BE7AF9 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		603C68CB2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetchStickerListUseCaseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951872CDB647A00B89C85 /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951A72CDB64F800B89C85 /* PhotoGetherDomainTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotoGetherDomainTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		603C68CC2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FetchStickerListUseCaseTests;
+			sourceTree = "<group>";
+		};
 		7B1746352CE8E97000E01D1A /* PhotoGetherDomain */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PhotoGetherDomain;
@@ -82,6 +117,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		603C68C82CEC51EC00BE7AF9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				603C68CF2CEC51EC00BE7AF9 /* PhotoGetherDomain.framework in Frameworks */,
+				603C68D52CEC529000BE7AF9 /* PhotoGetherDomainTesting.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7B5951842CDB647A00B89C85 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +159,7 @@
 				7B1746352CE8E97000E01D1A /* PhotoGetherDomain */,
 				7B1746472CE8E97300E01D1A /* PhotoGetherDomainInterface */,
 				7B1746542CE8E97A00E01D1A /* PhotoGetherDomainTesting */,
+				603C68CC2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests */,
 				7B5951BD2CDB655500B89C85 /* Frameworks */,
 				7B5951882CDB647A00B89C85 /* Products */,
 			);
@@ -126,6 +171,7 @@
 				7B5951872CDB647A00B89C85 /* PhotoGetherDomain.framework */,
 				7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B5951A72CDB64F800B89C85 /* PhotoGetherDomainTesting.framework */,
+				603C68CB2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -133,6 +179,7 @@
 		7B5951BD2CDB655500B89C85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				603C68C02CEC4C3400BE7AF9 /* DesignSystem.framework */,
 				05E553E92CDB9C4A00B70645 /* DomainUtility.framework */,
 			);
 			name = Frameworks;
@@ -165,6 +212,31 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		603C68CA2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 603C68D22CEC51EC00BE7AF9 /* Build configuration list for PBXNativeTarget "FetchStickerListUseCaseTests" */;
+			buildPhases = (
+				603C68C72CEC51EC00BE7AF9 /* Sources */,
+				603C68C82CEC51EC00BE7AF9 /* Frameworks */,
+				603C68C92CEC51EC00BE7AF9 /* Resources */,
+				603C68D92CEC529100BE7AF9 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				603C68D12CEC51EC00BE7AF9 /* PBXTargetDependency */,
+				603C68D82CEC529000BE7AF9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				603C68CC2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests */,
+			);
+			name = FetchStickerListUseCaseTests;
+			packageProductDependencies = (
+			);
+			productName = FetchStickerListUseCaseTests;
+			productReference = 603C68CB2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		7B5951862CDB647A00B89C85 /* PhotoGetherDomain */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7B59518D2CDB647A00B89C85 /* Build configuration list for PBXNativeTarget "PhotoGetherDomain" */;
@@ -246,8 +318,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					603C68CA2CEC51EC00BE7AF9 = {
+						CreatedOnToolsVersion = 16.0;
+					};
 					7B5951862CDB647A00B89C85 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -281,11 +357,19 @@
 				7B5951862CDB647A00B89C85 /* PhotoGetherDomain */,
 				7B5951992CDB64E000B89C85 /* PhotoGetherDomainInterface */,
 				7B5951A62CDB64F800B89C85 /* PhotoGetherDomainTesting */,
+				603C68CA2CEC51EC00BE7AF9 /* FetchStickerListUseCaseTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		603C68C92CEC51EC00BE7AF9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7B5951852CDB647A00B89C85 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -310,6 +394,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		603C68C72CEC51EC00BE7AF9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7B5951832CDB647A00B89C85 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -334,6 +425,18 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		603C68D12CEC51EC00BE7AF9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 7B5951862CDB647A00B89C85 /* PhotoGetherDomain */;
+			targetProxy = 603C68D02CEC51EC00BE7AF9 /* PBXContainerItemProxy */;
+		};
+		603C68D82CEC529000BE7AF9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 7B5951A62CDB64F800B89C85 /* PhotoGetherDomainTesting */;
+			targetProxy = 603C68D72CEC529000BE7AF9 /* PBXContainerItemProxy */;
+		};
 		7B5951C12CDB655500B89C85 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7B5951992CDB64E000B89C85 /* PhotoGetherDomainInterface */;
@@ -347,6 +450,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		603C68D32CEC51EC00BE7AF9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.FetchStickerListUseCaseTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		603C68D42CEC51EC00BE7AF9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.FetchStickerListUseCaseTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		7B59518E2CDB647A00B89C85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -709,6 +854,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		603C68D22CEC51EC00BE7AF9 /* Build configuration list for PBXNativeTarget "FetchStickerListUseCaseTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				603C68D32CEC51EC00BE7AF9 /* Debug */,
+				603C68D42CEC51EC00BE7AF9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7B5951812CDB647A00B89C85 /* Build configuration list for PBXProject "PhotoGetherDomain" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
