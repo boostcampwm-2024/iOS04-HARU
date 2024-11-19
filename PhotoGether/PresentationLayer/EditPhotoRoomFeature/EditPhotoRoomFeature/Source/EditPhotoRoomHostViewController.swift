@@ -79,8 +79,8 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         
         output.sink { [weak self] in
             switch $0 {
-            case .rectangle(let rect):
-                self?.generateRectangle(rect: rect)
+            case .sticker(let data):
+                self?.renderSticker(data: data)
             }
         }
         .store(in: &cancellables)
@@ -92,6 +92,32 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         navigationView.backgroundColor = .yellow
         bottomView.backgroundColor = .yellow
         canvasScrollView.backgroundColor = .red
+    }
+    
+    private func renderSticker(data: Data) {
+        let rect = calculateCenterPosition(imageSize: 60)
+        
+        let stickerImageView = UIView(frame: rect)
+        stickerImageView.backgroundColor = .cyan
+        
+        canvasScrollView.imageView.addSubview(stickerImageView)
+    }
+    
+    private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
+        let zoomScale = canvasScrollView.zoomScale
+        let bounds = canvasScrollView.bounds
+        
+        let centerX = bounds.midX / zoomScale
+        let centerY = bounds.midY / zoomScale
+        
+        let size = imageSize / sqrt(zoomScale)
+        
+        return CGRect(
+            x: centerX - size / 2,
+            y: centerY - size / 2,
+            width: size,
+            height: size
+        )
     }
     
     private func generateRectangle(rect: Rectangle) {
