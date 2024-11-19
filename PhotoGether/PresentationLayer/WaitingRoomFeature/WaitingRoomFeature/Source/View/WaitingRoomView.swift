@@ -2,8 +2,8 @@ import UIKit
 import DesignSystem
 
 final class WaitingRoomView: UIView {
-    private let bottomBarView = UIView()
-    let micButton = PTGCircleButton(type: .micOn)
+    let bottomBarView = UIView()
+    let micButton = PTGMicButton(micState: .on)
     let shareButton = PTGCircleButton(type: .share)
     let startButton = PTGPrimaryButton()
     
@@ -17,6 +17,10 @@ final class WaitingRoomView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func toggleMicButtonState() {
+        micButton.toggleMicState()
     }
     
     func updateStartButtonTitle(count: Int) {
@@ -93,6 +97,6 @@ extension WaitingRoomView {
         static let bottomBarViewHorizontalInset: CGFloat = 16
         static let circleButtonSize: CGSize = CGSize(width: 52, height: 52)
         static let startButtonHeight: CGFloat = 52
-        static let micButtonBottomSpacing: CGFloat = 4
+        static let micButtonBottomSpacing: CGFloat = -4
     }
 }
