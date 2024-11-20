@@ -9,6 +9,16 @@
 /* Begin PBXBuildFile section */
 		053DC8532CE32AE900DC9F35 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; };
 		053DC8542CE32AE900DC9F35 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		055AF9732CEC6E7A0060E408 /* PhotoGetherDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9722CEC6E7A0060E408 /* PhotoGetherDomain.framework */; };
+		055AF9742CEC6E7A0060E408 /* PhotoGetherDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9722CEC6E7A0060E408 /* PhotoGetherDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		055AF9762CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9752CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework */; };
+		055AF9772CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9752CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		055AF9792CEC6E840060E408 /* PhotoGetherDomainTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9782CEC6E840060E408 /* PhotoGetherDomainTesting.framework */; };
+		055AF97A2CEC6E840060E408 /* PhotoGetherDomainTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9782CEC6E840060E408 /* PhotoGetherDomainTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		055AF9A72CEC739C0060E408 /* FeatureTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9A62CEC739C0060E408 /* FeatureTesting.framework */; };
+		055AF9A82CEC739C0060E408 /* FeatureTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 055AF9A62CEC739C0060E408 /* FeatureTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		055AF9A92CEC73B20060E408 /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; };
+		055AF9AA2CEC73B20060E408 /* EditPhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60CB82A82CDB522900873DD6 /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; };
 		60CB82A92CDB522900873DD6 /* EditPhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B59510C2CDB598600B89C85 /* FeatureTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510B2CDB598600B89C85 /* FeatureTesting.framework */; };
@@ -20,6 +30,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		055AF9AB2CEC73B20060E408 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 60CB82582CDB4FC500873DD6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60CB82602CDB4FC500873DD6;
+			remoteInfo = EditPhotoRoomFeature;
+		};
 		60CB82AA2CDB522900873DD6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 60CB82582CDB4FC500873DD6 /* Project object */;
@@ -30,6 +47,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		055AF9A12CEC6F4A0060E408 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				055AF9A82CEC739C0060E408 /* FeatureTesting.framework in Embed Frameworks */,
+				055AF9AA2CEC73B20060E408 /* EditPhotoRoomFeature.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		60CB82AC2CDB522900873DD6 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -37,7 +66,10 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7B59510D2CDB598600B89C85 /* FeatureTesting.framework in Embed Frameworks */,
+				055AF97A2CEC6E840060E408 /* PhotoGetherDomainTesting.framework in Embed Frameworks */,
 				60CB82A92CDB522900873DD6 /* EditPhotoRoomFeature.framework in Embed Frameworks */,
+				055AF9772CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
+				055AF9742CEC6E7A0060E408 /* PhotoGetherDomain.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -59,6 +91,14 @@
 
 /* Begin PBXFileReference section */
 		053DC8522CE32AE900DC9F35 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF9722CEC6E7A0060E408 /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF9752CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF9782CEC6E840060E408 /* PhotoGetherDomainTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF9892CEC6F0B0060E408 /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF98D2CEC6F0E0060E408 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF9942CEC6F430060E408 /* EditPhotoRoomHostViewModelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditPhotoRoomHostViewModelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF99E2CEC6F4A0060E408 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		055AF9A62CEC739C0060E408 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EditPhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB827C2CDB508C00873DD6 /* EditPhotoRoomFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EditPhotoRoomFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59510B2CDB598600B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +118,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		055AF9952CEC6F430060E408 /* EditPhotoRoomHostViewModelTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EditPhotoRoomHostViewModelTests;
+			sourceTree = "<group>";
+		};
 		7B1746AC2CE8E9C900E01D1A /* EditPhotoRoomFeature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EditPhotoRoomFeature;
@@ -94,6 +139,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		055AF9912CEC6F430060E408 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				055AF9A72CEC739C0060E408 /* FeatureTesting.framework in Frameworks */,
+				055AF9A92CEC73B20060E408 /* EditPhotoRoomFeature.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		60CB825E2CDB4FC500873DD6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -109,7 +163,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B59510C2CDB598600B89C85 /* FeatureTesting.framework in Frameworks */,
+				055AF9792CEC6E840060E408 /* PhotoGetherDomainTesting.framework in Frameworks */,
 				60CB82A82CDB522900873DD6 /* EditPhotoRoomFeature.framework in Frameworks */,
+				055AF9762CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework in Frameworks */,
+				055AF9732CEC6E7A0060E408 /* PhotoGetherDomain.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +178,7 @@
 			children = (
 				7B1746AC2CE8E9C900E01D1A /* EditPhotoRoomFeature */,
 				7B1746D22CE8E9D400E01D1A /* EditPhotoRoomFeatureDemo */,
+				055AF9952CEC6F430060E408 /* EditPhotoRoomHostViewModelTests */,
 				60CB82A72CDB522900873DD6 /* Frameworks */,
 				60CB82622CDB4FC500873DD6 /* Products */,
 			);
@@ -131,6 +189,7 @@
 			children = (
 				60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */,
 				60CB827C2CDB508C00873DD6 /* EditPhotoRoomFeatureDemo.app */,
+				055AF9942CEC6F430060E408 /* EditPhotoRoomHostViewModelTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -138,6 +197,13 @@
 		60CB82A72CDB522900873DD6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				055AF9A62CEC739C0060E408 /* FeatureTesting.framework */,
+				055AF99E2CEC6F4A0060E408 /* PhotoGetherDomainInterface.framework */,
+				055AF98D2CEC6F0E0060E408 /* PhotoGetherDomainInterface.framework */,
+				055AF9892CEC6F0B0060E408 /* PhotoGetherDomain.framework */,
+				055AF9782CEC6E840060E408 /* PhotoGetherDomainTesting.framework */,
+				055AF9752CEC6E7F0060E408 /* PhotoGetherDomainInterface.framework */,
+				055AF9722CEC6E7A0060E408 /* PhotoGetherDomain.framework */,
 				053DC8522CE32AE900DC9F35 /* DesignSystem.framework */,
 				7B5951CE2CDB658400B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B5951772CDB62A200B89C85 /* PresentationUtility.framework */,
@@ -160,6 +226,30 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		055AF9932CEC6F430060E408 /* EditPhotoRoomHostViewModelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 055AF99B2CEC6F430060E408 /* Build configuration list for PBXNativeTarget "EditPhotoRoomHostViewModelTests" */;
+			buildPhases = (
+				055AF9902CEC6F430060E408 /* Sources */,
+				055AF9912CEC6F430060E408 /* Frameworks */,
+				055AF9922CEC6F430060E408 /* Resources */,
+				055AF9A12CEC6F4A0060E408 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				055AF9AC2CEC73B20060E408 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				055AF9952CEC6F430060E408 /* EditPhotoRoomHostViewModelTests */,
+			);
+			name = EditPhotoRoomHostViewModelTests;
+			packageProductDependencies = (
+			);
+			productName = EditPhotoRoomHostViewModelTests;
+			productReference = 055AF9942CEC6F430060E408 /* EditPhotoRoomHostViewModelTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		60CB82602CDB4FC500873DD6 /* EditPhotoRoomFeature */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 60CB82672CDB4FC500873DD6 /* Build configuration list for PBXNativeTarget "EditPhotoRoomFeature" */;
@@ -218,6 +308,9 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					055AF9932CEC6F430060E408 = {
+						CreatedOnToolsVersion = 16.0;
+					};
 					60CB82602CDB4FC500873DD6 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -242,11 +335,19 @@
 			targets = (
 				60CB82602CDB4FC500873DD6 /* EditPhotoRoomFeature */,
 				60CB827B2CDB508C00873DD6 /* EditPhotoRoomFeatureDemo */,
+				055AF9932CEC6F430060E408 /* EditPhotoRoomHostViewModelTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		055AF9922CEC6F430060E408 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		60CB825F2CDB4FC500873DD6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -264,6 +365,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		055AF9902CEC6F430060E408 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		60CB825D2CDB4FC500873DD6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -281,6 +389,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		055AF9AC2CEC73B20060E408 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60CB82602CDB4FC500873DD6 /* EditPhotoRoomFeature */;
+			targetProxy = 055AF9AB2CEC73B20060E408 /* PBXContainerItemProxy */;
+		};
 		60CB82AB2CDB522900873DD6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 60CB82602CDB4FC500873DD6 /* EditPhotoRoomFeature */;
@@ -289,6 +402,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		055AF99C2CEC6F430060E408 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.boostcamp9.EditPhotoRoomHostViewModelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		055AF99D2CEC6F430060E408 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.boostcamp9.EditPhotoRoomHostViewModelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		60CB82682CDB4FC500873DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -559,6 +714,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		055AF99B2CEC6F430060E408 /* Build configuration list for PBXNativeTarget "EditPhotoRoomHostViewModelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				055AF99C2CEC6F430060E408 /* Debug */,
+				055AF99D2CEC6F430060E408 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		60CB825B2CDB4FC500873DD6 /* Build configuration list for PBXProject "EditPhotoRoomFeature" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

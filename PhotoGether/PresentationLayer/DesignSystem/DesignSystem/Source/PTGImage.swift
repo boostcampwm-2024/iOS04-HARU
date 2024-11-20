@@ -7,6 +7,9 @@ public enum PTGImage {
     case chevronRightBlack
     case sampleImage
     case temp1, temp2, temp3, temp4
+    case filterIcon
+    case switchIcon
+    case ellipsisIcon
     
     public var image: UIImage {
         switch self {
@@ -28,6 +31,12 @@ public enum PTGImage {
             return UIImage(resource: .temp3)
         case .temp4:
             return UIImage(resource: .temp4)
+        case .filterIcon:
+            return UIImage(resource: .filterIcon)
+        case .switchIcon:
+            return UIImage(resource: .switchIcon)
+        case .ellipsisIcon:
+            return UIImage(resource: .ellipsisIcon)
         }
     }
 }
