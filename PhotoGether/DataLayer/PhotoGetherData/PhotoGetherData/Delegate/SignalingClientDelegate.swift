@@ -2,8 +2,8 @@ import Foundation
 import WebRTC
 
 public protocol SignalingClientDelegate: AnyObject {
-    func signalClientDidConnect(_ signalingClient: SignalingClient)
-    func signalClientDidDisconnect(_ signalingClient: SignalingClient)
-    func signalClient(_ signalingClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription)
-    func signalClient(_ signalingClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate)
+    func signalClientDidConnect(_ signalingClient: SignalingService)
+    func signalClientDidDisconnect(_ signalingClient: SignalingService)
+    func signalClient(_ signalingClient: SignalingService, didReceiveRemoteSdp sdp: RTCSessionDescription)
+    func signalClient(_ signalingClient: SignalingService, didReceiveCandidate candidate: RTCIceCandidate)
 }

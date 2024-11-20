@@ -4,7 +4,7 @@ import Combine
 import PhotoGetherDomainInterface
 
 public final class ConnectionClientImpl: ConnectionClient {
-    private let signalingClient: SignalingClient
+    private let signalingClient: SignalingService
     private let webRTCClient: WebRTCClient
     
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
@@ -15,7 +15,7 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var peerID: String = ""
     public var roomID: String = ""
     
-    public init(signalingClient: SignalingClient, webRTCClient: WebRTCClient) {
+    public init(signalingClient: SignalingService, webRTCClient: WebRTCClient) {
         self.signalingClient = signalingClient
         self.webRTCClient = webRTCClient
         
@@ -59,19 +59,19 @@ public final class ConnectionClientImpl: ConnectionClient {
 // MARK: SignalingClientDelegate
 extension ConnectionClientImpl: SignalingClientDelegate {
     public func signalClientDidConnect(
-        _ signalingClient: SignalingClient
+        _ signalingClient: SignalingService
     ) {
         // TODO: 서버 연결 완료 로직 처리
     }
     
     public func signalClientDidDisconnect(
-        _ signalingClient: SignalingClient
+        _ signalingClient: SignalingService
     ) {
         // TODO: 서버 연결 끊김 로직 처리
     }
     
     public func signalClient(
-        _ signalingClient: SignalingClient,
+        _ signalingClient: SignalingService,
         didReceiveRemoteSdp sdp: RTCSessionDescription
     ) {
         guard self.webRTCClient.peerConnection.remoteDescription == nil else { return }
@@ -89,7 +89,7 @@ extension ConnectionClientImpl: SignalingClientDelegate {
     }
     
     public func signalClient(
-        _ signalingClient: SignalingClient,
+        _ signalingClient: SignalingService,
         didReceiveCandidate candidate: RTCIceCandidate
     ) {
         self.webRTCClient.set(remoteCandidate: candidate) { _ in }

@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         debugPrint("SignalingServer URL: \(url)")
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
-        let signalingClient: SignalingClient = SignalingClientImpl(webSocketClient: webScoketClient)
+        let signalingClient: SignalingService = SignalingServiceImpl(webSocketClient: webScoketClient)
         
         let webRTCClient: WebRTCClient = WebRTCClientImpl(iceServers: [
             "stun:stun.l.google.com:19302",

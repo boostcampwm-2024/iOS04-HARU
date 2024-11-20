@@ -2,7 +2,7 @@ import Foundation
 import WebRTC
 import PhotoGetherNetwork
 
-final public class SignalingClientImpl: SignalingClient {
+final public class SignalingServiceImpl: SignalingService {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     private var webSocketClient: WebSocketClient
@@ -39,7 +39,7 @@ final public class SignalingClientImpl: SignalingClient {
 }
 
 // MARK: WebSocketClientDelegate
-extension SignalingClientImpl {
+extension SignalingServiceImpl {
     public func webSocketDidConnect(_ webSocket: WebSocketClient) {
         self.delegate?.signalClientDidConnect(self)
     }

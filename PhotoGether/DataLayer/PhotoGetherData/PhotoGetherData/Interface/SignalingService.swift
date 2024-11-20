@@ -2,7 +2,7 @@ import Foundation
 import WebRTC
 import PhotoGetherNetwork
 
-public protocol SignalingClient: WebSocketClientDelegate {
+public protocol SignalingService: WebSocketClientDelegate {
     var delegate: SignalingClientDelegate? { get set }
     
     func connect()
