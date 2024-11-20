@@ -40,12 +40,18 @@ public final class PTGCircleButton: UIButton {
         super.layoutSubviews()
         layer.cornerRadius = bounds.width / 2
     }
+    
+    public func changeType(to type: PTGCircleButtonType) {
+        buttonImage.image = UIImage(systemName: type.image)
+    }
 }
 
 public extension PTGCircleButton {
     enum PTGCircleButtonType {
         case link
         case share
+        case micOn
+        case micOff
         
         var image: String {
             switch self {
@@ -53,6 +59,10 @@ public extension PTGCircleButton {
                 return "link"
             case .share:
                 return "square.and.arrow.up"
+            case .micOn:
+                return "mic"
+            case .micOff:
+                return "mic.slash"
             }
         }
     }
