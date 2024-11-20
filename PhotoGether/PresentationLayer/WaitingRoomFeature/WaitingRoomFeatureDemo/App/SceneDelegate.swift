@@ -1,3 +1,4 @@
+import PhotoGetherDomainInterface
 import PhotoGetherData
 import PhotoGetherNetwork
 import WaitingRoomFeature
