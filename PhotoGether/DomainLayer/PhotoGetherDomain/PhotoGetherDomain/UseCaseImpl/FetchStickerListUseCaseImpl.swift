@@ -3,7 +3,7 @@ import Foundation
 import PhotoGetherDomainInterface
 
 public final class FetchStickerListUseCaseImpl: FetchStickerListUseCase {
-    public func execute() -> AnyPublisher<[Data], Never> {
+    public func execute() -> AnyPublisher<[StickerEntity], Never> {
         return shapeRepository.fetchStickerList()
     }
     
