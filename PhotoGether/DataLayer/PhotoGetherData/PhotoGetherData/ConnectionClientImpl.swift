@@ -1,6 +1,7 @@
 import Foundation
 import WebRTC
 import Combine
+import PhotoGetherDomainInterface
 
 public final class ConnectionClientImpl: ConnectionClient {
     private let signalingClient: SignalingClient
@@ -54,7 +55,7 @@ public final class ConnectionClientImpl: ConnectionClient {
 }
 
 // MARK: SignalingClientDelegate
-extension ConnectionClientImpl {
+extension ConnectionClientImpl: SignalingClientDelegate {
     public func signalClientDidConnect(
         _ signalingClient: SignalingClient
     ) {
@@ -94,7 +95,7 @@ extension ConnectionClientImpl {
 }
 
 // MARK: WebRTCClientDelegate
-extension ConnectionClientImpl {
+extension ConnectionClientImpl: WebRTCClientDelegate {
     /// SDP 가 생성되면 LocalCandidate 가 생성되기 시작 (가능한 경로만큼 생성됨)
     public func webRTCClient(
         _ client: WebRTCClient,
