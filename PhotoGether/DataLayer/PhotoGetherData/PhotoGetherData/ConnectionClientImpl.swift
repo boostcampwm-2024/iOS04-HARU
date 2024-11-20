@@ -1,6 +1,5 @@
 import Foundation
 import WebRTC
-import PhotoGetherDomainInterface
 import Combine
 
 public final class ConnectionClientImpl: ConnectionClient {

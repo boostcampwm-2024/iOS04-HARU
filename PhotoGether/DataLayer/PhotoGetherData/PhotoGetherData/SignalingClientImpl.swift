@@ -1,6 +1,6 @@
 import Foundation
 import WebRTC
-import PhotoGetherDomainInterface
+import PhotoGetherNetwork
 
 final public class SignalingClientImpl: SignalingClient {
     private let decoder = JSONDecoder()

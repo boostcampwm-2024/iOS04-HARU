@@ -1,5 +1,6 @@
 import Foundation
 import WebRTC
+import PhotoGetherNetwork
 
 public protocol SignalingClient: WebSocketClientDelegate {
     var delegate: SignalingClientDelegate? { get set }
