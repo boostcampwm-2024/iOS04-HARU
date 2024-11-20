@@ -12,6 +12,7 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var remoteVideoView: UIView = RTCMTLVideoView()
     public var localVideoView: UIView = RTCMTLVideoView()
     // TODO: 음성 정보
+    public var peerID: String?
     
     public init(signalingClient: SignalingClient, webRTCClient: WebRTCClient) {
         self.signalingClient = signalingClient
