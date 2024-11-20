@@ -17,6 +17,9 @@ private struct StickerEndPoint: EndPoint {
     var method: HTTPMethod { .get }
     // 시작 인덱스, 1회 호출당 30개씩 호출
     var parameters: [String: Any]? { ["group": "objects", "offset": 0] }
-    var headers: [String: String]? { ["X-Api-Key": "N5d5CSI9fhzP7bhTmydbpQ==Rc4jeybVfDReMxGo"] }
+    var headers: [String: String]? {
+        let apiKey = Bundle.main.object(forInfoDictionaryKey: "EMOJI_API_KEY") as? String ?? ""
+        return ["X-Api-Key": apiKey]
+    }
     var body: Encodable? { nil }
 }

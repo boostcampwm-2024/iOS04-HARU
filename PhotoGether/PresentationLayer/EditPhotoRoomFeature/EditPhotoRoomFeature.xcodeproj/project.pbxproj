@@ -528,6 +528,8 @@
 		};
 		60CB826A2CDB4FC500873DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 7B1746D22CE8E9D400E01D1A /* EditPhotoRoomFeatureDemo */;
+			baseConfigurationReferenceRelativePath = Resource/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
