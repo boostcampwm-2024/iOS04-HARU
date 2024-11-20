@@ -11,8 +11,9 @@ public final class ConnectionClientImpl: ConnectionClient {
     
     public var remoteVideoView: UIView = RTCMTLVideoView()
     public var localVideoView: UIView = RTCMTLVideoView()
-    // TODO: 음성 정보
-    public var peerID: String?
+    
+    public var peerID: String = ""
+    public var roomID: String = ""
     
     public init(signalingClient: SignalingClient, webRTCClient: WebRTCClient) {
         self.signalingClient = signalingClient
@@ -31,7 +32,7 @@ public final class ConnectionClientImpl: ConnectionClient {
     
     public func sendOffer() {
         self.webRTCClient.offer { sdp in
-            self.signalingClient.send(sdp: sdp)
+            self.signalingClient.send(sdp: sdp, peerID: self.peerID, roomID: self.roomID)
         }
     }
     
@@ -82,7 +83,7 @@ extension ConnectionClientImpl: SignalingClientDelegate {
             guard self.webRTCClient.peerConnection.localDescription == nil else { return }
             
             self.webRTCClient.answer { sdp in
-                self.signalingClient.send(sdp: sdp)
+                self.signalingClient.send(sdp: sdp, peerID: self.peerID, roomID: self.roomID)
             }
         }
     }
@@ -102,7 +103,7 @@ extension ConnectionClientImpl: WebRTCClientDelegate {
         _ client: WebRTCClient,
         didGenerateLocalCandidate candidate: RTCIceCandidate
     ) {
-        self.signalingClient.send(candidate: candidate)
+        self.signalingClient.send(candidate: candidate, peerID: self.peerID, roomID: self.roomID)
     }
     
     public func webRTCClient(

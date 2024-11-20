@@ -6,6 +6,6 @@ public protocol SignalingClient: WebSocketClientDelegate {
     var delegate: SignalingClientDelegate? { get set }
     
     func connect()
-    func send(sdp rtcSdp: RTCSessionDescription)
-    func send(candidate rtcIceCandidate: RTCIceCandidate)
+    func send(sdp rtcSdp: RTCSessionDescription, peerID: String, roomID: String)
+    func send(candidate rtcIceCandidate: RTCIceCandidate, peerID: String, roomID: String)
 }
