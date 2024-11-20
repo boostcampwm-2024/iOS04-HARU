@@ -2,11 +2,11 @@ import Foundation
 import PhotoGetherNetwork
 
 struct SignalingRequestDTO: WebSocketRequestable {
-    var type: SignalingMessageType
+    var messageType: SignalingMessageType
     var message: Data?
     
-    init(type: SignalingMessageType = .signaling, body: Data? = nil) {
-        self.type = type
+    init(messageType: SignalingMessageType = .signaling, body: Data? = nil) {
+        self.messageType = messageType
     }
     
     enum SignalingMessageType: String, Encodable {

@@ -2,7 +2,7 @@ import Foundation
 import PhotoGetherNetwork
 
 struct RoomResponseDTO: WebSocketResponsable {
-    var type: RoomMessageType
+    var messageType: RoomMessageType
     var message: Data?
     
     enum RoomMessageType: String, Decodable {

@@ -2,11 +2,11 @@ import Foundation
 import PhotoGetherNetwork
 
 struct RoomRequestDTO: WebSocketRequestable {
-    var type: RoomMessageType
+    var messageType: RoomMessageType
     var message: Data?
     
-    init(type: RoomMessageType, body: Data? = nil) {
-        self.type = type
+    init(messageType: RoomMessageType, body: Data? = nil) {
+        self.messageType = messageType
     }
     
     enum RoomMessageType: String, Encodable {
