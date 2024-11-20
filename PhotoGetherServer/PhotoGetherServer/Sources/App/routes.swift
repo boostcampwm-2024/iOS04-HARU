@@ -1,5 +1,7 @@
 import Vapor
 
+var roomManager = RoomManager()
+
 func routes(_ app: Application) throws {
     var connectedClients = [WebSocket]()
     
