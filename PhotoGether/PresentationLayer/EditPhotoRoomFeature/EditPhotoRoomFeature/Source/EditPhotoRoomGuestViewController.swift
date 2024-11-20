@@ -11,6 +11,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     private let input = PassthroughSubject<EditPhotoRoomGuestViewModel.Input, Never>()
     
     private let viewModel: EditPhotoRoomGuestViewModel
+    private var stickerIdDictionary: [UUID: Int] = [:]
     
     public init(viewModel: EditPhotoRoomGuestViewModel) {
         self.viewModel = viewModel
@@ -85,24 +86,61 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     public func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.sink { [weak self] in
-            switch $0 {
-            case .sticker(let data):
-                self?.renderSticker(data: data)
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] event in
+            switch event {
+            case .stickerImageData(let sticker):
+                self?.createStickerObject(by: sticker)
+            case .stickerObjectList(let stickerList):
+                self?.updateCanvas(with: stickerList)
             }
         }
         .store(in: &cancellables)
     }
     
-    private func renderSticker(data: Data) {
-        let imageSize: CGFloat = 60
-        let rect = calculateCenterPosition(imageSize: imageSize)
-        let stickerImageView = UIImageView(frame: rect)
-        let stickerImage = UIImage(data: data)
+    /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
+    private func updateCanvas(with stickerList: [StickerObject]) {
+        stickerList.forEach { sticker in
+            if let targetIndex = stickerIdDictionary[sticker.id] {
+                updateExistingSticker(at: targetIndex, with: sticker)
+            } else {
+                addNewSticker(to: sticker)
+            }
+        }
+    }
+    
+    private func updateExistingSticker(
+        at index: Int,
+        with sticker: StickerObject
+    ) {
+        guard
+            let stickerImageView = canvasScrollView.imageView.subviews[index]
+                as? UIImageView
+        else { return }
         
-        stickerImageView.image = stickerImage
+        stickerImageView.image = UIImage(data: sticker.image)
+        stickerImageView.frame = sticker.rect
+    }
+    
+    private func addNewSticker(to sticker: StickerObject) {
+        registerSticker(for: sticker)
         
+        let stickerImageView = UIImageView(frame: sticker.rect)
+        stickerImageView.image = UIImage(data: sticker.image)
         canvasScrollView.imageView.addSubview(stickerImageView)
+    }
+    
+    // MARK: 원래는 Data가 아니라 imageURL 및 Image의 MetaData가 와야함.
+    private func createStickerObject(by sticker: Data) {
+        let imageSize: CGFloat = 64
+        let rect = calculateCenterPosition(imageSize: imageSize)
+        let newStickerObject = StickerObject(
+            id: UUID(),
+            image: sticker,
+            rect: rect
+        )
+        input.send(.stickerObjectData(newStickerObject))
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -120,5 +158,10 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             width: size,
             height: size
         )
+    }
+    
+    private func registerSticker(for sticker: StickerObject) {
+        let newIndex = canvasScrollView.imageView.subviews.count
+        stickerIdDictionary[sticker.id] = newIndex
     }
 }
