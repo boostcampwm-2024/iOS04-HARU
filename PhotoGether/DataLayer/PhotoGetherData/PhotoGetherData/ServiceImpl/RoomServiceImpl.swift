@@ -10,7 +10,7 @@ public final class RoomServiceImpl: RoomService {
         self.webSocketClient = webSocketClient
     }
     
-    public func send(request: WebSocketRequest) {
+    public func send(request: any WebSocketRequestable) {
         guard let data = request.toData(encoder: encoder) else {
             debugPrint("방 생성 요청 데이터 인코딩 실패: \(request)")
             return

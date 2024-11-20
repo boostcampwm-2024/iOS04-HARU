@@ -6,7 +6,7 @@ final public class SignalingServiceImpl: SignalingService {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     private var webSocketClient: WebSocketClient
-    public var delegate: SignalingClientDelegate?
+    public var delegate: SignalingServiceDelegate?
     
     public init(webSocketClient: WebSocketClient) {
         self.webSocketClient = webSocketClient
@@ -41,11 +41,11 @@ final public class SignalingServiceImpl: SignalingService {
 // MARK: WebSocketClientDelegate
 extension SignalingServiceImpl {
     public func webSocketDidConnect(_ webSocket: WebSocketClient) {
-        self.delegate?.signalClientDidConnect(self)
+        self.delegate?.signalingServiceDidConnect(self)
     }
     
     public func webSocketDidDisconnect(_ webSocket: WebSocketClient) {
-        self.delegate?.signalClientDidDisconnect(self)
+        self.delegate?.signalingServiceDidDisconnect(self)
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
             debugPrint("Signaling server 재연결 시도 중...")
@@ -64,9 +64,9 @@ extension SignalingServiceImpl {
         
         switch message {
         case .candidate(let iceCandidate):
-            self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
+            self.delegate?.signalingService(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
         case .sdp(let sessionDescription):
-            self.delegate?.signalClient(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
+            self.delegate?.signalingService(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
         @unknown default:
             debugPrint("Unknown Message Type: \(message)")
             return

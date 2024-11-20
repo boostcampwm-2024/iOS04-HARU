@@ -3,7 +3,7 @@ import WebRTC
 import PhotoGetherNetwork
 
 public protocol SignalingService: WebSocketClientDelegate {
-    var delegate: SignalingClientDelegate? { get set }
+    var delegate: SignalingServiceDelegate? { get set }
     
     func connect()
     func send(sdp rtcSdp: RTCSessionDescription, peerID: String, roomID: String)

@@ -1,6 +1,6 @@
 import Foundation
 
-struct CreateRoomResponseDTO: Decodable {
+struct CreateRoomMessage: Decodable {
     let roomID: String
     let userID: String
 }

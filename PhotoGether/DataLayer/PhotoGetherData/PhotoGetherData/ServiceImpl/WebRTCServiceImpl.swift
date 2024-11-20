@@ -1,7 +1,7 @@
 import Foundation
 import WebRTC
 
-public final class WebRTCClientImpl: NSObject, WebRTCClient {
+public final class WebRTCServiceImpl: NSObject, WebRTCService {
     private static let peerConnectionFactory: RTCPeerConnectionFactory = {
         RTCInitializeSSL()
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
@@ -12,7 +12,7 @@ public final class WebRTCClientImpl: NSObject, WebRTCClient {
         )
     }()
     
-    public var delegate: WebRTCClientDelegate?
+    public var delegate: WebRTCServiceDelegate?
     public var peerConnection: RTCPeerConnection
     
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
@@ -39,7 +39,7 @@ public final class WebRTCClientImpl: NSObject, WebRTCClient {
             ]
         )
         
-        guard let peerConnection = WebRTCClientImpl.peerConnectionFactory.peerConnection(
+        guard let peerConnection = WebRTCServiceImpl.peerConnectionFactory.peerConnection(
             with: config,
             constraints: constraints,
             delegate: nil
@@ -59,7 +59,7 @@ public final class WebRTCClientImpl: NSObject, WebRTCClient {
 }
 
 // MARK: SDP
-public extension WebRTCClientImpl {
+public extension WebRTCServiceImpl {
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constraints = RTCMediaConstraints(
             mandatoryConstraints: self.mediaConstraints,
@@ -108,7 +108,7 @@ public extension WebRTCClientImpl {
 }
 
 // MARK: Video/Audio/Data
-public extension WebRTCClientImpl {
+public extension WebRTCServiceImpl {
     func startCaptureLocalVideo(renderer: RTCVideoRenderer) {
         guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
         guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
@@ -184,10 +184,10 @@ public extension WebRTCClientImpl {
             mandatoryConstraints: nil,
             optionalConstraints: nil
         )
-        let audioSource = WebRTCClientImpl.peerConnectionFactory.audioSource(
+        let audioSource = WebRTCServiceImpl.peerConnectionFactory.audioSource(
             with: audioConstraints
         )
-        let audioTrack = WebRTCClientImpl.peerConnectionFactory.audioTrack(
+        let audioTrack = WebRTCServiceImpl.peerConnectionFactory.audioTrack(
             with: audioSource,
             trackId: "audio0"
         )
@@ -195,11 +195,11 @@ public extension WebRTCClientImpl {
     }
     
     private func createVideoTrack() -> RTCVideoTrack {
-        let videoSource = WebRTCClientImpl.peerConnectionFactory.videoSource()
+        let videoSource = WebRTCServiceImpl.peerConnectionFactory.videoSource()
         
         self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
         
-        let videoTrack = WebRTCClientImpl.peerConnectionFactory.videoTrack(
+        let videoTrack = WebRTCServiceImpl.peerConnectionFactory.videoTrack(
             with: videoSource,
             trackId: "video0"
         )
@@ -226,7 +226,7 @@ public extension WebRTCClientImpl {
 }
 
 // MARK: Audio control
-public extension WebRTCClientImpl {
+public extension WebRTCServiceImpl {
     func muteAudio() {
         self.setAudioEnabled(false)
     }
@@ -247,7 +247,7 @@ public extension WebRTCClientImpl {
 }
 
 // MARK: PeerConnectionDelegate
-extension WebRTCClientImpl {
+extension WebRTCServiceImpl {
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didChange stateChanged: RTCSignalingState
@@ -280,7 +280,7 @@ extension WebRTCClientImpl {
         didChange newState: RTCIceConnectionState
     ) {
         debugPrint("peerConnection new connection state: \(newState)")
-        self.delegate?.webRTCClient(self, didChangeConnectionState: newState)
+        self.delegate?.webRTCService(self, didChangeConnectionState: newState)
     }
     
     public func peerConnection(
@@ -294,7 +294,7 @@ extension WebRTCClientImpl {
         _ peerConnection: RTCPeerConnection,
         didGenerate candidate: RTCIceCandidate
     ) {
-        self.delegate?.webRTCClient(self, didGenerateLocalCandidate: candidate)
+        self.delegate?.webRTCService(self, didGenerateLocalCandidate: candidate)
     }
     
     public func peerConnection(
@@ -314,7 +314,7 @@ extension WebRTCClientImpl {
 }
 
 // MARK: DataChannelDelegate
-extension WebRTCClientImpl {
+extension WebRTCServiceImpl {
     public func dataChannelDidChangeState(
         _ dataChannel: RTCDataChannel
     ) {
@@ -325,6 +325,6 @@ extension WebRTCClientImpl {
         _ dataChannel: RTCDataChannel,
         didReceiveMessageWith buffer: RTCDataBuffer
     ) {
-        self.delegate?.webRTCClient(self, didReceiveData: buffer.data)
+        self.delegate?.webRTCService(self, didReceiveData: buffer.data)
     }
 }
