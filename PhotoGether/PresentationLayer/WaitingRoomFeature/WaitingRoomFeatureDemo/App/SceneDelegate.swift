@@ -1,6 +1,5 @@
+import PhotoGetherData
 import PhotoGetherNetwork
-import PhotoGetherDomain
-import PhotoGetherDomainInterface
 import WaitingRoomFeature
 import UIKit
 
@@ -33,9 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             webRTCClient: webRTCClient
         )
         
-        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
-            connectionClient: connectionClient
-        )
+        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel()
         
         let viewController: WaitingRoomViewController = WaitingRoomViewController(
             viewModel: viewModel

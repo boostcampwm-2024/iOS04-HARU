@@ -1,6 +1,5 @@
 import Foundation
 import Combine
-import PhotoGetherDomainInterface
 
 public final class WaitingRoomViewModel {
     struct Input {
@@ -16,11 +15,8 @@ public final class WaitingRoomViewModel {
     }
     
     private var cancellables = Set<AnyCancellable>()
-    let connectionClient: ConnectionClient
     
-    public init(connectionClient: ConnectionClient) {
-        self.connectionClient = connectionClient
-    }
+    public init() { }
     
     func transform(input: Input) -> Output {
         let newMicMuteState = mutateMicMuteButtonDidTap(input)
