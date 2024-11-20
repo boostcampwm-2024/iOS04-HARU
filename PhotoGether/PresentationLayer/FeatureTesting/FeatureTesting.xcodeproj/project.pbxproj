@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60B05BB52CEDA65500843377 /* PhotoGetherDomainTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B05BB42CEDA65500843377 /* PhotoGetherDomainTesting.framework */; };
+		60B05BB62CEDA65500843377 /* PhotoGetherDomainTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60B05BB42CEDA65500843377 /* PhotoGetherDomainTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5950F82CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F42CDB590C00B89C85 /* EditPhotoRoomFeature.framework */; };
 		7B5950F92CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F42CDB590C00B89C85 /* EditPhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5950FA2CDB590C00B89C85 /* PhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F52CDB590C00B89C85 /* PhotoRoomFeature.framework */; };
@@ -25,6 +27,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7B5950FF2CDB590C00B89C85 /* WaitingRoomFeature.framework in Embed Frameworks */,
+				60B05BB62CEDA65500843377 /* PhotoGetherDomainTesting.framework in Embed Frameworks */,
 				7B5950F92CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Embed Frameworks */,
 				7B5950FB2CDB590C00B89C85 /* PhotoRoomFeature.framework in Embed Frameworks */,
 				7B5950FD2CDB590C00B89C85 /* SharePhotoFeature.framework in Embed Frameworks */,
@@ -35,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		60B05BB42CEDA65500843377 /* PhotoGetherDomainTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5950E72CDB58F000B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5950F42CDB590C00B89C85 /* EditPhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EditPhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5950F52CDB590C00B89C85 /* PhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B5950FE2CDB590C00B89C85 /* WaitingRoomFeature.framework in Frameworks */,
+				60B05BB52CEDA65500843377 /* PhotoGetherDomainTesting.framework in Frameworks */,
 				7B5950F82CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Frameworks */,
 				7B5950FA2CDB590C00B89C85 /* PhotoRoomFeature.framework in Frameworks */,
 				7B5950FC2CDB590C00B89C85 /* SharePhotoFeature.framework in Frameworks */,
@@ -85,6 +90,7 @@
 		7B5950F32CDB590C00B89C85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				60B05BB42CEDA65500843377 /* PhotoGetherDomainTesting.framework */,
 				7B5950F42CDB590C00B89C85 /* EditPhotoRoomFeature.framework */,
 				7B5950F52CDB590C00B89C85 /* PhotoRoomFeature.framework */,
 				7B5950F62CDB590C00B89C85 /* SharePhotoFeature.framework */,
