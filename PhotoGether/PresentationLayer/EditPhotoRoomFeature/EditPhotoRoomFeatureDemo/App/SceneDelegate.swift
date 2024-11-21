@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
             eventConnectionRepository: eventConnectionRepository
         )
-        let sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCaseImpl(
+        let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionRepository
         )
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(

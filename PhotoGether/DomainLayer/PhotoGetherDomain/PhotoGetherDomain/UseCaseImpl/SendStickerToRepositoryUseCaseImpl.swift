@@ -1,7 +1,7 @@
 import Foundation
 import PhotoGetherDomainInterface
 
-public final class sendStickerToRepositoryUseCaseImpl: SendStickerToRepositoryUseCase {
+public final class SendStickerToRepositoryUseCaseImpl: SendStickerToRepositoryUseCase {
     public func execute(type: EventType, sticker: StickerEntity) {
         eventConnectionRepository.mergeSticker(type: type, sticker: sticker)
     }
