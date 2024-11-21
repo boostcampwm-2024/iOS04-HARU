@@ -82,7 +82,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             .receive(on: RunLoop.main)
             .sink { [weak self] in
             switch $0 {
-            case .sticker(let entity):
+            case .emojiEntity(let entity):
                 self?.renderSticker(entity: entity)
             }
         }
@@ -97,14 +97,14 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         canvasScrollView.backgroundColor = .red
     }
     
-    private func renderSticker(entity: StickerEntity) {
+    private func renderSticker(entity: EmojiEntity) {
         let imageSize: CGFloat = 64
         let rect = calculateCenterPosition(imageSize: imageSize)
         let stickerImageView = UIImageView(frame: rect)
         guard let url = URL(string: entity.image) else { return }
         
         Task {
-            guard let (data, response) = try? await URLSession.shared.data(from: url)
+            guard let (data, _) = try? await URLSession.shared.data(from: url)
             else { return }
             
             let stickerImage = UIImage(data: data)

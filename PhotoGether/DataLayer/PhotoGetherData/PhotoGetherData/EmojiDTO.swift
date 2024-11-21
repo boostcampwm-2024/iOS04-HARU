@@ -1,7 +1,7 @@
 import Foundation
 import PhotoGetherDomainInterface
 
-public struct StickerDTO: Decodable {
+public struct EmojiDTO: Decodable {
     let code: String
     let character: String
     let image: String
@@ -10,8 +10,8 @@ public struct StickerDTO: Decodable {
     let subgroup: String
 }
 
-extension StickerDTO {
-    func toEntity() -> StickerEntity {
+extension EmojiDTO {
+    func toEntity() -> EmojiEntity {
         return .init(
             image: self.image,
             name: self.name

@@ -9,15 +9,15 @@ public final class ShapeRepositoryMock: ShapeRepository {
         self.imageNameList = imageNameList
     }
     
-    public func fetchStickerList() -> AnyPublisher<[StickerEntity], Never> {
-        let stickerEntities: [StickerEntity] = imageNameList.map {
+    public func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never> {
+        let emojiEntities: [EmojiEntity] = imageNameList.map {
             .init(
                 image: imagePath(named: $0),    // 이미지 주소(or 경로)
                 name: $0
             )
         }
         
-        return Just(stickerEntities).eraseToAnyPublisher()
+        return Just(emojiEntities).eraseToAnyPublisher()
     }
     
     private func imagePath(named: String) -> String {
