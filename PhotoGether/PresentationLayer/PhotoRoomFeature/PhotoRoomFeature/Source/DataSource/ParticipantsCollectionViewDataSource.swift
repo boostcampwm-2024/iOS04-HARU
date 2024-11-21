@@ -27,7 +27,7 @@ public final class ParticipantsCollectionViewDataSource: UICollectionViewDiffabl
         ) as? ParticipantsCollectionViewCell else {
             return UICollectionViewCell()
         }
-        let placeHolderView = placeHolderView()
+        let placeHolderView = PlaceHolderView()
         placeHolderView.setText("Photo Gether")
                 
         cell.setNickname(sectionItem.nickname)
