@@ -24,6 +24,8 @@
 		7B5951472CDB5FF200B89C85 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951452CDB5FF200B89C85 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951C92CDB656D00B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951C82CDB656D00B89C85 /* PhotoGetherDomainInterface.framework */; };
 		7B5951CA2CDB656D00B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951C82CDB656D00B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7B6F291F2CEF6E8A00A72959 /* PhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BD847CE2CEC31DD006C8AAD /* PhotoRoomFeature.framework */; };
+		7B6F29202CEF6E8A00A72959 /* PhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7BD847CE2CEC31DD006C8AAD /* PhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7BD847CF2CEC31DD006C8AAD /* PhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BD847CE2CEC31DD006C8AAD /* PhotoRoomFeature.framework */; };
 		7BD847D02CEC31DD006C8AAD /* PhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7BD847CE2CEC31DD006C8AAD /* PhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -46,6 +48,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				6013799E2CDB4B4500CA430A /* WaitingRoomFeature.framework in Embed Frameworks */,
+				7B6F29202CEF6E8A00A72959 /* PhotoRoomFeature.framework in Embed Frameworks */,
 				60348F302CE48F02002D1CEE /* PhotoGetherDomain.framework in Embed Frameworks */,
 				6075676B2CEDA2E6001110DB /* PhotoGetherData.framework in Embed Frameworks */,
 				60B061EF2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
@@ -129,6 +132,7 @@
 			files = (
 				60B061EE2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				6075676A2CEDA2E6001110DB /* PhotoGetherData.framework in Frameworks */,
+				7B6F291F2CEF6E8A00A72959 /* PhotoRoomFeature.framework in Frameworks */,
 				7B17455F2CE49EB100E01D1A /* WebRTC in Frameworks */,
 				6013799D2CDB4B4500CA430A /* WaitingRoomFeature.framework in Frameworks */,
 				60348F2F2CE48F02002D1CEE /* PhotoGetherDomain.framework in Frameworks */,

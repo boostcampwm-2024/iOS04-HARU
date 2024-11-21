@@ -1,7 +1,8 @@
+import UIKit
 import Combine
-import Foundation
+import PhotoGetherDomainInterface
 
-final class PhotoRoomViewModel {
+public final class PhotoRoomViewModel {
     private var cancellables = Set<AnyCancellable>()
     private var timerCount: Int = 3
     
@@ -11,10 +12,16 @@ final class PhotoRoomViewModel {
     
     enum Output {
         case timer(count: Int)
-        case timerCompleted
+        case timerCompleted(images: [UIImage])
     }
     
     private var output = PassthroughSubject<Output, Never>()
+    
+    private let captureVideosUseCase: CaptureVideosUseCase
+    
+    public init(captureVideosUseCase: CaptureVideosUseCase) {
+        self.captureVideosUseCase = captureVideosUseCase
+    }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] in
@@ -43,7 +50,11 @@ final class PhotoRoomViewModel {
             
             if self.timerCount == 0 {
                 self.timerCount = 3
-                self.output.send(.timerCompleted)
+                
+                let images = self.captureVideosUseCase.execute()
+                let result = Output.timerCompleted(images: images)
+                
+                self.output.send(result)
                 timer.invalidate()
             }
         }

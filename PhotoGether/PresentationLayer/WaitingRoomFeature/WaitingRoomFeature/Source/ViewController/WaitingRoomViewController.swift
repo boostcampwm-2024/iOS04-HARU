@@ -9,11 +9,16 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     private let viewModel: WaitingRoomViewModel
     private let waitingRoomView = WaitingRoomView()
     private let participantsCollectionViewController = ParticipantsCollectionViewController()
+    private let photoRoomViewController: PhotoRoomViewController
     
     private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
     
-    public init(viewModel: WaitingRoomViewModel) {
+    public init(
+        viewModel: WaitingRoomViewModel,
+        photoRoomViewController: PhotoRoomViewController
+    ) {
         self.viewModel = viewModel
+        self.photoRoomViewController = photoRoomViewController
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -76,8 +81,14 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     public func bindOutput() {
         let output = viewModel.transform(input: createInput())
         
-        output.navigateToPhotoRoom.sink { _ in
-            print("navigateToPhotoRoom 버튼이 눌렸어요!")
+        output.navigateToPhotoRoom.sink { [weak self] _ in
+            guard let self else { return }
+            
+            let collectionVC = participantsCollectionViewController
+            let photoRoomVC = self.photoRoomViewController
+            photoRoomVC.setCollectionViewController(collectionVC)
+            
+            self.navigationController?.pushViewController(photoRoomVC, animated: true)
         }.store(in: &cancellables)
         
         output.localVideo.sink { [weak self] localVideoView in

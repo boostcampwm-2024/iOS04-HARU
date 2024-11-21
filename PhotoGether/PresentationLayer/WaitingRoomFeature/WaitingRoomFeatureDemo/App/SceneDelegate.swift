@@ -4,6 +4,7 @@ import PhotoGetherData
 import PhotoGetherDomainInterface
 import PhotoGetherDomain
 import WaitingRoomFeature
+import PhotoRoomFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -59,6 +60,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let captureVideosUseCase: CaptureVideosUseCase = CaptureVideosUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
+        let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
+            captureVideosUseCase: captureVideosUseCase
+        )
+        
+        let photoRoomViewController: PhotoRoomViewController = PhotoRoomViewController(
+            connectionRepsitory: connectionRepository,
+            viewModel: photoRoomViewModel,
+            isHost: true
+        )
+        
         let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
@@ -66,7 +81,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let viewController: WaitingRoomViewController = WaitingRoomViewController(
-            viewModel: viewModel
+            viewModel: viewModel,
+            photoRoomViewController: photoRoomViewController
         )
         
         window = UIWindow(windowScene: windowScene)
