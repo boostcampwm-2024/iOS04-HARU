@@ -5,28 +5,28 @@ import PhotoGetherDomainInterface
 public final class EditPhotoRoomGuestViewModel {
     enum Input {
         case stickerButtonDidTap
-        case stickerObjectData(StickerObject)
+        case stickerObjectData(StickerEntity)
     }
     
     enum Output {
         case emojiEntity(entity: EmojiEntity)
-        case stickerObjectList([StickerObject])
+        case stickerObjectList([StickerEntity])
     }
     
     private let fetchEmojiListUseCase: FetchEmojiListUseCase
     private let connectionClient: ConnectionClient
     
     private var emojiList: [EmojiEntity] = []
-    private var stickerObjectListSubject = CurrentValueSubject<[StickerObject], Never>([])
+    private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        fetchStickerListUseCase: FetchEmojiListUseCase,
+        fetchEmojiListUseCase: FetchEmojiListUseCase,
         connectionClient: ConnectionClient
     ) {
-        self.fetchEmojiListUseCase = fetchStickerListUseCase
+        self.fetchEmojiListUseCase = fetchEmojiListUseCase
         self.connectionClient = connectionClient
         bind()
     }
@@ -55,7 +55,7 @@ public final class EditPhotoRoomGuestViewModel {
         return output.eraseToAnyPublisher()
     }
     
-    private func appendSticker(with sticker: StickerObject) {
+    private func appendSticker(with sticker: StickerEntity) {
         var currentStickerObjectList = stickerObjectListSubject.value
         currentStickerObjectList.append(sticker)
         stickerObjectListSubject.send(currentStickerObjectList)
@@ -72,10 +72,4 @@ public final class EditPhotoRoomGuestViewModel {
     private func sendEmoji() {
         output.send(.emojiEntity(entity: emojiList.randomElement()!))
     }
-}
-
-struct StickerObject {
-    let id: UUID
-    let image: Data
-    let rect: CGRect
 }
