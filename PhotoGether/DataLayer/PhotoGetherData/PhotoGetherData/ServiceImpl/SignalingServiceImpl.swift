@@ -2,11 +2,11 @@ import Foundation
 import WebRTC
 import PhotoGetherNetwork
 
-final public class SignalingClientImpl: SignalingClient {
+final public class SignalingServiceImpl: SignalingService {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     private var webSocketClient: WebSocketClient
-    public var delegate: SignalingClientDelegate?
+    public var delegate: SignalingServiceDelegate?
     
     public init(webSocketClient: WebSocketClient) {
         self.webSocketClient = webSocketClient
@@ -17,8 +17,8 @@ final public class SignalingClientImpl: SignalingClient {
         self.webSocketClient.connect()
     }
     
-    public func send(sdp rtcSdp: RTCSessionDescription) {
-        let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp))
+    public func send(sdp rtcSdp: RTCSessionDescription, peerID: String, roomID: String) {
+        let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
             self.webSocketClient.send(data: dataMessage)
@@ -27,8 +27,8 @@ final public class SignalingClientImpl: SignalingClient {
         }
     }
     
-    public func send(candidate rtcIceCandidate: RTCIceCandidate) {
-        let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate))
+    public func send(candidate rtcIceCandidate: RTCIceCandidate, peerID: String, roomID: String) {
+        let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
             self.webSocketClient.send(data: dataMessage)
@@ -39,13 +39,13 @@ final public class SignalingClientImpl: SignalingClient {
 }
 
 // MARK: WebSocketClientDelegate
-extension SignalingClientImpl {
+extension SignalingServiceImpl {
     public func webSocketDidConnect(_ webSocket: WebSocketClient) {
-        self.delegate?.signalClientDidConnect(self)
+        self.delegate?.signalingServiceDidConnect(self)
     }
     
     public func webSocketDidDisconnect(_ webSocket: WebSocketClient) {
-        self.delegate?.signalClientDidDisconnect(self)
+        self.delegate?.signalingServiceDidDisconnect(self)
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
             debugPrint("Signaling server 재연결 시도 중...")
@@ -64,9 +64,9 @@ extension SignalingClientImpl {
         
         switch message {
         case .candidate(let iceCandidate):
-            self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
+            self.delegate?.signalingService(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
         case .sdp(let sessionDescription):
-            self.delegate?.signalClient(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
+            self.delegate?.signalingService(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
         @unknown default:
             debugPrint("Unknown Message Type: \(message)")
             return
