@@ -21,6 +21,9 @@ final public class SignalingServiceImpl: SignalingService {
         let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
+            let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
+            let request = try self.encoder.encode(dto)
+            
             self.webSocketClient.send(data: dataMessage)
         } catch {
             debugPrint("Warning: Could not encode sdp: \(error)")
@@ -31,6 +34,9 @@ final public class SignalingServiceImpl: SignalingService {
         let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
+            let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
+            let request = try self.encoder.encode(dto)
+            
             self.webSocketClient.send(data: dataMessage)
         } catch {
             debugPrint("Warning: Could not encode candidate: \(error)")
