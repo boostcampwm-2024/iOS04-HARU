@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import PhotoGetherDomainInterface
 
 public final class WaitingRoomViewModel {
     struct Input {
@@ -16,7 +17,11 @@ public final class WaitingRoomViewModel {
     
     private var cancellables = Set<AnyCancellable>()
     
-    public init() { }
+    private let sendOfferUseCase: SendOfferUseCase
+    
+    public init(sendOfferUseCase: SendOfferUseCase) {
+        self.sendOfferUseCase = sendOfferUseCase
+    }
     
     func transform(input: Input) -> Output {
         let newMicMuteState = mutateMicMuteButtonDidTap(input)
@@ -30,6 +35,10 @@ public final class WaitingRoomViewModel {
         )
         
         return output
+    }
+    
+    func sendOffer() {
+        sendOfferUseCase.execute()
     }
 }
 
