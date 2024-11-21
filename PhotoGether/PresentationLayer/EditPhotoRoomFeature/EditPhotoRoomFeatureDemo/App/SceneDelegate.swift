@@ -52,20 +52,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ]
         let frameImageGenerator = FrameImageGeneratorImpl(images: images)
         
-        let eventConnectionRepository = EventConnectionGuestRepositoryImpl(clients: [connectionClient])
+        let eventConnectionRepository = EventConnectionHostRepositoryImpl(clients: [connectionClient])
         let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
             eventConnectionRepository: eventConnectionRepository
         )
         let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionRepository
         )
-        let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
+        let editPhotoRoomGuestViewModel = EditPhotoRoomHostViewModel(
             fetchEmojiListUseCase: fetchEmojiListUseCase,
-            receiveStickerListUseCase: receiveStickerListUseCase,
+            frameImageGenerator: frameImageGenerator,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase,
-            frameImageGenerator: frameImageGenerator
+            receiveStickerListUseCase: receiveStickerListUseCase
         )
-        let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
+        let editPhotoRoomGuestViewController = EditPhotoRoomHostViewController(
             viewModel: editPhotoRoomGuestViewModel
         )
         window?.rootViewController = editPhotoRoomGuestViewController

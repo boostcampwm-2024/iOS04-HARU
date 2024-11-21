@@ -63,7 +63,7 @@ public final class EditPhotoRoomHostViewModel {
                 self?.sendEmoji()
             case .stickerObjectData(let sticker):
                 self?.appendSticker(with: sticker)
-                self?.sendToRepository(with: sticker)
+//                self?.sendToRepository(with: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameImage()
             }
