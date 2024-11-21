@@ -1,6 +1,9 @@
+import Foundation
 import Vapor
 
 var roomManager = RoomManager()
+let decoder = JSONDecoder()
+let encoder = JSONEncoder()
 
 func routes(_ app: Application) throws {
     var connectedClients = [WebSocket]()
@@ -14,14 +17,27 @@ func routes(_ app: Application) throws {
         
         // 클라이언트로부터 데이터를 수신할 때 호출
         client.onBinary { client, data in
-            
+            print("Received binary data of size: \(data.readableBytes)")
             // TODO: 1. data -> JSON으로 디코딩
+            let request = decoder.decode(WebSocketRequestable.self, from: data)
+            switch request.messageType {
+            case "signaling":
+                guard let data = request.message else {
+                    print("Invalid Data: \(request.message)")
+                    return
+                }
+                connectedClients
+                    .filter { $0 !== client }
+                    .forEach { $0.send(data) }
+                break
+            default:
+                print("Unknown request message type: \(request.messageType)")
+            }
             // TODO: 2. type을 보고 수행할 명령을 선택
             
-            print("Received binary data of size: \(data.readableBytes)")
-            connectedClients
-                .filter { $0 !== client }
-                .forEach { $0.send(data) }
+//            connectedClients
+//                .filter { $0 !== client }
+//                .forEach { $0.send(data) }
         }
 
         // 클라이언트가 연결을 종료할 때 호출
