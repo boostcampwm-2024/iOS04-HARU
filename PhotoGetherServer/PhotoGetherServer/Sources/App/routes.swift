@@ -19,19 +19,28 @@ func routes(_ app: Application) throws {
         client.onBinary { client, data in
             print("Received binary data of size: \(data.readableBytes)")
             // TODO: 1. data -> JSON으로 디코딩
-            let request = decoder.decode(WebSocketRequestable.self, from: data)
-            switch request.messageType {
+            guard let requestType = try? decoder.decode(WebSocketRequestType.self, from: data) else {
+                print("Decode Failed to WebSocketRequestType: \(data)")
+                return
+            }
+            
+            switch requestType.type {
             case "signaling":
-                guard let data = request.message else {
-                    print("Invalid Data: \(request.message)")
+                guard let request = try? decoder.decode(SignalingRequestDTO.self, from: data) else {
+                    print("Decode Failed to SignalingRequestDTO: \(data)")
                     return
                 }
+                
+                guard let data = request.message else {
+                    print("Message is Nil")
+                    return
+                }
+                
                 connectedClients
                     .filter { $0 !== client }
                     .forEach { $0.send(data) }
-                break
             default:
-                print("Unknown request message type: \(request.messageType)")
+                print("Unknown request message type: \(requestType.type)")
             }
             // TODO: 2. type을 보고 수행할 명령을 선택
             
