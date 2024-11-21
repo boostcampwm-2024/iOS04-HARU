@@ -29,6 +29,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7B5950FF2CDB590C00B89C85 /* WaitingRoomFeature.framework in Embed Frameworks */,
+				60B05BB62CEDA65500843377 /* PhotoGetherDomainTesting.framework in Embed Frameworks */,
 				7B5950F92CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Embed Frameworks */,
 				7B5950FB2CDB590C00B89C85 /* PhotoRoomFeature.framework in Embed Frameworks */,
 				608ED9B42CED9E3F00A2577E /* PhotoGetherDomainTesting.framework in Embed Frameworks */,
@@ -64,6 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B5950FE2CDB590C00B89C85 /* WaitingRoomFeature.framework in Frameworks */,
+				60B05BB52CEDA65500843377 /* PhotoGetherDomainTesting.framework in Frameworks */,
 				7B5950F82CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Frameworks */,
 				7B5950FA2CDB590C00B89C85 /* PhotoRoomFeature.framework in Frameworks */,
 				608ED9B32CED9E3F00A2577E /* PhotoGetherDomainTesting.framework in Frameworks */,

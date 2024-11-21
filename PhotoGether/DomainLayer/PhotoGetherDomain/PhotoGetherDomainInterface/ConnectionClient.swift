@@ -2,7 +2,7 @@ import Foundation
 import WebRTC
 import Combine
 
-public protocol ConnectionClient: SignalingClientDelegate, WebRTCClientDelegate {
+public protocol ConnectionClient {
     var remoteVideoView: UIView { get }
     var localVideoView: UIView { get }
     

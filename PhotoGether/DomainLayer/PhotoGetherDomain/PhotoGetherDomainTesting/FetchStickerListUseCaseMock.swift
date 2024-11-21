@@ -1,7 +1,6 @@
 import Combine
 import Foundation
 import PhotoGetherDomainInterface
-import PhotoGetherDomainTesting
 
 public final class FetchStickerListUseCaseMock: FetchStickerListUseCase {
     private let repository: ShapeRepository = ShapeRepositoryMock(imageNameList: [
