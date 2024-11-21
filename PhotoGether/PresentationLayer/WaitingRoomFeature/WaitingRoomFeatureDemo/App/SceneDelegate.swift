@@ -42,30 +42,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             signalingService: signalingService,
             webRTCService: webRTCService
         )
-        
-        let connectionClient2: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
-        let connectionClient3: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
+
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
-            clients: [connectionClient,
-                      connectionClient2,
-                      connectionClient3]
+            clients: [connectionClient]
         )
         
         let sendOfferUseCase: SendOfferUseCase = SendOfferUseCaseImpl(
             repository: connectionRepository
         )
         
-        let getLocalVideoUseCase: GetLocalVideoUseCase = GetLocalVideoUseCaseImpl(connectionRepository: connectionRepository)
+        let getLocalVideoUseCase: GetLocalVideoUseCase = GetLocalVideoUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
         
-        let getRemoteVideoUseCase: GetRemoteVideoUseCase = GetRemoteVideoUseCaseImpl(connectionRepository: connectionRepository)
+        let getRemoteVideoUseCase: GetRemoteVideoUseCase = GetRemoteVideoUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
         
         let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
             sendOfferUseCase: sendOfferUseCase,

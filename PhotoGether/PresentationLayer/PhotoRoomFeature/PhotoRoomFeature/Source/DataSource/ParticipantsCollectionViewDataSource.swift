@@ -27,26 +27,12 @@ public final class ParticipantsCollectionViewDataSource: UICollectionViewDiffabl
         ) as? ParticipantsCollectionViewCell else {
             return UICollectionViewCell()
         }
+        let placeHolderView = placeHolderView()
+        placeHolderView.setText("Photo Gether")
+        
         cell.setNickname(sectionItem.nickname)
-        let tempImageView = configureTempImageView(indexPath.row)
-        cell.setVideoView(tempImageView)
+        cell.setView(sectionItem.videoView ?? placeHolderView)
         
         return cell
-    }
-    
-    private static func configureTempImageView(_ row: Int) -> UIImageView {
-        var tempImage: UIImage?
-        switch row {
-        case 0: tempImage = PTGImage.temp1.image
-        case 1: tempImage = PTGImage.temp2.image
-        case 2: tempImage = PTGImage.temp3.image
-        case 3: tempImage = PTGImage.temp4.image
-        default: tempImage = PTGImage.temp1.image
-        }
-        let tempImageView = UIImageView(image: tempImage)
-        tempImageView.contentMode = .scaleAspectFill
-        tempImageView.clipsToBounds = true
-        
-        return tempImageView
     }
 }
