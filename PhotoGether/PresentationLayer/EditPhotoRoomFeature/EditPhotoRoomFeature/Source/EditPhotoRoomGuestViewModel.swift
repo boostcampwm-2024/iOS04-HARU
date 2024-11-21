@@ -17,6 +17,7 @@ public final class EditPhotoRoomGuestViewModel {
     }
     
     private let fetchEmojiListUseCase: FetchEmojiListUseCase
+    private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let frameImageGenerator: FrameImageGenerator
     
     private var emojiList: [EmojiEntity] = []
@@ -27,9 +28,11 @@ public final class EditPhotoRoomGuestViewModel {
     
     public init(
         fetchEmojiListUseCase: FetchEmojiListUseCase,
+        receiveStickerListUseCase: ReceiveStickerListUseCase,
         frameImageGenerator: FrameImageGenerator
     ) {
         self.fetchEmojiListUseCase = fetchEmojiListUseCase
+        self.receiveStickerListUseCase = receiveStickerListUseCase
         self.frameImageGenerator = frameImageGenerator
         bind()
     }
@@ -40,6 +43,12 @@ public final class EditPhotoRoomGuestViewModel {
         stickerObjectListSubject
             .sink { [weak self] list in
                 self?.output.send(.stickerObjectList(list))
+            }
+            .store(in: &cancellables)
+        
+        receiveStickerListUseCase.execute()
+            .sink { [weak self] stickerList in
+                self?.stickerObjectListSubject.send(stickerList)
             }
             .store(in: &cancellables)
     }
