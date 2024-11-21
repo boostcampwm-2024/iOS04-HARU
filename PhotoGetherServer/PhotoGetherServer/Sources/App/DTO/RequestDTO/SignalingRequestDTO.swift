@@ -1,6 +1,6 @@
 import Foundation
 
-struct SignalingRequestDTO: WebSocketRequestable {
+struct SignalingRequestDTO: Decodable {
     var messageType: SignalingMessageType
     var message: Data?
     

@@ -1,6 +1,6 @@
 import Foundation
 
-struct RoomRequestDTO: WebSocketRequestable {
+struct RoomRequestDTO: Decodable {
     var messageType: RoomMessageType
     var message: Data?
     

@@ -24,7 +24,7 @@ func routes(_ app: Application) throws {
                 return
             }
             
-            switch requestType.type {
+            switch requestType.messageType {
             case "signaling":
                 guard let request = try? decoder.decode(SignalingRequestDTO.self, from: data) else {
                     print("Decode Failed to SignalingRequestDTO: \(data)")
@@ -40,7 +40,7 @@ func routes(_ app: Application) throws {
                     .filter { $0 !== client }
                     .forEach { $0.send(data) }
             default:
-                print("Unknown request message type: \(requestType.type)")
+                print("Unknown request message type: \(requestType.messageType)")
             }
             // TODO: 2. type을 보고 수행할 명령을 선택
             
