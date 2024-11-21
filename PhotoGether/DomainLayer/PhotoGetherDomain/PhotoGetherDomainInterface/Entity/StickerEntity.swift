@@ -25,3 +25,19 @@ public struct StickerEntity: Equatable, Codable {
         self.latestUpdated = latestUpdated
     }
 }
+
+import Foundation
+
+extension Array where Element == StickerEntity {
+    public func encode() throws -> Data {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return try encoder.encode(self)
+    }
+    
+    public static func decode(_ data: Data) throws -> [StickerEntity] {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode([StickerEntity].self, from: data)
+    }
+}
