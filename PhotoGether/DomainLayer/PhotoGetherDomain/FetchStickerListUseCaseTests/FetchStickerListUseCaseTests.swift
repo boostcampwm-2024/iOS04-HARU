@@ -28,20 +28,20 @@ final class FetchStickerListUseCaseTests: XCTestCase {
         
         sut = FetchStickerListUseCaseImpl(shapeRepository: shapeRepositoryMock)
         
-        var targetDataList: [Data] = []
-        let beforeDataListCount = 0
+        var targetEntityList: [StickerEntity] = []
+        let beforeEntityListCount = 0
         
         //Act 실행 단계: SUT 메소드를 호출하면서 의존성을 전달해서 결과를 저장하기
         let cancellable = sut.execute()
-            .sink { datas in
-                targetDataList.append(contentsOf: datas)
+            .sink { stickerEntities in
+                targetEntityList.append(contentsOf: stickerEntities)
                 expectation.fulfill()
             }
         
         //Assert 검증 단계: 결과와 기대치를 비교해서 검증하기
         wait(for: [expectation], timeout: 2.0)
-        XCTAssertEqual(beforeDataListCount, 0)
-        XCTAssertEqual(targetDataList.count, 12)
+        XCTAssertEqual(beforeEntityListCount, 0)
+        XCTAssertEqual(targetEntityList.count, 12)
         
         cancellable.cancel()
     }

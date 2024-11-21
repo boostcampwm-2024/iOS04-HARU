@@ -8,11 +8,11 @@ public final class EditPhotoRoomHostViewModel {
     }
 
     enum Output {
-        case sticker(data: Data)
+        case sticker(entity: StickerEntity)
     }
     
     private let fetchStickerListUseCase: FetchStickerListUseCase
-    private var stickerList: [Data] = []
+    private var stickerList: [StickerEntity] = []
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -42,13 +42,13 @@ public final class EditPhotoRoomHostViewModel {
     
     private func fetchStickerList() {
         fetchStickerListUseCase.execute()
-            .sink { [weak self] datas in
-                self?.stickerList = datas
+            .sink { [weak self] stickerEntities in
+                self?.stickerList = stickerEntities
             }
             .store(in: &cancellables)
     }
     
     private func addStickerToCanvas() {
-        output.send(.sticker(data: stickerList.randomElement()!))
+        output.send(.sticker(entity: stickerList.randomElement()!))
     }
 }

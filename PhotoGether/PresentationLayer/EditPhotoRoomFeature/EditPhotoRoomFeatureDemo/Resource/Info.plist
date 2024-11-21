@@ -19,6 +19,8 @@
 			</array>
 		</dict>
 	</dict>
+	<key>EMOJI_API_KEY</key>
+	<string>$(EMOJI_API_KEY)</string>
 	<key>BASE_URL</key>
 	<string>$(BASE_URL)</string>
 </dict>
