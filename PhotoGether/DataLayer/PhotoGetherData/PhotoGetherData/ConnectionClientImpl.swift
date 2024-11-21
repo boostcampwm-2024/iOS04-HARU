@@ -9,8 +9,8 @@ public final class ConnectionClientImpl: ConnectionClient {
     
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
-    public var remoteVideoView: UIView = RTCMTLVideoView()
-    public var localVideoView: UIView = RTCMTLVideoView()
+    public var remoteVideoView: UIView = CapturableVideoView()
+    public var localVideoView: UIView = CapturableVideoView()
     
     public var peerID: String = ""
     public var roomID: String = ""
@@ -38,6 +38,27 @@ public final class ConnectionClientImpl: ConnectionClient {
     
     public func sendData(data: Data) {
         self.webRTCService.sendData(data)
+    }
+    
+    public func captureVideos() -> [UIImage] {
+        let localCaptureImage = getCapturedVideos(isLocal: true)
+        let remoteCaptureImage = getCapturedVideos(isLocal: false)
+        
+        return [localCaptureImage, remoteCaptureImage]
+    }
+    
+    private func getCapturedVideos(isLocal: Bool) -> UIImage {
+        let targetVideo = isLocal ? self.localVideoView : self.remoteVideoView
+        
+        guard let videoView = targetVideo as? CapturableVideoView else {
+            return UIImage()
+        }
+        
+        guard let capturedImage = videoView.capturedImage else {
+            return UIImage()
+        }
+        
+        return capturedImage
     }
     
     private func connect() {
@@ -112,7 +133,7 @@ extension ConnectionClientImpl: WebRTCServiceDelegate {
     ) {
         // TODO: 피어커넥션 연결 상태 변경에 따른 처리
     }
-
+    
     /// peerConnection의 remoteDataChannel 에 데이터가 수신되면 호출됨
     public func webRTCService(
         _ service: WebRTCService,

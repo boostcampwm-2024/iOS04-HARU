@@ -10,4 +10,5 @@ public protocol ConnectionClient {
     
     func sendOffer()
     func sendData(data: Data)
+    func captureVideos() -> [UIImage]
 }
