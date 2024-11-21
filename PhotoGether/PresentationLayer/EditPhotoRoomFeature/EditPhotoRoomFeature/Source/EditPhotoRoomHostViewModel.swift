@@ -1,38 +1,58 @@
-import Foundation
 import Combine
+import Foundation
 import PhotoGetherDomainInterface
+import UIKit
 
 public final class EditPhotoRoomHostViewModel {
     enum Input {
         case stickerButtonDidTap
-    }
-
-    enum Output {
-        case sticker(entity: StickerEntity)
+        case frameButtonDidTap
+        case stickerObjectData(StickerEntity)
     }
     
-    private let fetchStickerListUseCase: FetchStickerListUseCase
-    private var stickerList: [StickerEntity] = []
+    enum Output {
+        case emojiEntity(entity: EmojiEntity)
+        case stickerObjectList([StickerEntity])
+        case frameImage(image: UIImage)
+    }
+    
+    private let fetchEmojiListUseCase: FetchEmojiListUseCase
+    private let frameImageGenerator: FrameImageGenerator
+    
+    private var emojiList: [EmojiEntity] = []
+    private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        fetchStickerListUseCase: FetchStickerListUseCase
+        fetchEmojiListUseCase: FetchEmojiListUseCase,
+        frameImageGenerator: FrameImageGenerator
     ) {
-        self.fetchStickerListUseCase = fetchStickerListUseCase
+        self.fetchEmojiListUseCase = fetchEmojiListUseCase
+        self.frameImageGenerator = frameImageGenerator
         bind()
     }
     
     private func bind() {
-        fetchStickerList()  // 처음 한번 부르고 부터는 재호출을 안하도록
+        fetchEmojiList()
+        
+        stickerObjectListSubject
+            .sink { [weak self] list in
+                self?.output.send(.stickerObjectList(list))
+            }
+            .store(in: &cancellables)
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { [weak self] in
-            switch $0 {
+        input.sink { [weak self] event in
+            switch event {
             case .stickerButtonDidTap:
-                self?.addStickerToCanvas()
+                self?.sendEmoji()
+            case .stickerObjectData(let sticker):
+                self?.appendSticker(with: sticker)
+            case .frameButtonDidTap:
+                self?.toggleFrameImage()
             }
         }
         .store(in: &cancellables)
@@ -40,15 +60,41 @@ public final class EditPhotoRoomHostViewModel {
         return output.eraseToAnyPublisher()
     }
     
-    private func fetchStickerList() {
-        fetchStickerListUseCase.execute()
-            .sink { [weak self] stickerEntities in
-                self?.stickerList = stickerEntities
+    private func toggleFrameImage() {
+        let currentFrameImageType = frameImageGenerator.frameType
+        var newFrameImageType: FrameType
+        switch currentFrameImageType {
+        case .defaultBlack:
+            newFrameImageType = .defaultWhite
+        case .defaultWhite:
+            newFrameImageType = .defaultBlack
+        }
+        
+        frameImageGenerator.changeFrame(to: newFrameImageType)
+        let newFrameImage = frameImageGenerator.generate()
+        output.send(.frameImage(image: newFrameImage))
+    }
+    
+    private func appendSticker(with sticker: StickerEntity) {
+        var currentStickerObjectList = stickerObjectListSubject.value
+        currentStickerObjectList.append(sticker)
+        stickerObjectListSubject.send(currentStickerObjectList)
+    }
+    
+    private func fetchEmojiList() {
+        fetchEmojiListUseCase.execute()
+            .sink { [weak self] emojiEntities in
+                self?.emojiList = emojiEntities
             }
             .store(in: &cancellables)
     }
     
-    private func addStickerToCanvas() {
-        output.send(.sticker(entity: stickerList.randomElement()!))
+    private func sendEmoji() {
+        output.send(.emojiEntity(entity: emojiList.randomElement()!))
+    }
+    
+    func setupFrame() {
+        let frameImage = frameImageGenerator.generate()
+        output.send(.frameImage(image: frameImage))
     }
 }

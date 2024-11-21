@@ -4,14 +4,14 @@ import PhotoGetherNetwork
 
 public final class RemoteShapeDataSourceImpl: ShapeDataSource {
     // TODO: 페이징 적용 필요
-    public func fetchStickerData() -> AnyPublisher<[StickerDTO], Error> {
-        return Request.requestJSON(StickerEndPoint())
+    public func fetchEmojiData() -> AnyPublisher<[EmojiDTO], Error> {
+        return Request.requestJSON(EmojiEndPoint())
     }
     
     public init() { }
 }
 
-private struct StickerEndPoint: EndPoint {
+private struct EmojiEndPoint: EndPoint {
     var baseURL: URL { URL(string: "https://api.api-ninjas.com")! }
     var path: String { "v1/emoji" }
     var method: HTTPMethod { .get }
