@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60B05BB52CEDA65500843377 /* PhotoGetherDomainTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B05BB42CEDA65500843377 /* PhotoGetherDomainTesting.framework */; };
+		60B05BB62CEDA65500843377 /* PhotoGetherDomainTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60B05BB42CEDA65500843377 /* PhotoGetherDomainTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		608ED9B02CED9E3900A2577E /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 608ED9AF2CED9E3900A2577E /* PhotoGetherDomainInterface.framework */; };
 		608ED9B12CED9E3900A2577E /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 608ED9AF2CED9E3900A2577E /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		608ED9B32CED9E3F00A2577E /* PhotoGetherDomainTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 608ED9B22CED9E3F00A2577E /* PhotoGetherDomainTesting.framework */; };
-		608ED9B42CED9E3F00A2577E /* PhotoGetherDomainTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 608ED9B22CED9E3F00A2577E /* PhotoGetherDomainTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5950F82CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F42CDB590C00B89C85 /* EditPhotoRoomFeature.framework */; };
 		7B5950F92CDB590C00B89C85 /* EditPhotoRoomFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F42CDB590C00B89C85 /* EditPhotoRoomFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5950FA2CDB590C00B89C85 /* PhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5950F52CDB590C00B89C85 /* PhotoRoomFeature.framework */; };

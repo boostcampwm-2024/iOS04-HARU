@@ -18,9 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         debugPrint("SignalingServer URL: \(url)")
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
-        let signalingClient: SignalingClient = SignalingClientImpl(webSocketClient: webScoketClient)
+        let signalingService: SignalingService = SignalingServiceImpl(webSocketClient: webScoketClient)
         
-        let webRTCClient: WebRTCClient = WebRTCClientImpl(iceServers: [
+        let webRTCService: WebRTCService = WebRTCServiceImpl(iceServers: [
             "stun:stun.l.google.com:19302",
             "stun:stun1.l.google.com:19302",
             "stun:stun2.l.google.com:19302",
@@ -29,8 +29,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ])
         
         let connectionClient: ConnectionClient = ConnectionClientImpl(
-            signalingClient: signalingClient,
-            webRTCClient: webRTCClient
+            signalingService: signalingService,
+            webRTCService: webRTCService
         )
         
         let viewModel: WaitingRoomViewModel = WaitingRoomViewModel()

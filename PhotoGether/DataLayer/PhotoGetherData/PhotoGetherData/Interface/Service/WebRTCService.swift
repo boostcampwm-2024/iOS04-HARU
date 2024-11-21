@@ -1,8 +1,8 @@
 import Foundation
 import WebRTC
 
-public protocol WebRTCClient: RTCPeerConnectionDelegate, RTCDataChannelDelegate {
-    var delegate: WebRTCClientDelegate? { get set }
+public protocol WebRTCService: RTCPeerConnectionDelegate, RTCDataChannelDelegate {
+    var delegate: WebRTCServiceDelegate? { get set }
     var peerConnection: RTCPeerConnection { get }
     
     // MARK: SDP

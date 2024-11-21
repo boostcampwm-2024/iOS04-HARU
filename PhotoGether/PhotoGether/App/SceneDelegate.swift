@@ -18,8 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let baseURLString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
         
         let webSocketClient: WebSocketClient = WebSocketClientImpl(url: URL(string: baseURLString)!)
-        let signalingClient: SignalingClient = SignalingClientImpl(webSocketClient: webSocketClient)
+        let signalingService: SignalingService = SignalingServiceImpl(webSocketClient: webSocketClient)
         
-        signalingClient.connect()
+        signalingService.connect()
     }
 }

@@ -1,5 +1,7 @@
 import Vapor
 
+var roomManager = RoomManager()
+
 func routes(_ app: Application) throws {
     var connectedClients = [WebSocket]()
     
@@ -12,6 +14,10 @@ func routes(_ app: Application) throws {
         
         // 클라이언트로부터 데이터를 수신할 때 호출
         client.onBinary { client, data in
+            
+            // TODO: 1. data -> JSON으로 디코딩
+            // TODO: 2. type을 보고 수행할 명령을 선택
+            
             print("Received binary data of size: \(data.readableBytes)")
             connectedClients
                 .filter { $0 !== client }
