@@ -12,7 +12,7 @@ public final class ShapeRepositoryMock: ShapeRepository {
     public func fetchStickerList() -> AnyPublisher<[StickerEntity], Never> {
         let stickerEntities: [StickerEntity] = imageNameList.map {
             .init(
-                image: imageData(named: $0),    // 이미지 주소(or 경로)
+                image: imagePath(named: $0),    // 이미지 주소(or 경로)
                 name: $0
             )
         }
@@ -20,7 +20,7 @@ public final class ShapeRepositoryMock: ShapeRepository {
         return Just(stickerEntities).eraseToAnyPublisher()
     }
     
-    private func imageData(named: String) -> String {
+    private func imagePath(named: String) -> String {
         let bundle = Bundle(for: Self.self) // 해당 클래스가 존재하는 Bundle을 의미
         guard let path = bundle.url(forResource: named, withExtension: "png")?.absoluteString
         else { return "" }
