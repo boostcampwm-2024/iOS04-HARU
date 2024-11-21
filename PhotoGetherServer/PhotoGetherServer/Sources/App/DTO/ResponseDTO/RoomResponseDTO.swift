@@ -1,10 +1,10 @@
 import Foundation
 
-struct RoomResponseDTO: WebSocketRequestable {
+struct RoomResponseDTO: Encodable {
     var messageType: RoomMessageType
     var message: Data?
     
-    enum RoomMessageType: String, Decodable {
+    enum RoomMessageType: String, Encodable {
         case createRoom
         case joinRoom
     }
