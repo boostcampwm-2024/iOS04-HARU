@@ -9,19 +9,22 @@ public final class ShapeRepositoryMock: ShapeRepository {
         self.imageNameList = imageNameList
     }
     
-    public func fetchStickerList() -> AnyPublisher<[Data], Never> {
-        let imageDataList = imageNameList.map { imageData(named: $0) }
+    public func fetchStickerList() -> AnyPublisher<[StickerEntity], Never> {
+        let stickerEntities: [StickerEntity] = imageNameList.map {
+            .init(
+                image: imagePath(named: $0),    // 이미지 주소(or 경로)
+                name: $0
+            )
+        }
         
-        return Just(imageDataList.compactMap { $0 })
-            .eraseToAnyPublisher()
+        return Just(stickerEntities).eraseToAnyPublisher()
     }
     
-    private func imageData(named: String) -> Data? {
+    private func imagePath(named: String) -> String {
         let bundle = Bundle(for: Self.self) // 해당 클래스가 존재하는 Bundle을 의미
-        guard let imageURL = bundle.url(forResource: named, withExtension: "png"),
-              let imageData = try? Data(contentsOf: imageURL)
-        else { debugPrint("bundle Image to Data error"); return nil }
+        guard let path = bundle.url(forResource: named, withExtension: "png")?.absoluteString
+        else { return "" }
         
-        return imageData
+        return path
     }
 }
