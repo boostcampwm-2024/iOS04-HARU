@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		050F6E122CEE19A2002F5473 /* PhotoGetherData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050F6E112CEE19A2002F5473 /* PhotoGetherData.framework */; };
+		050F6E132CEE19A2002F5473 /* PhotoGetherData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 050F6E112CEE19A2002F5473 /* PhotoGetherData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		053DC8532CE32AE900DC9F35 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; };
 		053DC8542CE32AE900DC9F35 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053DC8522CE32AE900DC9F35 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60CB82A82CDB522900873DD6 /* EditPhotoRoomFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */; };
@@ -36,6 +38,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				050F6E132CEE19A2002F5473 /* PhotoGetherData.framework in Embed Frameworks */,
 				7B59510D2CDB598600B89C85 /* FeatureTesting.framework in Embed Frameworks */,
 				60CB82A92CDB522900873DD6 /* EditPhotoRoomFeature.framework in Embed Frameworks */,
 			);
@@ -58,6 +61,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		050F6E112CEE19A2002F5473 /* PhotoGetherData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		053DC8522CE32AE900DC9F35 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB82612CDB4FC500873DD6 /* EditPhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EditPhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60CB827C2CDB508C00873DD6 /* EditPhotoRoomFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EditPhotoRoomFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				050F6E122CEE19A2002F5473 /* PhotoGetherData.framework in Frameworks */,
 				7B59510C2CDB598600B89C85 /* FeatureTesting.framework in Frameworks */,
 				60CB82A82CDB522900873DD6 /* EditPhotoRoomFeature.framework in Frameworks */,
 			);
@@ -138,8 +143,11 @@
 		60CB82A72CDB522900873DD6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				050F6E112CEE19A2002F5473 /* PhotoGetherData.framework */,
+				055AF9892CEC6F0B0060E408 /* PhotoGetherDomain.framework */,
+				055AF9782CEC6E840060E408 /* PhotoGetherDomainTesting.framework */,
+        7B5951CE2CDB658400B89C85 /* PhotoGetherDomainInterface.framework */,
 				053DC8522CE32AE900DC9F35 /* DesignSystem.framework */,
-				7B5951CE2CDB658400B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B5951772CDB62A200B89C85 /* PresentationUtility.framework */,
 				7B59514D2CDB5FFC00B89C85 /* BaseFeature.framework */,
 				7B59510B2CDB598600B89C85 /* FeatureTesting.framework */,

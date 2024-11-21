@@ -12,7 +12,7 @@ public final class FetchStickerListUseCaseMock: FetchStickerListUseCase {
     
     public init() { }
     
-    public func execute() -> AnyPublisher<[Data], Never> {
+    public func execute() -> AnyPublisher<[StickerEntity], Never> {
         return repository.fetchStickerList()
     }
 }

@@ -1,6 +1,7 @@
 import UIKit
 import Combine
 import BaseFeature
+import PhotoGetherDomainInterface
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -77,10 +78,12 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     public func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.sink { [weak self] in
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
             switch $0 {
-            case .sticker(let data):
-                self?.renderSticker(data: data)
+            case .sticker(let entity):
+                self?.renderSticker(entity: entity)
             }
         }
         .store(in: &cancellables)
@@ -94,15 +97,22 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         canvasScrollView.backgroundColor = .red
     }
     
-    private func renderSticker(data: Data) {
-        let imageSize: CGFloat = 60
+    private func renderSticker(entity: StickerEntity) {
+        let imageSize: CGFloat = 64
         let rect = calculateCenterPosition(imageSize: imageSize)
         let stickerImageView = UIImageView(frame: rect)
-        let stickerImage = UIImage(data: data)
+        guard let url = URL(string: entity.image) else { return }
         
-        stickerImageView.image = stickerImage
-        
-        canvasScrollView.imageView.addSubview(stickerImageView)
+        Task {
+            guard let (data, response) = try? await URLSession.shared.data(from: url)
+            else { return }
+            
+            let stickerImage = UIImage(data: data)
+            
+            stickerImageView.image = stickerImage
+            
+            canvasScrollView.imageView.addSubview(stickerImageView)
+        }
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
