@@ -1,5 +1,5 @@
 import Foundation
 
 struct WebSocketRequestType: Decodable {
-    let type: String
+    let messageType: String
 }

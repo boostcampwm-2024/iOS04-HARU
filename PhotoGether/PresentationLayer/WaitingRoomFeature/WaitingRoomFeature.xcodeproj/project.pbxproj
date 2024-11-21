@@ -17,6 +17,8 @@
 		60348F3A2CE49627002D1CEE /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60348F382CE49627002D1CEE /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6075676A2CEDA2E6001110DB /* PhotoGetherData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 607567692CEDA2E6001110DB /* PhotoGetherData.framework */; };
 		6075676B2CEDA2E6001110DB /* PhotoGetherData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 607567692CEDA2E6001110DB /* PhotoGetherData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60B061EE2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951C82CDB656D00B89C85 /* PhotoGetherDomainInterface.framework */; };
+		60B061EF2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951C82CDB656D00B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B17455F2CE49EB100E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B17455E2CE49EB100E01D1A /* WebRTC */; };
 		7B5951462CDB5FF200B89C85 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951452CDB5FF200B89C85 /* BaseFeature.framework */; };
 		7B5951472CDB5FF200B89C85 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951452CDB5FF200B89C85 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -46,6 +48,7 @@
 				6013799E2CDB4B4500CA430A /* WaitingRoomFeature.framework in Embed Frameworks */,
 				60348F302CE48F02002D1CEE /* PhotoGetherDomain.framework in Embed Frameworks */,
 				6075676B2CEDA2E6001110DB /* PhotoGetherData.framework in Embed Frameworks */,
+				60B061EF2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				60348F352CE49013002D1CEE /* PhotoGetherNetwork.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -124,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60B061EE2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				6075676A2CEDA2E6001110DB /* PhotoGetherData.framework in Frameworks */,
 				7B17455F2CE49EB100E01D1A /* WebRTC in Frameworks */,
 				6013799D2CDB4B4500CA430A /* WaitingRoomFeature.framework in Frameworks */,
