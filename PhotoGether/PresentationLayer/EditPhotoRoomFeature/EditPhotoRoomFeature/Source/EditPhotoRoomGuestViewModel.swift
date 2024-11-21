@@ -14,7 +14,7 @@ public final class EditPhotoRoomGuestViewModel {
     }
     
     private let fetchEmojiListUseCase: FetchEmojiListUseCase
-    private let connectionClient: ConnectionClient
+    private let frameImageGenerator: FrameImageGenerator
     
     private var emojiList: [EmojiEntity] = []
     private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
@@ -24,10 +24,10 @@ public final class EditPhotoRoomGuestViewModel {
     
     public init(
         fetchEmojiListUseCase: FetchEmojiListUseCase,
-        connectionClient: ConnectionClient
+        frameImageGenerator: FrameImageGenerator
     ) {
         self.fetchEmojiListUseCase = fetchEmojiListUseCase
-        self.connectionClient = connectionClient
+        self.frameImageGenerator = frameImageGenerator
         bind()
     }
     
