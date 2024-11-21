@@ -29,7 +29,7 @@ public final class ParticipantsCollectionViewDataSource: UICollectionViewDiffabl
         }
         let placeHolderView = placeHolderView()
         placeHolderView.setText("Photo Gether")
-        
+                
         cell.setNickname(sectionItem.nickname)
         cell.setView(sectionItem.videoView ?? placeHolderView)
         

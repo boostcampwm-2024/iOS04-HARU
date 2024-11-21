@@ -84,12 +84,12 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
             guard let self else { return }
             var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
             var items = snapshot.itemIdentifiers
-            guard let hostIndex = items.firstIndex(where: { $0.position == .host }) else { return }
             
             var newItem = SectionItem(position: .host, nickname: "나는 호스트", videoView: localVideoView)
 
+            guard let hostIndex = items.firstIndex(where: { $0.position == .host }) else { return }
+            items.remove(at: hostIndex)
             items.insert(newItem, at: hostIndex)
-            items.remove(at: hostIndex + 1)
             
             snapshot.appendItems(items, toSection: 0)
             self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
@@ -98,14 +98,15 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         output.remoteVideos.sink { [weak self] remoteVideoViews in
             guard let self else { return }
             guard let remoteVideoView = remoteVideoViews.first else { return }
+            
             var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
             var items = snapshot.itemIdentifiers
-            guard let guestIndex = items.firstIndex(where: { $0.position == .guest3 }) else { return }
             
-            var newItem = SectionItem(position: .host, nickname: "나는 게스트", videoView: remoteVideoView)
+            var newItem = SectionItem(position: .guest3, nickname: "나는 게스트", videoView: remoteVideoView)
 
+            guard let guestIndex = items.firstIndex(where: { $0.position == .guest3 }) else { return }
+            items.remove(at: guestIndex)
             items.insert(newItem, at: guestIndex)
-            items.remove(at: guestIndex + 1)
             
             snapshot.appendItems(items, toSection: 0)
             self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
