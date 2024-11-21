@@ -10,6 +10,8 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     private let waitingRoomView = WaitingRoomView()
     private let participantsCollectionViewController = ParticipantsCollectionViewController()
     
+    private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
+    
     public init(viewModel: WaitingRoomViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -25,6 +27,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        defer { viewDidLoadSubject.send(()) }
         addViews()
         setupConstraints()
         configureUI()
@@ -57,11 +60,13 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     }
     
     private func createInput() -> WaitingRoomViewModel.Input {
+        let viewDidLoadPublisher = viewDidLoadSubject.eraseToAnyPublisher()
         let startButtonTapPublisher = waitingRoomView.startButton.tapPublisher
             .throttle(for: .seconds(1), scheduler: RunLoop.main, latest: false)
             .eraseToAnyPublisher()
         
         return WaitingRoomViewModel.Input(
+            viewDidLoad: viewDidLoadPublisher,
             micMuteButtonDidTap: waitingRoomView.micButton.tapPublisher,
             shareButtonDidTap: waitingRoomView.shareButton.tapPublisher,
             startButtonDidTap: startButtonTapPublisher
@@ -73,6 +78,32 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         
         output.navigateToPhotoRoom.sink { _ in
             print("navigateToPhotoRoom 버튼이 눌렸어요!")
+        }.store(in: &cancellables)
+        
+        output.localVideo.sink { [weak self] localVideoView in
+            guard let self else { return }
+            var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
+            guard var item = snapshot.itemIdentifiers[safe: 0] else { return }
+            item.setNickname("나야, 호스트")
+            item.setVideoView(localVideoView)
+            snapshot.reconfigureItems([item])
+        }.store(in: &cancellables)
+        
+        output.remoteVideos.sink { [weak self] remoteVideoView in
+            guard let self else { return }
+            var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
+            guard var item = snapshot.itemIdentifiers[safe: 2] else { return }
+            guard let firstRemoteView = remoteVideoView.first else {
+                print("으엥?!?")
+                return
+            }
+            item.setNickname("나는야 게스트")
+            item.setVideoView(firstRemoteView)
+            snapshot.reconfigureItems([item])
+        }.store(in: &cancellables)
+        
+        output.shouldShowToast.sink { [weak self] message in
+            print(message)
         }.store(in: &cancellables)
     }
     

@@ -5,7 +5,7 @@ struct RoomRequestDTO: WebSocketRequestable {
     var messageType: RoomMessageType
     var message: Data?
     
-    init(messageType: RoomMessageType, body: Data? = nil) {
+    init(messageType: RoomMessageType, message: Data? = nil) {
         self.messageType = messageType
     }
     

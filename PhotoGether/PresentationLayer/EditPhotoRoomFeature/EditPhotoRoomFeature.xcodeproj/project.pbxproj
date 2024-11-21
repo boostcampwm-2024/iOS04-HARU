@@ -158,9 +158,6 @@
 		60CB82A72CDB522900873DD6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				05DBEF552CEEF8870075329B /* PhotoGetherDomainTesting.framework */,
-				05DBEF522CEEF8720075329B /* PhotoGetherDomainInterface.framework */,
-				05DBEF4F2CEEF86C0075329B /* PhotoGetherDomain.framework */,
 				050F6E112CEE19A2002F5473 /* PhotoGetherData.framework */,
 				055AF9892CEC6F0B0060E408 /* PhotoGetherDomain.framework */,
 				055AF9782CEC6E840060E408 /* PhotoGetherDomainTesting.framework */,

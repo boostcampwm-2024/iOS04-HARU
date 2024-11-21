@@ -1,8 +1,9 @@
-import Foundation
+import UIKit
 
 public struct ParticipantsSectionItem {
     public private(set) var nickname: String
     public let videoID: Int
+    public private(set) weak var videoView: UIView?
     private let identifier = UUID()
 
     public init(videoID: Int, nickname: String) {
@@ -12,6 +13,10 @@ public struct ParticipantsSectionItem {
     
     public mutating func setNickname(_ nickname: String) {
         self.nickname = nickname
+    }
+    
+    public mutating func setVideoView(_ videoView: UIView) {
+        self.videoView = videoView
     }
 }
 
