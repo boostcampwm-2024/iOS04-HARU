@@ -26,3 +26,17 @@ public struct EventEntity: Equatable, Codable {
 public enum EventType: Codable {
     case create, update, delete
 }
+
+extension EventEntity {
+    public func encode() throws -> Data {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return try encoder.encode(self)
+    }
+    
+    public static func decode(from data: Data) throws -> EventEntity {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(EventEntity.self, from: data)
+    }
+}

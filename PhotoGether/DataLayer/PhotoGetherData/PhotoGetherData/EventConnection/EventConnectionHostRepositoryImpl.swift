@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import PhotoGetherDomainInterface
 
-public final class EventConnectionHostRepositoryImpl {
+public final class EventConnectionHostRepositoryImpl: EventConnectionRepository {
     public var clients: [ConnectionClient]
     private let eventHub = EventHub()
     private var cancellables: Set<AnyCancellable> = []
@@ -26,28 +26,28 @@ public final class EventConnectionHostRepositoryImpl {
         receiveDataFromGuest
             .sink { [weak self] data in
             // TODO: Data를 EventEntity로 디코딩해서 EventHub에 push
-//            eventHub.push(event: )
+                guard let eventEntity = try? EventEntity.decode(from: data) else { return }
+                self?.eventHub.push(event: eventEntity)
             }
             .store(in: &cancellables)
         
         // MARK: EventHub에서 처리된 Event를 (GuestClient + HostView)에게 전파한다.
         eventHub.resultEventPublisher
-            .sink { [weak self] enitityList in
-                let encodedData = Data()
+            .sink { [weak self] entityList in
+                guard let encodedData = try? entityList.encode() else { return }
                 self?.clients.forEach { $0.sendData(data: encodedData)}
-                // 자기 뷰에 보내기
-                self?.sendToViewModel.send([])
+                self?.sendToViewModel.send(entityList)
             }
             .store(in: &cancellables)
     }
     
     // MARK: 호스트는 EventType도 얘를 호출하는애가 넣어줘야한다.
-    func mergeSticker(sticker: StickerEntity) {
-        let sticketEvent = EventEntity(type: .create, timeStamp: Date(), entity: sticker)
-        eventHub.push(event: sticketEvent)
+    public func receiveStickerList() -> AnyPublisher<[StickerEntity], Never> {
+        return sendToViewModel.eraseToAnyPublisher()
     }
     
-    func fetchStickerList() -> AnyPublisher<[StickerEntity], Never> {
-        return sendToViewModel.eraseToAnyPublisher()
+    public func mergeSticker(type: EventType, sticker: StickerEntity) {
+        let sticketEvent = EventEntity(type: type, timeStamp: Date(), entity: sticker)
+        eventHub.push(event: sticketEvent)
     }
 }

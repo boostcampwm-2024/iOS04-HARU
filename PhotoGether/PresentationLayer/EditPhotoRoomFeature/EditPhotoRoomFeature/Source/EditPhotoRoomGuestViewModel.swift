@@ -17,6 +17,8 @@ public final class EditPhotoRoomGuestViewModel {
     }
     
     private let fetchEmojiListUseCase: FetchEmojiListUseCase
+    private let receiveStickerListUseCase: ReceiveStickerListUseCase
+    private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let frameImageGenerator: FrameImageGenerator
     
     private var emojiList: [EmojiEntity] = []
@@ -27,9 +29,13 @@ public final class EditPhotoRoomGuestViewModel {
     
     public init(
         fetchEmojiListUseCase: FetchEmojiListUseCase,
+        receiveStickerListUseCase: ReceiveStickerListUseCase,
+        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
         frameImageGenerator: FrameImageGenerator
     ) {
         self.fetchEmojiListUseCase = fetchEmojiListUseCase
+        self.receiveStickerListUseCase = receiveStickerListUseCase
+        self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
         self.frameImageGenerator = frameImageGenerator
         bind()
     }
@@ -42,6 +48,12 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.output.send(.stickerObjectList(list))
             }
             .store(in: &cancellables)
+        
+        receiveStickerListUseCase.execute()
+            .sink { [weak self] stickerList in
+                self?.stickerObjectListSubject.send(stickerList)
+            }
+            .store(in: &cancellables)
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -51,6 +63,7 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.sendEmoji()
             case .stickerObjectData(let sticker):
                 self?.appendSticker(with: sticker)
+                self?.sendToRepository(with: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameImage()
             }
@@ -91,6 +104,10 @@ public final class EditPhotoRoomGuestViewModel {
     
     private func sendEmoji() {
         output.send(.emojiEntity(entity: emojiList.randomElement()!))
+    }
+    
+    private func sendToRepository(with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: .create, sticker: sticker)
     }
     
     func setupFrame() {
