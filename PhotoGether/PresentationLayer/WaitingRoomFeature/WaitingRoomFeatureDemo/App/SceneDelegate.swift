@@ -63,7 +63,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             repository: connectionRepository
         )
         
-        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(sendOfferUseCase: sendOfferUseCase)
+        let getLocalVideoUseCase: GetLocalVideoUseCase = GetLocalVideoUseCaseImpl(connectionRepository: connectionRepository)
+        
+        let getRemoteVideoUseCase: GetRemoteVideoUseCase = GetRemoteVideoUseCaseImpl(connectionRepository: connectionRepository)
+        
+        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+            sendOfferUseCase: sendOfferUseCase,
+            getLocalVideoUseCase: getLocalVideoUseCase,
+            getRemoteVideoUseCase: getRemoteVideoUseCase
+        )
         
         let viewController: WaitingRoomViewController = WaitingRoomViewController(
             viewModel: viewModel
