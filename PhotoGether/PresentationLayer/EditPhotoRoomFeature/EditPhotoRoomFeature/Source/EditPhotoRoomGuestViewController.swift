@@ -73,14 +73,20 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         navigationView.backgroundColor = .yellow
         bottomView.backgroundColor = .yellow
         canvasScrollView.backgroundColor = .red
-        
-        canvasScrollView.imageView.sizeToFit()
     }
     
     public func bindInput() {
         bottomView.stickerButtonTapped
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
             .sink { [weak self] in
                 self?.input.send(.stickerButtonDidTap)
+            }
+            .store(in: &cancellables)
+        
+        bottomView.frameButtonTapped
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] in
+                self?.input.send(.frameButtonDidTap)
             }
             .store(in: &cancellables)
     }
@@ -96,13 +102,21 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
                 self?.createStickerObject(by: emojiEntity)
             case .stickerObjectList(let stickerList):
                 self?.updateCanvas(with: stickerList)
+            case .frameImage(let image):
+                self?.updateFrameImage(to: image)
             }
         }
         .store(in: &cancellables)
+        
+        viewModel.setupFrame()
+    }
+    
+    private func updateFrameImage(to image: UIImage) {
+        canvasScrollView.updateFrameImage(to: image)
     }
     
     /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
-    private func updateCanvas(with stickerList: [StickerObject]) {
+    private func updateCanvas(with stickerList: [StickerEntity]) {
         stickerList.forEach { sticker in
             if let targetIndex = stickerIdDictionary[sticker.id] {
                 updateExistingSticker(at: targetIndex, with: sticker)
@@ -114,42 +128,49 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     
     private func updateExistingSticker(
         at index: Int,
-        with sticker: StickerObject
+        with sticker: StickerEntity
     ) {
         guard
             let stickerImageView = canvasScrollView.imageView.subviews[index]
                 as? UIImageView
         else { return }
         
-        stickerImageView.image = UIImage(data: sticker.image)
-        stickerImageView.frame = sticker.rect
+        guard let url = URL(string: sticker.image) else { return }
+        Task {
+            guard let (data, _) = try? await URLSession.shared.data(from: url)
+            else { return }
+            stickerImageView.image = UIImage(data: data)
+            stickerImageView.frame = sticker.frame
+        }
     }
     
-    private func addNewSticker(to sticker: StickerObject) {
+    private func addNewSticker(to sticker: StickerEntity) {
         registerSticker(for: sticker)
         
-        let stickerImageView = UIImageView(frame: sticker.rect)
-        stickerImageView.image = UIImage(data: sticker.image)
-        canvasScrollView.imageView.addSubview(stickerImageView)
+        guard let url = URL(string: sticker.image) else { return }
+        Task {
+            guard let (data, _) = try? await URLSession.shared.data(from: url)
+            else { return }
+            
+            let stickerImageView = UIImageView(frame: sticker.frame)
+            stickerImageView.image = UIImage(data: data)
+            canvasScrollView.imageView.addSubview(stickerImageView)
+        }
     }
     
     // MARK: 원래는 Data가 아니라 imageURL 및 Image의 MetaData가 와야함.
     private func createStickerObject(by entity: EmojiEntity) {
         let imageSize: CGFloat = 64
-        let rect = calculateCenterPosition(imageSize: imageSize)
+        let frame = calculateCenterPosition(imageSize: imageSize)
         
-        guard let url = URL(string: entity.image) else { return }
-        Task {
-            guard let (data, response) = try? await URLSession.shared.data(from: url)
-            else { return }
-            
-            let newStickerObject = StickerObject(
-                id: UUID(),
-                image: data,
-                rect: rect
-            )
-            input.send(.stickerObjectData(newStickerObject))
-        }
+        let newStickerObject = StickerEntity(
+            image: entity.image,
+            frame: frame,
+            owner: nil,
+            latestUpdated: Date()
+        )
+        
+        input.send(.stickerObjectData(newStickerObject))
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -169,7 +190,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         )
     }
     
-    private func registerSticker(for sticker: StickerObject) {
+    private func registerSticker(for sticker: StickerEntity) {
         let newIndex = canvasScrollView.imageView.subviews.count
         stickerIdDictionary[sticker.id] = newIndex
     }

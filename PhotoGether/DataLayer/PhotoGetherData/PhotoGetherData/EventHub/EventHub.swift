@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import PhotoGetherDomainInterface
 
 final class EventQueue {
     private var queue = [EventEntity]()
@@ -22,6 +23,10 @@ final class EventHub {
     private let eventManager = EventManager()
     private var eventQueue = EventQueue() // TODO: 추후 Priority queue로 변경
     
+    var resultEventPublisher: AnyPublisher<[StickerEntity], Never> {
+        eventManager.resultEventPublihser.eraseToAnyPublisher()
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -39,12 +44,6 @@ final class EventHub {
                 self?.eventManager.work(event: currentEvent)
             }
             .store(in: &cancellables)
-        
-        eventManager.resultEventPublihser
-            .sink { eventEntity in
-                // MARK: ConnectionClient에게 보내기
-            }
-            .store(in: &cancellables)
     }
     
     func push(event: EventEntity) {
@@ -55,10 +54,13 @@ final class EventHub {
 final class EventManager {
     // MARK: 네이밍 좀 고민
     let callEventPublisher = CurrentValueSubject<Bool, Never>(true)
-    let resultEventPublihser = PassthroughSubject<EventEntity, Never>()
+    let resultEventPublihser = PassthroughSubject<[StickerEntity], Never>()
     
     private var isObejctDeleted: [UUID: Bool] = [:]
     private var stickerDictionary: [UUID: StickerEntity] = [:]
+    private var currenntStickerList: [StickerEntity] {
+        return stickerDictionary.compactMap { $0.value }
+    }
     
     func work(event: EventEntity) {
         callEventPublisher.send(false)
@@ -83,7 +85,8 @@ final class EventManager {
         stickerDictionary[event.entity.id] = event.entity
         isObejctDeleted[event.entity.id] = false
         
-        resultEventPublihser.send(event)
+        // MARK: event가 아니라 전체 딕셔너리 보내기
+        resultEventPublihser.send(currenntStickerList)
     }
     
     private func deleteEvent(by event: EventEntity) {
@@ -102,7 +105,7 @@ final class EventManager {
             stickerDictionary[event.entity.id] = nil
             isObejctDeleted[event.entity.id] = true
             
-            resultEventPublihser.send(event)
+            resultEventPublihser.send(currenntStickerList)
         }
     }
     
@@ -121,7 +124,7 @@ final class EventManager {
             // OldOwner가 nil이거나 Old,New Owner가 서로 같을 때
             stickerDictionary[event.entity.id] = event.entity
 
-            resultEventPublihser.send(event)
+            resultEventPublihser.send(currenntStickerList)
         }
     }
 }
