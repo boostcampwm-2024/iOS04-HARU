@@ -24,7 +24,7 @@ final public class SignalingServiceImpl: SignalingService {
             let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
             let request = try self.encoder.encode(dto)
             
-            self.webSocketClient.send(data: dataMessage)
+            self.webSocketClient.send(data: request)
         } catch {
             debugPrint("Warning: Could not encode sdp: \(error)")
         }
@@ -37,7 +37,7 @@ final public class SignalingServiceImpl: SignalingService {
             let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
             let request = try self.encoder.encode(dto)
             
-            self.webSocketClient.send(data: dataMessage)
+            self.webSocketClient.send(data: request)
         } catch {
             debugPrint("Warning: Could not encode candidate: \(error)")
         }
