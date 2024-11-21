@@ -1,7 +1,6 @@
 import UIKit
 import PhotoGetherNetwork
-import PhotoGetherDomain
-import PhotoGetherDomainInterface
+import PhotoGetherData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

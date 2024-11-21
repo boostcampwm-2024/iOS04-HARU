@@ -2,9 +2,9 @@ import UIKit
 import BaseFeature
 import DesignSystem
 
-public final class ParticipantsCollectionViewCell: UICollectionViewCell {    
-    private let nicknameLabel = UILabel()
-    private var videoView = UIView()
+public final class ParticipantsCollectionViewCell: UICollectionViewCell {
+    private let nicknameLabel = PTGPaddingLabel()
+    private weak var videoView: UIView?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -18,26 +18,29 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     }
     
     public func setNickname(_ nickname: String) {
-        self.nicknameLabel.text = nickname
+        nicknameLabel.text = nickname
     }
     
     public func setVideoView(_ videoView: UIView) {
         self.videoView = videoView
-    }
-    
-    private func addViews() {
-        [videoView, nicknameLabel].forEach {
-            contentView.addSubview($0)
-        }
-    }
-    
-    private func setConstraints() {
+        
+        guard let videoView = self.videoView else { return }
+        
+        contentView.insertSubview(videoView, belowSubview: nicknameLabel)
+        
         videoView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+    }
+    
+    private func addViews() {
+        contentView.addSubview(nicknameLabel)
+    }
+    
+    private func setConstraints() {
         nicknameLabel.snp.makeConstraints {
-            $0.width.equalTo(Constants.nicknameLabelWidth)
+            $0.width.greaterThanOrEqualTo(Constants.nicknameLabelMinWidth)
+            $0.width.lessThanOrEqualTo(Constants.nicknameLabelMaxWidth)
             $0.height.equalTo(Constants.nicknameLabelHeight)
             $0.top.equalToSuperview().offset(Constants.nicknameLabelTopSpacing)
             $0.trailing.equalToSuperview().inset(Constants.nicknameLabelTrailingSpacing)
@@ -45,19 +48,25 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     }
     
     private func configureUI() {
+        backgroundColor = PTGColor.gray50.color
+        
         nicknameLabel.font = .systemFont(ofSize: 11)
         nicknameLabel.setKern()
         nicknameLabel.textColor = .white.withAlphaComponent(0.8)
         nicknameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        nicknameLabel.layer.cornerRadius = 20
+        nicknameLabel.layer.cornerRadius = 10
+        nicknameLabel.clipsToBounds = true
     }
 }
 
 extension ParticipantsCollectionViewCell {
     private enum Constants {
-        static let nicknameLabelWidth: CGFloat = 40
+        static let nicknameLabelMinWidth: CGFloat = 40
+        static let nicknameLabelMaxWidth: CGFloat = 120
         static let nicknameLabelHeight: CGFloat = 20
         static let nicknameLabelTopSpacing: CGFloat = 8
         static let nicknameLabelTrailingSpacing: CGFloat = 8
+        static let nicknameLabelVerticalInset: CGFloat = 3.5
+        static let nicknameLabelHorizontalInset: CGFloat = 8
     }
 }

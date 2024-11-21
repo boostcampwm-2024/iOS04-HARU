@@ -1,6 +1,7 @@
 import UIKit
 import Combine
 import BaseFeature
+import PhotoGetherDomainInterface
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -77,10 +78,12 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     public func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.sink { [weak self] in
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
             switch $0 {
-            case .rectangle(let rect):
-                self?.generateRectangle(rect: rect)
+            case .sticker(let entity):
+                self?.renderSticker(entity: entity)
             }
         }
         .store(in: &cancellables)
@@ -94,15 +97,38 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         canvasScrollView.backgroundColor = .red
     }
     
-    private func generateRectangle(rect: Rectangle) {
-        let view = UIView(
-            frame: CGRect(
-                origin: rect.position,
-                size: rect.size
-            )
-        )
+    private func renderSticker(entity: StickerEntity) {
+        let imageSize: CGFloat = 64
+        let rect = calculateCenterPosition(imageSize: imageSize)
+        let stickerImageView = UIImageView(frame: rect)
+        guard let url = URL(string: entity.image) else { return }
         
-        view.backgroundColor = .white
-        canvasScrollView.imageView.addSubview(view)
+        Task {
+            guard let (data, response) = try? await URLSession.shared.data(from: url)
+            else { return }
+            
+            let stickerImage = UIImage(data: data)
+            
+            stickerImageView.image = stickerImage
+            
+            canvasScrollView.imageView.addSubview(stickerImageView)
+        }
+    }
+    
+    private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
+        let zoomScale = canvasScrollView.zoomScale
+        let bounds = canvasScrollView.bounds
+        
+        let centerX = bounds.midX / zoomScale
+        let centerY = bounds.midY / zoomScale
+        
+        let size = imageSize / sqrt(zoomScale)
+        
+        return CGRect(
+            x: centerX - size / 2,
+            y: centerY - size / 2,
+            width: size,
+            height: size
+        )
     }
 }
