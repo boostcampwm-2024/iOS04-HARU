@@ -67,6 +67,7 @@ final class CanvasScrollView: UIScrollView {
 
 extension CanvasScrollView: UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        contentCentering()
         return imageView
     }
 }
