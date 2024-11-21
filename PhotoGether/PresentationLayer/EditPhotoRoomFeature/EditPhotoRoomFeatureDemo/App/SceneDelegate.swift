@@ -51,11 +51,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             PTGImage.temp4.image,
         ]
         let frameImageGenerator = FrameImageGeneratorImpl(images: images)
-        let editPhotoRoomGuestViewModel = EditPhotoRoomHostViewModel(
+        
+        let eventConnectionRepository = EventConnectionGuestRepositoryImpl(clients: [connectionClient])
+        let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
+            eventConnectionRepository: eventConnectionRepository
+        )
+        let sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionRepository
+        )
+        let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
             fetchEmojiListUseCase: fetchEmojiListUseCase,
+            receiveStickerListUseCase: receiveStickerListUseCase,
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase,
             frameImageGenerator: frameImageGenerator
         )
-        let editPhotoRoomGuestViewController = EditPhotoRoomHostViewController(
+        let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
             viewModel: editPhotoRoomGuestViewModel
         )
         window?.rootViewController = editPhotoRoomGuestViewController
