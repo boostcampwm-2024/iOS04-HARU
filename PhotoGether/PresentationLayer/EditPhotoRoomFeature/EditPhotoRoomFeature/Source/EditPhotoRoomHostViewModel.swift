@@ -22,6 +22,7 @@ public final class EditPhotoRoomHostViewModel {
     private var emojiList: [EmojiEntity] = []
     private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     private var sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
+    private var receiveStickerListUseCase: ReceiveStickerListUseCase
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -29,11 +30,13 @@ public final class EditPhotoRoomHostViewModel {
     public init(
         fetchEmojiListUseCase: FetchEmojiListUseCase,
         frameImageGenerator: FrameImageGenerator,
-        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
+        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
+        receiveStickerListUseCase: ReceiveStickerListUseCase
     ) {
         self.fetchEmojiListUseCase = fetchEmojiListUseCase
         self.frameImageGenerator = frameImageGenerator
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
+        self.receiveStickerListUseCase = receiveStickerListUseCase
         bind()
     }
     
@@ -43,6 +46,12 @@ public final class EditPhotoRoomHostViewModel {
         stickerObjectListSubject
             .sink { [weak self] list in
                 self?.output.send(.stickerObjectList(list))
+            }
+            .store(in: &cancellables)
+        
+        receiveStickerListUseCase.execute()
+            .sink { [weak self] stickerList in
+                self?.output.send(.stickerObjectList(stickerList))
             }
             .store(in: &cancellables)
     }

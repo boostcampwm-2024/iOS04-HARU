@@ -26,17 +26,17 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
         receiveDataFromGuest
             .sink { [weak self] data in
             // TODO: Data를 EventEntity로 디코딩해서 EventHub에 push
-//            eventHub.push(event: )
+                guard let eventEntity = try? EventEntity.decode(from: data) else { return }
+                self?.eventHub.push(event: eventEntity)
             }
             .store(in: &cancellables)
         
         // MARK: EventHub에서 처리된 Event를 (GuestClient + HostView)에게 전파한다.
         eventHub.resultEventPublisher
-            .sink { [weak self] enitityList in
-                let encodedData = Data()
+            .sink { [weak self] entityList in
+                guard let encodedData = try? entityList.encode() else { return }
                 self?.clients.forEach { $0.sendData(data: encodedData)}
-                // 자기 뷰에 보내기
-                self?.sendToViewModel.send([])
+                self?.sendToViewModel.send(entityList)
             }
             .store(in: &cancellables)
     }
