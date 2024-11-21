@@ -4,8 +4,9 @@ struct RoomRequestDTO: Decodable {
     var messageType: RoomMessageType
     var message: Data?
     
-    init(messageType: RoomMessageType, body: Data? = nil) {
+    init(messageType: RoomMessageType, message: Data? = nil) {
         self.messageType = messageType
+        self.message = message
     }
     
     enum RoomMessageType: String, Decodable {
