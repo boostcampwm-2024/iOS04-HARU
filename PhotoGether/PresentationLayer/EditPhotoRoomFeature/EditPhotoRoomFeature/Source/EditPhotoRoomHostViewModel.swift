@@ -21,16 +21,19 @@ public final class EditPhotoRoomHostViewModel {
     
     private var emojiList: [EmojiEntity] = []
     private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
+    private var sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
         fetchEmojiListUseCase: FetchEmojiListUseCase,
-        frameImageGenerator: FrameImageGenerator
+        frameImageGenerator: FrameImageGenerator,
+        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     ) {
         self.fetchEmojiListUseCase = fetchEmojiListUseCase
         self.frameImageGenerator = frameImageGenerator
+        self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
         bind()
     }
     
@@ -51,6 +54,7 @@ public final class EditPhotoRoomHostViewModel {
                 self?.sendEmoji()
             case .stickerObjectData(let sticker):
                 self?.appendSticker(with: sticker)
+                self?.sendToRepository(with: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameImage()
             }
@@ -91,6 +95,10 @@ public final class EditPhotoRoomHostViewModel {
     
     private func sendEmoji() {
         output.send(.emojiEntity(entity: emojiList.randomElement()!))
+    }
+    
+    private func sendToRepository(with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: .create, sticker: sticker)
     }
     
     func setupFrame() {

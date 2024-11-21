@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import PhotoGetherDomainInterface
 
-public final class EventConnectionHostRepositoryImpl {
+public final class EventConnectionHostRepositoryImpl: EventConnectionRepository {
     public var clients: [ConnectionClient]
     private let eventHub = EventHub()
     private var cancellables: Set<AnyCancellable> = []
@@ -42,12 +42,12 @@ public final class EventConnectionHostRepositoryImpl {
     }
     
     // MARK: 호스트는 EventType도 얘를 호출하는애가 넣어줘야한다.
-    func mergeSticker(sticker: StickerEntity) {
-        let sticketEvent = EventEntity(type: .create, timeStamp: Date(), entity: sticker)
-        eventHub.push(event: sticketEvent)
+    public func receiveStickerList() -> AnyPublisher<[StickerEntity], Never> {
+        return sendToViewModel.eraseToAnyPublisher()
     }
     
-    func fetchStickerList() -> AnyPublisher<[StickerEntity], Never> {
-        return sendToViewModel.eraseToAnyPublisher()
+    public func mergeSticker(type: EventType, sticker: StickerEntity) {
+        let sticketEvent = EventEntity(type: type, timeStamp: Date(), entity: sticker)
+        eventHub.push(event: sticketEvent)
     }
 }
