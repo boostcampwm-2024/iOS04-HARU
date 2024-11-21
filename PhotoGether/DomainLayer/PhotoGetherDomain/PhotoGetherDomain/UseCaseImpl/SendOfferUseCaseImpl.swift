@@ -10,7 +10,7 @@ public final class SendOfferUseCaseImpl: SendOfferUseCase {
     
     private let repository: ConnectionRepository
     
-    init(repository: ConnectionRepository) {
+    public init(repository: ConnectionRepository) {
         self.repository = repository
     }
 }
