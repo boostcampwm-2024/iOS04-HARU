@@ -5,6 +5,7 @@ import PhotoGetherDomainInterface
 import PhotoGetherDomain
 import PhotoGetherDomainTesting
 import PhotoGetherNetwork
+import DesignSystem
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -43,11 +44,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
             shapeRepository: shapeRepositoryImpl
         )
-        let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
+        let images = [
+            PTGImage.temp1.image,
+            PTGImage.temp2.image,
+            PTGImage.temp3.image,
+            PTGImage.temp4.image,
+        ]
+        let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+        let editPhotoRoomGuestViewModel = EditPhotoRoomHostViewModel(
             fetchEmojiListUseCase: fetchEmojiListUseCase,
-            connectionClient: connectionClient
+            frameImageGenerator: frameImageGenerator
         )
-        let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
+        let editPhotoRoomGuestViewController = EditPhotoRoomHostViewController(
             viewModel: editPhotoRoomGuestViewModel
         )
         window?.rootViewController = editPhotoRoomGuestViewController

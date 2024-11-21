@@ -82,6 +82,13 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
                 self?.input.send(.stickerButtonDidTap)
             }
             .store(in: &cancellables)
+        
+        bottomView.frameButtonTapped
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] in
+                self?.input.send(.frameButtonDidTap)
+            }
+            .store(in: &cancellables)
     }
     
     public func bindOutput() {
@@ -95,9 +102,17 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
                     self?.createStickerObject(by: emojiEntity)
                 case .stickerObjectList(let stickerList):
                     self?.updateCanvas(with: stickerList)
+                case .frameImage(let image):
+                    self?.updateFrameImage(to: image)
                 }
             }
             .store(in: &cancellables)
+        
+        viewModel.setupFrame()
+    }
+    
+    private func updateFrameImage(to image: UIImage) {
+        canvasScrollView.updateFrameImage(to: image)
     }
     
     /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
