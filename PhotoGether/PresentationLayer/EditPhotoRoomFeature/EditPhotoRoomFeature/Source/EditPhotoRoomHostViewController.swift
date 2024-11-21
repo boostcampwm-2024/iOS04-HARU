@@ -2,6 +2,7 @@ import UIKit
 import Combine
 import BaseFeature
 import PhotoGetherDomainInterface
+import SharePhotoFeature
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -89,8 +90,33 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
                 self?.input.send(.frameButtonDidTap)
             }
             .store(in: &cancellables)
+        
+        bottomView.nextButtonTapped
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] in
+                self?.showNextView()
+            }
+            .store(in: &cancellables)
     }
     
+    private func showNextView() {
+        guard let imageData = renderCanvasImageView().pngData() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        
+//        viewController.modalPresentationStyle = .fullScreen
+        self.present(viewController, animated: true)
+    }
+    
+    private func renderCanvasImageView() -> UIImage {
+        canvasScrollView.imageView.layoutIfNeeded()
+        let renderer = UIGraphicsImageRenderer(size: canvasScrollView.imageView.bounds.size)
+        let capturedImage = renderer.image { context in
+            canvasScrollView.imageView.layer.render(in: context.cgContext)
+        }
+        return capturedImage
+    }
     public func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
