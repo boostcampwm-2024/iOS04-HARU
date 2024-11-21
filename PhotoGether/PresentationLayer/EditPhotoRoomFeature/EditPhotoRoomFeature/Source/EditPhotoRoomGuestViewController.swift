@@ -1,4 +1,5 @@
 import UIKit
+import PhotoGetherDomainInterface
 import Combine
 import BaseFeature
 import DesignSystem
@@ -91,8 +92,8 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             .receive(on: RunLoop.main)
             .sink { [weak self] event in
             switch event {
-            case .stickerImageData(let sticker):
-                self?.createStickerObject(by: sticker)
+            case .emojiEntity(let emojiEntity):
+                self?.createStickerObject(by: emojiEntity)
             case .stickerObjectList(let stickerList):
                 self?.updateCanvas(with: stickerList)
             }
@@ -133,15 +134,22 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     }
     
     // MARK: 원래는 Data가 아니라 imageURL 및 Image의 MetaData가 와야함.
-    private func createStickerObject(by sticker: Data) {
+    private func createStickerObject(by entity: EmojiEntity) {
         let imageSize: CGFloat = 64
         let rect = calculateCenterPosition(imageSize: imageSize)
-        let newStickerObject = StickerObject(
-            id: UUID(),
-            image: sticker,
-            rect: rect
-        )
-        input.send(.stickerObjectData(newStickerObject))
+        
+        guard let url = URL(string: entity.image) else { return }
+        Task {
+            guard let (data, response) = try? await URLSession.shared.data(from: url)
+            else { return }
+            
+            let newStickerObject = StickerObject(
+                id: UUID(),
+                image: data,
+                rect: rect
+            )
+            input.send(.stickerObjectData(newStickerObject))
+        }
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
