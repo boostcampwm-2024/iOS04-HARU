@@ -2,5 +2,5 @@ import Combine
 import Foundation
 
 public protocol ShapeDataSource {
-    func fetchStickerData() -> AnyPublisher<[StickerDTO], Error>
+    func fetchEmojiData() -> AnyPublisher<[EmojiDTO], Error>
 }

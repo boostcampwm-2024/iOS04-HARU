@@ -8,24 +8,24 @@ public final class EditPhotoRoomHostViewModel {
     }
 
     enum Output {
-        case sticker(entity: StickerEntity)
+        case emojiEntity(entity: EmojiEntity)
     }
     
-    private let fetchStickerListUseCase: FetchStickerListUseCase
-    private var stickerList: [StickerEntity] = []
+    private let fetchEmojiListUseCase: FetchEmojiListUseCase
+    private var emojiList: [EmojiEntity] = []
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        fetchStickerListUseCase: FetchStickerListUseCase
+        fetchEmojiListUseCase: FetchEmojiListUseCase
     ) {
-        self.fetchStickerListUseCase = fetchStickerListUseCase
+        self.fetchEmojiListUseCase = fetchEmojiListUseCase
         bind()
     }
     
     private func bind() {
-        fetchStickerList()  // 처음 한번 부르고 부터는 재호출을 안하도록
+        fetchEmojiList()  // 처음 한번 부르고 부터는 재호출을 안하도록
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -40,15 +40,15 @@ public final class EditPhotoRoomHostViewModel {
         return output.eraseToAnyPublisher()
     }
     
-    private func fetchStickerList() {
-        fetchStickerListUseCase.execute()
-            .sink { [weak self] stickerEntities in
-                self?.stickerList = stickerEntities
+    private func fetchEmojiList() {
+        fetchEmojiListUseCase.execute()
+            .sink { [weak self] emojiEntities in
+                self?.emojiList = emojiEntities
             }
             .store(in: &cancellables)
     }
     
     private func addStickerToCanvas() {
-        output.send(.sticker(entity: stickerList.randomElement()!))
+        output.send(.emojiEntity(entity: emojiList.randomElement()!))
     }
 }

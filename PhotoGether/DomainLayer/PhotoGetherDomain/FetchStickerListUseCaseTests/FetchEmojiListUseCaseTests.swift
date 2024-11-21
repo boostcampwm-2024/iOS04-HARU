@@ -3,8 +3,8 @@ import PhotoGetherDomainTesting
 import PhotoGetherDomainInterface
 import PhotoGetherDomain
 
-final class FetchStickerListUseCaseTests: XCTestCase {
-    var sut: FetchStickerListUseCase!
+final class FetchEmojiListUseCaseTests: XCTestCase {
+    var sut: FetchEmojiListUseCase!
     var shapeRepositoryMock: ShapeRepositoryMock!
     
     func test_이미지데이터_리스트를_번들에서_잘_가져오는지() {
@@ -26,15 +26,15 @@ final class FetchStickerListUseCaseTests: XCTestCase {
         ]
         let shapeRepositoryMock = ShapeRepositoryMock(imageNameList: imageNameList)
         
-        sut = FetchStickerListUseCaseImpl(shapeRepository: shapeRepositoryMock)
+        sut = FetchEmojiListUseCaseImpl(shapeRepository: shapeRepositoryMock)
         
-        var targetEntityList: [StickerEntity] = []
+        var targetEntityList: [EmojiEntity] = []
         let beforeEntityListCount = 0
         
         //Act 실행 단계: SUT 메소드를 호출하면서 의존성을 전달해서 결과를 저장하기
         let cancellable = sut.execute()
-            .sink { stickerEntities in
-                targetEntityList.append(contentsOf: stickerEntities)
+            .sink { emojiEntities in
+                targetEntityList.append(contentsOf: emojiEntities)
                 expectation.fulfill()
             }
         

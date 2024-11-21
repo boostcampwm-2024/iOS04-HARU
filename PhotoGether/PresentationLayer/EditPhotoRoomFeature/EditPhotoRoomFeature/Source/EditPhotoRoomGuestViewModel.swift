@@ -9,30 +9,30 @@ public final class EditPhotoRoomGuestViewModel {
     }
     
     enum Output {
-        case stickerImageData(data: Data)
+        case emojiEntity(entity: EmojiEntity)
         case stickerObjectList([StickerObject])
     }
     
-    private let fetchStickerListUseCase: FetchStickerListUseCase
+    private let fetchEmojiListUseCase: FetchEmojiListUseCase
     private let connectionClient: ConnectionClient
     
-    private var stickerImageList: [Data] = []
+    private var emojiList: [EmojiEntity] = []
     private var stickerObjectListSubject = CurrentValueSubject<[StickerObject], Never>([])
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        fetchStickerListUseCase: FetchStickerListUseCase,
+        fetchStickerListUseCase: FetchEmojiListUseCase,
         connectionClient: ConnectionClient
     ) {
-        self.fetchStickerListUseCase = fetchStickerListUseCase
+        self.fetchEmojiListUseCase = fetchStickerListUseCase
         self.connectionClient = connectionClient
         bind()
     }
     
     private func bind() {
-        fetchStickerList()
+        fetchEmojiList()
         
         stickerObjectListSubject
             .sink { [weak self] list in
@@ -45,7 +45,7 @@ public final class EditPhotoRoomGuestViewModel {
         input.sink { [weak self] event in
             switch event {
             case .stickerButtonDidTap:
-                self?.sendStickerImage()
+                self?.sendEmoji()
             case .stickerObjectData(let sticker):
                 self?.appendSticker(with: sticker)
             }
@@ -61,16 +61,16 @@ public final class EditPhotoRoomGuestViewModel {
         stickerObjectListSubject.send(currentStickerObjectList)
     }
     
-    private func fetchStickerList() {
-        fetchStickerListUseCase.execute()
-            .sink { [weak self] datas in
-                self?.stickerImageList = datas
+    private func fetchEmojiList() {
+        fetchEmojiListUseCase.execute()
+            .sink { [weak self] emojiEntities in
+                self?.emojiList = emojiEntities
             }
             .store(in: &cancellables)
     }
     
-    private func sendStickerImage() {
-        output.send(.stickerImageData(data: stickerImageList.randomElement()!))
+    private func sendEmoji() {
+        output.send(.emojiEntity(entity: emojiList.randomElement()!))
     }
 }
 

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct StickerEntity: Decodable {
+public struct EmojiEntity: Decodable {
     public let image: String
     public let name: String
 
