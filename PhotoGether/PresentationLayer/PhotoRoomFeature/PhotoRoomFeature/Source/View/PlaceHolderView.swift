@@ -3,7 +3,7 @@ import DesignSystem
 import SnapKit
 import BaseFeature
 
-public final class placeHolderView: UIView {
+public final class PlaceHolderView: UIView {
     private let label = UILabel()
     
     public init() {
