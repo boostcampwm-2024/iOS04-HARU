@@ -1,8 +1,9 @@
-import PhotoGetherDomainInterface
-import PhotoGetherData
-import PhotoGetherNetwork
-import WaitingRoomFeature
 import UIKit
+import PhotoGetherNetwork
+import PhotoGetherData
+import PhotoGetherDomainInterface
+import PhotoGetherDomain
+import WaitingRoomFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -18,22 +19,51 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         debugPrint("SignalingServer URL: \(url)")
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
-        let signalingService: SignalingService = SignalingServiceImpl(webSocketClient: webScoketClient)
         
-        let webRTCService: WebRTCService = WebRTCServiceImpl(iceServers: [
-            "stun:stun.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-            "stun:stun2.l.google.com:19302",
-            "stun:stun3.l.google.com:19302",
-            "stun:stun4.l.google.com:19302"
-        ])
+        let roomService: RoomService = RoomServiceImpl(
+            webSocketClient: webScoketClient
+        )
+        
+        let signalingService: SignalingService = SignalingServiceImpl(
+            webSocketClient: webScoketClient
+        )
+        
+        let webRTCService: WebRTCService = WebRTCServiceImpl(
+            iceServers: [
+                "stun:stun.l.google.com:19302",
+                "stun:stun1.l.google.com:19302",
+                "stun:stun2.l.google.com:19302",
+                "stun:stun3.l.google.com:19302",
+                "stun:stun4.l.google.com:19302"
+            ]
+        )
         
         let connectionClient: ConnectionClient = ConnectionClientImpl(
             signalingService: signalingService,
             webRTCService: webRTCService
         )
+
+        let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
+            clients: [connectionClient]
+        )
         
-        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel()
+        let sendOfferUseCase: SendOfferUseCase = SendOfferUseCaseImpl(
+            repository: connectionRepository
+        )
+        
+        let getLocalVideoUseCase: GetLocalVideoUseCase = GetLocalVideoUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
+        let getRemoteVideoUseCase: GetRemoteVideoUseCase = GetRemoteVideoUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
+        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+            sendOfferUseCase: sendOfferUseCase,
+            getLocalVideoUseCase: getLocalVideoUseCase,
+            getRemoteVideoUseCase: getRemoteVideoUseCase
+        )
         
         let viewController: WaitingRoomViewController = WaitingRoomViewController(
             viewModel: viewModel

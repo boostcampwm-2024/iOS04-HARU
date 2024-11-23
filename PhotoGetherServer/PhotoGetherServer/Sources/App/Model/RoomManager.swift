@@ -1,9 +1,9 @@
 import Vapor
 
-struct RoomManager {
+final class RoomManager {
     private var rooms: [Room] = []
     
-    mutating func createRoom(_ client: WebSocket) -> (roomID: String, userID: String) {
+    func createRoom(_ client: WebSocket) -> (roomID: String, userID: String) {
         let roomID = randomRoomID()
         let userID = randomUserID()
         
@@ -15,7 +15,6 @@ struct RoomManager {
         
         return (roomID, userID)
     }
-    
     
     private func randomRoomID() -> String {
         return "room-\(UUID().uuidString)"

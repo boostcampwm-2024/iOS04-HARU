@@ -1,7 +1,6 @@
 import Foundation
-import PhotoGetherNetwork
 
-struct RoomRequestDTO: WebSocketRequestable {
+struct RoomRequestDTO: Decodable {
     var messageType: RoomMessageType
     var message: Data?
     
@@ -10,7 +9,7 @@ struct RoomRequestDTO: WebSocketRequestable {
         self.message = message
     }
     
-    enum RoomMessageType: String, Encodable {
+    enum RoomMessageType: String, Decodable {
         case createRoom
         case joinRoom
     }

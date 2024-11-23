@@ -6,7 +6,7 @@ public final class RoomServiceImpl: RoomService {
     private let encoder = JSONEncoder()
     private var webSocketClient: WebSocketClient
     
-    init(webSocketClient: WebSocketClient) {
+    public init(webSocketClient: WebSocketClient) {
         self.webSocketClient = webSocketClient
     }
     

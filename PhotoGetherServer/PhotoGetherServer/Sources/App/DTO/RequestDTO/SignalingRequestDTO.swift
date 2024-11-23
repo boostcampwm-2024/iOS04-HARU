@@ -1,7 +1,6 @@
 import Foundation
-import PhotoGetherNetwork
 
-struct SignalingRequestDTO: WebSocketRequestable {
+struct SignalingRequestDTO: Decodable {
     var messageType: SignalingMessageType
     var message: Data?
     
@@ -10,7 +9,7 @@ struct SignalingRequestDTO: WebSocketRequestable {
         self.message = message
     }
     
-    enum SignalingMessageType: String, Encodable {
+    enum SignalingMessageType: String, Decodable {
         case signaling
     }
 }
