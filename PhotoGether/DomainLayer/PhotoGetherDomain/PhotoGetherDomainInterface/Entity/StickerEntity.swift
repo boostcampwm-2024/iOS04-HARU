@@ -37,8 +37,8 @@ public struct StickerEntity: Equatable, Codable {
         self.latestUpdated = try container.decode(Date.self, forKey: .latestUpdated)
 
         let frameDict = try container.decode([String: CGFloat].self, forKey: .frame)
-        guard let x = frameDict["x"],
-              let y = frameDict["y"],
+        guard let originX = frameDict["x"],
+              let originY = frameDict["y"],
               let width = frameDict["width"],
               let height = frameDict["height"] else {
             throw DecodingError.dataCorruptedError(
@@ -47,7 +47,7 @@ public struct StickerEntity: Equatable, Codable {
                 debugDescription: "Frame dictionary does not contain valid keys."
             )
         }
-        self.frame = CGRect(x: x, y: y, width: width, height: height)
+        self.frame = CGRect(x: originX, y: originY, width: width, height: height)
     }
 
     public func encode(to encoder: Encoder) throws {
