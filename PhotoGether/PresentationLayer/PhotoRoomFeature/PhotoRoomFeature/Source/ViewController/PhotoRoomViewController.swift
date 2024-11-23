@@ -130,14 +130,14 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                 )
                 
                 let viewModel = EditPhotoRoomHostViewModel(
-                    fetchEmojiListUseCase: fetchEmojiListUseCase,
                     frameImageGenerator: frameImageGenerator,
-                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase,
-                    receiveStickerListUseCase: receiveStickerListUseCase
+                    fetchEmojiListUseCase: fetchEmojiListUseCase,
+                    receiveStickerListUseCase: receiveStickerListUseCase,
+                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
                 )
                 
-                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
-                
+//                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
+                let viewController = UIViewController()
                 self.navigationController?.pushViewController(viewController, animated: true)
             }
         }
