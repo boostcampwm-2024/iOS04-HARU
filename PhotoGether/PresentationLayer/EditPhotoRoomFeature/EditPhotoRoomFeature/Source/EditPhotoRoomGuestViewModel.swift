@@ -7,7 +7,7 @@ public final class EditPhotoRoomGuestViewModel {
     enum Input {
         case stickerButtonDidTap
         case frameButtonDidTap
-        case stickerObjectData(StickerEntity)
+        case createSticker(StickerEntity)
     }
     
     enum Output {
@@ -16,10 +16,10 @@ public final class EditPhotoRoomGuestViewModel {
         case frameImage(image: UIImage)
     }
     
+    private let frameImageGenerator: FrameImageGenerator
     private let fetchEmojiListUseCase: FetchEmojiListUseCase
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
-    private let frameImageGenerator: FrameImageGenerator
     
     private var emojiList: [EmojiEntity] = []
     private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
@@ -28,15 +28,15 @@ public final class EditPhotoRoomGuestViewModel {
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
+        frameImageGenerator: FrameImageGenerator,
         fetchEmojiListUseCase: FetchEmojiListUseCase,
         receiveStickerListUseCase: ReceiveStickerListUseCase,
-        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
-        frameImageGenerator: FrameImageGenerator
+        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     ) {
+        self.frameImageGenerator = frameImageGenerator
         self.fetchEmojiListUseCase = fetchEmojiListUseCase
         self.receiveStickerListUseCase = receiveStickerListUseCase
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
-        self.frameImageGenerator = frameImageGenerator
         bind()
     }
     
@@ -50,8 +50,10 @@ public final class EditPhotoRoomGuestViewModel {
             .store(in: &cancellables)
         
         receiveStickerListUseCase.execute()
-            .sink { [weak self] stickerList in
-                self?.stickerObjectListSubject.send(stickerList)
+            .sink { [weak self] receivedStickerList in
+                let currentStickerList = self?.stickerObjectListSubject.value ?? []
+                if currentStickerList == receivedStickerList { return }
+                self?.stickerObjectListSubject.send(receivedStickerList)
             }
             .store(in: &cancellables)
     }
@@ -61,7 +63,7 @@ public final class EditPhotoRoomGuestViewModel {
             switch event {
             case .stickerButtonDidTap:
                 self?.sendEmoji()
-            case .stickerObjectData(let sticker):
+            case .createSticker(let sticker):
                 self?.appendSticker(with: sticker)
                 self?.sendToRepository(with: sticker)
             case .frameButtonDidTap:

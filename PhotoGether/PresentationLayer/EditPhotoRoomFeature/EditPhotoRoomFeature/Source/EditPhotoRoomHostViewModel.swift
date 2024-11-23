@@ -7,7 +7,7 @@ public final class EditPhotoRoomHostViewModel {
     enum Input {
         case stickerButtonDidTap
         case frameButtonDidTap
-        case stickerObjectData(StickerEntity)
+        case createSticker(StickerEntity)
     }
     
     enum Output {
@@ -16,29 +16,36 @@ public final class EditPhotoRoomHostViewModel {
         case frameImage(image: UIImage)
     }
     
-    private let fetchEmojiListUseCase: FetchEmojiListUseCase
     private let frameImageGenerator: FrameImageGenerator
+    private let fetchEmojiListUseCase: FetchEmojiListUseCase
+    private let receiveStickerListUseCase: ReceiveStickerListUseCase
+    private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     
     private var emojiList: [EmojiEntity] = []
     private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
-    private var sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
-    private var receiveStickerListUseCase: ReceiveStickerListUseCase
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        fetchEmojiListUseCase: FetchEmojiListUseCase,
         frameImageGenerator: FrameImageGenerator,
-        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
-        receiveStickerListUseCase: ReceiveStickerListUseCase
+        fetchEmojiListUseCase: FetchEmojiListUseCase,
+        receiveStickerListUseCase: ReceiveStickerListUseCase,
+        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     ) {
-        self.fetchEmojiListUseCase = fetchEmojiListUseCase
         self.frameImageGenerator = frameImageGenerator
-        self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
+        self.fetchEmojiListUseCase = fetchEmojiListUseCase
         self.receiveStickerListUseCase = receiveStickerListUseCase
+        self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
         bind()
     }
+    
+    // Local -> [A]
+    // ViewModel -> [] XX
+    // Server -> [A, B, C]
+    // Local -> [A, B, C]
+    // Create -> Q
+    
     
     private func bind() {
         fetchEmojiList()
@@ -50,8 +57,10 @@ public final class EditPhotoRoomHostViewModel {
             .store(in: &cancellables)
         
         receiveStickerListUseCase.execute()
-            .sink { [weak self] stickerList in
-                self?.output.send(.stickerObjectList(stickerList))
+            .sink { [weak self] receivedStickerList in
+                let currentStickerList = self?.stickerObjectListSubject.value ?? []
+                if currentStickerList == receivedStickerList { return }
+                self?.stickerObjectListSubject.send(receivedStickerList)
             }
             .store(in: &cancellables)
     }
@@ -61,9 +70,9 @@ public final class EditPhotoRoomHostViewModel {
             switch event {
             case .stickerButtonDidTap:
                 self?.sendEmoji()
-            case .stickerObjectData(let sticker):
+            case .createSticker(let sticker):
                 self?.appendSticker(with: sticker)
-//                self?.sendToRepository(with: sticker)
+                self?.sendToRepository(with: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameImage()
             }
