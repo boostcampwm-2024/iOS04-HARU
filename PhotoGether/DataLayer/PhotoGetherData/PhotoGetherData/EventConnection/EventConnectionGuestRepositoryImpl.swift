@@ -7,15 +7,31 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
     private var cancellables: Set<AnyCancellable> = []
     private var receiveDataFromHost = PassthroughSubject<Data, Never>()
     
+    private let decoder: JSONDecoder
+    
     public init(clients: [ConnectionClient]) {
         self.clients = clients
+        self.decoder = JSONDecoder()
+        
+        setupDecoder()
         bindData()
+    }
+    
+    private func setupDecoder() {
+        decoder.dateDecodingStrategy = .iso8601
     }
     
     private func bindData() {
         // MARK: Host로 부터 들어오는 Data를 send한다.
         // clients.filter { $0 == .host }
         // receiveDataFromHost.send(Data())
+        
+        clients.first?.receivedDataPublisher
+            .sink(receiveValue: { [weak self] data in
+                print("DEBUG: Data Receive From Host")
+                self?.receiveDataFromHost.send(data)
+            })
+            .store(in: &cancellables)
     }
     
     // MARK: 게스트가 호스트에게 스티커의 생성/삭제/이동 등 자신의 이벤트를 전달
@@ -37,7 +53,7 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
     
     public func receiveStickerList() -> AnyPublisher<[StickerEntity], Never> {
         return receiveDataFromHost
-            .decode(type: [StickerEntity].self, decoder: JSONDecoder())
+            .decode(type: [StickerEntity].self, decoder: decoder)
             .replaceError(with: [])
             .eraseToAnyPublisher()
     }

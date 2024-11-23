@@ -2,6 +2,7 @@ import UIKit
 import Combine
 import BaseFeature
 import PhotoGetherDomainInterface
+import SharePhotoFeature
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -13,8 +14,16 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private let viewModel: EditPhotoRoomHostViewModel
     private var stickerIdDictionary: [UUID: Int] = [:]
     
-    public init(viewModel: EditPhotoRoomHostViewModel) {
+    // MARK: 개발 끝나면 지워야됨
+    private let offerUseCase: SendOfferUseCase
+    private var isConnected = false
+    
+    public init(
+        viewModel: EditPhotoRoomHostViewModel,
+        offerUseCase: SendOfferUseCase
+    ) {
         self.viewModel = viewModel
+        self.offerUseCase = offerUseCase
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -89,6 +98,32 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
                 self?.input.send(.frameButtonDidTap)
             }
             .store(in: &cancellables)
+        
+        bottomView.nextButtonTapped
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] in
+                self?.showNextView()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func showNextView() {
+        guard let imageData = renderCanvasImageView().pngData() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        
+//        viewController.modalPresentationStyle = .fullScreen
+        self.present(viewController, animated: true)
+    }
+    
+    private func renderCanvasImageView() -> UIImage {
+        canvasScrollView.imageView.layoutIfNeeded()
+        let renderer = UIGraphicsImageRenderer(size: canvasScrollView.imageView.bounds.size)
+        let capturedImage = renderer.image { context in
+            canvasScrollView.imageView.layer.render(in: context.cgContext)
+        }
+        return capturedImage
     }
     
     public func bindOutput() {
@@ -111,8 +146,16 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         viewModel.setupFrame()
     }
     
+    private func tempOffer() {
+        print("DEBUG: OFFER")
+        offerUseCase.execute()
+    }
+    
     private func updateFrameImage(to image: UIImage) {
-        canvasScrollView.updateFrameImage(to: image)
+        // MARK: 임시 클라연결
+        if isConnected { tempOffer() }
+        else { canvasScrollView.updateFrameImage(to: image) }
+        isConnected = true
     }
     
     /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
@@ -121,7 +164,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             if let targetIndex = stickerIdDictionary[sticker.id] {
                 updateExistingSticker(at: targetIndex, with: sticker)
             } else {
-                addNewSticker(to: sticker)
+                addNewSticker(to: sticker, isLocal: false)
             }
         }
     }
@@ -144,7 +187,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         }
     }
     
-    private func addNewSticker(to sticker: StickerEntity) {
+    private func addNewSticker(to sticker: StickerEntity, isLocal: Bool) {
         registerSticker(for: sticker)
         
         guard let url = URL(string: sticker.image) else { return }
@@ -153,8 +196,15 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             else { return }
             
             let stickerImageView = UIImageView(frame: sticker.frame)
-            stickerImageView.image = UIImage(data: data)
+            stickerImageView.image = await UIImage(data: data)?.byPreparingForDisplay()
             canvasScrollView.imageView.addSubview(stickerImageView)
+
+            if isLocal {
+                print("DEBUG: ADD NEW STICKER By Local, \(sticker.id)")
+                input.send(.createSticker(sticker))
+            } else {
+                print("DEBUG: ADD NEW STICKER By Server, \(sticker.id)")
+            }
         }
     }
     
@@ -170,7 +220,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             latestUpdated: Date()
         )
         
-        input.send(.stickerObjectData(newStickerObject))
+        addNewSticker(to: newStickerObject, isLocal: true)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {

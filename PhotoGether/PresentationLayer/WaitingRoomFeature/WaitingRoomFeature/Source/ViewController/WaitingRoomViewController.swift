@@ -9,11 +9,16 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     private let viewModel: WaitingRoomViewModel
     private let waitingRoomView = WaitingRoomView()
     private let participantsCollectionViewController = ParticipantsCollectionViewController()
+    private let photoRoomViewController: PhotoRoomViewController
     
     private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
     
-    public init(viewModel: WaitingRoomViewModel) {
+    public init(
+        viewModel: WaitingRoomViewModel,
+        photoRoomViewController: PhotoRoomViewController
+    ) {
         self.viewModel = viewModel
+        self.photoRoomViewController = photoRoomViewController
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -76,8 +81,50 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     public func bindOutput() {
         let output = viewModel.transform(input: createInput())
         
-        output.navigateToPhotoRoom.sink { _ in
-            print("navigateToPhotoRoom 버튼이 눌렸어요!")
+        output.navigateToPhotoRoom.sink { [weak self] _ in
+            guard let self else { return }
+            
+            let collectionVC = participantsCollectionViewController
+            let photoRoomVC = self.photoRoomViewController
+            photoRoomVC.setCollectionViewController(collectionVC)
+            
+            self.navigationController?.pushViewController(photoRoomVC, animated: true)
+        }.store(in: &cancellables)
+        
+        output.localVideo.sink { [weak self] localVideoView in
+            guard let self else { return }
+            var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
+            var items = snapshot.itemIdentifiers
+            
+            var newItem = SectionItem(position: .host, nickname: "나는 호스트", videoView: localVideoView)
+
+            guard let hostIndex = items.firstIndex(where: { $0.position == .host }) else { return }
+            items.remove(at: hostIndex)
+            items.insert(newItem, at: hostIndex)
+            
+            snapshot.appendItems(items, toSection: 0)
+            self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
+        }.store(in: &cancellables)
+        
+        output.remoteVideos.sink { [weak self] remoteVideoViews in
+            guard let self else { return }
+            guard let remoteVideoView = remoteVideoViews.first else { return }
+            
+            var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
+            var items = snapshot.itemIdentifiers
+            
+            var newItem = SectionItem(position: .guest3, nickname: "나는 게스트", videoView: remoteVideoView)
+
+            guard let guestIndex = items.firstIndex(where: { $0.position == .guest3 }) else { return }
+            items.remove(at: guestIndex)
+            items.insert(newItem, at: guestIndex)
+            
+            snapshot.appendItems(items, toSection: 0)
+            self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
+        }.store(in: &cancellables)
+        
+        output.shouldShowToast.sink { [weak self] message in
+            print(message)
         }.store(in: &cancellables)
         
         output.localVideo.sink { [weak self] localVideoView in

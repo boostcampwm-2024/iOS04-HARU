@@ -6,6 +6,7 @@ import PhotoGetherDomain
 import PhotoGetherDomainTesting
 import PhotoGetherNetwork
 import DesignSystem
+import WebRTC
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -35,6 +36,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             signalingService: signalingService,
             webRTCService: webRTCService
         )
+        
+        let repository = ConnectionRepositoryImpl(clients: [connectionClient])
+        let offerUseCase = SendOfferUseCaseImpl(repository: repository)
+        
         let localDataSource = LocalShapeDataSourceImpl()
         let remoteDataSource = RemoteShapeDataSourceImpl()
         let shapeRepositoryImpl = ShapeRepositoryImpl(
@@ -52,23 +57,48 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ]
         let frameImageGenerator = FrameImageGeneratorImpl(images: images)
         
-        let eventConnectionRepository = EventConnectionGuestRepositoryImpl(clients: [connectionClient])
-        let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
-            eventConnectionRepository: eventConnectionRepository
+        let eventConnectionHostRepository = EventConnectionHostRepositoryImpl(clients: [connectionClient])
+        
+        let eventConnectionGuestRepository = EventConnectionGuestRepositoryImpl(clients: [connectionClient])
+        
+        let receiveStickerListHostUseCase = ReceiveStickerListUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
         )
-        let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
-            eventConnectionRepository: eventConnectionRepository
+        let sendStickerToRepositoryHostUseCase = SendStickerToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
         )
-        let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
+        
+        let receiveStickerListGuestUseCase = ReceiveStickerListUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        let sendStickerToRepositoryGuestUseCase = SendStickerToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        
+        
+        let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
+            frameImageGenerator: frameImageGenerator,
             fetchEmojiListUseCase: fetchEmojiListUseCase,
-            receiveStickerListUseCase: receiveStickerListUseCase,
-            sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase,
-            frameImageGenerator: frameImageGenerator
+            receiveStickerListUseCase: receiveStickerListHostUseCase,
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase
         )
+        let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
+            viewModel: editPhotoRoomHostViewModel,
+            offerUseCase: offerUseCase
+        )
+        
+        let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
+            frameImageGenerator: frameImageGenerator,
+            fetchEmojiListUseCase: fetchEmojiListUseCase,
+            receiveStickerListUseCase: receiveStickerListGuestUseCase,
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase
+        )
+        
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
-            viewModel: editPhotoRoomGuestViewModel
+            viewModel: editPhotoRoomGuestViewModel,
+            offerUseCase: offerUseCase
         )
-        window?.rootViewController = editPhotoRoomGuestViewController
+        window?.rootViewController = editPhotoRoomHostViewController
         window?.makeKeyAndVisible()
     }
 }

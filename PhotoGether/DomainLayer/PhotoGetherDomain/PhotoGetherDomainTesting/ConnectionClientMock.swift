@@ -3,6 +3,8 @@ import Combine
 import PhotoGetherDomainInterface
 
 public final class ConnectionClientMock: ConnectionClient {
+    public func captureVideos() -> [UIImage] { return [] }
+    
     public var remoteVideoView: UIView = UIView()
     
     public var localVideoView: UIView = UIView()
