@@ -17,6 +17,7 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
     private func bindData() {
         clients.forEach {
             $0.receivedDataPublisher.sink { [weak self] data in
+                print("DEBUG: Data Receive From Guest")
                 self?.receiveDataFromGuest.send(data)
             }
             .store(in: &cancellables)
@@ -26,6 +27,7 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
         receiveDataFromGuest
             .sink { [weak self] data in
             // TODO: Data를 EventEntity로 디코딩해서 EventHub에 push
+                print("DEBUG: Push Event Hub")
                 guard let eventEntity = try? EventEntity.decode(from: data) else { return }
                 self?.eventHub.push(event: eventEntity)
             }
@@ -35,6 +37,7 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
         eventHub.resultEventPublisher
             .sink { [weak self] entityList in
                 guard let encodedData = try? entityList.encode() else { return }
+                print("DEBUG: EventHub Result Send")
                 self?.clients.forEach { $0.sendData(data: encodedData)}
                 self?.sendToViewModel.send(entityList)
             }
