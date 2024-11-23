@@ -51,7 +51,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sendOfferUseCase: SendOfferUseCase = SendOfferUseCaseImpl(
             repository: connectionRepository
         )
-        
+
         let getLocalVideoUseCase: GetLocalVideoUseCase = GetLocalVideoUseCaseImpl(
             connectionRepository: connectionRepository
         )
