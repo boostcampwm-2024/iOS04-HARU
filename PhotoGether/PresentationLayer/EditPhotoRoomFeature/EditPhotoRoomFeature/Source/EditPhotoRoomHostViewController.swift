@@ -147,7 +147,6 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func tempOffer() {
-        print("DEBUG: OFFER")
         offerUseCase.execute()
     }
     
@@ -194,7 +193,6 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         input.send(.createSticker(sticker))
     }
     
-    // MARK: 원래는 Data가 아니라 imageURL 및 Image의 MetaData가 와야함.
     private func createStickerObject(by entity: EmojiEntity) {
         let imageSize: CGFloat = 64
         let frame = calculateCenterPosition(imageSize: imageSize)

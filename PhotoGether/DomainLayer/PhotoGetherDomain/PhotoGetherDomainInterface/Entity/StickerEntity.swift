@@ -7,9 +7,6 @@ public struct StickerEntity: Equatable, Codable {
     
     public let id: UUID
     public let image: String
-    public let frame: CGRect
-    public let owner: String?
-    public let latestUpdated: Date
     public private(set) var frame: CGRect
     public private(set) var owner: String?
     public private(set) var latestUpdated: Date
