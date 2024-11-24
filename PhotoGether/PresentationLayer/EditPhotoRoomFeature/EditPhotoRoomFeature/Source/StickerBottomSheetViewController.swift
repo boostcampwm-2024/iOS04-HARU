@@ -1,9 +1,10 @@
 import UIKit
 
 import BaseFeature
+import DesignSystem
 
 final class StickerBottomSheetViewController: UIViewController, ViewControllerConfigure {
-    private let collectionView = StickerCollectionView()
+    private let collectionView = StickerCollectionView(collectionViewLayout: UICollectionViewFlowLayout())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,8 +16,8 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     }
     
     private func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
         
         self.collectionView.register(
             StickerCollectionViewCell.self,
@@ -25,21 +26,18 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     }
     
     func addViews() {
-        [collectionView].forEach { self.view.addSubview($0) }
+        [self.collectionView].forEach { self.view.addSubview($0) }
     }
     
     func setupConstraints() {
-        collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        self.collectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(24)
         }
     }
     
     func configureUI() {
-        collectionView.backgroundColor = .yellow
-        
-        if let sheet = self.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-        }
+        self.sheetPresentationController?.detents = [.medium(), .large()]
+        self.view.backgroundColor = PTGColor.gray10.color
     }
 }
 

@@ -1,19 +1,27 @@
 import UIKit
 
+import DesignSystem
+
 final class StickerCollectionView: UICollectionView {
-    convenience init() {
-        self.init()
+    override init(
+        frame: CGRect = .zero,
+        collectionViewLayout layout: UICollectionViewLayout
+    ) {
+        super.init(frame: frame, collectionViewLayout: layout)
         
-        let layout = UICollectionViewFlowLayout()
+        self.congigureUI()
+    }
+    
+    private func congigureUI() {
+        guard let layout = self.collectionViewLayout
+                as? UICollectionViewFlowLayout
+        else { return }
+        
         layout.itemSize = CGSize(width: 64, height: 64)
         layout.minimumInteritemSpacing = 16
         layout.minimumLineSpacing = 16
-        layout.sectionInset = UIEdgeInsets(
-            top: 16, left: 16,
-            bottom: 16, right: 16
-        )
         
-        self.collectionViewLayout = layout
+        self.backgroundColor = PTGColor.gray10.color
     }
     
     @available(*, unavailable)

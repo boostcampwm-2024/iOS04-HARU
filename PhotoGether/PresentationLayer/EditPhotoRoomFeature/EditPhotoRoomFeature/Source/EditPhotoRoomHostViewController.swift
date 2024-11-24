@@ -149,11 +149,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func presentStickerBottomSheet() {
-        print("DEBUG: hello")
-        let viewController = StickerBottomSheetViewController()
-        viewController.view.backgroundColor = .red
-
-        self.present(viewController, animated: true)
+        self.present(
+            StickerBottomSheetViewController(),
+            animated: true
+        )
     }
     
     private func tempOffer() {
