@@ -3,6 +3,9 @@ import Combine
 import BaseFeature
 import PhotoGetherDomainInterface
 import SharePhotoFeature
+import PhotoGetherData
+import PhotoGetherDomain
+
 
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -149,8 +152,23 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func presentStickerBottomSheet() {
+        let localDataSource = LocalShapeDataSourceImpl()
+        let remoteDataSource = RemoteShapeDataSourceImpl()
+        let shapeRepositoryImpl = ShapeRepositoryImpl(
+            localDataSource: localDataSource,
+            remoteDataSource: remoteDataSource
+        )
+        let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
+            shapeRepository: shapeRepositoryImpl
+        )
+        
+        let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
+            fetchEmojiListUseCase: fetchEmojiListUseCase
+        )
         self.present(
-            StickerBottomSheetViewController(),
+            StickerBottomSheetViewController(
+                viewModel: stickerBottomSheetViewModel
+            ),
             animated: true
         )
     }
