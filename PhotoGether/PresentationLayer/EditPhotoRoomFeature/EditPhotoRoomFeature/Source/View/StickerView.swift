@@ -52,6 +52,26 @@ final class StickerView: UIImageView {
         addGestureRecognizer(tapGesture)
     }
     
+    private func updateFrame(to frame: CGRect) {
+        guard sticker.frame != frame else { return }
+        
+        sticker.updateFrame(to: frame)
+        self.frame = frame
+    }
+    
+    private func updateOwner(to owner: String?) {
+        guard sticker.owner != owner else { return }
+        
+        sticker.updateOwner(to: owner)
+        if let owner = owner {
+            nicknameLabel.text = owner
+            layer.borderWidth = 1
+        } else {
+            nicknameLabel.text = nil
+            layer.borderWidth = 0
+        }
+    }
+    
     private func setImage(to urlString: String) {
         guard let url = URL(string: urlString) else { return }
         
@@ -75,3 +95,9 @@ final class StickerView: UIImageView {
             }
             .store(in: &cancellables)
     }
+    
+    func update(with sticker: StickerEntity) {
+        updateOwner(to: sticker.owner)
+        updateFrame(to: sticker.frame)
+    }
+}

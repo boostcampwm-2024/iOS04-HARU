@@ -10,6 +10,9 @@ public struct StickerEntity: Equatable, Codable {
     public let frame: CGRect
     public let owner: String?
     public let latestUpdated: Date
+    public private(set) var frame: CGRect
+    public private(set) var owner: String?
+    public private(set) var latestUpdated: Date
     
     enum CodingKeys: String, CodingKey {
         case id, image, frame, owner, latestUpdated
@@ -64,6 +67,16 @@ public struct StickerEntity: Equatable, Codable {
             "height": frame.size.height
         ]
         try container.encode(frameDict, forKey: .frame)
+    }
+    
+    public mutating func updateOwner(to owner: String?) {
+        self.owner = owner
+        self.latestUpdated = Date()
+    }
+    
+    public mutating func updateFrame(to frame: CGRect) {
+        self.frame = frame
+        self.latestUpdated = Date()
     }
 }
 
