@@ -21,8 +21,9 @@ public final class EditPhotoRoomGuestViewModel {
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     
-    private var emojiList: [EmojiEntity] = []
-    private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
+    private var emojiList: [EmojiEntity] = [] // MARK: 추후 삭제 예정
+    
+    private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
