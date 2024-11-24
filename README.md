@@ -47,9 +47,17 @@
 
 > 실시간으로 영상/음성/데이터를 주고 받기 위해 사용했습니다.
 > 
-> iOS 개발자밖에 없는 프로젝트였고, 짧은 기간 내에 개발을 해야하다보니
+> 멀리 떨어진 사용자와 실시간으로 통신하기 위해 레이턴시가 짧고 p2p 방식으로 서버 부담이 적은 WebRTC를 채택했습니다.
+
+### Combine
+
+> 비동기 프로그래밍과 UI 바인딩을 위해 사용했습니다.
+>
+> 다른 선택지로는 RxSwift가 있었고, 성능과 퍼스트 파티라는 이유에서 Combine을 선택하게 되었습니다.
 > 
-> 서버 작업을 최소화하기 위해 p2p 방식인 WebRTC 방식을 채택했습니다.
+> 만약 다양한 UI 컴포넌트와의 바인딩이 필요했다면 RxSwift와 RxCocoa를 사용했겠지만,
+>
+> 해당 프로젝트에선 화면이 적고 비교적 UI 컴포넌트들이 간단해 Combine을 사용하기로 결정했습니다.
 
 ### AVFoundation
 
@@ -58,24 +66,6 @@
 ### Vision
 
 > 영상에서 사람의 얼굴을 인식하고, 이미지 전처리 및 후처리를 하기 위해 사용했습니다.
-
-### Combine
-
-> 비동기 프로그래밍과 UI 바인딩을 위해 사용했습니다.
->
-> 다른 선택지로는 RxSwift가 있었고, 성능과 퍼스트 파티라는 이유에서 Combine을 선택하게 되었습니다.
-> 
-> 만약 다양한 UI 컴포넌트와의 바인딩이 필요했다면 RxSwift와 RxCocoa를 사용했겠지만, 해당 프로젝트에선 화면이 적고 비교적 UI 컴포넌트들이 간단해 사용하지 않았습니다.
-
-### Swift Concurrency
-
-> GCD보다 성능이 뛰어나고, Combine에 비해 단발성 비동기 이벤트 처리에 특화되어 있다고 생각합니다.
->
-> 그래서 네트워킹과 관련된 작업은 Concurrency를 사용하고, UI바인딩은 Combine을 사용해 각 비동기 프레임워크의 장점을 활용해보고자 했습니다.
-
-
-
-
 
 |🏷️ 바로가기|[Wiki](https://github.com/boostcampwm-2024/iOS04-HARU/wiki)|[팀 노션](https://www.notion.so/0hooni/HARU-12e07f89fdcd8077a443dbba60cb124d)|[그라운드 룰](https://github.com/boostcampwm-2024/iOS04-HARU/wiki/그라운드-룰)|[컨벤션](https://github.com/boostcampwm-2024/iOS04-HARU/wiki/컨벤션)|[회의록](https://www.notion.so/0hooni/05cb406cd61f460ba7294ae3ffa31f7e)|[기획/디자인](https://www.figma.com/design/6jACkAa5WxD8mm4KgsPtzg/iOS04-GP?node-id=11-32851)|
 |:-:|:-:|:-:|:-:|:-:|:-:|:--:|
