@@ -8,6 +8,7 @@ public final class EditPhotoRoomHostViewModel {
         case stickerButtonDidTap
         case frameButtonDidTap
         case createSticker(StickerEntity)
+        case stickerViewDidTap(UUID)
     }
     
     enum Output {
@@ -76,6 +77,8 @@ public final class EditPhotoRoomHostViewModel {
                 self?.sendToRepository(with: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameImage()
+            case .stickerViewDidTap(let stickerID):
+                self?.handleStickerViewDidTap(with: stickerID)
             }
         }
         .store(in: &cancellables)
