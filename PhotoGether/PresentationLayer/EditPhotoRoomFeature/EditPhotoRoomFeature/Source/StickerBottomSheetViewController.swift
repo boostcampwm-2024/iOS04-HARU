@@ -64,6 +64,7 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     }
     
     func bindOutput() {
+        // FIXME: Published 말고 다른 방법 없으려나...
         self.viewModel.$emojiList
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
@@ -102,10 +103,7 @@ extension StickerBottomSheetViewController: UICollectionViewDataSource {
             withReuseIdentifier: StickerCollectionViewCell.identifier,
             for: indexPath
         ) as? StickerCollectionViewCell
-        else { print("DEBUG: Cell type casting error"); return UICollectionViewCell() }
-        
-        print("DEBUG: viewModel.emojiList.count is", viewModel.emojiList.count)
-        print("DEBUG: vm.emojiList[indexPath.item] is", viewModel.emojiList[indexPath.item].name)
+        else { return UICollectionViewCell() }
         
         if viewModel.emojiList.isEmpty { return cell }
         
