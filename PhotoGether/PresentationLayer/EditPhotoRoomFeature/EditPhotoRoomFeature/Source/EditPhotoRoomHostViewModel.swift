@@ -86,19 +86,35 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     private func handleStickerViewDidTap(with stickerID: UUID) {
-        var stickerList = stickerObjectListSubject.value
-        
         // MARK: 선택할 수 있는 객체인지 확인함
-        guard stickerList.isOwned(id: stickerID, owner: owner) else { return }
+        guard canInteractWithSticker(id: stickerID) else { return }
         
         // MARK: 필요시 이전 스티커를 unlock하고 반영함
+        unlockPreviousSticker()
+        
+        // MARK: Tap한 스티커를 lock하고 반영한다.
+        lockTappedSticker(id: stickerID)
+    }
+    
+    private func canInteractWithSticker(id: UUID) -> Bool {
+        let stickerList = stickerObjectListSubject.value
+        
+        return stickerList.isOwned(id: id, owner: owner)
+    }
+    
+    private func unlockPreviousSticker() {
+        var stickerList = stickerObjectListSubject.value
+        
         if let previousSticker = stickerList.lockedSticker(by: owner) {
             stickerList.unlock(by: owner)
             sendToRepository(type: .unlock, with: previousSticker)
         }
+    }
+    
+    private func lockTappedSticker(id: UUID) {
+        var stickerList = stickerObjectListSubject.value
         
-        // MARK: Tap한 스티커를 lock하고 반영한다.
-        if let tappedSticker = stickerList.lock(by: stickerID, owner: owner) {
+        if let tappedSticker = stickerList.lock(by: id, owner: owner) {
             stickerObjectListSubject.send(stickerList)
             sendToRepository(type: .update, with: tappedSticker)
         }
