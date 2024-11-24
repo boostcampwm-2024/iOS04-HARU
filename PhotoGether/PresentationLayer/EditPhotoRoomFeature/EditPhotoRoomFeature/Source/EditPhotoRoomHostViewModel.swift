@@ -74,7 +74,7 @@ public final class EditPhotoRoomHostViewModel {
                 self?.sendEmoji()
             case .createSticker(let sticker):
                 self?.appendSticker(with: sticker)
-                self?.sendToRepository(with: sticker)
+                self?.sendToRepository(type: .create, with: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameImage()
             case .stickerViewDidTap(let stickerID):
@@ -119,8 +119,8 @@ public final class EditPhotoRoomHostViewModel {
         output.send(.emojiEntity(entity: emojiList.randomElement()!))
     }
     
-    private func sendToRepository(with sticker: StickerEntity) {
-        sendStickerToRepositoryUseCase.execute(type: .create, sticker: sticker)
+    private func sendToRepository(type: EventType, with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
     }
     
     func setupFrame() {

@@ -68,6 +68,7 @@ final class EventManager {
         case .create: createEvent(by: event)
         case .delete: deleteEvent(by: event)
         case .update: updateEvent(to: event)
+        case .unlock: unlockEvent(to: event)
         }
         callEventPublisher.send(true)
     }
@@ -124,6 +125,24 @@ final class EventManager {
             // OldOwner가 nil이거나 Old,New Owner가 서로 같을 때
             stickerDictionary[event.entity.id] = event.entity
 
+            resultEventPublihser.send(currenntStickerList)
+        }
+    }
+    
+    private func unlockEvent(to event: EventEntity) {
+        guard isObejctDeleted[event.entity.id] == false,
+              let oldSticker = stickerDictionary[event.entity.id]
+        else {
+            // 이미 처리된 상황이기에 아무 처리를 하지 않아도 문제가 없음
+            debugPrint("A/B 경쟁 상황에서 이미 삭제된 객체의 언락을 요청함")
+            return
+        }
+        
+        if oldSticker.owner == event.entity.owner {
+            var newSticker = stickerDictionary[event.entity.id]
+            newSticker?.updateOwner(to: nil)
+            
+            stickerDictionary[event.entity.id] = newSticker
             resultEventPublihser.send(currenntStickerList)
         }
     }
