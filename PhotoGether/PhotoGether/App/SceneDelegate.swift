@@ -10,7 +10,7 @@ import SharePhotoFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-
+    
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -20,6 +20,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let urlString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
         let url = URL(string: urlString)!
         debugPrint("SignalingServer URL: \(url)")
+        
+        var isHost: Bool = true
+        
+        if let urlContext = connectionOptions.urlContexts.first {
+            // MARK: 딥링크로 들어온지 여부로 호스트 게스트 판단
+            isHost = false
+        }
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
         
@@ -45,7 +52,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             signalingService: signalingService,
             webRTCService: webRTCService
         )
-
+        
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
             clients: [connectionClient]
         )
@@ -73,7 +80,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let photoRoomViewController: PhotoRoomViewController = PhotoRoomViewController(
             connectionRepsitory: connectionRepository,
             viewModel: photoRoomViewModel,
-            isHost: true
+            isHost: isHost
         )
         
         let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
