@@ -43,13 +43,6 @@ public final class EditPhotoRoomHostViewModel {
         bind()
     }
     
-    // Local -> [A]
-    // ViewModel -> [] XX
-    // Server -> [A, B, C]
-    // Local -> [A, B, C]
-    // Create -> Q
-    
-    
     private func bind() {
         fetchEmojiList()
         
