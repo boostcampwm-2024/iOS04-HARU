@@ -178,7 +178,11 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             } else {
                 print("DEBUG: ADD NEW STICKER By Host, \(sticker.id)")
             }
+        let stickerView = StickerView(sticker: sticker)
+        stickerView.tapHandler { [weak self] stickerID in
+            self?.input.send(.stickerViewDidTap(stickerID))
         }
+        
     }
     
     // MARK: 원래는 Data가 아니라 imageURL 및 Image의 MetaData가 와야함.
