@@ -36,6 +36,10 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     
     func configureUI() {
         collectionView.backgroundColor = .yellow
+        
+        if let sheet = self.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
     }
 }
 
