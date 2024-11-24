@@ -15,6 +15,8 @@ final class EventQueue {
     
     func popLast() -> EventEntity? {
         let popLast = queue.popLast()
+        if queue.isEmpty { popablePublisher.send(false) }
+        
         return popLast
     }
 }
