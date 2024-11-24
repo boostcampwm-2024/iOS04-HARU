@@ -63,9 +63,5 @@
 
 > 카메라 촬영 및 편집 그리고 VoIP 기능을 위해 사용했습니다.
 
-### Vision
-
-> 영상에서 사람의 얼굴을 인식하고, 이미지 전처리 및 후처리를 하기 위해 사용했습니다.
-
 |🏷️ 바로가기|[Wiki](https://github.com/boostcampwm-2024/iOS04-HARU/wiki)|[팀 노션](https://www.notion.so/0hooni/HARU-12e07f89fdcd8077a443dbba60cb124d)|[그라운드 룰](https://github.com/boostcampwm-2024/iOS04-HARU/wiki/그라운드-룰)|[컨벤션](https://github.com/boostcampwm-2024/iOS04-HARU/wiki/컨벤션)|[회의록](https://www.notion.so/0hooni/05cb406cd61f460ba7294ae3ffa31f7e)|[기획/디자인](https://www.figma.com/design/6jACkAa5WxD8mm4KgsPtzg/iOS04-GP?node-id=11-32851)|
 |:-:|:-:|:-:|:-:|:-:|:-:|:--:|
