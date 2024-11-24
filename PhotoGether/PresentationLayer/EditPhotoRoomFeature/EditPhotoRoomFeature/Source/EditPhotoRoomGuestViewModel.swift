@@ -53,8 +53,6 @@ public final class EditPhotoRoomGuestViewModel {
         
         receiveStickerListUseCase.execute()
             .sink { [weak self] receivedStickerList in
-                let currentStickerList = self?.stickerObjectListSubject.value ?? []
-                if currentStickerList == receivedStickerList { return }
                 self?.stickerObjectListSubject.send(receivedStickerList)
             }
             .store(in: &cancellables)
