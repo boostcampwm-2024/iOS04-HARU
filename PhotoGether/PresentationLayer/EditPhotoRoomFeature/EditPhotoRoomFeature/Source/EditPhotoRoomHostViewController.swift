@@ -139,11 +139,21 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
                     self?.updateCanvas(with: stickerList)
                 case .frameImage(let image):
                     self?.updateFrameImage(to: image)
+                case .stickerBottomSheetPresent:
+                    self?.presentStickerBottomSheet()
                 }
             }
             .store(in: &cancellables)
         
         viewModel.setupFrame()
+    }
+    
+    private func presentStickerBottomSheet() {
+        print("DEBUG: hello")
+        let viewController = StickerBottomSheetViewController()
+        viewController.view.backgroundColor = .red
+
+        self.present(viewController, animated: true)
     }
     
     private func tempOffer() {

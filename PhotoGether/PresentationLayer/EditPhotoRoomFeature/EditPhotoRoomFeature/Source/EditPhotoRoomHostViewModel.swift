@@ -14,6 +14,7 @@ public final class EditPhotoRoomHostViewModel {
         case emojiEntity(entity: EmojiEntity)
         case stickerObjectList([StickerEntity])
         case frameImage(image: UIImage)
+        case stickerBottomSheetPresent
     }
     
     private let frameImageGenerator: FrameImageGenerator
@@ -69,7 +70,8 @@ public final class EditPhotoRoomHostViewModel {
         input.sink { [weak self] event in
             switch event {
             case .stickerButtonDidTap:
-                self?.sendEmoji()
+//                self?.sendEmoji()
+                self?.presentStickerBottomSheet()
             case .createSticker(let sticker):
                 self?.appendSticker(with: sticker)
                 self?.sendToRepository(with: sticker)
@@ -82,6 +84,10 @@ public final class EditPhotoRoomHostViewModel {
         return output.eraseToAnyPublisher()
     }
     
+    
+    private func presentStickerBottomSheet() {
+        output.send(.stickerBottomSheetPresent)
+    }
     private func toggleFrameImage() {
         let currentFrameImageType = frameImageGenerator.frameType
         var newFrameImageType: FrameType
