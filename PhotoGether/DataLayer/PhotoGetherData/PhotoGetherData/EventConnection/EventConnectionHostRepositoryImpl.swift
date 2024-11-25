@@ -50,7 +50,11 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
     }
     
     public func mergeSticker(type: EventType, sticker: StickerEntity) {
-        let sticketEvent = EventEntity(type: type, timeStamp: Date(), entity: sticker)
+        let sticketEvent = EventEntity(
+            type: type,
+            timeStamp: Date(),
+            entity: EntityType.sticker(sticker)
+        )
         eventHub.push(event: sticketEvent)
     }
 }

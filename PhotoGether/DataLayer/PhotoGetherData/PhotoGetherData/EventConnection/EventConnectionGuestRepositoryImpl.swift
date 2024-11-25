@@ -39,7 +39,7 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
         let stickerEvent = EventEntity(
             type: type,
             timeStamp: Date(),
-            entity: sticker
+            entity: EntityType.sticker(sticker)
         )
         
         guard let encodedStickerEvent = try? stickerEvent.encode() else { return }
