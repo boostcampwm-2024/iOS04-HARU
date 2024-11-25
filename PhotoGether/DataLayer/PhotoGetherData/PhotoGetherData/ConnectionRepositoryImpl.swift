@@ -8,7 +8,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     private let _localVideoView = CapturableVideoView()
     
     public var localVideoView: UIView { _localVideoView }
-    public var CapturedLocalVideo: UIImage? { _localVideoView.capturedImage }
+    public var capturedLocalVideo: UIImage? { _localVideoView.capturedImage }
     
     public let roomService: RoomService
     
