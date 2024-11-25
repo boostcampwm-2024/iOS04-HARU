@@ -5,17 +5,21 @@ import PhotoGetherDomainInterface
 final class EventQueue {
     private var queue = [EventEntity]()
     
-    let popablePublisher = PassthroughSubject<Bool, Never>()
+    private let isEmptySubject = PassthroughSubject<Bool, Never>()
+    
+    var isEmptyPublisher: AnyPublisher<Bool, Never> {
+        return isEmptySubject.eraseToAnyPublisher()
+    }
     
     func push(event: EventEntity) {
         queue.append(event)
         queue.sort { $0.timeStamp > $1.timeStamp }
-        popablePublisher.send(true)
+        isEmptySubject.send(true)
     }
     
     func popLast() -> EventEntity? {
         let popLast = queue.popLast()
-        if queue.isEmpty { popablePublisher.send(false) }
+        if queue.isEmpty { isEmptySubject.send(false) }
         
         return popLast
     }
@@ -36,7 +40,7 @@ final class EventHub {
     }
     
     private func bind() {
-        eventQueue.popablePublisher.combineLatest(stickerEventManager.callEventPublisher)
+        eventQueue.isEmptyPublisher.combineLatest(stickerEventManager.callEventPublisher)
             .filter { $0 && $1 } // MARK: (Queue에 보낼게 남아있다) && (매니저가 비어있다) -> 보낸다
             .sink { [weak self] popable, call in
                 guard let currentEvent = self?.eventQueue.popLast() else {
