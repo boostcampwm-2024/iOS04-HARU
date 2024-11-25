@@ -74,13 +74,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sendStickerToRepositoryGuestUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
-        
+        let sendFrameToRepositoryGuestUseCase = SendFrameToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        let sendFrameToRepositoryHostUseCase = SendFrameToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
         
         let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
             frameImageGenerator: frameImageGenerator,
             fetchEmojiListUseCase: fetchEmojiListUseCase,
             receiveStickerListUseCase: receiveStickerListHostUseCase,
-            sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase,
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase
         )
         let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
             viewModel: editPhotoRoomHostViewModel
@@ -90,7 +96,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             frameImageGenerator: frameImageGenerator,
             fetchEmojiListUseCase: fetchEmojiListUseCase,
             receiveStickerListUseCase: receiveStickerListGuestUseCase,
-            sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase,
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase
         )
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
