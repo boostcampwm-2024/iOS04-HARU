@@ -36,7 +36,6 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
         self.addViews()
         self.setupConstraints()
         self.configureUI()
-        self.bindInput()
         self.bindOutput()
     }
     
@@ -63,10 +62,6 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     func configureUI() {
         self.sheetPresentationController?.detents = [.medium(), .large()]
         self.view.backgroundColor = PTGColor.gray10.color
-    }
-    
-    func bindInput() {
-        
     }
     
     func bindOutput() {
