@@ -184,9 +184,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         registerSticker(for: sticker)
         
         let stickerView = StickerView(sticker: sticker)
-        stickerView.tapHandler { [weak self] stickerID in
-            self?.input.send(.stickerViewDidTap(stickerID))
-        }
+        stickerView.delegate = self
         
         canvasScrollView.imageView.addSubview(stickerView)
         stickerView.update(with: sticker)
@@ -227,5 +225,11 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func registerSticker(for sticker: StickerEntity) {
         let newIndex = canvasScrollView.imageView.subviews.count
         stickerIdDictionary[sticker.id] = newIndex
+    }
+}
+
+extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
+    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
+        input.send(.stickerViewDidTap(id))
     }
 }

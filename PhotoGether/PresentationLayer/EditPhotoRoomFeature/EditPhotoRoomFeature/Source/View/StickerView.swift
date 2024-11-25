@@ -1,16 +1,18 @@
-import Combine
 import DesignSystem
 import PhotoGetherDomainInterface
 import UIKit
 
+protocol StickerViewActionDelegate: AnyObject {
+    func stickerView(_ stickerView: StickerView, didTap id: UUID)
+}
+
 final class StickerView: UIImageView {
-    private let tapPublisher = PassthroughSubject<Void, Never>()
     private let nicknameLabel = UILabel()
 
     private var sticker: StickerEntity
 
-    private var cancellables = Set<AnyCancellable>()
-
+    weak var delegate: StickerViewActionDelegate?
+    
     init(sticker: StickerEntity) {
         self.sticker = sticker
         super.init(frame: sticker.frame)
@@ -84,16 +86,7 @@ final class StickerView: UIImageView {
     }
     
     @objc private func handleTap() {
-        tapPublisher.send(())
-    }
-    
-    func tapHandler(_ completion: @escaping (UUID) -> Void) {
-        tapPublisher
-            .sink { [weak self] _ in
-                guard let self else { return }
-                completion(sticker.id)
-            }
-            .store(in: &cancellables)
+        delegate?.stickerView(self, didTap: sticker.id)
     }
     
     func update(with sticker: StickerEntity) {
