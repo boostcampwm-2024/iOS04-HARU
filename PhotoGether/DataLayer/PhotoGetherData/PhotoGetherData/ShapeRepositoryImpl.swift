@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import PhotoGetherDomainInterface
+import PhotoGetherNetwork
 
 final public class ShapeRepositoryImpl: ShapeRepository {
     public func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never> {
