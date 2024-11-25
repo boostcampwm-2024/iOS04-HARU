@@ -23,10 +23,7 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
     }
     
     private func bindData() {
-        // MARK: Host로 부터 들어오는 Data를 send한다.
-        // clients.filter { $0 == .host }
-        // receiveDataFromHost.send(Data())
-        
+        // TODO: 추후 Host를 특정하기
         clients.first?.receivedDataPublisher
             .sink(receiveValue: { [weak self] data in
                 guard let payload = try? self?.decoder.decode(EventPayload.self, from: data) else { return }
@@ -55,10 +52,7 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
         
         guard let encodedStickerEvent = try? stickerEvent.encode() else { return }
         
-        // MARK: Host의 Client를 특정한다.
-        // clients.filter { $0 == .host }
-        
-        // 자신의 이벤트를 전달한다. // MARK: hostClient.sendData()
+        // TODO: 추후 Host를 특정하기
         clients.first?.sendData(data: encodedStickerEvent)
     }
     
