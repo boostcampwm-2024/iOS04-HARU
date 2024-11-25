@@ -10,12 +10,14 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
     public var remoteVideoView: UIView = CapturableVideoView()
-    public var localVideoView: UIView = CapturableVideoView()
     
     public var peerID: String = ""
     public var roomID: String = ""
     
-    public init(signalingService: SignalingService, webRTCService: WebRTCService) {
+    public init(
+        signalingService: SignalingService,
+        webRTCService: WebRTCService
+    ) {
         self.signalingService = signalingService
         self.webRTCService = webRTCService
         
@@ -27,7 +29,6 @@ public final class ConnectionClientImpl: ConnectionClient {
         
         // VideoTrack과 나와 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
         self.bindRemoteVideo()
-        self.bindLocalVideo()
     }
     
     public func sendOffer() {
@@ -40,17 +41,8 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.webRTCService.sendData(data)
     }
     
-    public func captureVideos() -> [UIImage] {
-        let localCaptureImage = getCapturedVideos(isLocal: true)
-        let remoteCaptureImage = getCapturedVideos(isLocal: false)
-        
-        return [localCaptureImage, remoteCaptureImage]
-    }
-    
-    private func getCapturedVideos(isLocal: Bool) -> UIImage {
-        let targetVideo = isLocal ? self.localVideoView : self.remoteVideoView
-        
-        guard let videoView = targetVideo as? CapturableVideoView else {
+    public func captureVideo() -> UIImage {
+        guard let videoView = self.remoteVideoView as? CapturableVideoView else {
             return UIImage()
         }
         
@@ -71,7 +63,7 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.webRTCService.renderRemoteVideo(to: remoteVideoView)
     }
     
-    private func bindLocalVideo() {
+    public func bindLocalVideo(_ localVideoView: UIView) {
         guard let localVideoView = localVideoView as? RTCMTLVideoView else { return }
         self.webRTCService.startCaptureLocalVideo(renderer: localVideoView)
     }
