@@ -11,15 +11,20 @@ public final class RoomServiceImpl: RoomService {
         self.webSocketClient = webSocketClient
     }
     
-    public func send(request: Encodable) {
-        guard let request = request as? (any WebSocketRequestable),
-                let data = request.toData(encoder: encoder) else {
-            debugPrint("방 생성 요청 데이터 인코딩 실패: \(request)")
-            return
+    public func createRoom() -> Bool {
+        let createRoomRequest = RoomRequestDTO(messageType: .createRoom)
+        
+        guard let data = createRoomRequest.toData(encoder: encoder) else {
+            debugPrint("방 생성 요청 데이터 인코딩 실패: \(createRoomRequest)")
+            return false
         }
         
         webSocketClient.send(data: data)
+        
+        return true
     }
+    
+    public func joinRoom() { }
 }
 
 // MARK: WebSocketDelegate

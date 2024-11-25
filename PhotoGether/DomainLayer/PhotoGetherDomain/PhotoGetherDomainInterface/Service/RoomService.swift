@@ -1,5 +1,6 @@
 import Foundation
 
 public protocol RoomService {
-    func send(request: Encodable)
+    func createRoom() -> Bool
+    func joinRoom()
 }
