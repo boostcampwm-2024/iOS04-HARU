@@ -22,3 +22,8 @@ public struct FrameEntity: Equatable, Codable {
         self.latestUpdated = latestUpdated
     }
 }
+
+public enum FrameType: Codable {
+    case defaultBlack
+    case defaultWhite
+}
