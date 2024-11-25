@@ -23,6 +23,7 @@ public struct FrameEntity: Equatable, Codable {
     }
 }
 
+@frozen
 public enum FrameType: Codable {
     case defaultBlack
     case defaultWhite
