@@ -23,10 +23,15 @@ final class EventQueue {
         
         return popLast
     }
+    
+    func lastEventPayload() -> EventPayload? {
+        return queue.last?.payload
+    }
 }
 
 final class EventHub {
     private let stickerEventManager = StickerEventManager()
+    private let frameEventManager = FrameEventManager()
     private var eventQueue = EventQueue() // TODO: 추후 Priority queue로 변경
     
     var stickerListPublisher: AnyPublisher<[StickerEntity], Never> {
@@ -40,23 +45,47 @@ final class EventHub {
     }
     
     private func bind() {
-        eventQueue.isEmptyPublisher.combineLatest(stickerEventManager.isReady)
-            .filter { $0 && $1 } // MARK: (Queue에 보낼게 남아있다) && (매니저가 비어있다) -> 보낸다
-            .sink { [weak self] popable, call in
-                guard let currentEvent = self?.eventQueue.popLast() else {
-                    debugPrint("popLast 에러")
-                    return
-                }
-                
-                switch currentEvent.payload {
-                case .sticker(let stickerEntity):
-                    self?.stickerEventManager.work(type: currentEvent.type, with: stickerEntity)
-                case .frame(let frameEntity):
-                    // TODO: FrameManager
-                    break
-                }
+        eventQueue.isEmptyPublisher
+            .combineLatest(stickerEventManager.isReady, frameEventManager.isReady)
+            .filter { $0 && ($1 || $2) } // MARK: (큐에 내보낼 이벤트가 있음) && (스티커 매니저가 준비됨 || 프레임 매니저가 준비됨) -> 보낸다
+            .map { ($1, $2) }
+            .sink { [weak self] isStickerReady, isFrameReady in
+                self?.processEvent(isStickerReady: isStickerReady, isFrameReady: isFrameReady)
             }
             .store(in: &cancellables)
+    }
+    
+    private func processEvent(isStickerReady: Bool, isFrameReady: Bool) {
+        // 큐에서 내보낼 이벤트의 페이로드 타입
+        guard let payloadType = eventQueue.lastEventPayload() else { return }
+        
+        // 페이로드 타입과 준비 상태가 일치해야함
+        guard isPayloadTypeReady(type: payloadType, isStickerReady: isStickerReady, isFrameReady: isFrameReady) else { return }
+        
+        // 이벤트 큐에서 꺼내기
+        guard let currentEvent = eventQueue.popLast() else { return }
+
+        handleEvent(currentEvent, isStickerReady: isStickerReady, isFrameReady: isFrameReady)
+    }
+
+    private func isPayloadTypeReady(type: EventPayload, isStickerReady: Bool, isFrameReady: Bool) -> Bool {
+        switch type {
+        case .sticker:
+            return isStickerReady
+        case .frame:
+            return isFrameReady
+        }
+    }
+
+    private func handleEvent(_ event: EventEntity, isStickerReady: Bool, isFrameReady: Bool) {
+        switch event.payload {
+        case .sticker(let stickerEntity) where isStickerReady:
+            stickerEventManager.work(type: event.type, with: stickerEntity)
+        case .frame(let frameEntity) where isFrameReady:
+            frameEventManager.work(type: event.type, with: frameEntity)
+        default:
+            debugPrint("handleEvent 에러 - 처리할 수 없는 이벤트")
+        }
     }
     
     func push(event: EventEntity) {
@@ -166,5 +195,38 @@ final class StickerEventManager {
             stickerDictionary[sticker.id] = newSticker
             broadcastSubject.send(currenntStickerList)
         }
+    }
+}
+
+final class FrameEventManager {
+    private let isReadySubject = CurrentValueSubject<Bool, Never>(true)
+    private let broadcastSubject = PassthroughSubject<FrameEntity, Never>()
+    private var currentFrame: FrameEntity?
+    
+    var isReady: AnyPublisher<Bool, Never> {
+        return isReadySubject.eraseToAnyPublisher()
+    }
+    
+    var broadcastPublisher: AnyPublisher<FrameEntity, Never> {
+        return broadcastSubject.eraseToAnyPublisher()
+    }
+    
+    func work(type: EventType, with frame: FrameEntity) {
+        isReadySubject.send(false)
+        switch type {
+        case .update:
+            updateEvent(by: frame)
+        default:
+            debugPrint("DEBUG: 의도치 않은 상황에서 모든 참여자 전체 갱신")
+            broadcastSubject.send(frame)
+        }
+        isReadySubject.send(true)
+    }
+    
+    // 프레임은 Lock/Unlock 없이 갱신함
+    private func updateEvent(by frame: FrameEntity) {
+        guard currentFrame?.frameType != frame.frameType else { return }
+        currentFrame = frame
+        broadcastSubject.send(frame)
     }
 }
