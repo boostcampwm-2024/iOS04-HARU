@@ -77,9 +77,7 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
             }
             .store(in: &cancellables)
         
-        // FIXME: Published 말고 다른 방법 없으려나...
-        self.viewModel.$emojiList
-            .receive(on: RunLoop.main)
+        self.viewModel.emojiList
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()
             }

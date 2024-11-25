@@ -12,7 +12,7 @@ final class StickerBottomSheetViewModel {
         case emoji(entity: EmojiEntity)
     }
     
-    @Published var emojiList: [EmojiEntity] = []
+    private(set) var emojiList = CurrentValueSubject<[EmojiEntity], Never>([])
     
     private let fetchEmojiListUseCase: FetchEmojiListUseCase
     
@@ -30,7 +30,7 @@ final class StickerBottomSheetViewModel {
     private func bind() {
         fetchEmojiListUseCase.execute()
             .sink { [weak self] emojiEntities in
-                self?.emojiList = emojiEntities
+                self?.emojiList.send(emojiEntities)
             }
             .store(in: &cancellables)
     }
