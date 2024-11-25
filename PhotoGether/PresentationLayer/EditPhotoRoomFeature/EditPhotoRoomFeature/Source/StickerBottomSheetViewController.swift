@@ -64,6 +64,17 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     }
     
     func bindOutput() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+        
+        output
+            .sink { event in
+                switch event {
+                case .emoji(let entity):
+                    print("DEBUG: emoji name is", entity.name)
+                }
+            }
+            .store(in: &cancellables)
+        
         // FIXME: Published 말고 다른 방법 없으려나...
         self.viewModel.$emojiList
             .receive(on: RunLoop.main)
@@ -80,7 +91,6 @@ extension StickerBottomSheetViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: Cell 선택시 동작 -> 나중에 스티커 전달해줄 때 사용 예정
          input.send(.emojiTapped(index: indexPath))
     }
 }
