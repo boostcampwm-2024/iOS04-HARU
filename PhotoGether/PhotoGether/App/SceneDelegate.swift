@@ -97,13 +97,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             createRoomUseCase: createRoomUseCase
         )
         
-        let viewController: WaitingRoomViewController = WaitingRoomViewController(
+        let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(
             viewModel: viewModel,
             photoRoomViewController: photoRoomViewController
         )
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: viewController)
+        
+        if !isHost {
+            let joinRoomUseCase: JoinRoomUseCase = JoinRoomUseCaseImpl(
+                connectionRepository: connectionRepository
+            )
+            
+            let enterLoadingViewModel = EnterLoadingViewModel(
+                joinRoomUseCase: joinRoomUseCase
+            )
+            let enterLoadingViewController = EnterLoadingViewController(
+                viewModel: enterLoadingViewModel,
+                waitingRoomViewController: waitingRoomViewController
+            )
+            
+            window?.rootViewController = UINavigationController(rootViewController: enterLoadingViewController)
+        } else {
+            window?.rootViewController = UINavigationController(rootViewController: waitingRoomViewController)
+        }
+        
         window?.makeKeyAndVisible()
     }
 }
