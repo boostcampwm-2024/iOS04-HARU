@@ -83,8 +83,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase
         )
         let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
-            viewModel: editPhotoRoomHostViewModel,
-            offerUseCase: offerUseCase
+            viewModel: editPhotoRoomHostViewModel
         )
         
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
@@ -95,8 +94,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
-            viewModel: editPhotoRoomGuestViewModel,
-            offerUseCase: offerUseCase
+            viewModel: editPhotoRoomGuestViewModel
         )
         
         let offerViewController = OfferTempViewController(
