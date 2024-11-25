@@ -1,7 +1,6 @@
 import UIKit
 import PhotoGetherDomainInterface
 
-
 public final class ConnectionRepositoryImpl: ConnectionRepository {
     public var clients: [ConnectionClient]
     
