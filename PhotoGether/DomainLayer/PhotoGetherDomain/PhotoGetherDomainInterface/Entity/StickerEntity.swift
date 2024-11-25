@@ -78,6 +78,10 @@ public struct StickerEntity: Equatable, Codable {
 }
 
 extension Array where Element == StickerEntity {
+    subscript(safe index: Index) -> Iterator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+    
     public func encode() throws -> Data {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -91,7 +95,7 @@ extension Array where Element == StickerEntity {
     
     public mutating func lockedSticker(by owner: String) -> StickerEntity? {
         if let index = firstIndex(where: { $0.owner == owner }) {
-            return self[index]
+            return self[safe: index]
         }
         return nil
     }
