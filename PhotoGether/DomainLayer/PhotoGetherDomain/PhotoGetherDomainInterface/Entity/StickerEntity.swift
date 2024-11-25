@@ -7,9 +7,9 @@ public struct StickerEntity: Equatable, Codable {
     
     public let id: UUID
     public let image: String
-    public let frame: CGRect
-    public let owner: String?
-    public let latestUpdated: Date
+    public private(set) var frame: CGRect
+    public private(set) var owner: String?
+    public private(set) var latestUpdated: Date
     
     enum CodingKeys: String, CodingKey {
         case id, image, frame, owner, latestUpdated
@@ -65,12 +65,52 @@ public struct StickerEntity: Equatable, Codable {
         ]
         try container.encode(frameDict, forKey: .frame)
     }
+    
+    public mutating func updateOwner(to owner: String?) {
+        self.owner = owner
+        self.latestUpdated = Date()
+    }
+    
+    public mutating func updateFrame(to frame: CGRect) {
+        self.frame = frame
+        self.latestUpdated = Date()
+    }
 }
 
 extension Array where Element == StickerEntity {
+    subscript(safe index: Index) -> Iterator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+    
     public func encode() throws -> Data {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         return try encoder.encode(self)
+    }
+
+    public func isOwned(id: UUID, owner: String) -> Bool {
+        guard let target = first(where: { $0.id == id }) else { return false }
+        return target.owner == nil || target.owner == owner
+    }
+    
+    public mutating func lockedSticker(by owner: String) -> StickerEntity? {
+        if let index = firstIndex(where: { $0.owner == owner }) {
+            return self[safe: index]
+        }
+        return nil
+    }
+    
+    public mutating func unlock(by owner: String) {
+        if let index = firstIndex(where: { $0.owner == owner }) {
+            self[index].updateOwner(to: nil)
+        }
+    }
+
+    public mutating func lock(by id: UUID, owner: String) -> StickerEntity? {
+        if let index = firstIndex(where: { $0.id == id }) {
+            self[index].updateOwner(to: owner)
+            return self[index]
+        }
+        return nil
     }
 }

@@ -18,16 +18,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private let viewModel: EditPhotoRoomHostViewModel
     private var stickerIdDictionary: [UUID: Int] = [:]
     
-    // MARK: 개발 끝나면 지워야됨
-    private let offerUseCase: SendOfferUseCase
-    private var isConnected = false
-    
     public init(
-        viewModel: EditPhotoRoomHostViewModel,
-        offerUseCase: SendOfferUseCase
+        viewModel: EditPhotoRoomHostViewModel
     ) {
         self.viewModel = viewModel
-        self.offerUseCase = offerUseCase
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -149,17 +143,9 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         
         viewModel.setupFrame()
     }
-    
-    private func tempOffer() {
-        print("DEBUG: OFFER")
-        offerUseCase.execute()
-    }
-    
+
     private func updateFrameImage(to image: UIImage) {
-        // MARK: 임시 클라연결
-        if isConnected { tempOffer() }
-        else { canvasScrollView.updateFrameImage(to: image) }
-        isConnected = true
+        canvasScrollView.updateFrameImage(to: image)
     }
     
     /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
@@ -177,42 +163,25 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         at index: Int,
         with sticker: StickerEntity
     ) {
-        guard
-            let stickerImageView = canvasScrollView.imageView.subviews[index]
-                as? UIImageView
+        guard let stickerImageView = canvasScrollView
+            .imageView
+            .subviews[index] as? StickerView
         else { return }
         
-        guard let url = URL(string: sticker.image) else { return }
-        Task {
-            guard let (data, _) = try? await URLSession.shared.data(from: url)
-            else { return }
-            stickerImageView.image = UIImage(data: data)
-            stickerImageView.frame = sticker.frame
-        }
+        stickerImageView.update(with: sticker)
     }
     
     private func addNewSticker(to sticker: StickerEntity, isLocal: Bool) {
         registerSticker(for: sticker)
         
-        guard let url = URL(string: sticker.image) else { return }
-        Task {
-            guard let (data, _) = try? await URLSession.shared.data(from: url)
-            else { return }
-            
-            let stickerImageView = UIImageView(frame: sticker.frame)
-            stickerImageView.image = await UIImage(data: data)?.byPreparingForDisplay()
-            canvasScrollView.imageView.addSubview(stickerImageView)
-
-            if isLocal {
-                print("DEBUG: ADD NEW STICKER By Local, \(sticker.id)")
-                input.send(.createSticker(sticker))
-            } else {
-                print("DEBUG: ADD NEW STICKER By Server, \(sticker.id)")
-            }
-        }
+        let stickerView = StickerView(sticker: sticker)
+        stickerView.delegate = self
+        
+        canvasScrollView.imageView.addSubview(stickerView)
+        stickerView.update(with: sticker)
+        input.send(.createSticker(sticker))
     }
     
-    // MARK: 원래는 Data가 아니라 imageURL 및 Image의 MetaData가 와야함.
     private func createStickerObject(by entity: EmojiEntity) {
         let imageSize: CGFloat = 64
         let frame = calculateCenterPosition(imageSize: imageSize)
@@ -280,5 +249,11 @@ extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDeleg
         didTap emoji: EmojiEntity
     ) {
         self.createStickerObject(by: emoji)
+    }
+}
+
+extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
+    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
+        input.send(.stickerViewDidTap(id))
     }
 }
