@@ -14,16 +14,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private let viewModel: EditPhotoRoomHostViewModel
     private var stickerIdDictionary: [UUID: Int] = [:]
     
-    // MARK: 개발 끝나면 지워야됨
-    private let offerUseCase: SendOfferUseCase
-    private var isConnected = false
-    
     public init(
-        viewModel: EditPhotoRoomHostViewModel,
-        offerUseCase: SendOfferUseCase
+        viewModel: EditPhotoRoomHostViewModel
     ) {
         self.viewModel = viewModel
-        self.offerUseCase = offerUseCase
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -145,16 +139,9 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         
         viewModel.setupFrame()
     }
-    
-    private func tempOffer() {
-        offerUseCase.execute()
-    }
-    
+
     private func updateFrameImage(to image: UIImage) {
-        // MARK: 임시 클라연결
-        if isConnected { tempOffer() }
-        else { canvasScrollView.updateFrameImage(to: image) }
-        isConnected = true
+        canvasScrollView.updateFrameImage(to: image)
     }
     
     /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
