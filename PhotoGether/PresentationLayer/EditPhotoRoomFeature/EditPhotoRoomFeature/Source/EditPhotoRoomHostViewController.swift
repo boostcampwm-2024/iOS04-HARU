@@ -6,7 +6,6 @@ import SharePhotoFeature
 import PhotoGetherData
 import PhotoGetherDomain
 
-
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
@@ -165,12 +164,14 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
             fetchEmojiListUseCase: fetchEmojiListUseCase
         )
-        self.present(
-            StickerBottomSheetViewController(
-                viewModel: stickerBottomSheetViewModel
-            ),
-            animated: true
+        
+        let viewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
         )
+        
+        viewController.delegate = self
+        
+        self.present(viewController, animated: true)
     }
     
     private func tempOffer() {
@@ -270,5 +271,14 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func registerSticker(for sticker: StickerEntity) {
         let newIndex = canvasScrollView.imageView.subviews.count
         stickerIdDictionary[sticker.id] = newIndex
+    }
+}
+
+extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDelegate {
+    func stickerBottomSheetViewController(
+        _ viewController: StickerBottomSheetViewController,
+        didTap emoji: PhotoGetherDomainInterface.EmojiEntity
+    ) {
+        self.createStickerObject(by: entity)
     }
 }

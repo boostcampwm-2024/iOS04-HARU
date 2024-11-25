@@ -3,13 +3,19 @@ import UIKit
 
 import BaseFeature
 import DesignSystem
+import PhotoGetherDomainInterface
+
+protocol StickerBottomSheetViewControllerDelegate {
+    func stickerBottomSheetViewController(_ viewController: StickerBottomSheetViewController, didTap emoji: EmojiEntity)
+}
 
 final class StickerBottomSheetViewController: UIViewController, ViewControllerConfigure {
     private let collectionView: StickerCollectionView
     private let viewModel: StickerBottomSheetViewModel
     
-    private let input = PassthroughSubject<StickerBottomSheetViewModel.Input, Never>()
+    var delegate: StickerBottomSheetViewControllerDelegate?
     
+    private let input = PassthroughSubject<StickerBottomSheetViewModel.Input, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     init(viewModel: StickerBottomSheetViewModel) {
@@ -67,10 +73,11 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
         output
-            .sink { event in
+            .sink { [weak self] event in
                 switch event {
                 case .emoji(let entity):
-                    print("DEBUG: emoji name is", entity.name)
+                    // TODO: 이모지 전달
+                    self?.sendEmoji(by: entity)
                 }
             }
             .store(in: &cancellables)
@@ -82,6 +89,11 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
                 self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
+    }
+    
+    private func sendEmoji(by entity: EmojiEntity) {
+        self.delegate?.stickerBottomSheetViewController(self, didTap: entity)
+        self.dismiss(animated: true)
     }
 }
 
