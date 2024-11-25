@@ -74,6 +74,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let createRoomUseCase: CreateRoomUseCase = CreateRoomUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase
         )
@@ -87,7 +91,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
-            getRemoteVideoUseCase: getRemoteVideoUseCase
+            getRemoteVideoUseCase: getRemoteVideoUseCase,
+            createRoomUseCase: createRoomUseCase
         )
         
         let viewController: WaitingRoomViewController = WaitingRoomViewController(
