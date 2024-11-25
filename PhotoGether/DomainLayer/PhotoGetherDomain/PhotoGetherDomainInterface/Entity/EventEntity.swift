@@ -23,6 +23,7 @@ public struct EventEntity: Equatable, Codable {
     }
 }
 
+@frozen
 public enum EventType: Codable {
     case create, update, delete, unlock
 }
@@ -40,6 +41,8 @@ extension EventEntity {
         return try decoder.decode(EventEntity.self, from: data)
     }
 }
+
+@frozen
 public enum EventPayload: Codable {
     case sticker(StickerEntity)
     case frame(FrameEntity)
