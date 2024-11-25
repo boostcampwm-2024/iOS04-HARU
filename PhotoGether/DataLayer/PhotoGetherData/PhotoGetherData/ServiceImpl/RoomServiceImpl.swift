@@ -9,6 +9,7 @@ public final class RoomServiceImpl: RoomService {
     
     public init(webSocketClient: WebSocketClient) {
         self.webSocketClient = webSocketClient
+        self.webSocketClient.delegates.append(self)
     }
     
     public func createRoom() -> Bool {

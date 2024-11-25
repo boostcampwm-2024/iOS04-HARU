@@ -2,7 +2,7 @@ import Foundation
 import PhotoGetherDomainInterface
 
 public final class WebSocketClientImpl: NSObject, WebSocketClient {
-    public var delegate: WebSocketClientDelegate?
+    public var delegates: [WebSocketClientDelegate] = []
     private let url: URL
     private var socket: URLSessionWebSocketTask?
     
@@ -28,7 +28,9 @@ public final class WebSocketClientImpl: NSObject, WebSocketClient {
             
             switch message {
             case .success(.data(let data)):
-                self.delegate?.webSocket(self, didReceiveData: data)
+                self.delegates.forEach{
+                    $0.webSocket(self, didReceiveData: data)
+                }
                 self.readMessage()
                 
             case .success:
@@ -44,7 +46,9 @@ public final class WebSocketClientImpl: NSObject, WebSocketClient {
     private func disconnect() {
         self.socket?.cancel()
         self.socket = nil
-        self.delegate?.webSocketDidDisconnect(self)
+        self.delegates.forEach {
+            $0.webSocketDidDisconnect(self)
+        }
     }
 }
 
@@ -54,7 +58,9 @@ extension WebSocketClientImpl: URLSessionWebSocketDelegate, URLSessionDelegate {
         webSocketTask: URLSessionWebSocketTask,
         didOpenWithProtocol protocol: String?
     ) {
-        self.delegate?.webSocketDidConnect(self)
+        self.delegates.forEach {
+            $0.webSocketDidConnect(self)
+        }
     }
     
     public func urlSession(
