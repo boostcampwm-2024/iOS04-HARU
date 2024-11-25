@@ -67,6 +67,7 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
             guard let self else { return }
             switch $0 {
             case .navigateToWaitingRoom(let isGuest):
+                self.modalPresentationStyle = .fullScreen
                 self.present(waitingRoomViewController, animated: false)
             }
         }
