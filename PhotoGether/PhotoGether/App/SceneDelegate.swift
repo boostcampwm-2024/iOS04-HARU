@@ -54,7 +54,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
-            clients: [connectionClient]
+            clients: [connectionClient],
+            roomService: roomService
         )
         
         let sendOfferUseCase: SendOfferUseCase = SendOfferUseCaseImpl(
