@@ -4,10 +4,10 @@ import PhotoGetherNetwork
 import PhotoGetherDomainInterface
 
 public final class RoomServiceImpl: RoomService {
-    public var createRoomResponsePublisher: AnyPublisher<CreateRoomEntity, Error> {
+    public var createRoomResponsePublisher: AnyPublisher<RoomOwnerEntity, Error> {
         _createRoomResponsePublisher.eraseToAnyPublisher()
     }
-    private let _createRoomResponsePublisher = PassthroughSubject<CreateRoomEntity, Error>()
+    private let _createRoomResponsePublisher = PassthroughSubject<RoomOwnerEntity, Error>()
     private var cancellables: Set<AnyCancellable> = []
     
     private let decoder = JSONDecoder()
@@ -19,7 +19,7 @@ public final class RoomServiceImpl: RoomService {
         bindWebSocketClient()
     }
     
-    public func createRoom() -> AnyPublisher<CreateRoomEntity, Error> {
+    public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
         let createRoomRequest = RoomRequestDTO(messageType: .createRoom)
         
         guard let data = createRoomRequest.toData(encoder: encoder) else {
@@ -47,7 +47,7 @@ public final class RoomServiceImpl: RoomService {
                         debugPrint("Decode Failed to CreateRoomMessage: \(message)")
                         return
                     }
-                    let createRoomEntity = CreateRoomEntity(roomID: message.roomID, userID: message.userID)
+                    let createRoomEntity = RoomOwnerEntity(roomID: message.roomID, userID: message.userID)
                     _createRoomResponsePublisher.send(createRoomEntity)
                     
                     debugPrint("방 생성 성공: \(message.roomID) \n 유저 아이디: \(message.userID)")

@@ -22,10 +22,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         debugPrint("SignalingServer URL: \(url)")
         
         var isHost: Bool = true
+        var roomOwnerEntity: RoomOwnerEntity?
         
         if let urlContext = connectionOptions.urlContexts.first {
             // MARK: 딥링크로 들어온지 여부로 호스트 게스트 판단
             isHost = false
+            roomOwnerEntity = URLParser.parsingIDs(from: urlContext.url)
         }
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
