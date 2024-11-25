@@ -2,13 +2,14 @@ import Foundation
 import PhotoGetherDomainInterface
 
 public final class CreateRoomUseCaseImpl: CreateRoomUseCase {
+    @discardableResult
     public func execute() -> Bool {
-        repository.roomService.createRoom()
+        connectionRepository.roomService.createRoom()
     }
     
-    private let repository: ConnectionRepository
+    private let connectionRepository: ConnectionRepository
     
-    public init(repository: ConnectionRepository) {
-        self.repository = repository
+    public init(connectionRepository: ConnectionRepository) {
+        self.connectionRepository = connectionRepository
     }
 }
