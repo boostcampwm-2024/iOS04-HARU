@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CreateRoomEntity {
+public struct RoomOwnerEntity {
     public let roomID: String
     public let userID: String
     
