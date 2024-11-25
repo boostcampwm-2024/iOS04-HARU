@@ -131,7 +131,6 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                 
                 let viewModel = EditPhotoRoomHostViewModel(
                     frameImageGenerator: frameImageGenerator,
-                    fetchEmojiListUseCase: fetchEmojiListUseCase,
                     receiveStickerListUseCase: receiveStickerListUseCase,
                     sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
                 )

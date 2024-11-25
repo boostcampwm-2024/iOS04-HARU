@@ -78,7 +78,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
             frameImageGenerator: frameImageGenerator,
-            fetchEmojiListUseCase: fetchEmojiListUseCase,
             receiveStickerListUseCase: receiveStickerListHostUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase
         )
