@@ -53,7 +53,7 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
         let sticketEvent = EventEntity(
             type: type,
             timeStamp: Date(),
-            entity: EntityType.sticker(sticker)
+            payload: EventPayload.sticker(sticker)
         )
         eventHub.push(event: sticketEvent)
     }

@@ -8,18 +8,18 @@ public struct EventEntity: Equatable, Codable {
     private(set) var id: UUID
     public let type: EventType
     public let timeStamp: Date
-    public let entity: EntityType
+    public let payload: EventPayload
     
     public init(
         id: UUID = UUID(),
         type: EventType,
         timeStamp: Date,
-        entity: EntityType
+        payload: EventPayload
     ) {
         self.id = id
         self.type = type
         self.timeStamp = timeStamp
-        self.entity = entity
+        self.payload = payload
     }
 }
 
@@ -40,7 +40,7 @@ extension EventEntity {
         return try decoder.decode(EventEntity.self, from: data)
     }
 }
-public enum EntityType: Codable {
+public enum EventPayload: Codable {
     case sticker(StickerEntity)
     case frame(FrameEntity)
 
