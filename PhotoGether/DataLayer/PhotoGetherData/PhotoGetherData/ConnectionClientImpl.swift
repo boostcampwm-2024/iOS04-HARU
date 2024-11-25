@@ -10,16 +10,18 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
     public var remoteVideoView: UIView = CapturableVideoView()
+    public var userInfo: UserInfoEntity?
     
-    public var peerID: String = ""
     public var roomID: String = ""
     
     public init(
         signalingService: SignalingService,
-        webRTCService: WebRTCService
+        webRTCService: WebRTCService,
+        userInfo: UserInfoEntity? = nil
     ) {
         self.signalingService = signalingService
         self.webRTCService = webRTCService
+        self.userInfo = userInfo
         
         self.signalingService.delegate = self
         self.webRTCService.delegate = self
@@ -32,8 +34,14 @@ public final class ConnectionClientImpl: ConnectionClient {
     }
     
     public func sendOffer() {
+        guard let userInfo else { return }
+        
         self.webRTCService.offer { sdp in
-            self.signalingService.send(sdp: sdp, peerID: self.peerID, roomID: self.roomID)
+            self.signalingService.send(
+                sdp: sdp,
+                peerID: userInfo.id,
+                roomID: userInfo.roomID ?? ""
+            )
         }
     }
     
@@ -96,7 +104,13 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
             guard self.webRTCService.peerConnection.localDescription == nil else { return }
             
             self.webRTCService.answer { sdp in
-                self.signalingService.send(sdp: sdp, peerID: self.peerID, roomID: self.roomID)
+                guard let userInfo = self.userInfo else { return }
+                
+                self.signalingService.send(
+                    sdp: sdp,
+                    peerID: userInfo.id,
+                    roomID: userInfo.roomID ?? ""
+                )
             }
         }
     }
@@ -116,7 +130,13 @@ extension ConnectionClientImpl: WebRTCServiceDelegate {
         _ service: WebRTCService,
         didGenerateLocalCandidate candidate: RTCIceCandidate
     ) {
-        self.signalingService.send(candidate: candidate, peerID: self.peerID, roomID: self.roomID)
+        guard let userInfo else { return }
+        
+        self.signalingService.send(
+            candidate: candidate,
+            peerID: userInfo.id,
+            roomID: userInfo.roomID ?? ""
+        )
     }
     
     public func webRTCService(
