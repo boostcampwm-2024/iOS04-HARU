@@ -7,18 +7,18 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
     private var cancellables: Set<AnyCancellable> = []
     private var receiveDataFromHost = PassthroughSubject<Data, Never>()
     
-    private let decoder: JSONDecoder
+    private let decoder = JSONDecoder()
+    private let encoder = JSONEncoder()
     
     public init(clients: [ConnectionClient]) {
         self.clients = clients
-        self.decoder = JSONDecoder()
-        
-        setupDecoder()
+        setupCoder()
         bindData()
     }
     
-    private func setupDecoder() {
+    private func setupCoder() {
         decoder.dateDecodingStrategy = .iso8601
+        encoder.dateEncodingStrategy = .iso8601
     }
     
     private func bindData() {
