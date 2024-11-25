@@ -8,6 +8,7 @@ public final class EditPhotoRoomGuestViewModel {
         case stickerButtonDidTap
         case frameButtonDidTap
         case createSticker(StickerEntity)
+        case stickerViewDidTap(UUID)
     }
     
     enum Output {
@@ -21,8 +22,10 @@ public final class EditPhotoRoomGuestViewModel {
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     
-    private var emojiList: [EmojiEntity] = []
-    private var stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
+    private var emojiList: [EmojiEntity] = [] // MARK: 추후 삭제 예정
+    private let owner = "GUEST" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
+    
+    private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -51,8 +54,6 @@ public final class EditPhotoRoomGuestViewModel {
         
         receiveStickerListUseCase.execute()
             .sink { [weak self] receivedStickerList in
-                let currentStickerList = self?.stickerObjectListSubject.value ?? []
-                if currentStickerList == receivedStickerList { return }
                 self?.stickerObjectListSubject.send(receivedStickerList)
             }
             .store(in: &cancellables)
@@ -65,14 +66,51 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.sendEmoji()
             case .createSticker(let sticker):
                 self?.appendSticker(with: sticker)
-                self?.sendToRepository(with: sticker)
+                self?.sendToRepository(type: .create, with: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameImage()
+            case .stickerViewDidTap(let stickerID):
+                self?.handleStickerViewDidTap(with: stickerID)
             }
         }
         .store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
+    }
+    
+    private func handleStickerViewDidTap(with stickerID: UUID) {
+        // MARK: 선택할 수 있는 객체인지 확인함
+        guard canInteractWithSticker(id: stickerID) else { return }
+        
+        // MARK: 필요시 이전 스티커를 unlock하고 반영함
+        unlockPreviousSticker()
+        
+        // MARK: Tap한 스티커를 lock하고 반영한다.
+        lockTappedSticker(id: stickerID)
+    }
+    
+    private func canInteractWithSticker(id: UUID) -> Bool {
+        let stickerList = stickerObjectListSubject.value
+        
+        return stickerList.isOwned(id: id, owner: owner)
+    }
+    
+    private func unlockPreviousSticker() {
+        var stickerList = stickerObjectListSubject.value
+        
+        if let previousSticker = stickerList.lockedSticker(by: owner) {
+            stickerList.unlock(by: owner)
+            sendToRepository(type: .unlock, with: previousSticker)
+        }
+    }
+    
+    private func lockTappedSticker(id: UUID) {
+        var stickerList = stickerObjectListSubject.value
+        
+        if let tappedSticker = stickerList.lock(by: id, owner: owner) {
+            stickerObjectListSubject.send(stickerList)
+            sendToRepository(type: .update, with: tappedSticker)
+        }
     }
     
     private func toggleFrameImage() {
@@ -108,8 +146,8 @@ public final class EditPhotoRoomGuestViewModel {
         output.send(.emojiEntity(entity: emojiList.randomElement()!))
     }
     
-    private func sendToRepository(with sticker: StickerEntity) {
-        sendStickerToRepositoryUseCase.execute(type: .create, sticker: sticker)
+    private func sendToRepository(type: EventType, with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
     }
     
     func setupFrame() {

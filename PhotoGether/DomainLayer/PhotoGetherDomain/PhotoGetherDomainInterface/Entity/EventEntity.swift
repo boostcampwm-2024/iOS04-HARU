@@ -24,7 +24,7 @@ public struct EventEntity: Equatable, Codable {
 }
 
 public enum EventType: Codable {
-    case create, update, delete
+    case create, update, delete, unlock
 }
 
 extension EventEntity {

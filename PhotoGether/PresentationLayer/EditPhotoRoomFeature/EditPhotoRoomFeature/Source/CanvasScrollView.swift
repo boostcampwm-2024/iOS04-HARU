@@ -28,6 +28,8 @@ final class CanvasScrollView: UIScrollView {
         bouncesZoom = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
+
+        imageView.isUserInteractionEnabled = true
     }
     
     func updateFrameImage(to image: UIImage) {

@@ -147,7 +147,6 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func tempOffer() {
-        print("DEBUG: OFFER")
         offerUseCase.execute()
     }
     
@@ -173,42 +172,25 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         at index: Int,
         with sticker: StickerEntity
     ) {
-        guard
-            let stickerImageView = canvasScrollView.imageView.subviews[index]
-                as? UIImageView
+        guard let stickerImageView = canvasScrollView
+            .imageView
+            .subviews[index] as? StickerView
         else { return }
         
-        guard let url = URL(string: sticker.image) else { return }
-        Task {
-            guard let (data, _) = try? await URLSession.shared.data(from: url)
-            else { return }
-            stickerImageView.image = UIImage(data: data)
-            stickerImageView.frame = sticker.frame
-        }
+        stickerImageView.update(with: sticker)
     }
     
     private func addNewSticker(to sticker: StickerEntity, isLocal: Bool) {
         registerSticker(for: sticker)
         
-        guard let url = URL(string: sticker.image) else { return }
-        Task {
-            guard let (data, _) = try? await URLSession.shared.data(from: url)
-            else { return }
-            
-            let stickerImageView = UIImageView(frame: sticker.frame)
-            stickerImageView.image = await UIImage(data: data)?.byPreparingForDisplay()
-            canvasScrollView.imageView.addSubview(stickerImageView)
-
-            if isLocal {
-                print("DEBUG: ADD NEW STICKER By Local, \(sticker.id)")
-                input.send(.createSticker(sticker))
-            } else {
-                print("DEBUG: ADD NEW STICKER By Server, \(sticker.id)")
-            }
-        }
+        let stickerView = StickerView(sticker: sticker)
+        stickerView.delegate = self
+        
+        canvasScrollView.imageView.addSubview(stickerView)
+        stickerView.update(with: sticker)
+        input.send(.createSticker(sticker))
     }
     
-    // MARK: 원래는 Data가 아니라 imageURL 및 Image의 MetaData가 와야함.
     private func createStickerObject(by entity: EmojiEntity) {
         let imageSize: CGFloat = 64
         let frame = calculateCenterPosition(imageSize: imageSize)
@@ -243,5 +225,11 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func registerSticker(for sticker: StickerEntity) {
         let newIndex = canvasScrollView.imageView.subviews.count
         stickerIdDictionary[sticker.id] = newIndex
+    }
+}
+
+extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
+    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
+        input.send(.stickerViewDidTap(id))
     }
 }
