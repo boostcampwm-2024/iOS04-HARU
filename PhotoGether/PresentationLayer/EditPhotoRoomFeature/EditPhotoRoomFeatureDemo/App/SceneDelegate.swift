@@ -88,7 +88,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
             frameImageGenerator: frameImageGenerator,
-            fetchEmojiListUseCase: fetchEmojiListUseCase,
             receiveStickerListUseCase: receiveStickerListGuestUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase
         )
@@ -97,7 +96,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             viewModel: editPhotoRoomGuestViewModel,
             offerUseCase: offerUseCase
         )
-        window?.rootViewController = editPhotoRoomHostViewController
+        
+        window?.rootViewController = editPhotoRoomGuestViewController
         window?.makeKeyAndVisible()
     }
 }

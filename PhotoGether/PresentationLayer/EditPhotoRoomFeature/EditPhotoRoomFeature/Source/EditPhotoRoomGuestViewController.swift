@@ -1,8 +1,11 @@
-import UIKit
-import PhotoGetherDomainInterface
 import Combine
+import UIKit
+
 import BaseFeature
 import DesignSystem
+import PhotoGetherData
+import PhotoGetherDomain
+import PhotoGetherDomainInterface
 
 public class EditPhotoRoomGuestViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -106,12 +109,12 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             .receive(on: RunLoop.main)
             .sink { [weak self] event in
             switch event {
-            case .emojiEntity(let emojiEntity):
-                self?.createStickerObject(by: emojiEntity)
             case .stickerObjectList(let stickerList):
                 self?.updateCanvas(with: stickerList)
             case .frameImage(let image):
                 self?.updateFrameImage(to: image)
+            case .stickerBottomSheetPresent:
+                self?.presentStickerBottomSheet()
             }
         }
         .store(in: &cancellables)
@@ -216,5 +219,38 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     private func registerSticker(for sticker: StickerEntity) {
         let newIndex = canvasScrollView.imageView.subviews.count
         stickerIdDictionary[sticker.id] = newIndex
+    }
+    
+    private func presentStickerBottomSheet() {
+        let localDataSource = LocalShapeDataSourceImpl()
+        let remoteDataSource = RemoteShapeDataSourceImpl()
+        let shapeRepositoryImpl = ShapeRepositoryImpl(
+            localDataSource: localDataSource,
+            remoteDataSource: remoteDataSource
+        )
+        let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
+            shapeRepository: shapeRepositoryImpl
+        )
+        
+        let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
+            fetchEmojiListUseCase: fetchEmojiListUseCase
+        )
+        
+        let viewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
+        )
+        
+        viewController.delegate = self
+        
+        self.present(viewController, animated: true)
+    }
+}
+
+extension EditPhotoRoomGuestViewController: StickerBottomSheetViewControllerDelegate {
+    func stickerBottomSheetViewController(
+        _ viewController: StickerBottomSheetViewController,
+        didTap emoji: EmojiEntity
+    ) {
+        self.createStickerObject(by: emoji)
     }
 }
