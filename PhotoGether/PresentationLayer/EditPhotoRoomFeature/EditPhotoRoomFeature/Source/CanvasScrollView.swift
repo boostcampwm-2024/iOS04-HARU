@@ -62,8 +62,9 @@ final class CanvasScrollView: UIScrollView {
         let heightBaseScale = frame.height / image.size.height
         let calculatedZoomScale = min(widthBaseScale, heightBaseScale)
         
-        zoomScale = calculatedZoomScale
+        // 호출 순서 바꾸면 안됨
         minimumZoomScale = calculatedZoomScale
+        zoomScale = calculatedZoomScale
     }
 }
 
