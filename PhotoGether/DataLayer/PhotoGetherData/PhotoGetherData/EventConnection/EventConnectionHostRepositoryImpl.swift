@@ -34,7 +34,7 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
             .store(in: &cancellables)
         
         // MARK: EventHub에서 처리된 Event를 (GuestClient + HostView)에게 전파한다.
-        eventHub.resultEventPublisher
+        eventHub.stickerListPublisher
             .sink { [weak self] entityList in
                 guard let encodedData = try? entityList.encode() else { return }
                 print("DEBUG: EventHub Result Send")
