@@ -35,7 +35,11 @@ final class EventHub {
     private var eventQueue = EventQueue() // TODO: 추후 Priority queue로 변경
     
     var stickerListPublisher: AnyPublisher<[StickerEntity], Never> {
-        stickerEventManager.broadcastPublisher.eraseToAnyPublisher()
+        return stickerEventManager.broadcastPublisher.eraseToAnyPublisher()
+    }
+    
+    var framePublisher: AnyPublisher<FrameEntity, Never> {
+        return frameEventManager.broadcastPublisher.eraseToAnyPublisher()
     }
     
     private var cancellables = Set<AnyCancellable>()
