@@ -47,8 +47,8 @@ final class StickerBottomSheetViewModel {
         return output.eraseToAnyPublisher()
     }
     
-    func sendEmoji(by indexPath: IndexPath) {
-        let selectedEmoji = emojiList[indexPath.item]
+    private func sendEmoji(by indexPath: IndexPath) {
+        let selectedEmoji = emojiList.value[indexPath.item]
         output.send(.emoji(entity: selectedEmoji))
     }
 }

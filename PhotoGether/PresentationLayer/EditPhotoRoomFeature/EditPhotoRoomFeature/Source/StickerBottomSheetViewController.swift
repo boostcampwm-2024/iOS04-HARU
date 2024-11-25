@@ -106,8 +106,7 @@ extension StickerBottomSheetViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        if viewModel.emojiList.isEmpty { return 0 }
-        else { return viewModel.emojiList.count }
+        return viewModel.emojiList.value.count
     }
     
     func collectionView(
@@ -117,12 +116,12 @@ extension StickerBottomSheetViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: StickerCollectionViewCell.identifier,
             for: indexPath
-        ) as? StickerCollectionViewCell
+        ) as? StickerCollectionViewCell,
+              let emojiEntity = viewModel.emojiList.value[safe: indexPath.item]
         else { return UICollectionViewCell() }
         
-        if viewModel.emojiList.isEmpty { return cell }
-        
-        cell.setupImage(by: viewModel.emojiList[indexPath.item])
+        cell.setupImage(by: emojiEntity)
+
         return cell
     }
 }
