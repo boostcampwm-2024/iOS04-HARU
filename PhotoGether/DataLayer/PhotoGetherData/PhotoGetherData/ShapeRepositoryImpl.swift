@@ -4,7 +4,7 @@ import PhotoGetherDomainInterface
 
 final public class ShapeRepositoryImpl: ShapeRepository {
     public func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never> {
-        return remoteDataSource.fetchEmojiData()
+        return remoteDataSource.fetchEmojiData(EmojiEndPoint())
             .map { $0.map { $0.toEntity() } }
             .replaceError(with: [])
             .eraseToAnyPublisher()
