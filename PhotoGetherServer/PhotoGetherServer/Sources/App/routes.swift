@@ -19,14 +19,14 @@ func routes(_ app: Application) throws {
         client.onBinary { client, data in
             print("Received binary data of size: \(data.readableBytes)")
             // TODO: 1. data -> JSON으로 디코딩
-            guard let requestType = try? decoder.decode(WebSocketRequestType.self, from: data) else {
+            guard let requestType = data.toDTO(type: WebSocketRequestType.self) else {
                 print("Decode Failed to WebSocketRequestType: \(data)")
                 return
             }
             
             switch requestType.messageType {
             case "signaling":
-                guard let request = try? decoder.decode(SignalingRequestDTO.self, from: data) else {
+                guard let request = data.toDTO(type: SignalingRequestDTO.self) else {
                     print("Decode Failed to SignalingRequestDTO: \(data)")
                     return
                 }
@@ -39,6 +39,32 @@ func routes(_ app: Application) throws {
                 connectedClients
                     .filter { $0 !== client }
                     .forEach { $0.send(data) }
+                
+            case "createRoom":
+                guard let request = data.toDTO(type: RoomRequestDTO.self) else {
+                    print("Decode Failed to RoomRequestDTO: \(data)")
+                    return
+                }
+                
+                let ids = roomManager.createRoom(client)
+                let dto = CreateRoomResponseDTO(roomID: ids.roomID, userID: ids.userID)
+                
+                guard let message = dto.toData(encoder) else {
+                    print("Encode Failed to Data: \(dto)")
+                    return
+                }
+                
+                let responseDTO = RoomResponseDTO(messageType: .createRoom, message: message)
+                
+                guard let response = responseDTO.toData(encoder) else {
+                    print("Encode Failed to Data: \(responseDTO)")
+                    return
+                }
+                
+                client.send(response)
+                
+            case "joinRoom":
+                print("joinRoom")
             default:
                 print("Unknown request message type: \(requestType.messageType)")
             }
