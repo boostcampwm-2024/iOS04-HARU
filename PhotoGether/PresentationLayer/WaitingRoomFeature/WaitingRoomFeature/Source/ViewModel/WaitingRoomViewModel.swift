@@ -6,7 +6,7 @@ public final class WaitingRoomViewModel {
     struct Input {
         let viewDidLoad: AnyPublisher<Void, Never>
         let micMuteButtonDidTap: AnyPublisher<Void, Never>
-        let shareButtonDidTap: AnyPublisher<Void, Never>
+        let linkButtonDidTap: AnyPublisher<Void, Never>
         let startButtonDidTap: AnyPublisher<Void, Never>
     }
 
@@ -24,20 +24,23 @@ public final class WaitingRoomViewModel {
     private let sendOfferUseCase: SendOfferUseCase
     private let getLocalVideoUseCase: GetLocalVideoUseCase
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
+    private let createRoomUseCase: CreateRoomUseCase
     
     public init(
         sendOfferUseCase: SendOfferUseCase,
         getLocalVideoUseCase: GetLocalVideoUseCase,
-        getRemoteVideoUseCase: GetRemoteVideoUseCase
+        getRemoteVideoUseCase: GetRemoteVideoUseCase,
+        createRoomUseCase: CreateRoomUseCase
     ) {
         self.sendOfferUseCase = sendOfferUseCase
         self.getLocalVideoUseCase = getLocalVideoUseCase
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
+        self.createRoomUseCase = createRoomUseCase
     }
     
     func transform(input: Input) -> Output {
         let newMicMuteState = mutateMicMuteButtonDidTap(input)
-        let newShouldShowShareSheet = mutateShareButtonDidTap(input)
+        let newShouldShowShareSheet = mutateLinkButtonDidTap(input)
         let newNavigateToPhotoRoom = mutateStartButtonDidTap(input)
         
         let output = Output(
@@ -78,9 +81,10 @@ private extension WaitingRoomViewModel {
         }.eraseToAnyPublisher()
     }
     
-    func mutateShareButtonDidTap(_ input: Input) -> AnyPublisher<String, Never> {
-        input.shareButtonDidTap.map { [weak self] _ -> String in
+    func mutateLinkButtonDidTap(_ input: Input) -> AnyPublisher<String, Never> {
+        input.linkButtonDidTap.map { [weak self] _ -> String in
             guard let self else { return "레전드 에러 발생" }
+            self.createRoomUseCase.execute()
             self.sendOfferUseCase.execute()
             return "연결을 시도합니다."
         }

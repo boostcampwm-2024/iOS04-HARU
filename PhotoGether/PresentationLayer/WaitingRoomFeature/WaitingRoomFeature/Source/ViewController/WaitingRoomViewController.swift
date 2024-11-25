@@ -73,7 +73,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         return WaitingRoomViewModel.Input(
             viewDidLoad: viewDidLoadPublisher,
             micMuteButtonDidTap: waitingRoomView.micButton.tapPublisher,
-            shareButtonDidTap: waitingRoomView.shareButton.tapPublisher,
+            linkButtonDidTap: waitingRoomView.linkButton.tapPublisher,
             startButtonDidTap: startButtonTapPublisher
         )
     }
