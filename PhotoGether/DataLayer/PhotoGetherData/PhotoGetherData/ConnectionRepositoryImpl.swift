@@ -1,12 +1,16 @@
-import Foundation
+import UIKit
 import PhotoGetherDomainInterface
+
 
 public final class ConnectionRepositoryImpl: ConnectionRepository {
     public var clients: [ConnectionClient]
     
-    private let localVideoView = CapturableVideoView()
+    private let _localVideoView = CapturableVideoView()
     
-    private let roomService: RoomService
+    public var localVideoView: UIView { _localVideoView }
+    public var CapturedLocalVideo: UIImage? { _localVideoView.capturedImage }
+    
+    public let roomService: RoomService
     
     public init(clients: [ConnectionClient], roomService: RoomService) {
         self.clients = clients
@@ -15,6 +19,6 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     }
     
     private func bindLocalVideo() {
-        self.clients.forEach { $0.bindLocalVideo(localVideoView) }
+        self.clients.forEach { $0.bindLocalVideo(_localVideoView) }
     }
 }
