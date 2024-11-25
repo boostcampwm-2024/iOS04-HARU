@@ -55,6 +55,7 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
     public func configureUI() {
         view.backgroundColor = PTGColor.gray90.color
         label.text = "방에 입장 중입니다..."
+        label.textAlignment = .center
         label.font = .systemFont(ofSize: 20)
         label.textColor = .white
         label.setKern()
