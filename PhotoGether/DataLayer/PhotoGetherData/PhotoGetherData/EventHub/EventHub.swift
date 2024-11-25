@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import PhotoGetherDomainInterface
 
 final class EventQueue {
@@ -30,7 +30,7 @@ final class EventHub {
     private var eventQueue = EventQueue() // TODO: 추후 Priority queue로 변경
     
     var stickerListPublisher: AnyPublisher<[StickerEntity], Never> {
-        stickerEventManager.broadcastSubject.eraseToAnyPublisher()
+        stickerEventManager.broadcastPublisher.eraseToAnyPublisher()
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -40,7 +40,7 @@ final class EventHub {
     }
     
     private func bind() {
-        eventQueue.isEmptyPublisher.combineLatest(stickerEventManager.callEventPublisher)
+        eventQueue.isEmptyPublisher.combineLatest(stickerEventManager.isReady)
             .filter { $0 && $1 } // MARK: (Queue에 보낼게 남아있다) && (매니저가 비어있다) -> 보낸다
             .sink { [weak self] popable, call in
                 guard let currentEvent = self?.eventQueue.popLast() else {
@@ -65,9 +65,16 @@ final class EventHub {
 }
 
 final class StickerEventManager {
-    // MARK: 네이밍 좀 고민
-    let callEventPublisher = CurrentValueSubject<Bool, Never>(true)
-    let broadcastSubject = PassthroughSubject<[StickerEntity], Never>()
+    private let isReadySubject = CurrentValueSubject<Bool, Never>(true)
+    private let broadcastSubject = PassthroughSubject<[StickerEntity], Never>()
+    
+    var isReady: AnyPublisher<Bool, Never> {
+        return isReadySubject.eraseToAnyPublisher()
+    }
+    
+    var broadcastPublisher: AnyPublisher<[StickerEntity], Never> {
+        return broadcastSubject.eraseToAnyPublisher()
+    }
     
     private var isObejctDeleted: [UUID: Bool] = [:]
     private var stickerDictionary: [UUID: StickerEntity] = [:]
@@ -76,14 +83,14 @@ final class StickerEventManager {
     }
     
     func work(type: EventType, with sticker: StickerEntity) {
-        callEventPublisher.send(false)
+        isReadySubject.send(false)
         switch type {
         case .create: createEvent(by: sticker)
         case .delete: deleteEvent(by: sticker)
         case .update: updateEvent(by: sticker)
         case .unlock: unlockEvent(by: sticker)
         }
-        callEventPublisher.send(true)
+        isReadySubject.send(true)
     }
     
     private func createEvent(by sticker: StickerEntity) {
