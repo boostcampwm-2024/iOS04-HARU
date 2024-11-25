@@ -1,6 +1,9 @@
 import Foundation
+import Combine
 
 public protocol RoomService {
-    func createRoom() -> Bool
+    var createRoomResponsePublisher: AnyPublisher<CreateRoomEntity, Error> { get }
+    
+    func createRoom() -> AnyPublisher<CreateRoomEntity, Error>
     func joinRoom()
 }

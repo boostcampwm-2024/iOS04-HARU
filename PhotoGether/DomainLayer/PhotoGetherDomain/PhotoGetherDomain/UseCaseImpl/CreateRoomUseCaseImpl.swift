@@ -1,9 +1,9 @@
 import Foundation
+import Combine
 import PhotoGetherDomainInterface
 
 public final class CreateRoomUseCaseImpl: CreateRoomUseCase {
-    @discardableResult
-    public func execute() -> Bool {
+    public func execute() -> AnyPublisher<CreateRoomEntity, any Error> {
         connectionRepository.roomService.createRoom()
     }
     

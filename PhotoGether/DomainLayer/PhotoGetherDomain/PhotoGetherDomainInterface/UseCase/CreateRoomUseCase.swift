@@ -1,6 +1,6 @@
 import Foundation
+import Combine
 
 public protocol CreateRoomUseCase {
-    @discardableResult
-    func execute() -> Bool
+    func execute() -> AnyPublisher<CreateRoomEntity, any Error>
 }
