@@ -98,7 +98,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             viewModel: editPhotoRoomGuestViewModel,
             offerUseCase: offerUseCase
         )
-        window?.rootViewController = editPhotoRoomHostViewController
+        
+        let offerViewController = OfferTempViewController(
+            sendOfferUseCase: offerUseCase,
+            hostViewController: editPhotoRoomHostViewController,
+            guestViewController: editPhotoRoomGuestViewController
+        )
+        let navigationController = UINavigationController(rootViewController: offerViewController)
+        
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 }
