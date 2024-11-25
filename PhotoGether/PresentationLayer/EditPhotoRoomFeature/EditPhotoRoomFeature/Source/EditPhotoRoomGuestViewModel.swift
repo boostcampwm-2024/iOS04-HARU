@@ -1,33 +1,45 @@
-import Foundation
 import Combine
+import Foundation
 import PhotoGetherDomainInterface
+import UIKit
 
 public final class EditPhotoRoomGuestViewModel {
     enum Input {
         case stickerButtonDidTap
-        case stickerObjectData(StickerObject)
+        case frameButtonDidTap
+        case createSticker(StickerEntity)
+        case stickerViewDidTap(UUID)
     }
     
     enum Output {
         case emojiEntity(entity: EmojiEntity)
-        case stickerObjectList([StickerObject])
+        case stickerObjectList([StickerEntity])
+        case frameImage(image: UIImage)
     }
     
+    private let frameImageGenerator: FrameImageGenerator
     private let fetchEmojiListUseCase: FetchEmojiListUseCase
-    private let connectionClient: ConnectionClient
+    private let receiveStickerListUseCase: ReceiveStickerListUseCase
+    private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     
-    private var emojiList: [EmojiEntity] = []
-    private var stickerObjectListSubject = CurrentValueSubject<[StickerObject], Never>([])
+    private var emojiList: [EmojiEntity] = [] // MARK: 추후 삭제 예정
+    private let owner = "GUEST" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
+    
+    private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        fetchStickerListUseCase: FetchEmojiListUseCase,
-        connectionClient: ConnectionClient
+        frameImageGenerator: FrameImageGenerator,
+        fetchEmojiListUseCase: FetchEmojiListUseCase,
+        receiveStickerListUseCase: ReceiveStickerListUseCase,
+        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     ) {
-        self.fetchEmojiListUseCase = fetchStickerListUseCase
-        self.connectionClient = connectionClient
+        self.frameImageGenerator = frameImageGenerator
+        self.fetchEmojiListUseCase = fetchEmojiListUseCase
+        self.receiveStickerListUseCase = receiveStickerListUseCase
+        self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
         bind()
     }
     
@@ -39,6 +51,12 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.output.send(.stickerObjectList(list))
             }
             .store(in: &cancellables)
+        
+        receiveStickerListUseCase.execute()
+            .sink { [weak self] receivedStickerList in
+                self?.stickerObjectListSubject.send(receivedStickerList)
+            }
+            .store(in: &cancellables)
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -46,8 +64,13 @@ public final class EditPhotoRoomGuestViewModel {
             switch event {
             case .stickerButtonDidTap:
                 self?.sendEmoji()
-            case .stickerObjectData(let sticker):
+            case .createSticker(let sticker):
                 self?.appendSticker(with: sticker)
+                self?.sendToRepository(type: .create, with: sticker)
+            case .frameButtonDidTap:
+                self?.toggleFrameImage()
+            case .stickerViewDidTap(let stickerID):
+                self?.handleStickerViewDidTap(with: stickerID)
             }
         }
         .store(in: &cancellables)
@@ -55,7 +78,57 @@ public final class EditPhotoRoomGuestViewModel {
         return output.eraseToAnyPublisher()
     }
     
-    private func appendSticker(with sticker: StickerObject) {
+    private func handleStickerViewDidTap(with stickerID: UUID) {
+        // MARK: 선택할 수 있는 객체인지 확인함
+        guard canInteractWithSticker(id: stickerID) else { return }
+        
+        // MARK: 필요시 이전 스티커를 unlock하고 반영함
+        unlockPreviousSticker()
+        
+        // MARK: Tap한 스티커를 lock하고 반영한다.
+        lockTappedSticker(id: stickerID)
+    }
+    
+    private func canInteractWithSticker(id: UUID) -> Bool {
+        let stickerList = stickerObjectListSubject.value
+        
+        return stickerList.isOwned(id: id, owner: owner)
+    }
+    
+    private func unlockPreviousSticker() {
+        var stickerList = stickerObjectListSubject.value
+        
+        if let previousSticker = stickerList.lockedSticker(by: owner) {
+            stickerList.unlock(by: owner)
+            sendToRepository(type: .unlock, with: previousSticker)
+        }
+    }
+    
+    private func lockTappedSticker(id: UUID) {
+        var stickerList = stickerObjectListSubject.value
+        
+        if let tappedSticker = stickerList.lock(by: id, owner: owner) {
+            stickerObjectListSubject.send(stickerList)
+            sendToRepository(type: .update, with: tappedSticker)
+        }
+    }
+    
+    private func toggleFrameImage() {
+        let currentFrameImageType = frameImageGenerator.frameType
+        var newFrameImageType: FrameType
+        switch currentFrameImageType {
+        case .defaultBlack:
+            newFrameImageType = .defaultWhite
+        case .defaultWhite:
+            newFrameImageType = .defaultBlack
+        }
+        
+        frameImageGenerator.changeFrame(to: newFrameImageType)
+        let newFrameImage = frameImageGenerator.generate()
+        output.send(.frameImage(image: newFrameImage))
+    }
+    
+    private func appendSticker(with sticker: StickerEntity) {
         var currentStickerObjectList = stickerObjectListSubject.value
         currentStickerObjectList.append(sticker)
         stickerObjectListSubject.send(currentStickerObjectList)
@@ -72,10 +145,13 @@ public final class EditPhotoRoomGuestViewModel {
     private func sendEmoji() {
         output.send(.emojiEntity(entity: emojiList.randomElement()!))
     }
-}
-
-struct StickerObject {
-    let id: UUID
-    let image: Data
-    let rect: CGRect
+    
+    private func sendToRepository(type: EventType, with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
+    }
+    
+    func setupFrame() {
+        let frameImage = frameImageGenerator.generate()
+        output.send(.frameImage(image: frameImage))
+    }
 }

@@ -13,6 +13,14 @@ final class EditPhotoHostBottomView: UIView {
         return stickerButton.tapPublisher
     }
     
+    var frameButtonTapped: AnyPublisher<Void, Never> {
+        return frameButton.tapPublisher
+    }
+    
+    var nextButtonTapped: AnyPublisher<Void, Never> {
+        return nextButton.tapPublisher
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

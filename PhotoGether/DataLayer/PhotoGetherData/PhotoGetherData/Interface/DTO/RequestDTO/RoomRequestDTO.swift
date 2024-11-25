@@ -7,6 +7,7 @@ struct RoomRequestDTO: WebSocketRequestable {
     
     init(messageType: RoomMessageType, message: Data? = nil) {
         self.messageType = messageType
+        self.message = message
     }
     
     enum RoomMessageType: String, Encodable {

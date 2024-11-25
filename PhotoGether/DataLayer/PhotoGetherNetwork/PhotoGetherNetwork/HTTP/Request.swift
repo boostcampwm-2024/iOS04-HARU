@@ -10,9 +10,9 @@ public enum Request {
         decoder.dateDecodingStrategy = .iso8601
         return URLSession.shared.dataTaskPublisher(for: endPoint.request())
             .timeout(.seconds(10), scheduler: RunLoop.main)
-            .map { output in
-                printNetworkLog(request: endPoint.request(), output: output)
-            }
+//            .map { output in
+//                printNetworkLog(request: endPoint.request(), output: output)
+//            }
             .tryMap(responseToData)
             .decode(type: T.self, decoder: decoder)
             .mapError(\.asAPIError)
@@ -26,9 +26,9 @@ public enum Request {
     ) -> AnyPublisher<Void, any Error> {
         return URLSession.shared.dataTaskPublisher(for: endPoint.request())
             .timeout(.seconds(10), scheduler: RunLoop.main)
-            .map { output in
-                printNetworkLog(request: endPoint.request(), output: output)
-            }
+//            .map { output in
+//                printNetworkLog(request: endPoint.request(), output: output)
+//            }
             .tryMap(responseToData)
             .map { _ in () }
             .mapError(\.asAPIError)

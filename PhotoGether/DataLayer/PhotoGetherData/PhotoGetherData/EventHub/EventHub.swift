@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import PhotoGetherDomainInterface
 
 final class EventQueue {
     private var queue = [EventEntity]()
@@ -14,6 +15,8 @@ final class EventQueue {
     
     func popLast() -> EventEntity? {
         let popLast = queue.popLast()
+        if queue.isEmpty { popablePublisher.send(false) }
+        
         return popLast
     }
 }
@@ -21,6 +24,10 @@ final class EventQueue {
 final class EventHub {
     private let eventManager = EventManager()
     private var eventQueue = EventQueue() // TODO: 추후 Priority queue로 변경
+    
+    var resultEventPublisher: AnyPublisher<[StickerEntity], Never> {
+        eventManager.resultEventPublihser.eraseToAnyPublisher()
+    }
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -39,12 +46,6 @@ final class EventHub {
                 self?.eventManager.work(event: currentEvent)
             }
             .store(in: &cancellables)
-        
-        eventManager.resultEventPublihser
-            .sink { eventEntity in
-                // MARK: ConnectionClient에게 보내기
-            }
-            .store(in: &cancellables)
     }
     
     func push(event: EventEntity) {
@@ -55,10 +56,13 @@ final class EventHub {
 final class EventManager {
     // MARK: 네이밍 좀 고민
     let callEventPublisher = CurrentValueSubject<Bool, Never>(true)
-    let resultEventPublihser = PassthroughSubject<EventEntity, Never>()
+    let resultEventPublihser = PassthroughSubject<[StickerEntity], Never>()
     
     private var isObejctDeleted: [UUID: Bool] = [:]
     private var stickerDictionary: [UUID: StickerEntity] = [:]
+    private var currenntStickerList: [StickerEntity] {
+        return stickerDictionary.compactMap { $0.value }
+    }
     
     func work(event: EventEntity) {
         callEventPublisher.send(false)
@@ -66,6 +70,7 @@ final class EventManager {
         case .create: createEvent(by: event)
         case .delete: deleteEvent(by: event)
         case .update: updateEvent(to: event)
+        case .unlock: unlockEvent(to: event)
         }
         callEventPublisher.send(true)
     }
@@ -83,7 +88,8 @@ final class EventManager {
         stickerDictionary[event.entity.id] = event.entity
         isObejctDeleted[event.entity.id] = false
         
-        resultEventPublihser.send(event)
+        // MARK: event가 아니라 전체 딕셔너리 보내기
+        resultEventPublihser.send(currenntStickerList)
     }
     
     private func deleteEvent(by event: EventEntity) {
@@ -102,7 +108,7 @@ final class EventManager {
             stickerDictionary[event.entity.id] = nil
             isObejctDeleted[event.entity.id] = true
             
-            resultEventPublihser.send(event)
+            resultEventPublihser.send(currenntStickerList)
         }
     }
     
@@ -121,7 +127,25 @@ final class EventManager {
             // OldOwner가 nil이거나 Old,New Owner가 서로 같을 때
             stickerDictionary[event.entity.id] = event.entity
 
-            resultEventPublihser.send(event)
+            resultEventPublihser.send(currenntStickerList)
+        }
+    }
+    
+    private func unlockEvent(to event: EventEntity) {
+        guard isObejctDeleted[event.entity.id] == false,
+              let oldSticker = stickerDictionary[event.entity.id]
+        else {
+            // 이미 처리된 상황이기에 아무 처리를 하지 않아도 문제가 없음
+            debugPrint("A/B 경쟁 상황에서 이미 삭제된 객체의 언락을 요청함")
+            return
+        }
+        
+        if oldSticker.owner == event.entity.owner {
+            var newSticker = stickerDictionary[event.entity.id]
+            newSticker?.updateOwner(to: nil)
+            
+            stickerDictionary[event.entity.id] = newSticker
+            resultEventPublihser.send(currenntStickerList)
         }
     }
 }

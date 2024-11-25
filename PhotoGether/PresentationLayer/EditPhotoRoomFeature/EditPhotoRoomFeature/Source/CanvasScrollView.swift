@@ -2,16 +2,13 @@ import UIKit
 import DesignSystem
 
 final class CanvasScrollView: UIScrollView {
-    private let image = PTGImage.sampleImage.image
     let imageView = UIImageView()
-    
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         delegate = self
         addViews()
-        setupConstraints()
         configureUI()
     }
     
@@ -25,22 +22,19 @@ final class CanvasScrollView: UIScrollView {
         }
     }
     
-    private func setupConstraints() {
-        imageView.snp.makeConstraints {
-            $0.width.equalTo(image.size.width)
-            $0.height.equalTo(image.size.height)
-        }
-    }
-    
     private func configureUI() {
         isScrollEnabled = true
         maximumZoomScale = 3
         bouncesZoom = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
-        
+
+        imageView.isUserInteractionEnabled = true
+    }
+    
+    func updateFrameImage(to image: UIImage) {
         imageView.image = image
-        imageView.contentMode = .scaleAspectFit
+        imageView.sizeToFit()
     }
     
     func contentCentering() {
@@ -62,6 +56,8 @@ final class CanvasScrollView: UIScrollView {
     }
     
     func setupZoomScale() {
+        guard let image = imageView.image else { return }
+        
         let widthBaseScale = frame.width / image.size.width
         let heightBaseScale = frame.height / image.size.height
         let calculatedZoomScale = min(widthBaseScale, heightBaseScale)
@@ -73,6 +69,7 @@ final class CanvasScrollView: UIScrollView {
 
 extension CanvasScrollView: UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        contentCentering()
         return imageView
     }
 }

@@ -7,6 +7,7 @@ struct SignalingRequestDTO: WebSocketRequestable {
     
     init(messageType: SignalingMessageType = .signaling, message: Data? = nil) {
         self.messageType = messageType
+        self.message = message
     }
     
     enum SignalingMessageType: String, Encodable {

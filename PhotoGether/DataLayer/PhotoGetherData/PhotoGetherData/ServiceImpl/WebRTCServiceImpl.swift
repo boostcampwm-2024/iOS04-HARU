@@ -145,11 +145,11 @@ public extension WebRTCServiceImpl {
     private func configureAudioSession() {
         self.rtcAudioSession.lockForConfiguration()
         do {
-            let playAndRecord = AVAudioSession.Category.playAndRecord
-            let speaker = AVAudioSession.PortOverride.speaker
-            
-            try self.rtcAudioSession.setCategory(playAndRecord)
-            try self.rtcAudioSession.overrideOutputAudioPort(speaker)
+            try self.rtcAudioSession.setCategory(
+                .playAndRecord,
+                mode: .voiceChat,
+                options: .defaultToSpeaker
+            )
             try self.rtcAudioSession.setActive(true)
         } catch let error {
             debugPrint("Error changeing AVAudioSession category: \(error)")

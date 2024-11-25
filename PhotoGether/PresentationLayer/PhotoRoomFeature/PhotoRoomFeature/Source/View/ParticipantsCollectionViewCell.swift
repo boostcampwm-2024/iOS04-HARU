@@ -4,7 +4,7 @@ import DesignSystem
 
 public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     private let nicknameLabel = PTGPaddingLabel()
-    private weak var videoView: UIView?
+    private weak var view: UIView?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,14 +21,14 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
         nicknameLabel.text = nickname
     }
     
-    public func setVideoView(_ videoView: UIView) {
-        self.videoView = videoView
+    public func setView(_ view: UIView) {
+        self.view = view
         
-        guard let videoView = self.videoView else { return }
+        guard let view = self.view else { return }
         
-        contentView.insertSubview(videoView, belowSubview: nicknameLabel)
+        contentView.insertSubview(view, belowSubview: nicknameLabel)
         
-        videoView.snp.makeConstraints {
+        view.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
@@ -49,7 +49,8 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     
     private func configureUI() {
         backgroundColor = PTGColor.gray50.color
-        
+        contentView.clipsToBounds = true
+
         nicknameLabel.font = .systemFont(ofSize: 11)
         nicknameLabel.setKern()
         nicknameLabel.textColor = .white.withAlphaComponent(0.8)

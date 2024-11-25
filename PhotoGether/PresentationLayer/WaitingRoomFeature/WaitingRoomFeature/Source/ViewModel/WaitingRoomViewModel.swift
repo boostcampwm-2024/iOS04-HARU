@@ -88,6 +88,6 @@ private extension WaitingRoomViewModel {
     }
     
     func mutateStartButtonDidTap(_ input: Input) -> AnyPublisher<Void, Never> {
-        return Just(()).eraseToAnyPublisher()
+        return input.startButtonDidTap.eraseToAnyPublisher()
     }
 }

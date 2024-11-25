@@ -2,18 +2,30 @@ import UIKit
 import BaseFeature
 import Combine
 import DesignSystem
+import EditPhotoRoomFeature
+import PhotoGetherDomain
+import PhotoGetherData
+import PhotoGetherDomainInterface
 
 public final class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
-    private let participantsViewController = ParticipantsCollectionViewController()
+    var participantsViewController: ParticipantsCollectionViewController!
+    var connectionRepsitory: ConnectionRepository
     private let photoRoomBottomView: PhotoRoomBottomView
     private let isHost: Bool
     
+    
     private let input = PassthroughSubject<PhotoRoomViewModel.Input, Never>()
     
-    private let viewModel = PhotoRoomViewModel()
+    private let viewModel: PhotoRoomViewModel
     
-    public init(isHost: Bool) {
+    public init(
+        connectionRepsitory: ConnectionRepository,
+        viewModel: PhotoRoomViewModel,
+        isHost: Bool
+    ) {
+        self.connectionRepsitory = connectionRepsitory
+        self.viewModel = viewModel
         self.isHost = isHost
         self.photoRoomBottomView = PhotoRoomBottomView(isHost: isHost)
         
@@ -33,6 +45,10 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         configureUI()
         bindInput()
         bindOutput()
+    }
+    
+    public func setCollectionViewController(_ viewController: ParticipantsCollectionViewController) {
+        self.participantsViewController = viewController
     }
     
     public func addViews() {
@@ -65,7 +81,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     }
     
     public func configureUI() {
-        navigationView.backgroundColor = PTGColor.gray50.color
+        navigationView.backgroundColor = PTGColor.gray90.color
     }
     
     public func bindInput() {
@@ -83,11 +99,46 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
         output.sink { [weak self] in
+            guard let self else { return }
             switch $0 {
             case .timer(let count):
-                self?.photoRoomBottomView.setCameraButtonTimer(count)
-            case .timerCompleted:
-                self?.photoRoomBottomView.stopCameraButtonTimer()
+                self.photoRoomBottomView.setCameraButtonTimer(count)
+            case .timerCompleted(let images):
+                self.photoRoomBottomView.stopCameraButtonTimer()
+                
+                let localDataSource = LocalShapeDataSourceImpl()
+                let remoteDataSource = RemoteShapeDataSourceImpl()
+                let repository = ShapeRepositoryImpl(
+                    localDataSource: localDataSource,
+                    remoteDataSource: remoteDataSource
+                )
+                let eventConnectionRepository = EventConnectionHostRepositoryImpl(
+                    clients: self.connectionRepsitory.clients
+                )
+                
+                let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
+                    shapeRepository: repository
+                )
+                let frameImageGenerator = FrameImageGeneratorImpl(
+                    images: images
+                )
+                let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
+                    eventConnectionRepository: eventConnectionRepository
+                )
+                let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
+                    eventConnectionRepository: eventConnectionRepository
+                )
+                
+                let viewModel = EditPhotoRoomHostViewModel(
+                    frameImageGenerator: frameImageGenerator,
+                    fetchEmojiListUseCase: fetchEmojiListUseCase,
+                    receiveStickerListUseCase: receiveStickerListUseCase,
+                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
+                )
+                
+//                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
+                let viewController = UIViewController()
+                self.navigationController?.pushViewController(viewController, animated: true)
             }
         }
         .store(in: &cancellables)
