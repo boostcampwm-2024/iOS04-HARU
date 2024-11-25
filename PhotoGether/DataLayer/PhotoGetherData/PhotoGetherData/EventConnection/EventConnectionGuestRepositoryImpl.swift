@@ -57,9 +57,23 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
     }
     
     public func receiveStickerList() -> AnyPublisher<[StickerEntity], Never> {
-        return receiveDataFromHost
-            .decode(type: [StickerEntity].self, decoder: decoder)
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
+        return receiveDataFromHost.eraseToAnyPublisher()
+    }
+    
+    public func mergeFrame(type: EventType, frame: FrameEntity) {
+        let frameEvent = EventEntity(
+            type: type,
+            timeStamp: Date(),
+            payload: EventPayload.frame(frame)
+        )
+        
+        guard let encodedFrameEvent = try? encoder.encode(frameEvent) else { return }
+
+        // TODO: 추후 Host를 특정하기
+        clients.first?.sendData(data: encodedFrameEvent)
+    }
+    
+    public func receiveFrameEntity() -> AnyPublisher<FrameEntity, Never> {
+        return receiveDataFromHostFrame.eraseToAnyPublisher()
     }
 }

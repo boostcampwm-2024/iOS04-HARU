@@ -77,4 +77,17 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
         )
         eventHub.push(event: sticketEvent)
     }
+    
+    public func receiveFrameEntity() -> AnyPublisher<FrameEntity, Never> {
+        return sendToViewModelFrame.eraseToAnyPublisher()
+    }
+    
+    public func mergeFrame(type: EventType, frame: FrameEntity) {
+        let frameEvent = EventEntity(
+            type: type,
+            timeStamp: Date(),
+            payload: EventPayload.frame(frame)
+        )
+        eventHub.push(event: frameEvent)
+    }
 }
