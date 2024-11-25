@@ -35,13 +35,6 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         bindOutput()
     }
     
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        canvasScrollView.setupZoomScale()
-        canvasScrollView.contentCentering()
-    }
-    
     public func addViews() {
         [navigationView, canvasScrollView, bottomView].forEach {
             view.addSubview($0)
