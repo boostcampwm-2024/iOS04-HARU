@@ -85,7 +85,7 @@ extension Array where Element == StickerEntity {
     }
 
     public func isOwned(id: UUID, owner: String) -> Bool {
-        guard let target = first(where: { $0.id == id}) else { return false }
+        guard let target = first(where: { $0.id == id }) else { return false }
         return target.owner == nil || target.owner == owner
     }
     
