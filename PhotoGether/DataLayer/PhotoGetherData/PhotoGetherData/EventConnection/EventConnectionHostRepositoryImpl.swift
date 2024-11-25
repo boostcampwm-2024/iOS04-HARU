@@ -7,7 +7,9 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
     private let eventHub = EventHub()
     private var cancellables: Set<AnyCancellable> = []
     private var receiveDataFromGuest = PassthroughSubject<Data, Never>()
-    private var sendToViewModel = PassthroughSubject<[StickerEntity], Never>()
+    private let sendToViewModel = PassthroughSubject<[StickerEntity], Never>()
+    private let sendToViewModelFrame = PassthroughSubject<FrameEntity, Never>()
+    
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     
@@ -44,10 +46,20 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
         // MARK: EventHub에서 처리된 Event를 (GuestClient + HostView)에게 전파한다.
         eventHub.stickerListPublisher
             .sink { [weak self] entityList in
-                guard let encodedData = try? entityList.encode() else { return }
+                let payload = EventPayload.stickerList(entityList)
+                guard let encodedData = try? self?.encoder.encode(payload) else { return }
                 print("DEBUG: EventHub Result Send")
                 self?.clients.forEach { $0.sendData(data: encodedData)}
                 self?.sendToViewModel.send(entityList)
+            }
+            .store(in: &cancellables)
+        
+        eventHub.framePublisher
+            .sink { [weak self] frameEntity in
+                let payload = EventPayload.frame(frameEntity)
+                guard let encodedData = try? self?.encoder.encode(payload) else { return }
+                self?.clients.forEach { $0.sendData(data: encodedData) }
+                self?.sendToViewModelFrame.send(frameEntity)
             }
             .store(in: &cancellables)
     }

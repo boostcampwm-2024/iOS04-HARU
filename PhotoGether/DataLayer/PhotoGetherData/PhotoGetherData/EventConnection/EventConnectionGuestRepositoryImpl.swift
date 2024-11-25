@@ -5,7 +5,8 @@ import PhotoGetherDomainInterface
 public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository {
     public var clients: [ConnectionClient]
     private var cancellables: Set<AnyCancellable> = []
-    private var receiveDataFromHost = PassthroughSubject<Data, Never>()
+    private let receiveDataFromHost = PassthroughSubject<[StickerEntity], Never>()
+    private let receiveDataFromHostFrame = PassthroughSubject<FrameEntity, Never>()
     
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
@@ -28,8 +29,18 @@ public final class EventConnectionGuestRepositoryImpl: EventConnectionRepository
         
         clients.first?.receivedDataPublisher
             .sink(receiveValue: { [weak self] data in
-                print("DEBUG: Data Receive From Host")
-                self?.receiveDataFromHost.send(data)
+                guard let payload = try? self?.decoder.decode(EventPayload.self, from: data) else { return }
+                
+                switch payload {
+                case .stickerList(let stickerList):
+                    print("DEBUG: Decoded Sticker List: \(stickerList)")
+                    self?.receiveDataFromHost.send(stickerList)
+                case .frame(let frameEntity):
+                    print("DEBUG: Decoded Frame Entity: \(frameEntity)")
+                    self?.receiveDataFromHostFrame.send(frameEntity)
+                default:
+                    break
+                }
             })
             .store(in: &cancellables)
     }

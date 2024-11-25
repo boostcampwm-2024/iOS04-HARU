@@ -78,6 +78,8 @@ final class EventHub {
             return isStickerReady
         case .frame:
             return isFrameReady
+        default:
+            return false
         }
     }
 

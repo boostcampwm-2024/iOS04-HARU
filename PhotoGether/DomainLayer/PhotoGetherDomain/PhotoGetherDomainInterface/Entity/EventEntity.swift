@@ -46,10 +46,12 @@ extension EventEntity {
 public enum EventPayload: Codable {
     case sticker(StickerEntity)
     case frame(FrameEntity)
+    case stickerList([StickerEntity]) // 새로운 case 추가
 
     private enum EntityTypeKey: String, Codable {
         case sticker
         case frame
+        case stickerList // 새로운 키 추가
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -66,6 +68,8 @@ public enum EventPayload: Codable {
             self = .sticker(try container.decode(StickerEntity.self, forKey: .data))
         case .frame:
             self = .frame(try container.decode(FrameEntity.self, forKey: .data))
+        case .stickerList: // stickerList 추가
+            self = .stickerList(try container.decode([StickerEntity].self, forKey: .data))
         }
     }
 
@@ -79,6 +83,9 @@ public enum EventPayload: Codable {
         case .frame(let frameEntity):
             try container.encode(EntityTypeKey.frame, forKey: .type)
             try container.encode(frameEntity, forKey: .data)
+        case .stickerList(let stickerList): // stickerList 인코딩 추가
+            try container.encode(EntityTypeKey.stickerList, forKey: .type)
+            try container.encode(stickerList, forKey: .data)
         }
     }
 }
