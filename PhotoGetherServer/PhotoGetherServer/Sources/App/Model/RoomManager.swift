@@ -38,6 +38,12 @@ final class RoomManager {
             .failure(RoomError.joinFailed)
     }
     
+    func cleanRoom() -> Int {
+        let emptyRoomCount = rooms.filter { $0.userList.isEmpty }.count
+        rooms.removeAll { $0.userList.isEmpty }
+        return emptyRoomCount
+    }
+    
     private func randomRoomID() -> String {
         return "room-\(UUID().uuidString)"
     }
