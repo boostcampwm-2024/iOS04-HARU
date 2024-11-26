@@ -14,7 +14,7 @@ public final class EditPhotoRoomHostViewModel {
     enum Output {
         case stickerObjectList([StickerEntity])
         case frameImage(image: UIImage)
-        case stickerBottomSheetPresent
+        case presentStickerBottomSheet
     }
     
     private let frameImageGenerator: FrameImageGenerator
@@ -139,6 +139,6 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     private func presentStickerBottomSheet() {
-        output.send(.stickerBottomSheetPresent)
+        output.send(.presentStickerBottomSheet)
     }
 }
