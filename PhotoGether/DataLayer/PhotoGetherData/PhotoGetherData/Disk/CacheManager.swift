@@ -4,14 +4,15 @@ import OSLog
 import UIKit
 
 final class CacheManager {
-    private let fileManager: FileManager
+private let fileManager: FileManager
     private let cacheDirectory: URL
     
-    init() {
+    init(path: String) {
         self.fileManager = .default
         self.cacheDirectory = fileManager
             .urls(for: .cachesDirectory, in: .userDomainMask)
             .first!
+            .appendingPathComponent(path)
     }
     
     /// 데이터 캐싱
@@ -62,5 +63,5 @@ final class CacheManager {
 }
 
 extension CacheManager {
-    static let emoji = "emoji"
+    static let emojiPath = "emoji"
 }
