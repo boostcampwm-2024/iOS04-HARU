@@ -3,14 +3,25 @@ import PhotoGetherDomainInterface
 
 public struct JoinRoomResponseMessage: Decodable {
     public let userID: String
-    public let clientsID: [String]
+    public let userList: [UserDTO]
     
-    public init(userID: String, clientsID: [String]) {
+    public init(userID: String, userList: [UserDTO]) {
         self.userID = userID
-        self.clientsID = clientsID
+        self.userList = userList
     }
     
     public func toEntity() -> JoinRoomEntity {
-        JoinRoomEntity(userID: self.userID, clientsID: self.clientsID)
+        let userList = self.userList.map { $0.toEntity() }
+        return JoinRoomEntity(userID: self.userID, userList: userList)
+    }
+}
+
+public struct UserDTO: Decodable {
+    public let userID: String
+    public let nickname: String
+    public let initialPosition: Int
+    
+    public func toEntity() -> UserEntity {
+        UserEntity(userID: self.userID, nickname: self.nickname, initialPosition: self.initialPosition)
     }
 }

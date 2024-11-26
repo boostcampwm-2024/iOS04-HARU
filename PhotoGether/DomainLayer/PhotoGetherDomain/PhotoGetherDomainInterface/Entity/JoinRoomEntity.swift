@@ -2,10 +2,10 @@ import Foundation
 
 public struct JoinRoomEntity {
     public let userID: String
-    public let clientsID: [String]
+    public let userList: [UserEntity]
     
-    public init(userID: String, clientsID: [String]) {
+    public init(userID: String, userList: [UserEntity]) {
         self.userID = userID
-        self.clientsID = clientsID
+        self.userList = userList
     }
 }
