@@ -76,11 +76,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sendStickerToRepositoryGuestUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
+
+        let sendFrameToRepositoryGuestUseCase = SendFrameToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        let sendFrameToRepositoryHostUseCase = SendFrameToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
+        
+        let receiveFrameHostUseCase = ReceiveFrameUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
+        let receiveFrameGuestUseCase = ReceiveFrameUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
         
         let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
             frameImageGenerator: frameImageGenerator,
             receiveStickerListUseCase: receiveStickerListHostUseCase,
-            sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase
+            receiveFrameUseCase: receiveFrameHostUseCase,
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase,
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase
         )
         
         let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
@@ -99,7 +115,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
             frameImageGenerator: frameImageGenerator,
             receiveStickerListUseCase: receiveStickerListGuestUseCase,
-            sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase
+            receiveFrameUseCase: receiveFrameGuestUseCase,
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase,
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase
         )
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(

@@ -19,11 +19,14 @@ public final class EditPhotoRoomHostViewModel {
     
     private let frameImageGenerator: FrameImageGenerator
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
+    private let receiveFrameUseCase: ReceiveFrameUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
+    private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
     private let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
     private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
+    private let frameImageSubject = PassthroughSubject<FrameType, Never>()
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -31,12 +34,15 @@ public final class EditPhotoRoomHostViewModel {
     public init(
         frameImageGenerator: FrameImageGenerator,
         receiveStickerListUseCase: ReceiveStickerListUseCase,
-        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
+        receiveFrameUseCase: ReceiveFrameUseCase,
+        sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
+        sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     ) {
         self.frameImageGenerator = frameImageGenerator
         self.receiveStickerListUseCase = receiveStickerListUseCase
+        self.receiveFrameUseCase = receiveFrameUseCase
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
-        
+        self.sendFrameToRepositoryUseCase = sendFrameToRepositoryUseCase
         bind()
     }
     
@@ -47,9 +53,21 @@ public final class EditPhotoRoomHostViewModel {
             }
             .store(in: &cancellables)
         
+        frameImageSubject
+            .sink { [weak self] frameType in
+                
+            }
+            .store(in: &cancellables)
+        
         receiveStickerListUseCase.execute()
             .sink { [weak self] receivedStickerList in
                 self?.stickerObjectListSubject.send(receivedStickerList)
+            }
+            .store(in: &cancellables)
+        
+        receiveFrameUseCase.execute()
+            .sink { [weak self] receivedFrame in
+                
             }
             .store(in: &cancellables)
     }

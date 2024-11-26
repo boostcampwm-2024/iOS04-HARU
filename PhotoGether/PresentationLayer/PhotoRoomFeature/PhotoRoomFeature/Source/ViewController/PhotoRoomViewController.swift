@@ -129,12 +129,12 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                     eventConnectionRepository: eventConnectionRepository
                 )
                 
-                let viewModel = EditPhotoRoomHostViewModel(
-                    frameImageGenerator: frameImageGenerator,
-                    receiveStickerListUseCase: receiveStickerListUseCase,
-                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
-                )
-                
+//                let viewModel = EditPhotoRoomHostViewModel(
+//                    frameImageGenerator: frameImageGenerator,
+//                    fetchEmojiListUseCase: fetchEmojiListUseCase,
+//                    receiveStickerListUseCase: receiveStickerListUseCase,
+//                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
+//                )                
 //                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
                 let viewController = UIViewController()
                 self.navigationController?.pushViewController(viewController, animated: true)
