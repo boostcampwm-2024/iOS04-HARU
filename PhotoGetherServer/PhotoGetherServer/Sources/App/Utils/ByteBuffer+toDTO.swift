@@ -1,6 +1,7 @@
 import Foundation
+import Vapor
 
-public extension Data {
+package extension ByteBuffer {
     func toDTO<T: Decodable>(type: T.Type, decoder: JSONDecoder) -> T? {
         return try? decoder.decode(type, from: self)
     }

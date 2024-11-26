@@ -6,7 +6,7 @@ public final class WaitingRoomViewModel {
     struct Input {
         let viewDidLoad: AnyPublisher<Void, Never>
         let micMuteButtonDidTap: AnyPublisher<Void, Never>
-        let shareButtonDidTap: AnyPublisher<Void, Never>
+        let linkButtonDidTap: AnyPublisher<Void, Never>
         let startButtonDidTap: AnyPublisher<Void, Never>
     }
 
@@ -24,20 +24,23 @@ public final class WaitingRoomViewModel {
     private let sendOfferUseCase: SendOfferUseCase
     private let getLocalVideoUseCase: GetLocalVideoUseCase
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
+    private let createRoomUseCase: CreateRoomUseCase
     
     public init(
         sendOfferUseCase: SendOfferUseCase,
         getLocalVideoUseCase: GetLocalVideoUseCase,
-        getRemoteVideoUseCase: GetRemoteVideoUseCase
+        getRemoteVideoUseCase: GetRemoteVideoUseCase,
+        createRoomUseCase: CreateRoomUseCase
     ) {
         self.sendOfferUseCase = sendOfferUseCase
         self.getLocalVideoUseCase = getLocalVideoUseCase
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
+        self.createRoomUseCase = createRoomUseCase
     }
     
     func transform(input: Input) -> Output {
         let newMicMuteState = mutateMicMuteButtonDidTap(input)
-        let newShouldShowShareSheet = mutateShareButtonDidTap(input)
+        let newShouldShowShareSheet = mutateLinkButtonDidTap(input)
         let newNavigateToPhotoRoom = mutateStartButtonDidTap(input)
         
         let output = Output(
@@ -78,16 +81,32 @@ private extension WaitingRoomViewModel {
         }.eraseToAnyPublisher()
     }
     
-    func mutateShareButtonDidTap(_ input: Input) -> AnyPublisher<String, Never> {
-        input.shareButtonDidTap.map { [weak self] _ -> String in
-            guard let self else { return "레전드 에러 발생" }
-            self.sendOfferUseCase.execute()
-            return "연결을 시도합니다."
-        }
-        .eraseToAnyPublisher()
+    func mutateLinkButtonDidTap(_ input: Input) -> AnyPublisher<String, Never> {
+        input.linkButtonDidTap
+            .flatMap { [weak self] _ -> AnyPublisher<String, Never> in
+                guard let self else { return Just("").eraseToAnyPublisher() }
+                return self.createRoomUseCase.execute()
+                    .catch { error in
+                        debugPrint(error.localizedDescription)
+                        return Just("").eraseToAnyPublisher()
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
     }
     
     func mutateStartButtonDidTap(_ input: Input) -> AnyPublisher<Void, Never> {
         return input.startButtonDidTap.eraseToAnyPublisher()
+    }
+}
+
+public enum WaitingRoomViewModelError: LocalizedError {
+    case selfIsNil
+    
+    public var errorDescription: String? {
+        switch self {
+        case .selfIsNil: "WaitingRoomViewModel is nil"
+        }
     }
 }

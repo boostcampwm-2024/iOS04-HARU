@@ -73,7 +73,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         return WaitingRoomViewModel.Input(
             viewDidLoad: viewDidLoadPublisher,
             micMuteButtonDidTap: waitingRoomView.micButton.tapPublisher,
-            shareButtonDidTap: waitingRoomView.shareButton.tapPublisher,
+            linkButtonDidTap: waitingRoomView.linkButton.tapPublisher,
             startButtonDidTap: startButtonTapPublisher
         )
     }
@@ -129,8 +129,8 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
             self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
         }.store(in: &cancellables)
         
-        output.shouldShowToast.sink { [weak self] message in
-            print(message)
+        output.shouldShowShareSheet.sink { [weak self] message in
+            self?.showShareSheet(message: message)
         }.store(in: &cancellables)
     }
     
@@ -145,5 +145,13 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         snapshot.appendSections([0])
         snapshot.appendItems(placeHolder, toSection: 0)
         participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    private func showShareSheet(message: String) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [message],
+            applicationActivities: nil
+        )
+        present(activityViewController, animated: true)
     }
 }

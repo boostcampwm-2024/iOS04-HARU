@@ -1,8 +1,25 @@
 import Foundation
 import PhotoGetherDomainInterface
+import Combine
 
 public final class WebSocketClientImpl: NSObject, WebSocketClient {
-    public var delegate: WebSocketClientDelegate?
+    @available(*, deprecated, message: "Publisher로 교체될 예정입니다.")
+    public var delegates: [WebSocketClientDelegate] = []
+    
+    private let _webSocketDidConnectPublisher = PassthroughSubject<Void, Never>()
+    private let _webSocketDidDisconnectPublisher = PassthroughSubject<Void, Never>()
+    private let _webSocketdidReceiveDataPublisher = PassthroughSubject<Data, Never>()
+    
+    public var webSocketDidConnectPublisher: AnyPublisher<Void, Never> {
+        _webSocketDidConnectPublisher.eraseToAnyPublisher()
+    }
+    public var webSocketDidDisconnectPublisher: AnyPublisher<Void, Never> {
+        _webSocketDidDisconnectPublisher.eraseToAnyPublisher()
+    }
+    public var webSocketdidReceiveDataPublisher: AnyPublisher<Data, Never> {
+        _webSocketdidReceiveDataPublisher.eraseToAnyPublisher()
+    }
+    
     private let url: URL
     private var socket: URLSessionWebSocketTask?
     
@@ -28,7 +45,10 @@ public final class WebSocketClientImpl: NSObject, WebSocketClient {
             
             switch message {
             case .success(.data(let data)):
-                self.delegate?.webSocket(self, didReceiveData: data)
+                self._webSocketdidReceiveDataPublisher.send(data)
+                self.delegates.forEach{
+                    $0.webSocket(self, didReceiveData: data)
+                }
                 self.readMessage()
                 
             case .success:
@@ -44,7 +64,10 @@ public final class WebSocketClientImpl: NSObject, WebSocketClient {
     private func disconnect() {
         self.socket?.cancel()
         self.socket = nil
-        self.delegate?.webSocketDidDisconnect(self)
+        self._webSocketDidDisconnectPublisher.send(())
+        self.delegates.forEach {
+            $0.webSocketDidDisconnect(self)
+        }
     }
 }
 
@@ -54,7 +77,10 @@ extension WebSocketClientImpl: URLSessionWebSocketDelegate, URLSessionDelegate {
         webSocketTask: URLSessionWebSocketTask,
         didOpenWithProtocol protocol: String?
     ) {
-        self.delegate?.webSocketDidConnect(self)
+        self._webSocketDidConnectPublisher.send(())
+        self.delegates.forEach {
+            $0.webSocketDidConnect(self)
+        }
     }
     
     public func urlSession(

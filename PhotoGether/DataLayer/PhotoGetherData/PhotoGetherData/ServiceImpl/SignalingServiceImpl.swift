@@ -10,7 +10,7 @@ final public class SignalingServiceImpl: SignalingService {
     
     public init(webSocketClient: WebSocketClient) {
         self.webSocketClient = webSocketClient
-        self.webSocketClient.delegate = self
+        self.webSocketClient.delegates.append(self) 
     }
     
     public func connect() {
