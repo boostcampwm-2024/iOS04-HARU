@@ -3,15 +3,28 @@ import Combine
 import PhotoGetherDomainInterface
 
 public final class EventConnectionHostRepositoryImpl: EventConnectionRepository {
-    public var clients: [ConnectionClient]
+    private let clients: [ConnectionClient]
+    
     private let eventHub = EventHub()
+    
+    private let receiveDataFromGuest = PassthroughSubject<Data, Never>()
+    private let sendToViewModel = PassthroughSubject<[StickerEntity], Never>()
+    private let sendToViewModelFrame = PassthroughSubject<FrameEntity, Never>()
+    
+    private let decoder = JSONDecoder()
+    private let encoder = JSONEncoder()
+    
     private var cancellables: Set<AnyCancellable> = []
-    private var receiveDataFromGuest = PassthroughSubject<Data, Never>()
-    private var sendToViewModel = PassthroughSubject<[StickerEntity], Never>()
     
     public init(clients: [ConnectionClient]) {
         self.clients = clients
+        setupCoder()
         bindData()
+    }
+    
+    private func setupCoder() {
+        decoder.dateDecodingStrategy = .iso8601
+        encoder.dateEncodingStrategy = .iso8601
     }
     
     private func bindData() {
@@ -34,12 +47,22 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
             .store(in: &cancellables)
         
         // MARK: EventHub에서 처리된 Event를 (GuestClient + HostView)에게 전파한다.
-        eventHub.resultEventPublisher
+        eventHub.stickerListPublisher
             .sink { [weak self] entityList in
-                guard let encodedData = try? entityList.encode() else { return }
+                let payload = EventPayload.stickerList(entityList)
+                guard let encodedData = try? self?.encoder.encode(payload) else { return }
                 print("DEBUG: EventHub Result Send")
                 self?.clients.forEach { $0.sendData(data: encodedData)}
                 self?.sendToViewModel.send(entityList)
+            }
+            .store(in: &cancellables)
+        
+        eventHub.framePublisher
+            .sink { [weak self] frameEntity in
+                let payload = EventPayload.frame(frameEntity)
+                guard let encodedData = try? self?.encoder.encode(payload) else { return }
+                self?.clients.forEach { $0.sendData(data: encodedData) }
+                self?.sendToViewModelFrame.send(frameEntity)
             }
             .store(in: &cancellables)
     }
@@ -50,7 +73,24 @@ public final class EventConnectionHostRepositoryImpl: EventConnectionRepository 
     }
     
     public func mergeSticker(type: EventType, sticker: StickerEntity) {
-        let sticketEvent = EventEntity(type: type, timeStamp: Date(), entity: sticker)
-        eventHub.push(event: sticketEvent)
+        let stickerEvent = EventEntity(
+            type: type,
+            timeStamp: Date(),
+            payload: EventPayload.sticker(sticker)
+        )
+        eventHub.push(event: stickerEvent)
+    }
+    
+    public func receiveFrameEntity() -> AnyPublisher<FrameEntity, Never> {
+        return sendToViewModelFrame.eraseToAnyPublisher()
+    }
+    
+    public func mergeFrame(type: EventType, frame: FrameEntity) {
+        let frameEvent = EventEntity(
+            type: type,
+            timeStamp: Date(),
+            payload: EventPayload.frame(frame)
+        )
+        eventHub.push(event: frameEvent)
     }
 }
