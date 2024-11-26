@@ -87,7 +87,7 @@ public final class EditPhotoRoomHostViewModel {
                 self?.appendSticker(with: sticker)
                 self?.sendToRepository(type: .create, with: sticker)
             case .frameButtonDidTap:
-                self?.toggleFrameImage()
+                self?.toggleFrameType()
             case .stickerViewDidTap(let stickerID):
                 self?.handleStickerViewDidTap(with: stickerID)
             }
@@ -132,21 +132,6 @@ public final class EditPhotoRoomHostViewModel {
         }
     }
     
-    private func toggleFrameImage() {
-        let currentFrameImageType = frameImageGenerator.frameType
-        var newFrameImageType: FrameType
-        switch currentFrameImageType {
-        case .defaultBlack:
-            newFrameImageType = .defaultWhite
-        case .defaultWhite:
-            newFrameImageType = .defaultBlack
-        }
-        
-        frameImageGenerator.changeFrame(to: newFrameImageType)
-        let newFrameImage = frameImageGenerator.generate()
-        output.send(.frameImage(image: newFrameImage))
-    }
-    
     private func appendSticker(with sticker: StickerEntity) {
         var currentStickerObjectList = stickerObjectListSubject.value
         currentStickerObjectList.append(sticker)
@@ -158,6 +143,15 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     func setupFrame() {
+    private func toggleFrameType() {
+        let oldFrameImageType = frameTypeSubject.value
+        let newFrameImageType = (oldFrameImageType == .defaultBlack)
+        ? FrameType.defaultWhite
+        : FrameType.defaultBlack
+        
+        mutateFrameTypeLocal(with: newFrameImageType)
+        mutateFrameTypeEventHub(with: newFrameImageType)
+    }
         let frameImage = frameImageGenerator.generate()
         output.send(.frameImage(image: frameImage))
     }
