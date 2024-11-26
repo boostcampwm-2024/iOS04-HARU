@@ -143,7 +143,11 @@ public final class EditPhotoRoomGuestViewModel {
         sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
     }
     
-    func setupFrame() {
+    private func presentStickerBottomSheet() {
+        output.send(.stickerBottomSheetPresent)
+    }
+}
+
 extension EditPhotoRoomGuestViewModel {
     private func toggleFrameType() {
         let oldFrameImageType = frameTypeSubject.value
@@ -170,9 +174,8 @@ extension EditPhotoRoomGuestViewModel {
 
         output.send(.frameImage(image: frameImage))
     }
-    
-    private func presentStickerBottomSheet() {
-        output.send(.stickerBottomSheetPresent)
+}
+
 private extension EditPhotoRoomGuestViewModel {
     enum Constants {
         static let defaultFrameType: FrameType = .defaultBlack
