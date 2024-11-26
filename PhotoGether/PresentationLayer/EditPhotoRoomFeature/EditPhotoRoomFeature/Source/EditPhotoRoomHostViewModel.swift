@@ -25,7 +25,7 @@ public final class EditPhotoRoomHostViewModel {
     
     private let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
-    private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
+    private let stickerListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)
     
     private var cancellables = Set<AnyCancellable>()
@@ -53,7 +53,7 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     private func bind() {
-        stickerObjectListSubject
+        stickerListSubject
             .sink { [weak self] list in
                 self?.output.send(.stickerObjectList(list))
             }
@@ -68,7 +68,7 @@ public final class EditPhotoRoomHostViewModel {
         
         receiveStickerListUseCase.execute()
             .sink { [weak self] receivedStickerList in
-                self?.stickerObjectListSubject.send(receivedStickerList)
+                self?.stickerListSubject.send(receivedStickerList)
             }
             .store(in: &cancellables)
         
@@ -114,13 +114,13 @@ extension EditPhotoRoomHostViewModel {
     }
     
     private func canInteractWithSticker(id: UUID) -> Bool {
-        let stickerList = stickerObjectListSubject.value
+        let stickerList = stickerListSubject.value
         
         return stickerList.isOwned(id: id, owner: owner)
     }
     
     private func unlockPreviousSticker() {
-        var stickerList = stickerObjectListSubject.value
+        var stickerList = stickerListSubject.value
         
         if let previousSticker = stickerList.lockedSticker(by: owner) {
             stickerList.unlock(by: owner)
@@ -129,18 +129,18 @@ extension EditPhotoRoomHostViewModel {
     }
     
     private func lockTappedSticker(id: UUID) {
-        var stickerList = stickerObjectListSubject.value
+        var stickerList = stickerListSubject.value
         
         if let tappedSticker = stickerList.lock(by: id, owner: owner) {
-            stickerObjectListSubject.send(stickerList)
+            stickerListSubject.send(stickerList)
             sendToRepository(type: .update, with: tappedSticker)
         }
     }
     
     private func appendSticker(with sticker: StickerEntity) {
-        var currentStickerObjectList = stickerObjectListSubject.value
+        var currentStickerObjectList = stickerListSubject.value
         currentStickerObjectList.append(sticker)
-        stickerObjectListSubject.send(currentStickerObjectList)
+        stickerListSubject.send(currentStickerObjectList)
     }
 
     private func sendToRepository(type: EventType, with sticker: StickerEntity) {
