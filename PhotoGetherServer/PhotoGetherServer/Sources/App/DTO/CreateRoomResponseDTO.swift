@@ -1,5 +1,5 @@
 package struct CreateRoomResponseDTO: Encodable {
     let roomID: String
-    let userID: String
+    let hostID: String
 }
 

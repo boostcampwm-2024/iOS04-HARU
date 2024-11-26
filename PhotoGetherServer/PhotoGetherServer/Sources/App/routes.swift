@@ -54,7 +54,7 @@ func routes(_ app: Application) throws {
                 let ids = roomManager.createRoom(client)
                 let dto = CreateRoomResponseDTO(
                     roomID: ids.roomID,
-                    userID: ids.userID
+                    hostID: ids.userID
                 )
                 
                 guard let message = dto.toData(encoder) else {
