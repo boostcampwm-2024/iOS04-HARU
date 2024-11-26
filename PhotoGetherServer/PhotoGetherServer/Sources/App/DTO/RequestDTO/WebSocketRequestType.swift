@@ -1,5 +1,11 @@
 import Foundation
 
 struct WebSocketRequestType: Decodable {
-    let messageType: String
+    let messageType: MessageType
+}
+
+enum MessageType: String, Decodable {
+    case signaling
+    case createRoom
+    case joinRoom
 }
