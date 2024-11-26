@@ -1,6 +1,10 @@
-import UIKit
 import Combine
+import UIKit
+
 import BaseFeature
+import DesignSystem
+import PhotoGetherData
+import PhotoGetherDomain
 import PhotoGetherDomainInterface
 import SharePhotoFeature
 
@@ -8,6 +12,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoHostBottomView()
+    private let bottomSheetViewController: StickerBottomSheetViewController
     
     private let input = PassthroughSubject<EditPhotoRoomHostViewModel.Input, Never>()
     
@@ -15,10 +20,13 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private var stickerIdDictionary: [UUID: Int] = [:]
     
     public init(
-        viewModel: EditPhotoRoomHostViewModel
+        viewModel: EditPhotoRoomHostViewModel,
+        bottomSheetViewController: StickerBottomSheetViewController
     ) {
         self.viewModel = viewModel
+        self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
+        self.bottomSheetViewController.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -127,12 +135,12 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             .receive(on: RunLoop.main)
             .sink { [weak self] event in
                 switch event {
-                case .emojiEntity(let emojiEntity):
-                    self?.createStickerObject(by: emojiEntity)
                 case .stickerObjectList(let stickerList):
                     self?.updateCanvas(with: stickerList)
                 case .frameImage(let image):
                     self?.updateFrameImage(to: image)
+                case .presentStickerBottomSheet:
+                    self?.presentStickerBottomSheet()
                 }
             }
             .store(in: &cancellables)
@@ -212,6 +220,19 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func registerSticker(for sticker: StickerEntity) {
         let newIndex = canvasScrollView.imageView.subviews.count
         stickerIdDictionary[sticker.id] = newIndex
+    }
+    
+    private func presentStickerBottomSheet() {
+        self.present(bottomSheetViewController, animated: true)
+    }
+}
+
+extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDelegate {
+    func stickerBottomSheetViewController(
+        _ viewController: StickerBottomSheetViewController,
+        didTap emoji: EmojiEntity
+    ) {
+        self.createStickerObject(by: emoji)
     }
 }
 

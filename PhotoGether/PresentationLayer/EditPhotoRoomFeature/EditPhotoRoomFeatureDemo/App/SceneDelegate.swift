@@ -64,6 +64,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let receiveStickerListHostUseCase = ReceiveStickerListUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
+        
         let sendStickerToRepositoryHostUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
@@ -71,37 +72,47 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let receiveStickerListGuestUseCase = ReceiveStickerListUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
+        
         let sendStickerToRepositoryGuestUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
         
-        
         let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
             frameImageGenerator: frameImageGenerator,
-            fetchEmojiListUseCase: fetchEmojiListUseCase,
             receiveStickerListUseCase: receiveStickerListHostUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase
         )
+        
+        let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
+            fetchEmojiListUseCase: fetchEmojiListUseCase
+        )
+        
+        let stickerBottomSheetViewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
+        )
+        
         let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
-            viewModel: editPhotoRoomHostViewModel
+            viewModel: editPhotoRoomHostViewModel,
+            bottomSheetViewController: stickerBottomSheetViewController
         )
         
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
             frameImageGenerator: frameImageGenerator,
-            fetchEmojiListUseCase: fetchEmojiListUseCase,
             receiveStickerListUseCase: receiveStickerListGuestUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase
         )
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
-            viewModel: editPhotoRoomGuestViewModel
+            viewModel: editPhotoRoomGuestViewModel,
+            bottomSheetViewController: stickerBottomSheetViewController
         )
-        
+      
         let offerViewController = OfferTempViewController(
             sendOfferUseCase: offerUseCase,
             hostViewController: editPhotoRoomHostViewController,
             guestViewController: editPhotoRoomGuestViewController
         )
+        
         let navigationController = UINavigationController(rootViewController: offerViewController)
         
         window?.rootViewController = navigationController
