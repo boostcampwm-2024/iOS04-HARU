@@ -5,9 +5,15 @@ import PhotoGetherNetwork
 
 final public class ShapeRepositoryImpl: ShapeRepository {
     public func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never> {
-        return remoteDataSource.fetchEmojiData(EmojiEndPoint())
+        return localDataSource.fetchEmojiData(EmojiEndPoint())
+            .catch { [weak self] _ -> AnyPublisher<[EmojiDTO], Never> in
+                guard let self else { return Just([]).eraseToAnyPublisher() }
+                
+                return remoteDataSource.fetchEmojiData(EmojiEndPoint())
+                    .replaceError(with: [])
+                    .eraseToAnyPublisher()
+            }
             .map { $0.map { $0.toEntity() } }
-            .replaceError(with: [])
             .eraseToAnyPublisher()
     }
     
