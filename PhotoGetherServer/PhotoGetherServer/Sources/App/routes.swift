@@ -51,23 +51,21 @@ func routes(_ app: Application) throws {
                     .forEach { $0.send(data) }
                 
             case "createRoom":
-                guard let request = data.toDTO(
-                    type: RoomRequestDTO.self,
-                    decoder: decoder
-                ) else {
-                    print("Decode Failed to RoomRequestDTO: \(data)")
-                    return
-                }
-                
                 let ids = roomManager.createRoom(client)
-                let dto = CreateRoomResponseDTO(roomID: ids.roomID, userID: ids.userID)
+                let dto = CreateRoomResponseDTO(
+                    roomID: ids.roomID,
+                    userID: ids.userID
+                )
                 
                 guard let message = dto.toData(encoder) else {
                     print("Encode Failed to Data: \(dto)")
                     return
                 }
                 
-                let responseDTO = RoomResponseDTO(messageType: .createRoom, message: message)
+                let responseDTO = RoomResponseDTO(
+                    messageType: .createRoom,
+                    message: message
+                )
                 
                 guard let response = responseDTO.toData(encoder) else {
                     print("Encode Failed to Data: \(responseDTO)")
@@ -77,7 +75,54 @@ func routes(_ app: Application) throws {
                 client.send(response)
                 
             case "joinRoom":
-                print("joinRoom")
+                guard let request = data.toDTO(
+                    type: RoomRequestDTO.self,
+                    decoder: decoder
+                ) else {
+                    print("Decode Failed to RoomRequestDTO: \(data)")
+                    return
+                }
+                
+                guard let message = request.message?.toDTO(
+                    type: JoinRoomRequestMessage.self,
+                    decoder: decoder
+                ) else {
+                    print("Decode Failed to DTO: \(request.message)")
+                    return
+                }
+                
+                let joinResult = roomManager.joinRoom(client: client, to: message.roomID)
+                
+                switch joinResult {
+                case .success(let responseDTO):
+                    guard let message = responseDTO.toData(encoder) else {
+                        print("Encode Failed to Data: \(responseDTO)")
+                        return
+                    }
+                    
+                    let responseDTO = RoomResponseDTO(
+                        messageType: .joinRoom,
+                        message: message
+                    )
+                    
+                    guard let response = responseDTO.toData(encoder) else {
+                        print("Encoder Failed to Data: \(responseDTO)")
+                        return
+                    }
+                
+                    client.send(response)
+                    
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    let failureResponseDTO = RoomResponseDTO(messageType: .joinRoom)
+                    
+                    guard let response = failureResponseDTO.toData(encoder) else {
+                        print("Encoder Failed to Data: \(failureResponseDTO)")
+                        return
+                    }
+                    
+                    client.send(response)
+                }
             default:
                 print("Unknown request message type: \(requestType.messageType)")
             }
