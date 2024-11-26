@@ -10,6 +10,7 @@ public enum PTGImage {
     case filterIcon
     case switchIcon
     case ellipsisIcon
+    case xmarkIcon
     
     public var image: UIImage {
         switch self {
@@ -37,6 +38,8 @@ public enum PTGImage {
             return UIImage(resource: .switchIcon)
         case .ellipsisIcon:
             return UIImage(resource: .ellipsisIcon)
+        case .xmarkIcon:
+            return UIImage(resource: .ptGxmark)
         }
     }
 }
