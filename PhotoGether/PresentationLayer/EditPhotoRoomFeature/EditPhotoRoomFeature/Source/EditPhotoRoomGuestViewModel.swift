@@ -142,6 +142,7 @@ public final class EditPhotoRoomGuestViewModel {
     }
     
     func setupFrame() {
+extension EditPhotoRoomGuestViewModel {
     private func toggleFrameType() {
         let oldFrameImageType = frameTypeSubject.value
         let newFrameImageType = (oldFrameImageType == .defaultBlack)
@@ -150,6 +151,15 @@ public final class EditPhotoRoomGuestViewModel {
 
         mutateFrameTypeLocal(with: newFrameImageType)
         mutateFrameTypeEventHub(with: newFrameImageType)
+    }
+
+    private func mutateFrameTypeLocal(with frameType: FrameType) {
+        frameTypeSubject.send(frameType)
+    }
+
+    private func mutateFrameTypeEventHub(with frameType: FrameType) {
+        let frameEntity = FrameEntity(frameType: frameType, owner: owner, latestUpdated: Date())
+        sendFrameToRepositoryUseCase.execute(type: .update, frame: frameEntity)
     }
         let frameImage = frameImageGenerator.generate()
         output.send(.frameImage(image: frameImage))
