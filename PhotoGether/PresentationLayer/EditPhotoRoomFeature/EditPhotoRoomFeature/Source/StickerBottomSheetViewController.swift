@@ -5,7 +5,7 @@ import BaseFeature
 import DesignSystem
 import PhotoGetherDomainInterface
 
-protocol StickerBottomSheetViewControllerDelegate {
+protocol StickerBottomSheetViewControllerDelegate: AnyObject {
     func stickerBottomSheetViewController(_ viewController: StickerBottomSheetViewController, didTap emoji: EmojiEntity)
 }
 
@@ -13,7 +13,7 @@ public final class StickerBottomSheetViewController: UIViewController, ViewContr
     private let collectionView: StickerCollectionView
     private let viewModel: StickerBottomSheetViewModel
     
-    var delegate: StickerBottomSheetViewControllerDelegate?
+    weak var delegate: StickerBottomSheetViewControllerDelegate?
     
     private let input = PassthroughSubject<StickerBottomSheetViewModel.Input, Never>()
     private var cancellables = Set<AnyCancellable>()
