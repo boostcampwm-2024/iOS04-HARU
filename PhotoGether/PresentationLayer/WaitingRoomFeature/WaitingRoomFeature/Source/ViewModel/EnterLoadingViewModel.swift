@@ -10,16 +10,20 @@ public final class EnterLoadingViewModel {
     }
     
     public enum Output {
-        case navigateToWaitingRoom(isGuest: Bool)
+        case didJoinRoom(isSuccess: Bool)
     }
     
     private let _output = PassthroughSubject<Output, Never>()
     public var output: AnyPublisher<Output, Never> { _output.eraseToAnyPublisher() }
     
     private let joinRoomUseCase: JoinRoomUseCase
+    private let roomID: String
+    private let hostID: String
     
-    public init(joinRoomUseCase: JoinRoomUseCase) {
+    public init(joinRoomUseCase: JoinRoomUseCase, roomID: String, hostID: String) {
         self.joinRoomUseCase = joinRoomUseCase
+        self.roomID = roomID
+        self.hostID = hostID
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -28,17 +32,17 @@ public final class EnterLoadingViewModel {
             
             switch $0 {
             case .viewDidLoad:
-                self.requestJoinRoom()
+                self.requestJoinRoom(roomID: self.roomID, hostID: self.hostID)
             }
         }.store(in: &cancellables)
         
         return output
     }
     
-    private func requestJoinRoom() {
-        joinRoomUseCase.execute()
-            .sink { [weak self] isGuest in
-                self?._output.send(.navigateToWaitingRoom(isGuest: isGuest))
+    private func requestJoinRoom(roomID: String, hostID: String) {
+        joinRoomUseCase.execute(roomID: roomID, hostID: hostID)
+            .sink { [weak self] isSuccess in
+                self?._output.send(.didJoinRoom(isSuccess: isSuccess))
             }
             .store(in: &cancellables)
     }
