@@ -8,6 +8,8 @@ protocol StickerViewActionDelegate: AnyObject {
 
 final class StickerView: UIImageView {
     private let nicknameLabel = UILabel()
+    private let layerView = UIView()
+    private let deleteButton = UIImageView()
 
     private var sticker: StickerEntity
     private let user: String
@@ -33,7 +35,9 @@ final class StickerView: UIImageView {
     }
     
     private func addViews() {
-        addSubview(nicknameLabel)
+        [nicknameLabel, layerView, deleteButton].forEach {
+            addSubview($0)
+        }
     }
     
     private func setupConstraints() {
@@ -41,15 +45,37 @@ final class StickerView: UIImageView {
             $0.top.equalTo(snp.bottom)
             $0.trailing.equalTo(snp.trailing)
         }
+        
+        layerView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        deleteButton.snp.makeConstraints {
+            $0.bottom.equalTo(snp.top).inset(10)
+            $0.trailing.equalTo(snp.trailing).offset(10)
+            $0.width.height.equalTo(20)
+        }
     }
     
     private func configureUI() {
-        layer.borderColor = PTGColor.primaryGreen.color.cgColor
+        let deleteButtonImage = PTGImage.xmarkIcon.image
+        layerView.layer.borderWidth = 1
+        layerView.layer.borderColor = PTGColor.primaryGreen.color.cgColor
+        layerView.isUserInteractionEnabled = false
+        
+        deleteButton.image = deleteButtonImage
+        deleteButton.layer.cornerRadius = 10
+        deleteButton.clipsToBounds = true
+        
         setImage(to: sticker.image)
         
         sticker.owner != nil
-        ? (layer.borderWidth = 1)
-        : (layer.borderWidth = 0)
+        ? (layerView.isHidden = false)
+        : (layerView.isHidden = true)
+        
+        _ = sticker.owner != user
+        ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
+        : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
     }
 
     private func setupTapGesture() {
@@ -72,11 +98,15 @@ final class StickerView: UIImageView {
         sticker.updateOwner(to: owner)
         if let owner = owner {
             nicknameLabel.text = owner
-            layer.borderWidth = 1
+            layerView.isHidden = false
         } else {
             nicknameLabel.text = nil
-            layer.borderWidth = 0
+            layerView.isHidden = true
         }
+        
+        _ = sticker.owner != user
+        ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
+        : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
     }
     
     private func setImage(to urlString: String) {
