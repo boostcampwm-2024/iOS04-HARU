@@ -68,7 +68,7 @@ public final class RoomServiceImpl: RoomService {
                     let roomOwnerEntity = message.toEntity()
                     _createRoomResponsePublisher.send(roomOwnerEntity)
                     
-                    debugPrint("방 생성 성공: \(message.roomID) \n 유저 아이디: \(message.userID)")
+                    debugPrint("방 생성 성공: \(message.roomID) \n 유저 아이디: \(message.hostID)")
                 case .joinRoom:
                     guard let message = decodeMessage(
                         response.message,

@@ -1,8 +1,8 @@
 import Foundation
 import PhotoGetherDomainInterface
 
-public enum URLParser {
-    public static func parsingIDs(from url: URL) -> RoomOwnerEntity? {
+public enum DeepLinkParser {
+    public static func parseRoomInfo(from url: URL) -> RoomOwnerEntity? {
         guard let queryItems = parsingURLQueryItems(url) else { return nil }
         
         guard let roomID = queryItems.first(where: { $0.name == "roomID" })?.value,
@@ -10,7 +10,7 @@ public enum URLParser {
             return nil
         }
         
-        return RoomOwnerEntity(roomID: roomID, userID: hostID)
+        return RoomOwnerEntity(roomID: roomID, hostID: hostID)
     }
     
     private static func parsingURLQueryItems(_ url: URL) -> [URLQueryItem]? {
