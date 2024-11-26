@@ -109,6 +109,10 @@ extension EditPhotoRoomGuestViewModel {
     }
     
     private func handleDeleteSticker(with stickerID: UUID) {
+        let stickerList = stickerListSubject.value
+        guard let sticker = stickerList.find(id: stickerID) else { return }
+        
+        mutateStickerEventHub(type: .delete, with: sticker)
     }
     
     private func mutateStickerLocal(sticker: StickerEntity) {
