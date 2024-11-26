@@ -53,12 +53,15 @@ public final class RoomServiceImpl: RoomService {
             .sink { [weak self] data in
                 guard let self else { return }
                 
-                guard let response = data.toDTO(type: RoomResponseDTO.self) else { return }
+                guard let response = data.toDTO(type: RoomResponseDTO.self, decoder: decoder) else { return }
                 
                 switch response.messageType {
                 case .createRoom:
                     guard let message = response.message else { return }
-                    guard let message = message.toDTO(type: CreateRoomResponseMessage.self) else {
+                    guard let message = message.toDTO(
+                        type: CreateRoomResponseMessage.self,
+                        decoder: decoder
+                    ) else {
                         debugPrint("Decode Failed to CreateRoomMessage: \(message)")
                         return
                     }
@@ -84,7 +87,7 @@ public final class RoomServiceImpl: RoomService {
     
     private func decodeMessage<T: Decodable>(_ message: Data?, type: T.Type) -> T? {
         guard let message = message else { return nil }
-        guard let dto = message.toDTO(type: type) else {
+        guard let dto = message.toDTO(type: type, decoder: decoder) else {
             debugPrint("Decode Failed to: \(message)")
             return nil
         }
