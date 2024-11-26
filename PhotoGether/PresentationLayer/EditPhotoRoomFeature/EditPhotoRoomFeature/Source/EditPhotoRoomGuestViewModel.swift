@@ -59,8 +59,9 @@ public final class EditPhotoRoomGuestViewModel {
             .store(in: &cancellables)
         
         frameTypeSubject
+            .receive(on: RunLoop.main)
             .sink { [weak self] frameType in
-                
+                self?.applyFrameImage(with: frameType)
             }
             .store(in: &cancellables)
         
@@ -72,7 +73,8 @@ public final class EditPhotoRoomGuestViewModel {
 
         receiveFrameUseCase.execute()
             .sink { [weak self] receivedFrame in
-                
+                let receivedFrameType = receivedFrame.frameType
+                self?.frameTypeSubject.send(receivedFrameType)
             }
             .store(in: &cancellables)
     }
