@@ -85,8 +85,7 @@ public final class EditPhotoRoomGuestViewModel {
             case .stickerButtonDidTap:
                 self?.presentStickerBottomSheet()
             case .createSticker(let sticker):
-                self?.appendSticker(with: sticker)
-                self?.sendToRepository(type: .create, with: sticker)
+                self?.handleCreateSticker(sticker: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameType()
             case .stickerViewDidTap(let stickerID):
@@ -101,6 +100,25 @@ public final class EditPhotoRoomGuestViewModel {
 
 // MARK: Sticker 관련
 extension EditPhotoRoomGuestViewModel {
+    private func handleCreateSticker(sticker: StickerEntity) {
+        mutateStickerLocal(sticker: sticker)
+        mutateStickerEventHub(type: .create, with: sticker)
+    }
+    
+    private func mutateStickerLocal(sticker: StickerEntity) {
+        var stickerList = stickerListSubject.value
+        stickerList.append(sticker)
+        stickerListSubject.send(stickerList)
+    }
+    
+    private func mutateStickerListLocal(stickerList: [StickerEntity]) {
+        stickerListSubject.send(stickerList)
+    }
+    
+    private func mutateStickerEventHub(type: EventType, with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
+    }
+    
     private func handleStickerViewDidTap(with stickerID: UUID) {
         // MARK: 선택할 수 있는 객체인지 확인함
         guard canInteractWithSticker(id: stickerID) else { return }
@@ -123,7 +141,7 @@ extension EditPhotoRoomGuestViewModel {
         
         if let previousSticker = stickerList.lockedSticker(by: owner) {
             stickerList.unlock(by: owner)
-            sendToRepository(type: .unlock, with: previousSticker)
+            mutateStickerEventHub(type: .unlock, with: previousSticker)
         }
     }
     
@@ -131,21 +149,11 @@ extension EditPhotoRoomGuestViewModel {
         var stickerList = stickerListSubject.value
         
         if let tappedSticker = stickerList.lock(by: id, owner: owner) {
-            stickerListSubject.send(stickerList)
-            sendToRepository(type: .update, with: tappedSticker)
+            mutateStickerListLocal(stickerList: stickerList)
+            mutateStickerEventHub(type: .update, with: tappedSticker)
         }
     }
-    
-    private func appendSticker(with sticker: StickerEntity) {
-        var currentStickerObjectList = stickerListSubject.value
-        currentStickerObjectList.append(sticker)
-        stickerListSubject.send(currentStickerObjectList)
-    }
-    
-    private func sendToRepository(type: EventType, with sticker: StickerEntity) {
-        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
-    }
-    
+
     private func presentStickerBottomSheet() {
         output.send(.stickerBottomSheetPresent)
     }
