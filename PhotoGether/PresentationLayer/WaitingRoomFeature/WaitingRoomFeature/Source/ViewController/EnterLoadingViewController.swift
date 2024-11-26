@@ -68,9 +68,17 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
             .sink { [weak self] in
             guard let self else { return }
             switch $0 {
-            case .navigateToWaitingRoom(let isGuest):
-                self.modalPresentationStyle = .fullScreen
-                self.present(waitingRoomViewController, animated: false)
+            case .didJoinRoom(let isSuccess):
+                if isSuccess {
+                    self.modalPresentationStyle = .fullScreen
+                    self.present(waitingRoomViewController, animated: false)
+                } else {
+                    print("방 참여에 실패했습니다 흑흑") // TODO: 토스트 메시지로 변경 예정
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        self.modalPresentationStyle = .fullScreen
+                        self.present(self.waitingRoomViewController, animated: false)
+                    }
+                }
             }
         }
         .store(in: &cancellables)
