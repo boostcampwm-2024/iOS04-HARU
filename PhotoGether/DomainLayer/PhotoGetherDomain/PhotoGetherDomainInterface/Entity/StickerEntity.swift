@@ -87,6 +87,13 @@ extension Array where Element == StickerEntity {
         encoder.dateEncodingStrategy = .iso8601
         return try encoder.encode(self)
     }
+    
+    public func find(id: UUID) -> StickerEntity? {
+        if let index = firstIndex(where: { $0.id == id }) {
+            return self[safe: index]
+        }
+        return nil
+    }
 
     public func isOwned(id: UUID, owner: String) -> Bool {
         guard let target = first(where: { $0.id == id }) else { return false }
