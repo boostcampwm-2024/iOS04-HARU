@@ -3,6 +3,8 @@ import Combine
 import PhotoGetherDomainInterface
 
 public final class ConnectionRepositoryImpl: ConnectionRepository {
+    private var cancellables: Set<AnyCancellable> = []
+    
     public var clients: [ConnectionClient]
     
     private let _localVideoView = CapturableVideoView()
@@ -17,12 +19,46 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         self.clients = clients
         self.roomService = roomService
         bindLocalVideo()
+        bindNotifyNewUserPublihser()
     }
-    
+}
+
+extension ConnectionRepositoryImpl {
     private func bindLocalVideo() {
         self.clients.forEach { $0.bindLocalVideo(_localVideoView) }
     }
     
+    private func bindNotifyNewUserPublihser() {
+        roomService.notifyRoomResponsePublisher
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    return
+                case .failure(let error):
+                    debugPrint(error.localizedDescription)
+                }
+            }, receiveValue: {  [weak self] entity in
+                guard let self else { return }
+                let newUser = entity.newUser
+                let emptyClient = clients.first(where: { $0.remoteUserInfo == nil })
+                
+                guard let viewPosition = UserInfoEntity.ViewPosition(rawValue: newUser.initialPosition) else {
+                    return
+                }
+                
+                let newUserInfoEntity = UserInfoEntity(
+                    id: newUser.userID,
+                    nickname: newUser.nickname,
+                    isHost: false,
+                    viewPosition: viewPosition
+                )
+                
+                emptyClient?.setRemoteUserInfo(newUserInfoEntity)
+                clients.forEach { print("client:", $0.remoteUserInfo?.nickname) }
+            })
+            .store(in: &cancellables)
+    }
+
     public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
         return roomService.createRoom()
     }

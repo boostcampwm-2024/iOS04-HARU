@@ -10,8 +10,12 @@ public final class RoomServiceImpl: RoomService {
     public var joinRoomResponsePublisher: AnyPublisher<JoinRoomEntity, Error> {
         _joinRoomResponsePublisher.eraseToAnyPublisher()
     }
+    public var notifyRoomResponsePublisher: AnyPublisher<NotifyNewUserEntity, Error> {
+        _notifyRoomReponsePublisher.eraseToAnyPublisher()
+    }
     private let _createRoomResponsePublisher = PassthroughSubject<RoomOwnerEntity, Error>()
     private let _joinRoomResponsePublisher = PassthroughSubject<JoinRoomEntity, Error>()
+    private let _notifyRoomReponsePublisher = PassthroughSubject<NotifyNewUserEntity, Error>()
     private var cancellables: Set<AnyCancellable> = []
     
     private let decoder = JSONDecoder()
@@ -81,6 +85,16 @@ public final class RoomServiceImpl: RoomService {
                     _joinRoomResponsePublisher.send(joinRoomEntity)
                     
                     debugPrint("방 참가 성공\n 유저 아이디: \(message.userID) \n 방 유저목록: \(message.userList)")
+                case .notifyNewUser:
+                    guard let message = decodeMessage(
+                        response.message,
+                        type: NotifyNewUserMessage.self
+                    ) else {
+                        debugPrint("Decode Failed to JoinRoomEntity: \(String(describing: response.message))")
+                        return
+                    }
+                    let notifyNewUserEntity = message.toEntity()
+                    _notifyRoomReponsePublisher.send(notifyNewUserEntity)
                 }
             }.store(in: &cancellables)
     }
