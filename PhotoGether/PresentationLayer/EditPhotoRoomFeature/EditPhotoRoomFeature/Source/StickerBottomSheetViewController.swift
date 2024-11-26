@@ -80,6 +80,8 @@ public final class StickerBottomSheetViewController: UIViewController, ViewContr
             .store(in: &cancellables)
         
         self.viewModel.emojiList
+            .dropFirst()
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.collectionView.reloadData()
             }
