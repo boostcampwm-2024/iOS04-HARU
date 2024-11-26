@@ -3,15 +3,18 @@ import Combine
 import PhotoGetherDomainInterface
 
 public final class EventConnectionHostRepositoryImpl: EventConnectionRepository {
-    public var clients: [ConnectionClient]
+    private let clients: [ConnectionClient]
+    
     private let eventHub = EventHub()
-    private var cancellables: Set<AnyCancellable> = []
-    private var receiveDataFromGuest = PassthroughSubject<Data, Never>()
+    
+    private let receiveDataFromGuest = PassthroughSubject<Data, Never>()
     private let sendToViewModel = PassthroughSubject<[StickerEntity], Never>()
     private let sendToViewModelFrame = PassthroughSubject<FrameEntity, Never>()
     
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
+    
+    private var cancellables: Set<AnyCancellable> = []
     
     public init(clients: [ConnectionClient]) {
         self.clients = clients
