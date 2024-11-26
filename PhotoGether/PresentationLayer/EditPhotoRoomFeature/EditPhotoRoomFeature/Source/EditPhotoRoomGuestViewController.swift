@@ -1,30 +1,31 @@
-import UIKit
-import PhotoGetherDomainInterface
 import Combine
+import UIKit
+
 import BaseFeature
 import DesignSystem
+import PhotoGetherData
+import PhotoGetherDomain
+import PhotoGetherDomainInterface
 
 public class EditPhotoRoomGuestViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoGuestBottomView()
+    private let bottomSheetViewController: StickerBottomSheetViewController
     
     private let input = PassthroughSubject<EditPhotoRoomGuestViewModel.Input, Never>()
     
     private let viewModel: EditPhotoRoomGuestViewModel
     private var stickerIdDictionary: [UUID: Int] = [:]
     
-    // MARK: 개발 끝나면 지워야됨
-    private let offerUseCase: SendOfferUseCase
-    private var isConnected = false
-    
     public init(
         viewModel: EditPhotoRoomGuestViewModel,
-        offerUseCase: SendOfferUseCase
+        bottomSheetViewController: StickerBottomSheetViewController
     ) {
         self.viewModel = viewModel
-        self.offerUseCase = offerUseCase
+        self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
+        self.bottomSheetViewController.delegate = self
     }
     
     @available(*, unavailable)
@@ -40,13 +41,6 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         configureUI()
         bindInput()
         bindOutput()
-    }
-    
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        canvasScrollView.setupZoomScale()
-        canvasScrollView.contentCentering()
     }
     
     public func addViews() {
@@ -106,12 +100,12 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             .receive(on: RunLoop.main)
             .sink { [weak self] event in
             switch event {
-            case .emojiEntity(let emojiEntity):
-                self?.createStickerObject(by: emojiEntity)
             case .stickerObjectList(let stickerList):
                 self?.updateCanvas(with: stickerList)
             case .frameImage(let image):
                 self?.updateFrameImage(to: image)
+            case .stickerBottomSheetPresent:
+                self?.presentStickerBottomSheet()
             }
         }
         .store(in: &cancellables)
@@ -119,15 +113,8 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         viewModel.setupFrame()
     }
     
-    private func tempOffer() {
-        offerUseCase.execute()
-    }
-    
     private func updateFrameImage(to image: UIImage) {
-        // MARK: 임시 클라연결
-        if isConnected { tempOffer() }
-        else { canvasScrollView.updateFrameImage(to: image) }
-        isConnected = true
+        canvasScrollView.updateFrameImage(to: image)
     }
     
     /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
@@ -198,6 +185,19 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     private func registerSticker(for sticker: StickerEntity) {
         let newIndex = canvasScrollView.imageView.subviews.count
         stickerIdDictionary[sticker.id] = newIndex
+    }
+    
+    private func presentStickerBottomSheet() {
+        self.present(bottomSheetViewController, animated: true)
+    }
+}
+
+extension EditPhotoRoomGuestViewController: StickerBottomSheetViewControllerDelegate {
+    func stickerBottomSheetViewController(
+        _ viewController: StickerBottomSheetViewController,
+        didTap emoji: EmojiEntity
+    ) {
+        self.createStickerObject(by: emoji)
     }
 }
 

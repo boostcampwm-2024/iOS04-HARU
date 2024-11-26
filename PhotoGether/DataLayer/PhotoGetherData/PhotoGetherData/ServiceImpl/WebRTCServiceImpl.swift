@@ -134,12 +134,22 @@ public extension WebRTCServiceImpl {
             fps: Int(fps.maxFrameRate)
         )
         
+        flipVideoRenderer(renderer)
+        
         self.localVideoTrack?.add(renderer)
     }
     
     /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
+        flipVideoRenderer(renderer)
+        
         self.remoteVideoTrack?.add(renderer)
+    }
+    
+    /// 들어오는 화면에 좌우 반전을 적용합니다
+    private func flipVideoRenderer(_ renderer: RTCVideoRenderer) {
+        guard let renderedView = renderer as? UIView else { return }
+        renderedView.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
     }
     
     private func configureAudioSession() {

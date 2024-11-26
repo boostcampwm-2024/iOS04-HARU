@@ -10,16 +10,18 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
     public var remoteVideoView: UIView = CapturableVideoView()
+    public var remoteUserInfo: UserInfoEntity?
     
-    public var peerID: String = ""
     public var roomID: String = ""
     
     public init(
         signalingService: SignalingService,
-        webRTCService: WebRTCService
+        webRTCService: WebRTCService,
+        remoteUserInfo: UserInfoEntity? = nil
     ) {
         self.signalingService = signalingService
         self.webRTCService = webRTCService
+        self.remoteUserInfo = remoteUserInfo
         
         self.signalingService.delegate = self
         self.webRTCService.delegate = self
@@ -31,9 +33,19 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.bindRemoteVideo()
     }
     
+    public func setRemoteUserInfo(_ remoteUserInfo: UserInfoEntity) {
+        self.remoteUserInfo = remoteUserInfo
+    }
+    
     public func sendOffer() {
+        guard let remoteUserInfo else { return }
+        
         self.webRTCService.offer { sdp in
-            self.signalingService.send(sdp: sdp, peerID: self.peerID, roomID: self.roomID)
+            self.signalingService.send(
+                sdp: sdp,
+                peerID: remoteUserInfo.id,
+                roomID: remoteUserInfo.roomID ?? ""
+            )
         }
     }
     
@@ -96,7 +108,13 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
             guard self.webRTCService.peerConnection.localDescription == nil else { return }
             
             self.webRTCService.answer { sdp in
-                self.signalingService.send(sdp: sdp, peerID: self.peerID, roomID: self.roomID)
+                guard let userInfo = self.remoteUserInfo else { return }
+                
+                self.signalingService.send(
+                    sdp: sdp,
+                    peerID: userInfo.id,
+                    roomID: userInfo.roomID ?? ""
+                )
             }
         }
     }
@@ -116,7 +134,13 @@ extension ConnectionClientImpl: WebRTCServiceDelegate {
         _ service: WebRTCService,
         didGenerateLocalCandidate candidate: RTCIceCandidate
     ) {
-        self.signalingService.send(candidate: candidate, peerID: self.peerID, roomID: self.roomID)
+        guard let remoteUserInfo else { return }
+        
+        self.signalingService.send(
+            candidate: candidate,
+            peerID: remoteUserInfo.id,
+            roomID: remoteUserInfo.roomID ?? ""
+        )
     }
     
     public func webRTCService(

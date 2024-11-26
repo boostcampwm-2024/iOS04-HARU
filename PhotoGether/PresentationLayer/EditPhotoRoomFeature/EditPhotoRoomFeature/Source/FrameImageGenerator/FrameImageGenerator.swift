@@ -1,3 +1,4 @@
+import PhotoGetherDomainInterface
 import UIKit
 
 public protocol FrameImageGenerator {
@@ -39,9 +40,4 @@ public final class FrameImageGeneratorImpl: FrameImageGenerator {
     public func generate() -> UIImage {
         return frameView.render()
     }
-}
-
-public enum FrameType {
-    case defaultBlack
-    case defaultWhite
 }
