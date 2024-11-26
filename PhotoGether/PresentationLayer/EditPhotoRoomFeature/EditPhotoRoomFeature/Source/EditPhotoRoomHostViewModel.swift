@@ -8,6 +8,7 @@ public final class EditPhotoRoomHostViewModel {
         case stickerButtonDidTap
         case frameButtonDidTap
         case createSticker(StickerEntity)
+        case deleteSticker(UUID)
         case stickerViewDidTap(UUID)
     }
     
@@ -89,6 +90,8 @@ public final class EditPhotoRoomHostViewModel {
                 self?.handleCreateSticker(sticker: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameType()
+            case .deleteSticker(let stickerID):
+                self?.handleDeleteSticker(with: stickerID)
             case .stickerViewDidTap(let stickerID):
                 self?.handleStickerViewDidTap(with: stickerID)
             }

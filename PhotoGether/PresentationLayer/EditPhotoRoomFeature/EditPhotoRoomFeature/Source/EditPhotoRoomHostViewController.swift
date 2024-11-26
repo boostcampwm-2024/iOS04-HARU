@@ -235,6 +235,6 @@ extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
     }
     
     func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
-        
+        input.send(.deleteSticker(id))
     }
 }

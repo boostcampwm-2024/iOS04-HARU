@@ -8,6 +8,7 @@ public final class EditPhotoRoomGuestViewModel {
         case stickerButtonDidTap
         case frameButtonDidTap
         case createSticker(StickerEntity)
+        case deleteSticker(UUID)
         case stickerViewDidTap(UUID)
     }
     
@@ -86,6 +87,8 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.presentStickerBottomSheet()
             case .createSticker(let sticker):
                 self?.handleCreateSticker(sticker: sticker)
+            case .deleteSticker(let stickerID):
+                self?.handleDeleteSticker(with: stickerID)
             case .frameButtonDidTap:
                 self?.toggleFrameType()
             case .stickerViewDidTap(let stickerID):
@@ -103,6 +106,9 @@ extension EditPhotoRoomGuestViewModel {
     private func handleCreateSticker(sticker: StickerEntity) {
         mutateStickerLocal(sticker: sticker)
         mutateStickerEventHub(type: .create, with: sticker)
+    }
+    
+    private func handleDeleteSticker(with stickerID: UUID) {
     }
     
     private func mutateStickerLocal(sticker: StickerEntity) {
