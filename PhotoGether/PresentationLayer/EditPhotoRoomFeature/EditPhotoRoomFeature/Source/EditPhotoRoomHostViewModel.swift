@@ -98,7 +98,10 @@ public final class EditPhotoRoomHostViewModel {
         
         return output.eraseToAnyPublisher()
     }
-    
+}
+
+// MARK: Sticker 관련
+extension EditPhotoRoomHostViewModel {
     private func handleStickerViewDidTap(with stickerID: UUID) {
         // MARK: 선택할 수 있는 객체인지 확인함
         guard canInteractWithSticker(id: stickerID) else { return }
@@ -149,6 +152,7 @@ public final class EditPhotoRoomHostViewModel {
     }
 }
 
+// MARK: Frame 관련
 extension EditPhotoRoomHostViewModel {
     private func toggleFrameType() {
         let oldFrameImageType = frameTypeSubject.value
