@@ -41,6 +41,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         configureUI()
         bindInput()
         bindOutput()
+        viewModel.configureDefaultState()
     }
     
     public func addViews() {
@@ -109,8 +110,6 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             }
         }
         .store(in: &cancellables)
-        
-        viewModel.setupFrame()
     }
     
     private func updateFrameImage(to image: UIImage) {

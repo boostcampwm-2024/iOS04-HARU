@@ -46,6 +46,11 @@ public final class EditPhotoRoomGuestViewModel {
         bind()
     }
     
+    func configureDefaultState() {
+        let defaultFrameType = Constants.defaultFrameType
+        mutateFrameTypeLocal(with: defaultFrameType)
+    }
+    
     private func bind() {
         stickerObjectListSubject
             .sink { [weak self] list in
