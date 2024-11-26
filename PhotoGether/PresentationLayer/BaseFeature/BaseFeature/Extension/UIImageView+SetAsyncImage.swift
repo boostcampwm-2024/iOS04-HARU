@@ -14,6 +14,10 @@ public extension UIImageView {
                     debugPrint("이미지 다운로드 실패: \(url)")
                     return
                 }
+                
+                let cachingImage = CacheableImage(imageData: data)
+                ImageCache.updateCache(with: url, image: cachingImage)
+                
                 self.image = image
                 
             } catch {
