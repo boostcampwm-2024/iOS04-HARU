@@ -134,8 +134,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
 //                    fetchEmojiListUseCase: fetchEmojiListUseCase,
 //                    receiveStickerListUseCase: receiveStickerListUseCase,
 //                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
-//                )
-                
+//                )                
 //                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
                 let viewController = UIViewController()
                 self.navigationController?.pushViewController(viewController, animated: true)

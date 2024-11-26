@@ -12,19 +12,17 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     enum Output {
-        case emojiEntity(entity: EmojiEntity)
         case stickerObjectList([StickerEntity])
         case frameImage(image: UIImage)
+        case presentStickerBottomSheet
     }
     
     private let frameImageGenerator: FrameImageGenerator
-    private let fetchEmojiListUseCase: FetchEmojiListUseCase
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let receiveFrameUseCase: ReceiveFrameUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
-    private var emojiList: [EmojiEntity] = [] // MARK: 추후 삭제 예정
     private let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
     private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
@@ -35,14 +33,12 @@ public final class EditPhotoRoomHostViewModel {
     
     public init(
         frameImageGenerator: FrameImageGenerator,
-        fetchEmojiListUseCase: FetchEmojiListUseCase,
         receiveStickerListUseCase: ReceiveStickerListUseCase,
         receiveFrameUseCase: ReceiveFrameUseCase,
         sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
         sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     ) {
         self.frameImageGenerator = frameImageGenerator
-        self.fetchEmojiListUseCase = fetchEmojiListUseCase
         self.receiveStickerListUseCase = receiveStickerListUseCase
         self.receiveFrameUseCase = receiveFrameUseCase
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
@@ -51,8 +47,6 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     private func bind() {
-        fetchEmojiList()
-        
         stickerObjectListSubject
             .sink { [weak self] list in
                 self?.output.send(.stickerObjectList(list))
@@ -82,7 +76,7 @@ public final class EditPhotoRoomHostViewModel {
         input.sink { [weak self] event in
             switch event {
             case .stickerButtonDidTap:
-                self?.sendEmoji()
+                self?.presentStickerBottomSheet()
             case .createSticker(let sticker):
                 self?.appendSticker(with: sticker)
                 self?.sendToRepository(type: .create, with: sticker)
@@ -152,19 +146,7 @@ public final class EditPhotoRoomHostViewModel {
         currentStickerObjectList.append(sticker)
         stickerObjectListSubject.send(currentStickerObjectList)
     }
-    
-    private func fetchEmojiList() {
-        fetchEmojiListUseCase.execute()
-            .sink { [weak self] emojiEntities in
-                self?.emojiList = emojiEntities
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func sendEmoji() {
-        output.send(.emojiEntity(entity: emojiList.randomElement()!))
-    }
-    
+
     private func sendToRepository(type: EventType, with sticker: StickerEntity) {
         sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
     }
@@ -172,5 +154,9 @@ public final class EditPhotoRoomHostViewModel {
     func setupFrame() {
         let frameImage = frameImageGenerator.generate()
         output.send(.frameImage(image: frameImage))
+    }
+    
+    private func presentStickerBottomSheet() {
+        output.send(.presentStickerBottomSheet)
     }
 }

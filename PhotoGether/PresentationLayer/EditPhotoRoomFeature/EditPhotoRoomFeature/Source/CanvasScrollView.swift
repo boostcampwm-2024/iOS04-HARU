@@ -34,7 +34,10 @@ final class CanvasScrollView: UIScrollView {
     
     func updateFrameImage(to image: UIImage) {
         imageView.image = image
-        imageView.sizeToFit()
+        
+        self.imageView.sizeToFit()
+        self.setupZoomScale()
+        self.contentCentering()
     }
     
     func contentCentering() {
@@ -62,14 +65,14 @@ final class CanvasScrollView: UIScrollView {
         let heightBaseScale = frame.height / image.size.height
         let calculatedZoomScale = min(widthBaseScale, heightBaseScale)
         
-        zoomScale = calculatedZoomScale
+        // 호출 순서 바꾸면 안됨
         minimumZoomScale = calculatedZoomScale
+        zoomScale = calculatedZoomScale
     }
 }
 
 extension CanvasScrollView: UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        contentCentering()
         return imageView
     }
 }
