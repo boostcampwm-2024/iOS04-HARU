@@ -84,9 +84,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             eventConnectionRepository: eventConnectionHostRepository
         )
         
+        let receiveFrameHostUseCase = ReceiveFrameUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
+        let receiveFrameGuestUseCase = ReceiveFrameUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        
         let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
             frameImageGenerator: frameImageGenerator,
             receiveStickerListUseCase: receiveStickerListHostUseCase,
+            receiveFrameUseCase: receiveFrameHostUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase,
             sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase
         )
@@ -107,6 +115,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
             frameImageGenerator: frameImageGenerator,
             receiveStickerListUseCase: receiveStickerListGuestUseCase,
+            receiveFrameUseCase: receiveFrameGuestUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase,
             sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase
         )
