@@ -23,11 +23,10 @@ public final class EditPhotoRoomGuestViewModel {
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
-
     private let owner = "GUEST" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
     private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
-    private let frameImageSubject = PassthroughSubject<FrameType, Never>()
+    private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -47,6 +46,11 @@ public final class EditPhotoRoomGuestViewModel {
         bind()
     }
     
+    func configureDefaultState() {
+        let defaultFrameType = Constants.defaultFrameType
+        mutateFrameTypeLocal(with: defaultFrameType)
+    }
+    
     private func bind() {
         stickerObjectListSubject
             .sink { [weak self] list in
@@ -54,9 +58,10 @@ public final class EditPhotoRoomGuestViewModel {
             }
             .store(in: &cancellables)
         
-        frameImageSubject
+        frameTypeSubject
+            .receive(on: RunLoop.main)
             .sink { [weak self] frameType in
-                
+                self?.applyFrameImage(with: frameType)
             }
             .store(in: &cancellables)
         
@@ -68,7 +73,8 @@ public final class EditPhotoRoomGuestViewModel {
 
         receiveFrameUseCase.execute()
             .sink { [weak self] receivedFrame in
-                
+                let receivedFrameType = receivedFrame.frameType
+                self?.frameTypeSubject.send(receivedFrameType)
             }
             .store(in: &cancellables)
     }
@@ -82,7 +88,7 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.appendSticker(with: sticker)
                 self?.sendToRepository(type: .create, with: sticker)
             case .frameButtonDidTap:
-                self?.toggleFrameImage()
+                self?.toggleFrameType()
             case .stickerViewDidTap(let stickerID):
                 self?.handleStickerViewDidTap(with: stickerID)
             }
@@ -127,21 +133,6 @@ public final class EditPhotoRoomGuestViewModel {
         }
     }
     
-    private func toggleFrameImage() {
-        let currentFrameImageType = frameImageGenerator.frameType
-        var newFrameImageType: FrameType
-        switch currentFrameImageType {
-        case .defaultBlack:
-            newFrameImageType = .defaultWhite
-        case .defaultWhite:
-            newFrameImageType = .defaultBlack
-        }
-        
-        frameImageGenerator.changeFrame(to: newFrameImageType)
-        let newFrameImage = frameImageGenerator.generate()
-        output.send(.frameImage(image: newFrameImage))
-    }
-    
     private func appendSticker(with sticker: StickerEntity) {
         var currentStickerObjectList = stickerObjectListSubject.value
         currentStickerObjectList.append(sticker)
@@ -152,12 +143,41 @@ public final class EditPhotoRoomGuestViewModel {
         sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
     }
     
-    func setupFrame() {
-        let frameImage = frameImageGenerator.generate()
-        output.send(.frameImage(image: frameImage))
-    }
-    
     private func presentStickerBottomSheet() {
         output.send(.stickerBottomSheetPresent)
+    }
+}
+
+extension EditPhotoRoomGuestViewModel {
+    private func toggleFrameType() {
+        let oldFrameImageType = frameTypeSubject.value
+        let newFrameImageType = (oldFrameImageType == .defaultBlack)
+        ? FrameType.defaultWhite
+        : FrameType.defaultBlack
+
+        mutateFrameTypeLocal(with: newFrameImageType)
+        mutateFrameTypeEventHub(with: newFrameImageType)
+    }
+
+    private func mutateFrameTypeLocal(with frameType: FrameType) {
+        frameTypeSubject.send(frameType)
+    }
+
+    private func mutateFrameTypeEventHub(with frameType: FrameType) {
+        let frameEntity = FrameEntity(frameType: frameType, owner: owner, latestUpdated: Date())
+        sendFrameToRepositoryUseCase.execute(type: .update, frame: frameEntity)
+    }
+
+    private func applyFrameImage(with frameType: FrameType) {
+        frameImageGenerator.changeFrame(to: frameType)
+        let frameImage = frameImageGenerator.generate()
+
+        output.send(.frameImage(image: frameImage))
+    }
+}
+
+private extension EditPhotoRoomGuestViewModel {
+    enum Constants {
+        static let defaultFrameType: FrameType = .defaultBlack
     }
 }

@@ -103,13 +103,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             fetchEmojiListUseCase: fetchEmojiListUseCase
         )
         
-        let stickerBottomSheetViewController = StickerBottomSheetViewController(
+        let stickerBottomSheetGuestViewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
+        )
+        
+        let stickerBottomSheetHostViewController = StickerBottomSheetViewController(
             viewModel: stickerBottomSheetViewModel
         )
         
         let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
             viewModel: editPhotoRoomHostViewModel,
-            bottomSheetViewController: stickerBottomSheetViewController
+            bottomSheetViewController: stickerBottomSheetHostViewController
         )
         
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
@@ -122,7 +126,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
             viewModel: editPhotoRoomGuestViewModel,
-            bottomSheetViewController: stickerBottomSheetViewController
+            bottomSheetViewController: stickerBottomSheetGuestViewController
         )
       
         let offerViewController = OfferTempViewController(
