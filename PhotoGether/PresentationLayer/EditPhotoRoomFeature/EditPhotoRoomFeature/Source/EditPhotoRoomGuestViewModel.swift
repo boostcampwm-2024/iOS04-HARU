@@ -23,11 +23,10 @@ public final class EditPhotoRoomGuestViewModel {
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
-
     private let owner = "GUEST" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
     private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
-    private let frameImageSubject = PassthroughSubject<FrameType, Never>()
+    private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -54,7 +53,7 @@ public final class EditPhotoRoomGuestViewModel {
             }
             .store(in: &cancellables)
         
-        frameImageSubject
+        frameTypeSubject
             .sink { [weak self] frameType in
                 
             }
