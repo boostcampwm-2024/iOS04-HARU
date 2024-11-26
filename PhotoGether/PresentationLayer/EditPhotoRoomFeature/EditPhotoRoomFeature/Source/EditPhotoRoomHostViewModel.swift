@@ -105,20 +105,28 @@ public final class EditPhotoRoomHostViewModel {
 // MARK: Sticker 관련
 extension EditPhotoRoomHostViewModel {
     private func handleCreateSticker(sticker: StickerEntity) {
-        mutateStickerLocal(sticker: sticker)
+        mutateStickerLocal(type: .create, sticker: sticker)
         mutateStickerEventHub(type: .create, with: sticker)
     }
     
-    private func mutateStickerLocal(sticker: StickerEntity) {
-        var stickerList = stickerListSubject.value
-        stickerList.append(sticker)
-        stickerListSubject.send(stickerList)
     private func handleDeleteSticker(with stickerID: UUID) {
         let stickerList = stickerListSubject.value
         guard let sticker = stickerList.find(id: stickerID) else { return }
         
         mutateStickerEventHub(type: .delete, with: sticker)
     }
+    
+    private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
+        switch type {
+        case .create:
+            var stickerList = stickerListSubject.value
+            stickerList.append(sticker)
+            stickerListSubject.send(stickerList)
+        case .delete: break
+        case .update: break
+        case .unlock: break
+        }
+
     }
     
     private func mutateStickerListLocal(stickerList: [StickerEntity]) {
