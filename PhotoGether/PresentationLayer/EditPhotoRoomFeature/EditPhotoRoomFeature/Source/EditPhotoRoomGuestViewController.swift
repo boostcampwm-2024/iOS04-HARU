@@ -204,4 +204,7 @@ extension EditPhotoRoomGuestViewController: StickerViewActionDelegate {
     func stickerView(_ stickerView: StickerView, didTap id: UUID) {
         input.send(.stickerViewDidTap(id))
     }
+    
+    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
+    }
 }

@@ -4,12 +4,13 @@ import UIKit
 
 protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, didTap id: UUID)
+    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID)
 }
 
 final class StickerView: UIImageView {
     private let nicknameLabel = UILabel()
     private let layerView = UIView()
-    private let deleteButton = UIImageView()
+    private let deleteButton = UIButton()
 
     private var sticker: StickerEntity
     private let user: String
@@ -24,6 +25,7 @@ final class StickerView: UIImageView {
         self.user = user
         super.init(frame: sticker.frame)
         setupTapGesture()
+        setupTarget()
         addViews()
         setupConstraints()
         configureUI()
@@ -63,7 +65,7 @@ final class StickerView: UIImageView {
         layerView.layer.borderColor = PTGColor.primaryGreen.color.cgColor
         layerView.isUserInteractionEnabled = false
         
-        deleteButton.image = deleteButtonImage
+        deleteButton.setImage(deleteButtonImage, for: .normal)
         deleteButton.layer.cornerRadius = 10
         deleteButton.clipsToBounds = true
         
@@ -77,12 +79,20 @@ final class StickerView: UIImageView {
         ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
         : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
     }
-
+    
     private func setupTapGesture() {
         isUserInteractionEnabled = true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
+    }
+    
+    private func setupTarget() {
+        deleteButton.addTarget(
+            self,
+            action: #selector(deleteButtonTapped),
+            for: .touchUpInside
+        )
     }
     
     private func updateFrame(to frame: CGRect) {
@@ -122,6 +132,10 @@ final class StickerView: UIImageView {
     
     @objc private func handleTap() {
         delegate?.stickerView(self, didTap: sticker.id)
+    }
+    
+    @objc private func deleteButtonTapped() {
+        delegate?.stickerView(self, didTapDelete: sticker.id)
     }
     
     func update(with sticker: StickerEntity) {
