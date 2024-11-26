@@ -9,7 +9,7 @@ protocol StickerBottomSheetViewControllerDelegate {
     func stickerBottomSheetViewController(_ viewController: StickerBottomSheetViewController, didTap emoji: EmojiEntity)
 }
 
-final class StickerBottomSheetViewController: UIViewController, ViewControllerConfigure {
+public final class StickerBottomSheetViewController: UIViewController, ViewControllerConfigure {
     private let collectionView: StickerCollectionView
     private let viewModel: StickerBottomSheetViewModel
     
@@ -18,7 +18,7 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     private let input = PassthroughSubject<StickerBottomSheetViewModel.Input, Never>()
     private var cancellables = Set<AnyCancellable>()
     
-    init(viewModel: StickerBottomSheetViewModel) {
+    public init(viewModel: StickerBottomSheetViewModel) {
         let layout = UICollectionViewFlowLayout()
         self.collectionView = StickerCollectionView(collectionViewLayout: layout)
         self.viewModel = viewModel
@@ -29,7 +29,7 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupCollectionView()
@@ -49,22 +49,22 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
         )
     }
     
-    func addViews() {
+    public func addViews() {
         [self.collectionView].forEach { self.view.addSubview($0) }
     }
     
-    func setupConstraints() {
+    public func setupConstraints() {
         self.collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(24)
         }
     }
     
-    func configureUI() {
+    public func configureUI() {
         self.sheetPresentationController?.detents = [.medium(), .large()]
         self.view.backgroundColor = PTGColor.gray10.color
     }
     
-    func bindOutput() {
+    public func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
         output
@@ -92,7 +92,7 @@ final class StickerBottomSheetViewController: UIViewController, ViewControllerCo
 
 // MARK: - CollectionViewDelegate
 extension StickerBottomSheetViewController: UICollectionViewDelegate {
-    func collectionView(
+    public func collectionView(
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
@@ -102,14 +102,14 @@ extension StickerBottomSheetViewController: UICollectionViewDelegate {
 
 // MARK: - CollectionViewDataSource
 extension StickerBottomSheetViewController: UICollectionViewDataSource {
-    func collectionView(
+    public func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
         return viewModel.emojiList.value.count
     }
     
-    func collectionView(
+    public func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {

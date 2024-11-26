@@ -3,7 +3,7 @@ import Foundation
 
 import PhotoGetherDomainInterface
 
-final class StickerBottomSheetViewModel {
+public final class StickerBottomSheetViewModel {
     enum Input {
         case emojiTapped(index: IndexPath)
     }
@@ -19,7 +19,7 @@ final class StickerBottomSheetViewModel {
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
     
-    init(
+    public init(
         fetchEmojiListUseCase: FetchEmojiListUseCase
     ) {
         self.fetchEmojiListUseCase = fetchEmojiListUseCase

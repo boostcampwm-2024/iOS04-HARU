@@ -12,6 +12,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoHostBottomView()
+    private let bottomSheetViewController: StickerBottomSheetViewController
     
     private let input = PassthroughSubject<EditPhotoRoomHostViewModel.Input, Never>()
     
@@ -19,10 +20,13 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private var stickerIdDictionary: [UUID: Int] = [:]
     
     public init(
-        viewModel: EditPhotoRoomHostViewModel
+        viewModel: EditPhotoRoomHostViewModel,
+        bottomSheetViewController: StickerBottomSheetViewController
     ) {
         self.viewModel = viewModel
+        self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
+        self.bottomSheetViewController.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -219,27 +223,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func presentStickerBottomSheet() {
-        let localDataSource = LocalShapeDataSourceImpl()
-        let remoteDataSource = RemoteShapeDataSourceImpl()
-        let shapeRepositoryImpl = ShapeRepositoryImpl(
-            localDataSource: localDataSource,
-            remoteDataSource: remoteDataSource
-        )
-        let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
-            shapeRepository: shapeRepositoryImpl
-        )
-        
-        let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
-            fetchEmojiListUseCase: fetchEmojiListUseCase
-        )
-        
-        let viewController = StickerBottomSheetViewController(
-            viewModel: stickerBottomSheetViewModel
-        )
-        
-        viewController.delegate = self
-        
-        self.present(viewController, animated: true)
+        self.present(bottomSheetViewController, animated: true)
     }
 }
 

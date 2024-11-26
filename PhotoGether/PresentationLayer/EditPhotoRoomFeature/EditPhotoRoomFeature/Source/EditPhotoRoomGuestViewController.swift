@@ -11,6 +11,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
     private let bottomView = EditPhotoGuestBottomView()
+    private let bottomSheetViewController: StickerBottomSheetViewController
     
     private let input = PassthroughSubject<EditPhotoRoomGuestViewModel.Input, Never>()
     
@@ -18,10 +19,13 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     private var stickerIdDictionary: [UUID: Int] = [:]
     
     public init(
-        viewModel: EditPhotoRoomGuestViewModel
+        viewModel: EditPhotoRoomGuestViewModel,
+        bottomSheetViewController: StickerBottomSheetViewController
     ) {
         self.viewModel = viewModel
+        self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
+        self.bottomSheetViewController.delegate = self
     }
     
     @available(*, unavailable)
@@ -191,27 +195,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     }
     
     private func presentStickerBottomSheet() {
-        let localDataSource = LocalShapeDataSourceImpl()
-        let remoteDataSource = RemoteShapeDataSourceImpl()
-        let shapeRepositoryImpl = ShapeRepositoryImpl(
-            localDataSource: localDataSource,
-            remoteDataSource: remoteDataSource
-        )
-        let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
-            shapeRepository: shapeRepositoryImpl
-        )
-        
-        let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
-            fetchEmojiListUseCase: fetchEmojiListUseCase
-        )
-        
-        let viewController = StickerBottomSheetViewController(
-            viewModel: stickerBottomSheetViewModel
-        )
-        
-        viewController.delegate = self
-        
-        self.present(viewController, animated: true)
+        self.present(bottomSheetViewController, animated: true)
     }
 }
 

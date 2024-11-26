@@ -64,6 +64,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let receiveStickerListHostUseCase = ReceiveStickerListUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
+        
         let sendStickerToRepositoryHostUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
@@ -71,18 +72,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let receiveStickerListGuestUseCase = ReceiveStickerListUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
+        
         let sendStickerToRepositoryGuestUseCase = SendStickerToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
-        
         
         let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
             frameImageGenerator: frameImageGenerator,
             receiveStickerListUseCase: receiveStickerListHostUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase
         )
+        
+        let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
+            fetchEmojiListUseCase: fetchEmojiListUseCase
+        )
+        
+        let stickerBottomSheetViewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
+        )
+        
         let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
-            viewModel: editPhotoRoomHostViewModel
+            viewModel: editPhotoRoomHostViewModel,
+            bottomSheetViewController: stickerBottomSheetViewController
         )
         
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
@@ -92,7 +103,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
-            viewModel: editPhotoRoomGuestViewModel
+            viewModel: editPhotoRoomGuestViewModel,
+            bottomSheetViewController: stickerBottomSheetViewController
         )
       
         let offerViewController = OfferTempViewController(
@@ -100,6 +112,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             hostViewController: editPhotoRoomHostViewController,
             guestViewController: editPhotoRoomGuestViewController
         )
+        
         let navigationController = UINavigationController(rootViewController: offerViewController)
         
         window?.rootViewController = navigationController
