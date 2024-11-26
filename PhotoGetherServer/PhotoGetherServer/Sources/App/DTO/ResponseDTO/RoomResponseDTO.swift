@@ -7,5 +7,6 @@ struct RoomResponseDTO: Encodable {
     enum RoomMessageType: String, Encodable {
         case createRoom
         case joinRoom
+        case notifyNewUser
     }
 }

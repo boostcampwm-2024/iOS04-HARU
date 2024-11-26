@@ -1,10 +1,10 @@
 package struct JoinRoomResponseDTO: Encodable {
     let userID: String
-    let users: [UserDTO]
+    let userList: [UserDTO]
     
-    package init(userID: String, users: [UserDTO]) {
+    package init(userID: String, userList: [UserDTO]) {
         self.userID = userID
-        self.users = users
+        self.userList = userList
     }
 }
 
