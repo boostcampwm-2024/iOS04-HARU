@@ -89,12 +89,15 @@ func routes(_ app: Application) throws {
                     return
                 }
                 
-                let joinResult = roomManager.joinRoom(client: client, to: message.roomID)
+                let roomID = message.roomID
+                
+                let joinResult = roomManager.joinRoom(client: client, to: roomID)
                 
                 switch joinResult {
-                case .success(let responseDTO):
-                    guard let message = responseDTO.toData(encoder) else {
-                        print("[DEBUG] :: Encode Failed to Data: \(responseDTO)")
+                case .success(let joinRoomResponseDTO):
+                    guard let message = joinRoomResponseDTO.toData(encoder) else {
+                        print("[DEBUG] :: Encode Failed to Data: \(joinRoomResponseDTO)")
+
                         return
                     }
                     
@@ -109,6 +112,36 @@ func routes(_ app: Application) throws {
                     }
                 
                     client.send(response)
+                    
+                    let newUserID = joinRoomResponseDTO.userID
+                    guard let newUser = joinRoomResponseDTO.userList.first(where: { $0.userID == newUserID })
+                    else {
+                        print("[DEBUG] :: Failed to Find New User")
+                        return
+                    }
+                    
+                    let dto = NotifyNewUserResponseDTO(newUser: newUser)
+                    
+                    guard let message = dto.toData(encoder) else {
+                        print("[DEBUG] :: Encoder Failed to Data: \(dto)")
+                        return
+                    }
+                    
+                    let notifyResponseDTO = RoomResponseDTO(
+                        messageType: .notifyNewUser,
+                        message: message
+                    )
+                    
+                    guard let notifyResponse = notifyResponseDTO.toData(encoder) else {
+                        print("Encoder Failed to Data: \(notifyResponseDTO)")
+                        return
+                    }
+                    
+                    roomManager.notifyToUsers(
+                        data: notifyResponse,
+                        roomID: roomID,
+                        except: joinRoomResponseDTO.userID
+                    )
                     
                 case .failure(let error):
                     print(error.localizedDescription)
