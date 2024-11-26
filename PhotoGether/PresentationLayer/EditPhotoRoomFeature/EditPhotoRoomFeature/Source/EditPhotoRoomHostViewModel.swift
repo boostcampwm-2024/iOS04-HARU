@@ -86,10 +86,10 @@ public final class EditPhotoRoomHostViewModel {
             switch event {
             case .stickerButtonDidTap:
                 self?.presentStickerBottomSheet()
-            case .createSticker(let sticker):
-                self?.handleCreateSticker(sticker: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameType()
+            case .createSticker(let sticker):
+                self?.handleCreateSticker(sticker: sticker)
             case .deleteSticker(let stickerID):
                 self?.handleDeleteSticker(with: stickerID)
             case .stickerViewDidTap(let stickerID):
