@@ -7,7 +7,11 @@ public final class CreateRoomUseCaseImpl: CreateRoomUseCase {
     
     public func execute() -> AnyPublisher<String, any Error> {
         connectionRepository.roomService.createRoom()
-            .map { self.inviteMessage + "photoGether://createRoom?roomID=\($0.roomID)&hostID=\($0.userID)" }
+            .map { [weak self] in
+                let message = self?.inviteMessage ?? ""
+                let scheme = "photoGether://createRoom?roomID=\($0.roomID)&hostID=\($0.hostID)"
+                return message + scheme
+            }
             .eraseToAnyPublisher()
     }
     

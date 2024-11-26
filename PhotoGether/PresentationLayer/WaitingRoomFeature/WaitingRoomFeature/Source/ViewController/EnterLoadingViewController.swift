@@ -63,7 +63,9 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
     
     public func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
-        output.sink { [weak self] in
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
             guard let self else { return }
             switch $0 {
             case .navigateToWaitingRoom(let isGuest):
