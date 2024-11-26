@@ -5,21 +5,21 @@ import PhotoGetherDomainInterface
 final class EventQueue {
     private var queue = [EventEntity]()
     
-    private let isEmptySubject = PassthroughSubject<Bool, Never>()
+    private let isExistSubject = PassthroughSubject<Bool, Never>()
     
-    var isEmptyPublisher: AnyPublisher<Bool, Never> {
-        return isEmptySubject.eraseToAnyPublisher()
+    var isExist: AnyPublisher<Bool, Never> {
+        return isExistSubject.eraseToAnyPublisher()
     }
     
     func push(event: EventEntity) {
         queue.append(event)
         queue.sort { $0.timeStamp > $1.timeStamp }
-        isEmptySubject.send(true)
+        isExistSubject.send(true)
     }
     
     func popLast() -> EventEntity? {
         let popLast = queue.popLast()
-        if queue.isEmpty { isEmptySubject.send(false) }
+        if queue.isEmpty { isExistSubject.send(false) }
         
         return popLast
     }
@@ -49,7 +49,7 @@ final class EventHub {
     }
     
     private func bind() {
-        eventQueue.isEmptyPublisher
+        eventQueue.isExist
             .combineLatest(stickerEventManager.isReady, frameEventManager.isReady)
             .filter { $0 && ($1 || $2) } // MARK: (큐에 내보낼 이벤트가 있음) && (스티커 매니저가 준비됨 || 프레임 매니저가 준비됨) -> 보낸다
             .map { ($1, $2) }
