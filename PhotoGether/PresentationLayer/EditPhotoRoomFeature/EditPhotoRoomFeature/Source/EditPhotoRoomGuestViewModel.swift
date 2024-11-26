@@ -173,5 +173,8 @@ extension EditPhotoRoomGuestViewModel {
     
     private func presentStickerBottomSheet() {
         output.send(.stickerBottomSheetPresent)
+private extension EditPhotoRoomGuestViewModel {
+    enum Constants {
+        static let defaultFrameType: FrameType = .defaultBlack
     }
 }
