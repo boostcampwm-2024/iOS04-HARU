@@ -24,22 +24,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
         let signalingService: SignalingService = SignalingServiceImpl(webSocketClient: webScoketClient)
-        
         let webRTCService: WebRTCService = WebRTCServiceImpl(iceServers: [
-            "stun:stun.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-            "stun:stun2.l.google.com:19302",
-            "stun:stun3.l.google.com:19302",
+            "stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302",
+            "stun:stun2.l.google.com:19302", "stun:stun3.l.google.com:19302",
             "stun:stun4.l.google.com:19302"
         ])
         let connectionClient: ConnectionClient = ConnectionClientImpl(
             signalingService: signalingService,
             webRTCService: webRTCService
         )
-        
+
         let repository = ConnectionRepositoryImpl(clients: [connectionClient])
         let offerUseCase = SendOfferUseCaseImpl(repository: repository)
-        
         let localDataSource = LocalShapeDataSourceImpl()
         let remoteDataSource = RemoteShapeDataSourceImpl()
         let shapeRepositoryImpl = ShapeRepositoryImpl(
