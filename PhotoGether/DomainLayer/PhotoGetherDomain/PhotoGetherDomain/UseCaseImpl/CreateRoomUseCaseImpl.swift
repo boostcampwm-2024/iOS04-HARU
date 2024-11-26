@@ -6,7 +6,7 @@ public final class CreateRoomUseCaseImpl: CreateRoomUseCase {
     private let inviteMessage = "PhotoGether 앱에서 초대를 보냈습니다.\n같이 사진 찍어요! 📷\n"
     
     public func execute() -> AnyPublisher<String, any Error> {
-        connectionRepository.roomService.createRoom()
+        connectionRepository.createRoom()
             .map { [weak self] in
                 let message = self?.inviteMessage ?? ""
                 let scheme = "photoGether://createRoom?roomID=\($0.roomID)&hostID=\($0.hostID)"
