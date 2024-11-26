@@ -80,7 +80,7 @@ public final class RoomServiceImpl: RoomService {
                     let joinRoomEntity = message.toEntity()
                     _joinRoomResponsePublisher.send(joinRoomEntity)
                     
-                    debugPrint("방 참가 성공\n 유저 아이디: \(message.userID) \n 방 유저들 아이디: \(message.clientsID)")
+                    debugPrint("방 참가 성공\n 유저 아이디: \(message.userID) \n 방 유저목록: \(message.userList)")
                 }
             }.store(in: &cancellables)
     }
