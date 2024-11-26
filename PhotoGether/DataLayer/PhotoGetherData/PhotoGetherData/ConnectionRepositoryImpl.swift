@@ -54,7 +54,6 @@ extension ConnectionRepositoryImpl {
                 )
                 
                 emptyClient?.setRemoteUserInfo(newUserInfoEntity)
-                clients.forEach { print("client:", $0.remoteUserInfo?.nickname) }
             })
             .store(in: &cancellables)
     }
