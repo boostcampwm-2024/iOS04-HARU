@@ -68,14 +68,14 @@ public final class EditPhotoRoomHostViewModel {
         
         receiveStickerListUseCase.execute()
             .sink { [weak self] receivedStickerList in
-                self?.stickerListSubject.send(receivedStickerList)
+                self?.mutateStickerListLocal(stickerList: receivedStickerList)
             }
             .store(in: &cancellables)
         
         receiveFrameUseCase.execute()
             .sink { [weak self] receivedFrame in
                 let receivedFrameType = receivedFrame.frameType
-                self?.frameTypeSubject.send(receivedFrameType)
+                self?.mutateFrameTypeLocal(with: receivedFrameType)
             }
             .store(in: &cancellables)
     }
