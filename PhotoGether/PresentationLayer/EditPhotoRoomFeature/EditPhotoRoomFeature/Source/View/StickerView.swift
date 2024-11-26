@@ -10,11 +10,16 @@ final class StickerView: UIImageView {
     private let nicknameLabel = UILabel()
 
     private var sticker: StickerEntity
+    private let user: String
 
     weak var delegate: StickerViewActionDelegate?
     
-    init(sticker: StickerEntity) {
+    init(
+        sticker: StickerEntity,
+        user: String
+    ) {
         self.sticker = sticker
+        self.user = user
         super.init(frame: sticker.frame)
         setupTapGesture()
         addViews()

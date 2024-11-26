@@ -23,7 +23,7 @@ public final class EditPhotoRoomHostViewModel {
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
-    private let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
+    let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
     private let stickerListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)

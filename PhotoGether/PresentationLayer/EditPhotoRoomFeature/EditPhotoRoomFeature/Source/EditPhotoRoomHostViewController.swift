@@ -168,7 +168,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func addNewSticker(to sticker: StickerEntity, isLocal: Bool) {
         registerSticker(for: sticker)
         
-        let stickerView = StickerView(sticker: sticker)
+        let stickerView = StickerView(
+            sticker: sticker,
+            user: viewModel.owner
+        )
         stickerView.delegate = self
         
         canvasScrollView.imageView.addSubview(stickerView)
