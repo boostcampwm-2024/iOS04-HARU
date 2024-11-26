@@ -163,7 +163,11 @@ extension EditPhotoRoomGuestViewModel {
         let frameEntity = FrameEntity(frameType: frameType, owner: owner, latestUpdated: Date())
         sendFrameToRepositoryUseCase.execute(type: .update, frame: frameEntity)
     }
+
+    private func applyFrameImage(with frameType: FrameType) {
+        frameImageGenerator.changeFrame(to: frameType)
         let frameImage = frameImageGenerator.generate()
+
         output.send(.frameImage(image: frameImage))
     }
     
