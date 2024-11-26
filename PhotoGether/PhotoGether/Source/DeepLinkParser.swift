@@ -6,7 +6,7 @@ public enum DeepLinkParser {
         guard let queryItems = parsingURLQueryItems(url) else { return nil }
         
         guard let roomID = queryItems.first(where: { $0.name == "roomID" })?.value,
-              let hostID = queryItems.first(where: { $0.name == "userID" })?.value else {
+              let hostID = queryItems.first(where: { $0.name == "hostID" })?.value else {
             return nil
         }
         
