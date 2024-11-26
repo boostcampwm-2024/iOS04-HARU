@@ -109,8 +109,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 connectionRepository: connectionRepository
             )
             
+            guard let roomOwnerEntity else { return }
+            
             let enterLoadingViewModel = EnterLoadingViewModel(
-                joinRoomUseCase: joinRoomUseCase
+                joinRoomUseCase: joinRoomUseCase,
+                roomID: roomOwnerEntity.roomID,
+                hostID: roomOwnerEntity.hostID
             )
             let enterLoadingViewController = EnterLoadingViewController(
                 viewModel: enterLoadingViewModel,
