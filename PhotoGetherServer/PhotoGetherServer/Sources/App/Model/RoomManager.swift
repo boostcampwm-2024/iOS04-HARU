@@ -34,7 +34,7 @@ final class RoomManager {
         }
         
         return isSuccessInvite ?
-            .success(JoinRoomResponseDTO(userID: userID, users: userDTOList)) :
+            .success(JoinRoomResponseDTO(userID: userID, userList: userDTOList)) :
             .failure(RoomError.joinFailed)
     }
     
@@ -42,6 +42,19 @@ final class RoomManager {
         let emptyRoomCount = rooms.filter { $0.userList.isEmpty }.count
         rooms.removeAll { $0.userList.isEmpty }
         return emptyRoomCount
+    }
+
+    func notifyToUsers(data: Data, roomID: String, except userID: String) {
+        guard let room = rooms.first(where: { $0.roomID == roomID }) else {
+            print("Failed To Find Room")
+            return
+        }
+        
+        let targetList = room.userList.filter { $0.id != userID }
+        
+        targetList.forEach {
+            $0.client.send(data)
+        }
     }
     
     private func randomRoomID() -> String {
