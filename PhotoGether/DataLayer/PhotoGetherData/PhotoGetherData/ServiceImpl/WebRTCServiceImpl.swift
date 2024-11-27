@@ -129,13 +129,13 @@ public extension WebRTCServiceImpl {
             $0.position == .front
         }) else { return }
               
-        // 가장 높은 해상도 선택
+        // 가장 낮은 해상도 선택
         guard let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera)
             .sorted { frame1, frame2 -> Bool in
                 let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
                 let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
                 return width1 < width2
-            }).last else { return }
+            }).first else { return }
               
         // 가장 높은 fps 선택
         guard let fps = (format.videoSupportedFrameRateRanges
