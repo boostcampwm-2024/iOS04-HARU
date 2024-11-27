@@ -76,6 +76,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sendFrameToRepositoryGuestUseCase = SendFrameToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
+        
         let sendFrameToRepositoryHostUseCase = SendFrameToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
@@ -83,6 +84,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let receiveFrameHostUseCase = ReceiveFrameUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
+        
         let receiveFrameGuestUseCase = ReceiveFrameUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
