@@ -43,8 +43,8 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.webRTCService.offer { sdp in
             self.signalingService.send(
                 sdp: sdp,
-                peerID: remoteUserInfo.id,
-                roomID: remoteUserInfo.roomID ?? ""
+                userID: remoteUserInfo.id,
+                roomID: remoteUserInfo.roomID
             )
         }
     }
@@ -112,8 +112,8 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
                 
                 self.signalingService.send(
                     sdp: sdp,
-                    peerID: userInfo.id,
-                    roomID: userInfo.roomID ?? ""
+                    userID: userInfo.id,
+                    roomID: userInfo.roomID
                 )
             }
         }
@@ -138,7 +138,7 @@ extension ConnectionClientImpl: WebRTCServiceDelegate {
         
         self.signalingService.send(
             candidate: candidate,
-            peerID: remoteUserInfo.id,
+            userID: remoteUserInfo.id,
             roomID: remoteUserInfo.roomID ?? ""
         )
     }

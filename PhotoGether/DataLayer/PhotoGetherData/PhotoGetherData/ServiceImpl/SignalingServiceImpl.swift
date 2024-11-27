@@ -17,8 +17,8 @@ final public class SignalingServiceImpl: SignalingService {
         self.webSocketClient.connect()
     }
     
-    public func send(sdp rtcSdp: RTCSessionDescription, peerID: String, roomID: String) {
-        let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp, peerID: peerID, roomID: roomID))
+    public func send(sdp rtcSdp: RTCSessionDescription, userID: String, roomID: String) {
+        let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp, userID: userID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
@@ -30,8 +30,8 @@ final public class SignalingServiceImpl: SignalingService {
         }
     }
     
-    public func send(candidate rtcIceCandidate: RTCIceCandidate, peerID: String, roomID: String) {
-        let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate, peerID: peerID, roomID: roomID))
+    public func send(candidate rtcIceCandidate: RTCIceCandidate, userID: String, roomID: String) {
+        let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate, userID: userID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
