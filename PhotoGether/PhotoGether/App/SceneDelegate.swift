@@ -50,32 +50,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             ]
         )
         
-        let connectionClient1: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
-        let connectionClient2: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
-        let connectionClient3: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
-        let connectionClient4: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
             clients: [
-                connectionClient1,
-                connectionClient2,
-                connectionClient3,
-                connectionClient4
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                )
             ],
             roomService: roomService
         )
@@ -149,5 +141,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         window?.makeKeyAndVisible()
+    }
+    
+    private func makeConnectionClient(
+        signalingService: SignalingService,
+        webRTCService: WebRTCService
+    ) -> ConnectionClient {
+        return ConnectionClientImpl(
+            signalingService: signalingService,
+            webRTCService: webRTCService
+        )
     }
 }
