@@ -102,9 +102,8 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
     ) {
         guard self.webRTCService.peerConnection.remoteDescription == nil else { return }
         
-        // TODO: 컴플리션 핸들러 -> async로 리팩토링
         self.webRTCService.set(remoteSdp: sdp) { error in
-            if let error { debugPrint(error) }
+            if let error { PTGDataLogger.log(error.localizedDescription) }
             
             guard self.webRTCService.peerConnection.localDescription == nil else { return }
             
