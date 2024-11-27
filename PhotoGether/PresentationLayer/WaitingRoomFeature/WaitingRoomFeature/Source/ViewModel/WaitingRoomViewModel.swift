@@ -43,9 +43,6 @@ public final class WaitingRoomViewModel {
         let newMicMuteState = mutateMicMuteButtonDidTap(input)
         let newShouldShowShareSheet = mutateLinkButtonDidTap(input)
         let newNavigateToPhotoRoom = mutateStartButtonDidTap(input)
-        let sendOfferOnGuestTestPublisher = Publishers.MergeMany([
-            newShouldShowShareSheet, sendOfferOnGuestTest(input)
-        ]).eraseToAnyPublisher()
         
         let output = Output(
             localVideo: bindLocalVideo(input),
@@ -53,12 +50,11 @@ public final class WaitingRoomViewModel {
             micMuteState: newMicMuteState,
             shouldShowShareSheet: newShouldShowShareSheet,
             navigateToPhotoRoom: newNavigateToPhotoRoom,
-            shouldShowToast: sendOfferOnGuestTestPublisher
+            shouldShowToast: sendOfferOnGuestTest(input)
         )
         return output
     }
 
-    
     public func setGuestMode(_ isGuest: Bool) {
         self.isGuest = isGuest
     }
