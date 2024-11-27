@@ -5,7 +5,7 @@ public struct IceCandidateMessage: Codable {
     public let sdp: String
     public let sdpMLineIndex: Int32
     public let sdpMid: String?
-    public let userID: String // MARK: Offer를 보내는 사람의 ID
+    public let userID: String // MARK: 받는 사람의 ID
     public let roomID: String // MARK: 참가하려는 방의 ID
     
     public init(from iceCandidate: RTCIceCandidate, userID: String, roomID: String) {
