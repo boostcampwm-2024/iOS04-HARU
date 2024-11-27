@@ -11,6 +11,9 @@ public enum PTGDataLogger {
         line: Int = #line
     ) {
         let fileName = (file as NSString).lastPathComponent
-        logger.log(level: level, "[ 🚀 DATA ] \(fileName):\(line) | \(function) | \(message, privacy: .public)")
+        logger.log(
+            level: level,
+            "[ 🚀 DATA ] \(fileName, privacy: .public):\(line) | \(function) | \(message, privacy: .public)"
+        )
     }
 }
