@@ -10,6 +10,7 @@ public final class SharePhotoViewModel {
     
     enum Output {
         case showShareSheet
+        case showAuthorizationAlert
     }
     
     public private(set) var photoData: Data
@@ -26,11 +27,19 @@ public final class SharePhotoViewModel {
         input.sink { [weak self] event in
             switch event {
             case .shareButtonDidTap:
+                self?.output.send(.showShareSheet)
             case .saveButtonDidTap:
+                Task { await self?.handleSaveButtonDidTap() }
             }
         }
         .store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
+    }
+    private func handleSaveButtonDidTap() async {
+        guard await isAuthorized() else {
+            output.send(.showAuthorizationAlert)
+            return
+        }
     }
 }

@@ -118,5 +118,6 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
         }
     }
     
+        present(alert, animated: true)
     }
 }
