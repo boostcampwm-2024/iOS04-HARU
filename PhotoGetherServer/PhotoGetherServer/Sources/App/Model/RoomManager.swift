@@ -45,7 +45,7 @@ actor RoomManager {
         return emptyRoomCount
     }
 
-    func notifyToUsers(data: Data, roomID: String, except userID: String) async {
+    func notifyNewUserEntered(dto: RoomResponseDTO, roomID: String, except userID: String) async {
         guard let targetRoom = rooms.first(where: { $0.roomID == roomID }) else {
             print("[DEBUG] :: Failed To Find Room\(roomID)")
             return
@@ -54,11 +54,11 @@ actor RoomManager {
         let targetList = targetRoom.userList.filter { $0.id != userID }
         
         targetList.forEach {
-            $0.client.send(data)
+            $0.client.sendDTO(dto, encoder: encoder)
         }
     }
     
-    func sendSDPToRoom(dto: SessionDescriptionMessage) async {
+    func sendOfferSDP(dto: SessionDescriptionMessage) async {
         guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
             print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
             return
@@ -66,7 +66,7 @@ actor RoomManager {
         
         let targetList = targetRoom.userList.filter { $0.id != dto.userID }
         let response = SignalingResponseDTO(
-            messageType: .sdp,
+            messageType: .offerSDP,
             message: dto.toData(encoder)
         )
         
@@ -75,24 +75,7 @@ actor RoomManager {
         }
     }
     
-    func sendIceCandidateToRoom(dto: IceCandidateMessage) async {
-        guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
-            print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
-            return
-        }
-        
-        let targetList = targetRoom.userList.filter { $0.id != dto.userID }
-        let response = SignalingResponseDTO(
-            messageType: .iceCandidate,
-            message: dto.toData(encoder)
-        )
-        
-        targetRoom.userList.forEach {
-            $0.client.sendDTO(response, encoder: encoder)
-        }
-    }
-    
-    func sendSDPToUser(dto: SessionDescriptionMessage) async {
+    func sendAnswerSDP(dto: SessionDescriptionMessage) async {
         guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
             print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
             return
@@ -103,14 +86,14 @@ actor RoomManager {
             return
         }
         let response = SignalingResponseDTO(
-            messageType: .sdp,
+            messageType: .answerSDP,
             message: dto.toData(encoder)
         )
         
         targetUser.client.sendDTO(response, encoder: encoder)
     }
     
-    func sendIceCandidateToUser(dto: IceCandidateMessage) async {
+    func sendIceCandidate(dto: IceCandidateMessage) async {
         guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
             print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
             return
