@@ -4,7 +4,7 @@ import OSLog
 import UIKit
 
 final class CacheManager {
-private let fileManager: FileManager
+    private let fileManager: FileManager
     private let cacheDirectory: URL
     
     init(path: String) {
