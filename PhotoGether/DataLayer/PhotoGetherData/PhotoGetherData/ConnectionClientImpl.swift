@@ -42,6 +42,7 @@ public final class ConnectionClientImpl: ConnectionClient {
         
         self.webRTCService.offer { sdp in
             self.signalingService.send(
+                type: .offerSDP,
                 sdp: sdp,
                 userID: remoteUserInfo.id,
                 roomID: remoteUserInfo.roomID
@@ -111,6 +112,7 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
                 guard let userInfo = self.remoteUserInfo else { return }
                 
                 self.signalingService.send(
+                    type: .answerSDP,
                     sdp: sdp,
                     userID: userInfo.id,
                     roomID: userInfo.roomID
@@ -137,9 +139,10 @@ extension ConnectionClientImpl: WebRTCServiceDelegate {
         guard let remoteUserInfo else { return }
         
         self.signalingService.send(
+            type: .iceCandidate,
             candidate: candidate,
             userID: remoteUserInfo.id,
-            roomID: remoteUserInfo.roomID ?? ""
+            roomID: remoteUserInfo.roomID
         )
     }
     

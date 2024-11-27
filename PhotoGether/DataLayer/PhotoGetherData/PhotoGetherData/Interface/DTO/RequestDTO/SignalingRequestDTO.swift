@@ -1,17 +1,18 @@
 import Foundation
 import PhotoGetherNetwork
 
-struct SignalingRequestDTO: WebSocketRequestable {
-    var messageType: SignalingMessageType
-    var message: Data?
+public struct SignalingRequestDTO: WebSocketRequestable {
+    public var messageType: SignalingMessageType
+    public var message: Data?
     
-    init(messageType: SignalingMessageType, message: Data? = nil) {
+    public init(messageType: SignalingMessageType, message: Data? = nil) {
         self.messageType = messageType
         self.message = message
     }
     
-    enum SignalingMessageType: String, Encodable {
-        case sdp
+    public enum SignalingMessageType: String, Encodable {
+        case offerSDP
+        case answerSDP
         case iceCandidate
     }
 }

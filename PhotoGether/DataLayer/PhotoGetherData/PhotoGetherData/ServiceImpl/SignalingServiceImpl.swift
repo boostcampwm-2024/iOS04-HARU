@@ -17,11 +17,16 @@ final public class SignalingServiceImpl: SignalingService {
         self.webSocketClient.connect()
     }
     
-    public func send(sdp rtcSdp: RTCSessionDescription, userID: String, roomID: String) {
+    public func send(
+        type: SignalingRequestDTO.SignalingMessageType,
+        sdp rtcSdp: RTCSessionDescription,
+        userID: String,
+        roomID: String
+    ) {
         let message = SessionDescriptionMessage(from: rtcSdp, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
-            let dto = SignalingRequestDTO(messageType: .sdp, message: dataMessage)
+            let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
             let request = try self.encoder.encode(dto)
             
             self.webSocketClient.send(data: request)
@@ -30,11 +35,16 @@ final public class SignalingServiceImpl: SignalingService {
         }
     }
     
-    public func send(candidate rtcIceCandidate: RTCIceCandidate, userID: String, roomID: String) {
+    public func send(
+        type: SignalingRequestDTO.SignalingMessageType,
+        candidate rtcIceCandidate: RTCIceCandidate,
+        userID: String,
+        roomID: String
+    ) {
         let message = IceCandidateMessage(from: rtcIceCandidate, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
-            let dto = SignalingRequestDTO(messageType: .iceCandidate, message: dataMessage)
+            let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
             let request = try self.encoder.encode(dto)
             
             self.webSocketClient.send(data: request)
