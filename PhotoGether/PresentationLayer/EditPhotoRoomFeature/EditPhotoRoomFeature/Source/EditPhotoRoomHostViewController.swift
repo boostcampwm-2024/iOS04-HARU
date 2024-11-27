@@ -41,7 +41,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         configureUI()
         bindInput()
         bindOutput()
-        viewModel.configureDefaultState()
+        input.send(.initialState)
     }
     
     public func addViews() {

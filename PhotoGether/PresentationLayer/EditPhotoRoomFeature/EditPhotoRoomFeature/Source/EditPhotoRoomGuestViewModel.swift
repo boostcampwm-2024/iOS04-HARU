@@ -5,6 +5,7 @@ import UIKit
 
 public final class EditPhotoRoomGuestViewModel {
     enum Input {
+        case initialState
         case stickerButtonDidTap
         case frameButtonDidTap
         case createSticker(StickerEntity)
@@ -47,7 +48,7 @@ public final class EditPhotoRoomGuestViewModel {
         bind()
     }
     
-    func configureDefaultState() {
+    private func configureInitialState() {
         let defaultFrameType = Constants.defaultFrameType
         mutateFrameTypeLocal(with: defaultFrameType)
     }
@@ -83,6 +84,8 @@ public final class EditPhotoRoomGuestViewModel {
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
             switch event {
+            case .initialState:
+                self?.configureInitialState()
             case .stickerButtonDidTap:
                 self?.presentStickerBottomSheet()
             case .frameButtonDidTap:
