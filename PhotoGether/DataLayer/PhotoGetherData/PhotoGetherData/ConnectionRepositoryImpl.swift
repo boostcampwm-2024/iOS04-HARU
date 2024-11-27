@@ -1,5 +1,6 @@
 import UIKit
 import Combine
+import OSLog
 import PhotoGetherDomainInterface
 
 public final class ConnectionRepositoryImpl: ConnectionRepository {
@@ -81,6 +82,8 @@ extension ConnectionRepositoryImpl {
                 )
                 
                 emptyClient?.setRemoteUserInfo(newUserInfoEntity)
+                let logger = Logger(subsystem: "PhotoGether", category: "ConnectionRepository")
+                logger.log(level: .debug, "New user joined: \(newUserInfoEntity.id)")
             })
             .store(in: &cancellables)
     }
