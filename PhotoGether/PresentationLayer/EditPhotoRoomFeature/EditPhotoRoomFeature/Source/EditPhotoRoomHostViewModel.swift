@@ -25,8 +25,8 @@ public final class EditPhotoRoomHostViewModel {
     
     private let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
-    private let stickerObjectListSubject = CurrentValueSubject<[StickerEntity], Never>([])
-    private let frameImageSubject = PassthroughSubject<FrameType, Never>()
+    private let stickerListSubject = CurrentValueSubject<[StickerEntity], Never>([])
+    private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)
     
     private var cancellables = Set<AnyCancellable>()
     private var output = PassthroughSubject<Output, Never>()
@@ -46,28 +46,36 @@ public final class EditPhotoRoomHostViewModel {
         bind()
     }
     
+    func configureDefaultState() {
+        let defaultFrameType = Constants.defaultFrameType
+        mutateFrameTypeLocal(with: defaultFrameType)
+        mutateFrameTypeEventHub(with: defaultFrameType)
+    }
+    
     private func bind() {
-        stickerObjectListSubject
+        stickerListSubject
             .sink { [weak self] list in
                 self?.output.send(.stickerObjectList(list))
             }
             .store(in: &cancellables)
         
-        frameImageSubject
+        frameTypeSubject
+            .receive(on: RunLoop.main)
             .sink { [weak self] frameType in
-                
+                self?.applyFrameImage(with: frameType)
             }
             .store(in: &cancellables)
         
         receiveStickerListUseCase.execute()
             .sink { [weak self] receivedStickerList in
-                self?.stickerObjectListSubject.send(receivedStickerList)
+                self?.mutateStickerListLocal(stickerList: receivedStickerList)
             }
             .store(in: &cancellables)
         
         receiveFrameUseCase.execute()
             .sink { [weak self] receivedFrame in
-                
+                let receivedFrameType = receivedFrame.frameType
+                self?.mutateFrameTypeLocal(with: receivedFrameType)
             }
             .store(in: &cancellables)
     }
@@ -78,10 +86,9 @@ public final class EditPhotoRoomHostViewModel {
             case .stickerButtonDidTap:
                 self?.presentStickerBottomSheet()
             case .createSticker(let sticker):
-                self?.appendSticker(with: sticker)
-                self?.sendToRepository(type: .create, with: sticker)
+                self?.handleCreateSticker(sticker: sticker)
             case .frameButtonDidTap:
-                self?.toggleFrameImage()
+                self?.toggleFrameType()
             case .stickerViewDidTap(let stickerID):
                 self?.handleStickerViewDidTap(with: stickerID)
             }
@@ -89,6 +96,28 @@ public final class EditPhotoRoomHostViewModel {
         .store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
+    }
+}
+
+// MARK: Sticker 관련
+extension EditPhotoRoomHostViewModel {
+    private func handleCreateSticker(sticker: StickerEntity) {
+        mutateStickerLocal(sticker: sticker)
+        mutateStickerEventHub(type: .create, with: sticker)
+    }
+    
+    private func mutateStickerLocal(sticker: StickerEntity) {
+        var stickerList = stickerListSubject.value
+        stickerList.append(sticker)
+        stickerListSubject.send(stickerList)
+    }
+    
+    private func mutateStickerListLocal(stickerList: [StickerEntity]) {
+        stickerListSubject.send(stickerList)
+    }
+    
+    private func mutateStickerEventHub(type: EventType, with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
     }
     
     private func handleStickerViewDidTap(with stickerID: UUID) {
@@ -103,60 +132,65 @@ public final class EditPhotoRoomHostViewModel {
     }
     
     private func canInteractWithSticker(id: UUID) -> Bool {
-        let stickerList = stickerObjectListSubject.value
+        let stickerList = stickerListSubject.value
         
         return stickerList.isOwned(id: id, owner: owner)
     }
     
     private func unlockPreviousSticker() {
-        var stickerList = stickerObjectListSubject.value
+        var stickerList = stickerListSubject.value
         
         if let previousSticker = stickerList.lockedSticker(by: owner) {
             stickerList.unlock(by: owner)
-            sendToRepository(type: .unlock, with: previousSticker)
+            mutateStickerEventHub(type: .unlock, with: previousSticker)
         }
     }
     
     private func lockTappedSticker(id: UUID) {
-        var stickerList = stickerObjectListSubject.value
+        var stickerList = stickerListSubject.value
         
         if let tappedSticker = stickerList.lock(by: id, owner: owner) {
-            stickerObjectListSubject.send(stickerList)
-            sendToRepository(type: .update, with: tappedSticker)
+            mutateStickerListLocal(stickerList: stickerList)
+            mutateStickerEventHub(type: .update, with: tappedSticker)
         }
-    }
-    
-    private func toggleFrameImage() {
-        let currentFrameImageType = frameImageGenerator.frameType
-        var newFrameImageType: FrameType
-        switch currentFrameImageType {
-        case .defaultBlack:
-            newFrameImageType = .defaultWhite
-        case .defaultWhite:
-            newFrameImageType = .defaultBlack
-        }
-        
-        frameImageGenerator.changeFrame(to: newFrameImageType)
-        let newFrameImage = frameImageGenerator.generate()
-        output.send(.frameImage(image: newFrameImage))
-    }
-    
-    private func appendSticker(with sticker: StickerEntity) {
-        var currentStickerObjectList = stickerObjectListSubject.value
-        currentStickerObjectList.append(sticker)
-        stickerObjectListSubject.send(currentStickerObjectList)
-    }
-
-    private func sendToRepository(type: EventType, with sticker: StickerEntity) {
-        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
-    }
-    
-    func setupFrame() {
-        let frameImage = frameImageGenerator.generate()
-        output.send(.frameImage(image: frameImage))
     }
     
     private func presentStickerBottomSheet() {
         output.send(.presentStickerBottomSheet)
+    }
+}
+
+// MARK: Frame 관련
+extension EditPhotoRoomHostViewModel {
+    private func toggleFrameType() {
+        let oldFrameImageType = frameTypeSubject.value
+        let newFrameImageType = (oldFrameImageType == .defaultBlack)
+        ? FrameType.defaultWhite
+        : FrameType.defaultBlack
+        
+        mutateFrameTypeLocal(with: newFrameImageType)
+        mutateFrameTypeEventHub(with: newFrameImageType)
+    }
+    
+    private func mutateFrameTypeLocal(with frameType: FrameType) {
+        frameTypeSubject.send(frameType)
+    }
+    
+    private func mutateFrameTypeEventHub(with frameType: FrameType) {
+        let frameEntity = FrameEntity(frameType: frameType, owner: owner, latestUpdated: Date())
+        sendFrameToRepositoryUseCase.execute(type: .update, frame: frameEntity)
+    }
+    
+    private func applyFrameImage(with frameType: FrameType) {
+        frameImageGenerator.changeFrame(to: frameType)
+        let frameImage = frameImageGenerator.generate()
+        
+        output.send(.frameImage(image: frameImage))
+    }
+}
+
+private extension EditPhotoRoomHostViewModel {
+    enum Constants {
+        static let defaultFrameType: FrameType = .defaultBlack
     }
 }
