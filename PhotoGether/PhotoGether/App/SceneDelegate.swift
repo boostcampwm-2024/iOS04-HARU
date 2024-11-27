@@ -10,7 +10,7 @@ import SharePhotoFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
+    // swiftlint:disable function_body_length
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
