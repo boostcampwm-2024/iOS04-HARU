@@ -5,7 +5,8 @@ struct WebSocketRequestType: Decodable {
 }
 
 enum MessageType: String, Decodable {
-    case sdp
+    case offerSDP
+    case answerSDP
     case iceCandidate
     case createRoom
     case joinRoom

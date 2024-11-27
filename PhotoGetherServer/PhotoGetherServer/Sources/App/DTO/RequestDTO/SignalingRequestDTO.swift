@@ -10,7 +10,8 @@ struct SignalingRequestDTO: Decodable {
     }
     
     enum SignalingMessageType: String, Decodable {
-        case sdp
+        case offerSDP
+        case answerSDP
         case iceCandidate
     }
 }
