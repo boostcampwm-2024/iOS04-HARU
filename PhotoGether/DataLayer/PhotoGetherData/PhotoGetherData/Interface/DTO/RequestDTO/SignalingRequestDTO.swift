@@ -5,12 +5,13 @@ struct SignalingRequestDTO: WebSocketRequestable {
     var messageType: SignalingMessageType
     var message: Data?
     
-    init(messageType: SignalingMessageType = .signaling, message: Data? = nil) {
+    init(messageType: SignalingMessageType, message: Data? = nil) {
         self.messageType = messageType
         self.message = message
     }
     
     enum SignalingMessageType: String, Encodable {
-        case signaling
+        case sdp
+        case iceCandidate
     }
 }

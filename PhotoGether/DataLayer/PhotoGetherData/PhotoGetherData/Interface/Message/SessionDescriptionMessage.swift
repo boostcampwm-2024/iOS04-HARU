@@ -14,7 +14,7 @@ public enum SdpType: String, Codable {
     }
 }
 
-public struct SessionDescription: Codable {
+public struct SessionDescriptionMessage: Codable {
     public let sdp: String
     public let type: SdpType
     public let userID: String // MARK: Offer를 보내는 사람의 ID

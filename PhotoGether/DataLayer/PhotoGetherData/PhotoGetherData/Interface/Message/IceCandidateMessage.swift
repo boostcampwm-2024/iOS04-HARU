@@ -1,7 +1,7 @@
 import Foundation
 import WebRTC
 
-public struct IceCandidate: Codable {
+public struct IceCandidateMessage: Codable {
     public let sdp: String
     public let sdpMLineIndex: Int32
     public let sdpMid: String?
