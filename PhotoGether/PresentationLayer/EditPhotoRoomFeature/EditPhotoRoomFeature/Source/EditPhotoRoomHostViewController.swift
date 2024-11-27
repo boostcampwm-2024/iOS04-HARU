@@ -99,22 +99,16 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func showNextView() {
-        guard let imageData = renderCanvasImageView().pngData() else { return }
+        guard let imageData = renderCanvasImageView() else { return }
         let component = SharePhotoComponent(imageData: imageData)
         let viewModel = SharePhotoViewModel(component: component)
         let viewController = SharePhotoViewController(viewModel: viewModel)
         
-//        viewController.modalPresentationStyle = .fullScreen
         self.present(viewController, animated: true)
     }
     
-    private func renderCanvasImageView() -> UIImage {
-        canvasScrollView.imageView.layoutIfNeeded()
-        let renderer = UIGraphicsImageRenderer(size: canvasScrollView.imageView.bounds.size)
-        let capturedImage = renderer.image { context in
-            canvasScrollView.imageView.layer.render(in: context.cgContext)
-        }
-        return capturedImage
+    private func renderCanvasImageView() -> Data? {
+        return canvasScrollView.makeSharePhoto()
     }
     
     public func bindOutput() {

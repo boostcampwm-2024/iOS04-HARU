@@ -8,8 +8,7 @@ protocol CanvasScrollViewDelegate: AnyObject {
 }
 
 final class CanvasScrollView: UIScrollView {
-    let imageView = UIImageView()
-    
+    private let imageView = UIImageView()
     private var stickerViewDictonary: [UUID: StickerView]
 
     weak var stickerViewDelegate: CanvasScrollViewDelegate?
@@ -115,6 +114,15 @@ extension CanvasScrollView {
         self.imageView.sizeToFit()
         self.setupZoomScale()
         self.contentCentering()
+    }
+    
+    func makeSharePhoto() -> Data? {
+        imageView.layoutIfNeeded()
+        let renderer = UIGraphicsImageRenderer(size: imageView.bounds.size)
+        let capturedImage = renderer.image { context in
+            imageView.layer.render(in: context.cgContext)
+        }
+        return capturedImage.pngData()
     }
 }
 
