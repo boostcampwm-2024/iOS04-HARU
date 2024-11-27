@@ -76,9 +76,9 @@ final class WebSocketController {
         
         await roomManager.sendOfferSDP(dto: dto)
         
-        connectedClients
-            .filter { $0 !== client }
-            .forEach { $0.send(message) }
+//        connectedClients
+//            .filter { $0 !== client }
+//            .forEach { $0.send(message) }
     }
     
     private func handleAnswerSDP(client: WebSocket, data: ByteBuffer) async {
@@ -98,9 +98,9 @@ final class WebSocketController {
         
         await roomManager.sendAnswerSDP(dto: dto)
         
-        connectedClients
-            .filter { $0 !== client }
-            .forEach { $0.send(message) }
+//        connectedClients
+//            .filter { $0 !== client }
+//            .forEach { $0.send(message) }
     }
     
     private func handleIceCandidate(client: WebSocket, data: ByteBuffer) async {
@@ -121,9 +121,9 @@ final class WebSocketController {
         
         await roomManager.sendIceCandidate(dto: dto)
         
-        connectedClients
-            .filter { $0 !== client }
-            .forEach { $0.send(message) }
+//        connectedClients
+//            .filter { $0 !== client }
+//            .forEach { $0.send(message) }
     }
     
     private func handleCreateRoom(client: WebSocket, data: ByteBuffer) async {
