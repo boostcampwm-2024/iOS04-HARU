@@ -1,14 +1,14 @@
 import Vapor
 
-final class RoomManager {
+actor RoomManager {
     private var rooms: [Room] = []
     
-    func createRoom(_ client: WebSocket) -> (roomID: String, userID: String) {
+    func createRoom(_ client: WebSocket) async -> (roomID: String, userID: String) {
         let roomID = randomRoomID()
         let userID = randomUserID()
         
         let user = User(id: userID, client: client)
-        var room = Room(roomID: roomID)
+        let room = Room(roomID: roomID)
         
         room.invite(user: user)
         self.rooms.append(room)
@@ -16,7 +16,7 @@ final class RoomManager {
         return (roomID, userID)
     }
     
-    func joinRoom(client: WebSocket, to roomID: String) -> Result<JoinRoomResponseDTO, Error> {
+    func joinRoom(client: WebSocket, to roomID: String) async -> Result<JoinRoomResponseDTO, Error> {
         let userID = randomUserID()
         
         let user = User(id: userID, client: client)
@@ -38,13 +38,13 @@ final class RoomManager {
             .failure(RoomError.joinFailed)
     }
     
-    func cleanRoom() -> Int {
+    func cleanRoom() async -> Int {
         let emptyRoomCount = rooms.filter { $0.userList.isEmpty }.count
         rooms.removeAll { $0.userList.isEmpty }
         return emptyRoomCount
     }
 
-    func notifyToUsers(data: Data, roomID: String, except userID: String) {
+    func notifyToUsers(data: Data, roomID: String, except userID: String) async {
         guard let room = rooms.first(where: { $0.roomID == roomID }) else {
             print("Failed To Find Room")
             return
