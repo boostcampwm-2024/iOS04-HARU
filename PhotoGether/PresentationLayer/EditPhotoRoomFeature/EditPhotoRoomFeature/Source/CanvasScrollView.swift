@@ -53,7 +53,7 @@ extension CanvasScrollView {
         return stickerViewDictonary[id]
     }
     
-    func createStickerView(
+    func addStickerView(
         _ target: StickerViewActionDelegate,
         with sticker: StickerEntity,
         user: String
