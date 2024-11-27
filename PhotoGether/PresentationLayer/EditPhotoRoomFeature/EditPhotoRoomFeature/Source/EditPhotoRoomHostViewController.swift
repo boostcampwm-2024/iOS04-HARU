@@ -26,6 +26,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
         self.bottomSheetViewController.delegate = self
+        self.canvasScrollView.stickerViewDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -230,3 +231,10 @@ extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
         input.send(.deleteSticker(id))
     }
 }
+
+extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity) {
+        input.send(.createSticker(sticker))
+    }
+}
+

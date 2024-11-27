@@ -3,6 +3,10 @@ import UIKit
 import DesignSystem
 import PhotoGetherDomainInterface
 
+protocol CanvasScrollViewDelegate: AnyObject {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity)
+}
+
 final class CanvasScrollView: UIScrollView {
     let imageView = UIImageView()
     
@@ -12,6 +16,8 @@ final class CanvasScrollView: UIScrollView {
         return stickerViewDictonary.keys.map { $0 }
     }
 
+    weak var stickerViewDelegate: CanvasScrollViewDelegate?
+    
     override init(frame: CGRect) {
         self.stickerViewDictonary = [:]
         super.init(frame: frame)
