@@ -41,6 +41,12 @@ public final class StickerBottomSheetViewController: UIViewController, ViewContr
         self.bindOutput()
     }
     
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.sheetPresentationController?.detents = [.medium(), .large()]
+    }
+    
     private func setupCollectionView() {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -62,7 +68,6 @@ public final class StickerBottomSheetViewController: UIViewController, ViewContr
     }
     
     public func configureUI() {
-        self.sheetPresentationController?.detents = [.medium(), .large()]
         self.view.backgroundColor = PTGColor.gray10.color
     }
     
