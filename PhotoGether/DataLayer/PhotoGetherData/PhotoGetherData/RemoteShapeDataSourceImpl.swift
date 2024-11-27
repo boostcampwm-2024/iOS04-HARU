@@ -9,7 +9,7 @@ public final class RemoteShapeDataSourceImpl: ShapeDataSource {
             .map { (emojiDTOs: [EmojiDTO]) -> [EmojiDTO] in
                 if let data = try? JSONEncoder().encode(emojiDTOs),
                    let url = endpoint.request().url {
-                    CacheManager(path: CacheManager.emojiPath).save(url: url, data: data)
+                    CacheManager(path: CacheManager.Path.emoji).save(url: url, data: data)
                 }
                 return emojiDTOs
             }

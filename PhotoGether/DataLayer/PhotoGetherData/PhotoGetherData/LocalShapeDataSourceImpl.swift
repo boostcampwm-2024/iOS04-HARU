@@ -8,7 +8,7 @@ public final class LocalShapeDataSourceImpl: ShapeDataSource {
         guard let url = endpoint.request().url
         else { return Empty().eraseToAnyPublisher() }
         
-        return CacheManager(path: CacheManager.emojiPath).loadPublisher(url: url)
+        return CacheManager(path: CacheManager.Path.emoji).loadPublisher(url: url)
             .compactMap { $0 }
             .decode(type: [EmojiDTO].self, decoder: JSONDecoder())
             .eraseToAnyPublisher()

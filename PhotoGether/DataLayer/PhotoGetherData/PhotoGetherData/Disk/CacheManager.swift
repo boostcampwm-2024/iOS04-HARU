@@ -70,5 +70,7 @@ final class CacheManager {
 }
 
 extension CacheManager {
-    static let emojiPath = "emoji"
+    enum Path {
+        static let emoji = "emoji"
+    }
 }
