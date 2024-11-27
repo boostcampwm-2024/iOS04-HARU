@@ -57,6 +57,13 @@ extension CanvasScrollView {
     
     func findStickerView(with id: UUID) -> StickerView? {
         return stickerViewDictonary[id]
+    func updateCanvas(
+        _ target: StickerViewActionDelegate,
+        stickerList: [StickerEntity],
+        user: String
+    ) {
+        prepareForApply(stickerList)
+        applyStickerList(target, for: stickerList, user: user)
     }
     
     func addStickerView(
@@ -70,17 +77,42 @@ extension CanvasScrollView {
         stickerViewDictonary[sticker.id] = stickerView
         imageView.addSubview(stickerView)
         stickerView.update(with: sticker)
+        
+        stickerViewDelegate?.canvasScrollView(self, didAdd: sticker)
     }
     
-    func updateStickerView(with sticker: StickerEntity) {
+    private func updateStickerView(with sticker: StickerEntity) {
         guard let stickerView = findStickerView(with: sticker.id) else { return }
         stickerView.update(with: sticker)
     }
     
-    func deleteStickerView(with id: UUID) {
+    private func deleteStickerView(with id: UUID) {
         guard let stickerView = findStickerView(with: id) else { return }
         stickerView.removeFromSuperview()
         stickerViewDictonary[id] = nil
+    }
+    
+    private func prepareForApply(_ stickerList: [StickerEntity]) {
+        let stickerIdList = stickerViewDictonary.keys.map { $0 }
+        
+        Set(stickerIdList)
+            .subtracting(stickerList.map { $0.id })
+            .forEach { deleteStickerView(with: $0) }
+    }
+    
+    private func applyStickerList(
+        _ target: StickerViewActionDelegate,
+        for stickerList: [StickerEntity],
+        user: String
+    ) {
+        stickerList.forEach { sticker in
+            switch isExistStickerView(with: sticker.id) {
+            case true:
+                updateStickerView(with: sticker)
+            case false:
+                addStickerView(target, with: sticker, user: user)
+            }
+        }
     }
 }
 

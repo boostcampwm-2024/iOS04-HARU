@@ -116,53 +116,22 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         canvasScrollView.updateFrameImage(to: image)
     }
     
-    /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
     private func updateCanvas(with stickerList: [StickerEntity]) {
-        let oldIdList = canvasScrollView.stickerIDList
-        let newIdList = stickerList.map { $0.id }
-        
-        var oldIdSet = Set<UUID>(oldIdList)
-        var newIdSet = Set<UUID>(newIdList)
-        
-        let deletingIdSet = oldIdSet.subtracting(newIdSet)
-        deletingIdSet.forEach { stickerId in
-            deleteExistingSticker(by: stickerId)
-        }
-        
-        stickerList.forEach { sticker in
-            if canvasScrollView.isExistStickerView(with: sticker.id) {
-                updateExistingSticker(with: sticker)
-            } else {
-                addNewSticker(to: sticker, isLocal: false)
-            }
-        }
+        canvasScrollView.updateCanvas(self, stickerList: stickerList, user: viewModel.owner)
     }
     
-    private func updateExistingSticker(with sticker: StickerEntity) {
-        canvasScrollView.updateStickerView(with: sticker)
-    }
-    
-    private func deleteExistingSticker(by id: UUID) {
-        canvasScrollView.deleteStickerView(with: id)
-    }
-    
-    private func addNewSticker(to sticker: StickerEntity, isLocal: Bool) {
-        canvasScrollView.addStickerView(self, with: sticker, user: viewModel.owner)
-        input.send(.createSticker(sticker))
-    }
-    
-    private func createStickerObject(by entity: EmojiEntity) {
+    private func createStickerEntity(by entity: EmojiEntity) {
         let imageSize: CGFloat = 64
         let frame = calculateCenterPosition(imageSize: imageSize)
         
-        let newStickerObject = StickerEntity(
+        let newSticker = StickerEntity(
             image: entity.image,
             frame: frame,
             owner: nil,
             latestUpdated: Date()
         )
         
-        addNewSticker(to: newStickerObject, isLocal: true)
+        canvasScrollView.addStickerView(self, with: newSticker, user: viewModel.owner)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -192,7 +161,7 @@ extension EditPhotoRoomGuestViewController: StickerBottomSheetViewControllerDele
         _ viewController: StickerBottomSheetViewController,
         didTap emoji: EmojiEntity
     ) {
-        self.createStickerObject(by: emoji)
+        self.createStickerEntity(by: emoji)
     }
 }
 
