@@ -45,8 +45,10 @@ final class WebSocketController {
         
         // MARK: messageType에 따른 처리를 분기합니다.
         switch requestType.messageType {
-        case .signaling:
-            handleSignaling(client: client, data: data)
+        case .sdp:
+            await handleSDP(client: client, data: data)
+        case .iceCandidate:
+            await handleIceCandidate(client: client, data: data)
         case .createRoom:
             await handleCreateRoom(client: client, data: data)
         case .joinRoom:
@@ -54,7 +56,7 @@ final class WebSocketController {
         }
     }
     
-    private func handleSignaling(client: WebSocket, data: ByteBuffer) {
+    private func handleSDP(client: WebSocket, data: ByteBuffer) async {
         guard let request = client.decodeDTO(
             data: data,
             type: SignalingRequestDTO.self,
@@ -63,6 +65,36 @@ final class WebSocketController {
             print("[DEBUG] :: Message is Nil")
             return
         }
+        
+        guard let dto = client.decodeDTO(data: message,
+            type: SessionDescriptionMessage.self,
+            decoder: decoder
+        ) else { return }
+        
+        await roomManager.sendSDPToRoom(dto: dto)
+        
+        connectedClients
+            .filter { $0 !== client }
+            .forEach { $0.send(message) }
+    }
+    
+    private func handleIceCandidate(client: WebSocket, data: ByteBuffer) async {
+        guard let request = client.decodeDTO(
+            data: data,
+            type: SignalingRequestDTO.self,
+            decoder: decoder
+        ), let message = request.message else {
+            print("[DEBUG] :: Message is Nil")
+            return
+        }
+        
+        guard let dto = client.decodeDTO(
+            data: message,
+            type: IceCandidateMessage.self,
+            decoder: decoder
+        ) else { return }
+        
+        await roomManager.sendIceCandidateToRoom(dto: dto)
         
         connectedClients
             .filter { $0 !== client }

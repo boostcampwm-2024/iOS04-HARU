@@ -2,6 +2,7 @@ import Vapor
 
 actor RoomManager {
     private var rooms: [Room] = []
+    private let encoder = JSONEncoder()
     
     func createRoom(_ client: WebSocket) async -> (roomID: String, userID: String) {
         let roomID = randomRoomID()
@@ -45,17 +46,88 @@ actor RoomManager {
     }
 
     func notifyToUsers(data: Data, roomID: String, except userID: String) async {
-        guard let room = rooms.first(where: { $0.roomID == roomID }) else {
-            print("Failed To Find Room")
+        guard let targetRoom = rooms.first(where: { $0.roomID == roomID }) else {
+            print("[DEBUG] :: Failed To Find Room\(roomID)")
             return
         }
         
-        let targetList = room.userList.filter { $0.id != userID }
+        let targetList = targetRoom.userList.filter { $0.id != userID }
         
         targetList.forEach {
             $0.client.send(data)
         }
     }
+    
+    func sendSDPToRoom(dto: SessionDescriptionMessage) async {
+        guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
+            print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
+            return
+        }
+        
+        let targetList = targetRoom.userList.filter { $0.id != dto.userID }
+        let response = SignalingResponseDTO(
+            messageType: .sdp,
+            message: dto.toData(encoder)
+        )
+        
+        targetRoom.userList.forEach {
+            $0.client.sendDTO(response, encoder: encoder)
+        }
+    }
+    
+    func sendIceCandidateToRoom(dto: IceCandidateMessage) async {
+        guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
+            print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
+            return
+        }
+        
+        let targetList = targetRoom.userList.filter { $0.id != dto.userID }
+        let response = SignalingResponseDTO(
+            messageType: .iceCandidate,
+            message: dto.toData(encoder)
+        )
+        
+        targetRoom.userList.forEach {
+            $0.client.sendDTO(response, encoder: encoder)
+        }
+    }
+    
+    func sendSDPToUser(dto: SessionDescriptionMessage) async {
+        guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
+            print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
+            return
+        }
+        
+        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.userID }).first else {
+            print("[DEBUG] :: Failed To Find User\(dto.userID)")
+            return
+        }
+        let response = SignalingResponseDTO(
+            messageType: .sdp,
+            message: dto.toData(encoder)
+        )
+        
+        targetUser.client.sendDTO(response, encoder: encoder)
+    }
+    
+    func sendIceCandidateToUser(dto: IceCandidateMessage) async {
+        guard let targetRoom = rooms.first(where: { $0.roomID == dto.roomID }) else {
+            print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
+            return
+        }
+        
+        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.userID }).first else {
+            print("[DEBUG] :: Failed To Find User\(dto.userID)")
+            return
+        }
+        let response = SignalingResponseDTO(
+            messageType: .iceCandidate,
+            message: dto.toData(encoder)
+        )
+        
+        targetUser.client.sendDTO(response, encoder: encoder)
+    }
+    
     
     private func randomRoomID() -> String {
         return "room-\(UUID().uuidString)"
