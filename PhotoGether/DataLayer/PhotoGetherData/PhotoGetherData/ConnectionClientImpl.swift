@@ -13,9 +13,7 @@ public final class ConnectionClientImpl: ConnectionClient {
     
     public var remoteVideoView: UIView = CapturableVideoView()
     public var remoteUserInfo: UserInfo?
-    
-    public var roomID: String = ""
-    
+        
     public init(
         signalingService: SignalingService,
         webRTCService: WebRTCService,
@@ -87,17 +85,13 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.signalingService.didReceiveRemoteSdpPublisher.sink { [weak self] sdp in
             guard let self else { return }
             
-            PTGDataLogger.log("1. SDP 를 받았어요!!!")
             guard self.webRTCService.peerConnection.remoteDescription == nil else { return }
-            PTGDataLogger.log("2. remoteSdp 를 저장할게요!!!")
             self.webRTCService.set(remoteSdp: sdp) { error in
                 if let error { PTGDataLogger.log(error.localizedDescription) }
                 
                 guard self.webRTCService.peerConnection.localDescription == nil else { return }
-                PTGDataLogger.log("3. remoteSdp 저장 다했고, answer를 준비합니다.")
                 self.webRTCService.answer { sdp in
                     guard let userInfo = self.remoteUserInfo else { return }
-                    PTGDataLogger.log("4. sendAnswerSDP 호출!!")
                     self.signalingService.send(
                         type: .answerSDP,
                         sdp: sdp,
@@ -110,8 +104,6 @@ public final class ConnectionClientImpl: ConnectionClient {
         
         self.signalingService.didReceiveCandidatePublisher.sink { [weak self] candidate in
             guard let self else { return }
-            
-            PTGDataLogger.log("3. remoteCandidate 를 받았고, 저장할 준비를 합니다.")
             self.webRTCService.set(remoteCandidate: candidate) { _ in }
         }.store(in: &cancellables)
     }
