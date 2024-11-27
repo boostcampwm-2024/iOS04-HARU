@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import WebRTC
 
 public final class WebRTCServiceImpl: NSObject, WebRTCService {
@@ -12,7 +13,20 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         )
     }()
     
-    public var delegate: WebRTCServiceDelegate?
+    private let didGenerateLocalCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
+    private let didChangeConnectionStateSubject = PassthroughSubject<RTCIceConnectionState, Never>()
+    private let didReceiveDataSubject = PassthroughSubject<Data, Never>()
+    
+    public var didGenerateLocalCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> {
+        self.didGenerateLocalCandidateSubject.eraseToAnyPublisher()
+    }
+    public var didChangeConnectionStatePublisher: AnyPublisher<RTCIceConnectionState, Never> {
+        self.didChangeConnectionStateSubject.eraseToAnyPublisher()
+    }
+    public var didReceiveDataPublisher: AnyPublisher<Data, Never> {
+        self.didReceiveDataSubject.eraseToAnyPublisher()
+    }
+    
     public var peerConnection: RTCPeerConnection
     
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
@@ -290,7 +304,7 @@ extension WebRTCServiceImpl {
         didChange newState: RTCIceConnectionState
     ) {
         PTGDataLogger.log("peerConnection new connection state: \(newState)")
-        self.delegate?.webRTCService(self, didChangeConnectionState: newState)
+        self.didChangeConnectionStateSubject.send(newState)
     }
     
     public func peerConnection(
@@ -304,7 +318,7 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didGenerate candidate: RTCIceCandidate
     ) {
-        self.delegate?.webRTCService(self, didGenerateLocalCandidate: candidate)
+        self.didGenerateLocalCandidateSubject.send(candidate)
     }
     
     public func peerConnection(
@@ -335,6 +349,6 @@ extension WebRTCServiceImpl {
         _ dataChannel: RTCDataChannel,
         didReceiveMessageWith buffer: RTCDataBuffer
     ) {
-        self.delegate?.webRTCService(self, didReceiveData: buffer.data)
+        self.didReceiveDataSubject.send(buffer.data)
     }
 }

@@ -26,7 +26,7 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.remoteUserInfo = remoteUserInfo
         
         bindSignalingService()
-        self.webRTCService.delegate = self
+        bindWebRTCService()
         
         // 서버 자동 연결
         self.connect()
@@ -34,8 +34,6 @@ public final class ConnectionClientImpl: ConnectionClient {
         // VideoTrack과 나와 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
         self.bindRemoteVideo()
     }
-    
-    
     
     public func setRemoteUserInfo(_ remoteUserInfo: UserInfo) {
         self.remoteUserInfo = remoteUserInfo
@@ -108,7 +106,6 @@ public final class ConnectionClientImpl: ConnectionClient {
                     )
                 }
             }
-            
         }.store(in: &cancellables)
         
         self.signalingService.didReceiveCandidatePublisher.sink { [weak self] candidate in
@@ -116,88 +113,23 @@ public final class ConnectionClientImpl: ConnectionClient {
             
             PTGDataLogger.log("3. remoteCandidate 를 받았고, 저장할 준비를 합니다.")
             self.webRTCService.set(remoteCandidate: candidate) { _ in }
-            
         }.store(in: &cancellables)
     }
-}
-
-//// MARK: SignalingClientDelegate
-//extension ConnectionClientImpl: SignalingServiceDelegate {
-//    public func signalingServiceDidConnect(
-//        _ signalingService: SignalingService
-//    ) {
-//        // TODO: 서버 연결 완료 로직 처리
-//    }
-//    
-//    public func signalingServiceDidDisconnect(
-//        _ signalingService: SignalingService
-//    ) {
-//        // TODO: 서버 연결 끊김 로직 처리
-//    }
-//    
-//    public func signalingService(
-//        _ signalingService: SignalingService,
-//        didReceiveRemoteSdp sdp: RTCSessionDescription
-//    ) {
-//        PTGDataLogger.log("1. SDP 를 받았어요!!!")
-//        guard self.webRTCService.peerConnection.remoteDescription == nil else { return }
-//        PTGDataLogger.log("2. remoteSdp 를 저장할게요!!!")
-//        self.webRTCService.set(remoteSdp: sdp) { error in
-//            if let error { PTGDataLogger.log(error.localizedDescription) }
-//            
-//            guard self.webRTCService.peerConnection.localDescription == nil else { return }
-//            PTGDataLogger.log("3. remoteSdp 저장 다했고, answer를 준비합니다.")
-//            self.webRTCService.answer { sdp in
-//                guard let userInfo = self.remoteUserInfo else { return }
-//                PTGDataLogger.log("4. sendAnswerSDP 호출!!")
-//                self.signalingService.send(
-//                    type: .answerSDP,
-//                    sdp: sdp,
-//                    userID: userInfo.id,
-//                    roomID: userInfo.roomID
-//                )
-//            }
-//        }
-//    }
-//    
-//    public func signalingService(
-//        _ signalingService: SignalingService,
-//        didReceiveCandidate candidate: RTCIceCandidate
-//    ) {
-//        PTGDataLogger.log("3. remoteCandidate 를 받았고, 저장할 준비를 합니다.")
-//        self.webRTCService.set(remoteCandidate: candidate) { _ in }
-//    }
-//}
-
-// MARK: WebRTCClientDelegate
-extension ConnectionClientImpl: WebRTCServiceDelegate {
-    /// SDP 가 생성되면 LocalCandidate 가 생성되기 시작 (가능한 경로만큼 생성됨)
-    public func webRTCService(
-        _ service: WebRTCService,
-        didGenerateLocalCandidate candidate: RTCIceCandidate
-    ) {
-        guard let remoteUserInfo else { return }
+    
+    private func bindWebRTCService() {
+        self.webRTCService.didReceiveDataPublisher.sink { [weak self] data in
+            guard let self else { return }
+            receivedDataPublisher.send(data)
+        }.store(in: &cancellables)
         
-        self.signalingService.send(
-            type: .iceCandidate,
-            candidate: candidate,
-            userID: remoteUserInfo.id,
-            roomID: remoteUserInfo.roomID
-        )
-    }
-    
-    public func webRTCService(
-        _ service: WebRTCService,
-        didChangeConnectionState state: RTCIceConnectionState
-    ) {
-        // TODO: 피어커넥션 연결 상태 변경에 따른 처리
-    }
-    
-    /// peerConnection의 remoteDataChannel 에 데이터가 수신되면 호출됨
-    public func webRTCService(
-        _ service: WebRTCService,
-        didReceiveData data: Data
-    ) {
-        receivedDataPublisher.send(data)
+        self.webRTCService.didGenerateLocalCandidatePublisher.sink { [weak self] candidate in
+            guard let self, let remoteUserInfo else { return }
+            self.signalingService.send(
+                type: .iceCandidate,
+                candidate: candidate,
+                userID: remoteUserInfo.id,
+                roomID: remoteUserInfo.roomID
+            )
+        }.store(in: &cancellables)
     }
 }
