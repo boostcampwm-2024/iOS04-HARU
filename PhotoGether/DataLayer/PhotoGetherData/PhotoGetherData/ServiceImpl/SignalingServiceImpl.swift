@@ -60,7 +60,6 @@ final public class SignalingServiceImpl: SignalingService {
         userID: String,
         roomID: String
     ) {
-        PTGDataLogger.log("send Candidate type: \(type) userID: \(userID) roomID: \(roomID)")
         let message = IceCandidateMessage(from: rtcIceCandidate, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
@@ -90,35 +89,23 @@ extension SignalingServiceImpl {
     }
     
     public func webSocket(_ webSocket: WebSocketClient, didReceiveData data: Data) {
-        guard let response = data.toDTO(type: SignalingResponseDTO.self, decoder: decoder)
-        else {
-            PTGDataLogger.log("수신한 메시지 decoding에 실패하였습니다.: \(data)")
-            return
-        }
-        PTGDataLogger.log("Signaling 응답 수신.: \(response.messageType)")
+        guard let response = data.toDTO(type: SignalingResponseDTO.self, decoder: decoder) else { return }
         switch response.messageType {
         case .iceCandidate:
             guard let iceCandidate = response.message?.toDTO(type: IceCandidateMessage.self, decoder: decoder)
-            else {
-                PTGDataLogger.log("IceCandidate decoding에 실패하였습니다.: \(response)")
-                return
-            }
+            else { return }
             self.didReceiveCandidateSubject.send(iceCandidate.rtcIceCandidate)
+        
         case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
-            else {
-                PTGDataLogger.log("SDP decoding에 실패하였습니다.: \(response)")
-                return
-            }
+            else { return }
             self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
             
         case .answerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
-            else {
-                PTGDataLogger.log("SDP decoding에 실패하였습니다.: \(response)")
-                return
-            }
+            else { return }
             self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
+        
         @unknown default:
             PTGDataLogger.log("Unknown Message Type: \(response)")
             return
