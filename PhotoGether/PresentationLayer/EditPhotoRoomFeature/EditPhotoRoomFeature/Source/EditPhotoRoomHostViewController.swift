@@ -71,11 +71,8 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     public func configureUI() {
-        view.backgroundColor = .brown
-        
-        navigationView.backgroundColor = .yellow
-        bottomView.backgroundColor = .yellow
-        canvasScrollView.backgroundColor = .red
+        view.backgroundColor = PTGColor.gray90.color
+        navigationView.backgroundColor = PTGColor.gray70.color
     }
     
     public func bindInput() {

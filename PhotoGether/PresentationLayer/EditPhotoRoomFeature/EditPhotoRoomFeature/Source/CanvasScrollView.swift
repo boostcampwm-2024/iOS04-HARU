@@ -11,10 +11,6 @@ final class CanvasScrollView: UIScrollView {
     let imageView = UIImageView()
     
     private var stickerViewDictonary: [UUID: StickerView]
-    
-    var stickerIDList: [UUID] {
-        return stickerViewDictonary.keys.map { $0 }
-    }
 
     weak var stickerViewDelegate: CanvasScrollViewDelegate?
     
@@ -44,19 +40,14 @@ final class CanvasScrollView: UIScrollView {
         bouncesZoom = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
-
+        backgroundColor = PTGColor.gray90.color
+        
         imageView.isUserInteractionEnabled = true
     }
 }
 
 // MARK: - StickerView methods
 extension CanvasScrollView {
-    func isExistStickerView(with id: UUID) -> Bool {
-        return stickerViewDictonary.keys.contains(id)
-    }
-    
-    func findStickerView(with id: UUID) -> StickerView? {
-        return stickerViewDictonary[id]
     func updateCanvas(
         _ target: StickerViewActionDelegate,
         stickerList: [StickerEntity],
@@ -129,6 +120,14 @@ extension CanvasScrollView {
 
 // MARK: - Sub method
 extension CanvasScrollView {
+    private func findStickerView(with id: UUID) -> StickerView? {
+        return stickerViewDictonary[id]
+    }
+    
+    private func isExistStickerView(with id: UUID) -> Bool {
+        return stickerViewDictonary.keys.contains(id)
+    }
+    
     private func contentCentering() {
         let scrollView = self
         let contentView = imageView
