@@ -118,6 +118,25 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     
     /// DataSource를 기반으로 이미 존재하는 스티커를 업데이트하거나 새로운 스티커를 추가합니다.
     private func updateCanvas(with stickerList: [StickerEntity]) {
+        // 내가 그려놓고있는 StickerView들의 ID Set [1,2,3,4]
+        // 내가 그릴 StickerView들의 ID [1,2,3] <- 이게 그냥 서버로부터 오는 데이터
+        
+        // 우리는 그리기전에 무조건 (갖고있던 Set과 업데이트될 Set의 (교집합의 여집합)을 삭제해야합니다.)
+        // -> bestPracctice는 이게 단 1개일꺼다.
+
+        var beforeSet = Set<UUID>()
+        stickerIdDictionary.keys.forEach { beforeSet.insert($0) }
+
+        var afterSet = Set<UUID>()
+        stickerList.forEach { afterSet.insert($0.id) }
+        
+        let deleteTargetSet = beforeSet.subtracting(afterSet)
+        deleteTargetSet.forEach { stickerID in
+            if let targetIndex = stickerIdDictionary[stickerID] {
+                deleteExistingSticker(at: targetIndex)
+            }
+        }
+        
         stickerList.forEach { sticker in
             if let targetIndex = stickerIdDictionary[sticker.id] {
                 updateExistingSticker(at: targetIndex, with: sticker)
@@ -137,6 +156,15 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         else { return }
         
         stickerImageView.update(with: sticker)
+    }
+    
+    private func deleteExistingSticker(at index: Int) {
+        guard let stickerImageView = canvasScrollView
+            .imageView
+            .subviews[index] as? StickerView
+        else { return }
+        
+        stickerImageView.removeFromSuperview()
     }
     
     private func addNewSticker(to sticker: StickerEntity, isLocal: Bool) {
