@@ -70,7 +70,7 @@ actor RoomManager {
             message: dto.toData(encoder)
         )
         
-        targetRoom.userList.forEach {
+        targetList.forEach {
             $0.client.sendDTO(response, encoder: encoder)
         }
     }
