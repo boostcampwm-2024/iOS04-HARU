@@ -78,10 +78,12 @@ final public class SignalingServiceImpl: SignalingService {
 // MARK: WebSocketClientDelegate
 extension SignalingServiceImpl {
     public func webSocketDidConnect(_ webSocket: WebSocketClient) {
+        self.didConnectSubject.send(())
         self.delegate?.signalingServiceDidConnect(self)
     }
     
     public func webSocketDidDisconnect(_ webSocket: WebSocketClient) {
+        self.didDisconnectSubject.send(())
         self.delegate?.signalingServiceDidDisconnect(self)
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
@@ -105,6 +107,7 @@ extension SignalingServiceImpl {
                 return
             }
             PTGDataLogger.log("iceCandidate 응답 수신.\(String(describing: self.delegate))")
+            self.didReceiveCandidateSubject.send(iceCandidate.rtcIceCandidate)
             self.delegate?.signalingService(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
         case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
@@ -113,6 +116,7 @@ extension SignalingServiceImpl {
                 return
             }
             PTGDataLogger.log("offerSDP 응답 수신.\(String(describing: self.delegate))")
+            self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
             self.delegate?.signalingService(self, didReceiveRemoteSdp: sdp.rtcSessionDescription)
             
         case .answerSDP:
@@ -122,6 +126,7 @@ extension SignalingServiceImpl {
                 return
             }
             PTGDataLogger.log("answerSDP 응답 수신.\(String(describing: self.delegate))")
+            self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
             self.delegate?.signalingService(self, didReceiveRemoteSdp: sdp.rtcSessionDescription)
         @unknown default:
             PTGDataLogger.log("Unknown Message Type: \(response)")
