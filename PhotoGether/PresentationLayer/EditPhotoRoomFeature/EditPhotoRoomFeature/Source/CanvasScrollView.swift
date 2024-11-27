@@ -1,5 +1,7 @@
 import UIKit
+
 import DesignSystem
+import PhotoGetherDomainInterface
 
 final class CanvasScrollView: UIScrollView {
     let imageView = UIImageView()
@@ -39,7 +41,33 @@ final class CanvasScrollView: UIScrollView {
 
 // MARK: - StickerView methods
 extension CanvasScrollView {
+    func findStickerView(with id: UUID) -> StickerView? {
+        return stickerViewDictonary[id]
+    }
     
+    func createStickerView(
+        _ target: StickerViewActionDelegate,
+        with sticker: StickerEntity,
+        user: String
+    ) {
+        let stickerView = StickerView(sticker: sticker, user: user)
+        stickerView.delegate = target
+        
+        stickerViewDictonary[sticker.id] = stickerView
+        imageView.addSubview(stickerView)
+        stickerView.update(with: sticker)
+    }
+    
+    func updateStickerView(with sticker: StickerEntity) {
+        guard let stickerView = findStickerView(with: sticker.id) else { return }
+        stickerView.update(with: sticker)
+    }
+    
+    func deleteStickerView(with id: UUID) {
+        guard let stickerView = findStickerView(with: id) else { return }
+        stickerView.removeFromSuperview()
+        stickerViewDictonary[id] = nil
+    }
 }
 
 // MARK: - ImageView setup methods
