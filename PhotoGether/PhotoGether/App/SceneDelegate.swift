@@ -50,13 +50,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             ]
         )
         
-        let connectionClient: ConnectionClient = ConnectionClientImpl(
+        let connectionClient1: ConnectionClient = ConnectionClientImpl(
+            signalingService: signalingService,
+            webRTCService: webRTCService
+        )
+        
+        let connectionClient2: ConnectionClient = ConnectionClientImpl(
+            signalingService: signalingService,
+            webRTCService: webRTCService
+        )
+        
+        let connectionClient3: ConnectionClient = ConnectionClientImpl(
+            signalingService: signalingService,
+            webRTCService: webRTCService
+        )
+        
+        let connectionClient4: ConnectionClient = ConnectionClientImpl(
             signalingService: signalingService,
             webRTCService: webRTCService
         )
         
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
-            clients: [connectionClient],
+            clients: [
+                connectionClient1,
+                connectionClient2,
+                connectionClient3,
+                connectionClient4
+            ],
             roomService: roomService
         )
         
