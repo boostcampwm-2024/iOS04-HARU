@@ -35,7 +35,7 @@ actor RoomManager {
         }
         
         return isSuccessInvite ?
-            .success(JoinRoomResponseDTO(userID: userID, userList: userDTOList)) :
+            .success(JoinRoomResponseDTO(userID: userID, roomID: roomID, userList: userDTOList)) :
             .failure(RoomError.joinFailed)
     }
     
