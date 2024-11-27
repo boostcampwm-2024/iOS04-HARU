@@ -98,7 +98,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             .receive(on: RunLoop.main)
             .sink { [weak self] event in
             switch event {
-            case .stickerObjectList(let stickerList):
+            case .stickerList(let stickerList):
                 self?.updateCanvas(with: stickerList)
             case .frameImage(let image):
                 self?.updateFrameImage(to: image)

@@ -13,7 +13,7 @@ public final class EditPhotoRoomGuestViewModel {
     }
     
     enum Output {
-        case stickerObjectList([StickerEntity])
+        case stickerList([StickerEntity])
         case frameImage(image: UIImage)
         case stickerBottomSheetPresent
     }
@@ -55,7 +55,7 @@ public final class EditPhotoRoomGuestViewModel {
     private func bind() {
         stickerListSubject
             .sink { [weak self] list in
-                self?.output.send(.stickerObjectList(list))
+                self?.output.send(.stickerList(list))
             }
             .store(in: &cancellables)
         
