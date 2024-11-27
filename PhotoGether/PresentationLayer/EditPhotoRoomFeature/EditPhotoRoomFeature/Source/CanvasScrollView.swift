@@ -7,6 +7,10 @@ final class CanvasScrollView: UIScrollView {
     let imageView = UIImageView()
     
     private var stickerViewDictonary: [UUID: StickerView]
+    
+    var stickerIDList: [UUID] {
+        return stickerViewDictonary.keys.map { $0 }
+    }
 
     override init(frame: CGRect) {
         self.stickerViewDictonary = [:]
@@ -41,6 +45,10 @@ final class CanvasScrollView: UIScrollView {
 
 // MARK: - StickerView methods
 extension CanvasScrollView {
+    func isExistStickerView(with id: UUID) -> Bool {
+        return stickerViewDictonary.keys.contains(id)
+    }
+    
     func findStickerView(with id: UUID) -> StickerView? {
         return stickerViewDictonary[id]
     }
