@@ -10,6 +10,8 @@ public final class SharePhotoViewModel {
     
     enum Output {
         case showShareSheet
+        case showSaveToast
+        case showFailToast
         case showAuthorizationAlert
     }
     
@@ -36,6 +38,7 @@ public final class SharePhotoViewModel {
         
         return output.eraseToAnyPublisher()
     }
+    
     private func handleSaveButtonDidTap() async {
         guard await isAuthorized() else {
             output.send(.showAuthorizationAlert)
