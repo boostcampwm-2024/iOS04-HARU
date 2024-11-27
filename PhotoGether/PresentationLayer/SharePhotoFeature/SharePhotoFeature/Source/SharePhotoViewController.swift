@@ -101,6 +101,8 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
                 switch event {
                 case .showShareSheet:
                     self?.showShareSheet()
+                case .showAuthorizationAlert:
+                    self?.showAutorizationAlert()
                 }
             }
             .store(in: &cancellables)
@@ -118,6 +120,18 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
         }
     }
     
+    private func showAutorizationAlert() {
+        let alert = UIAlertController(
+            title: "사진 앱 접근 권한 필요",
+            message: "사진을 저장하려면 설정에서 사진 앱에 대한 접근 권한을 허용해주세요.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "설정", style: .default, handler: { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }))
         present(alert, animated: true)
     }
 }
