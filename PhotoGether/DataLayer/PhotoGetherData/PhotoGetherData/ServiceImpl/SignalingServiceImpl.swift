@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import WebRTC
 import PhotoGetherNetwork
 
@@ -7,6 +8,24 @@ final public class SignalingServiceImpl: SignalingService {
     private let encoder = JSONEncoder()
     private var webSocketClient: WebSocketClient
     public var delegate: SignalingServiceDelegate?
+    
+    private let didConnectSubject = PassthroughSubject<Void, Never>()
+    private let didDisconnectSubject = PassthroughSubject<Void, Never>()
+    private let didReceiveRemoteSdpSubject = PassthroughSubject<RTCSessionDescription, Never>()
+    private let didReceiveCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
+    
+    public var didConnectPublisher: AnyPublisher<Void, Never> {
+        self.didConnectSubject.eraseToAnyPublisher()
+    }
+    public var didDidDisconnectPublisher: AnyPublisher<Void, Never> {
+        self.didDisconnectSubject.eraseToAnyPublisher()
+    }
+    public var didReceiveRemoteSdpPublisher: AnyPublisher<RTCSessionDescription, Never> {
+        self.didReceiveRemoteSdpSubject.eraseToAnyPublisher()
+    }
+    public var didReceiveCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> {
+        self.didReceiveCandidateSubject.eraseToAnyPublisher()
+    }
     
     public init(webSocketClient: WebSocketClient) {
         self.webSocketClient = webSocketClient
@@ -77,7 +96,7 @@ extension SignalingServiceImpl {
             PTGDataLogger.log("수신한 메시지 decoding에 실패하였습니다.: \(data)")
             return
         }
-        
+        PTGDataLogger.log("Signaling 응답 수신.: \(response.messageType)")
         switch response.messageType {
         case .iceCandidate:
             guard let iceCandidate = response.message?.toDTO(type: IceCandidateMessage.self, decoder: decoder)
@@ -85,6 +104,7 @@ extension SignalingServiceImpl {
                 PTGDataLogger.log("IceCandidate decoding에 실패하였습니다.: \(response)")
                 return
             }
+            PTGDataLogger.log("iceCandidate 응답 수신.\(String(describing: self.delegate))")
             self.delegate?.signalingService(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
         case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
@@ -92,6 +112,7 @@ extension SignalingServiceImpl {
                 PTGDataLogger.log("SDP decoding에 실패하였습니다.: \(response)")
                 return
             }
+            PTGDataLogger.log("offerSDP 응답 수신.\(String(describing: self.delegate))")
             self.delegate?.signalingService(self, didReceiveRemoteSdp: sdp.rtcSessionDescription)
             
         case .answerSDP:
@@ -100,6 +121,7 @@ extension SignalingServiceImpl {
                 PTGDataLogger.log("SDP decoding에 실패하였습니다.: \(response)")
                 return
             }
+            PTGDataLogger.log("answerSDP 응답 수신.\(String(describing: self.delegate))")
             self.delegate?.signalingService(self, didReceiveRemoteSdp: sdp.rtcSessionDescription)
         @unknown default:
             PTGDataLogger.log("Unknown Message Type: \(response)")
