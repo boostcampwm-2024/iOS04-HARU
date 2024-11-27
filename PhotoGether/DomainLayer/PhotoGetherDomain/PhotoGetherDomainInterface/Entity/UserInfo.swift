@@ -1,11 +1,11 @@
 import Foundation
 
-public struct UserInfoEntity: Identifiable {
+public struct UserInfo: Identifiable {
     public var id: String
     public var nickname: String
     public var isHost: Bool
     public var viewPosition: ViewPosition
-    public var roomID: String?
+    public var roomID: String
     
     public enum ViewPosition: Int {
         case topLeading
@@ -19,7 +19,7 @@ public struct UserInfoEntity: Identifiable {
         nickname: String,
         isHost: Bool,
         viewPosition: ViewPosition,
-        roomID: String? = nil
+        roomID: String
     ) {
         self.id = id
         self.nickname = nickname

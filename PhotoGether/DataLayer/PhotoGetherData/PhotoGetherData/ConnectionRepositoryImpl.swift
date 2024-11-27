@@ -8,7 +8,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     public var clients: [ConnectionClient]
     
     private let _localVideoView = CapturableVideoView()
-    private var localUserInfo: UserInfoEntity?
+    private var localUserInfo: UserInfo?
     
     public var localVideoView: UIView { _localVideoView }
     public var capturedLocalVideo: UIImage? { _localVideoView.capturedImage }
@@ -42,15 +42,16 @@ extension ConnectionRepositoryImpl {
                 let newUser = entity.newUser
                 let emptyClient = clients.first(where: { $0.remoteUserInfo == nil })
                 
-                guard let viewPosition = UserInfoEntity.ViewPosition(rawValue: newUser.initialPosition) else {
-                    return
-                }
+                guard let viewPosition = UserInfo.ViewPosition(rawValue: newUser.initialPosition),
+                      let roomID = self.localUserInfo?.roomID
+                else { return }
                 
-                let newUserInfoEntity = UserInfoEntity(
+                let newUserInfoEntity = UserInfo(
                     id: newUser.userID,
                     nickname: newUser.nickname,
                     isHost: false,
-                    viewPosition: viewPosition
+                    viewPosition: viewPosition,
+                    roomID: roomID
                 )
                 
                 emptyClient?.setRemoteUserInfo(newUserInfoEntity)
@@ -59,7 +60,11 @@ extension ConnectionRepositoryImpl {
     }
 
     public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
-        return roomService.createRoom()
+        return roomService.createRoom().map { [weak self] entity -> RoomOwnerEntity in
+            guard let self else { return entity }
+            return self.setLocalUserInfo(entity: entity)
+        }
+        .eraseToAnyPublisher()
     }
     
     public func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error> {
@@ -80,6 +85,12 @@ extension ConnectionRepositoryImpl {
         return true
     }
     
+    private func setLocalUserInfo(entity: RoomOwnerEntity) -> RoomOwnerEntity {
+        guard let localUserInfo = localUserInfo(for: entity) else { return entity }
+        self.localUserInfo = localUserInfo
+        return entity
+    }
+    
     private func setRemoteUserInfo(entity: JoinRoomEntity, hostID: String) -> Bool {
         let remoteUserInfoList = remoteUserInfoList(for: entity, hostID: hostID)
         
@@ -89,36 +100,50 @@ extension ConnectionRepositoryImpl {
         return true
     }
     
-    private func localUserInfo(for entity: JoinRoomEntity) -> UserInfoEntity? {
+    private func localUserInfo(for entity: JoinRoomEntity) -> UserInfo? {
         let myID = entity.userID
         let clientsInfo = entity.userList
         guard let myInfo = clientsInfo.first(where: { $0.userID == myID }),
-              let viewPosition = UserInfoEntity.ViewPosition(rawValue: myInfo.initialPosition)
+              let viewPosition = UserInfo.ViewPosition(rawValue: myInfo.initialPosition),
+              let roomID = self.localUserInfo?.roomID
         else { return nil }
         
-        return UserInfoEntity(
+        return UserInfo(
             id: myInfo.userID,
             nickname: myInfo.nickname,
             isHost: false,
-            viewPosition: viewPosition
+            viewPosition: viewPosition,
+            roomID: roomID
         )
     }
     
-    private func remoteUserInfoList(for entity: JoinRoomEntity, hostID: String) -> [UserInfoEntity] {
-        var result: [UserInfoEntity] = []
+    private func localUserInfo(for entity: RoomOwnerEntity) -> UserInfo? {
+        return UserInfo(
+            id: entity.hostID,
+            nickname: "내가 호스트다",
+            isHost: true,
+            viewPosition: .topLeading,
+            roomID: entity.roomID
+        )
+    }
+    
+    private func remoteUserInfoList(for entity: JoinRoomEntity, hostID: String) -> [UserInfo] {
+        var result: [UserInfo] = []
         let clientsInfo = entity.userList.filter { $0.userID != entity.userID }
         result = clientsInfo.map {
             let userID = $0.userID
             guard let userInfo = clientsInfo.first(where: { $0.userID == userID }),
-                  let viewPosition = UserInfoEntity.ViewPosition(rawValue: userInfo.initialPosition)
+                  let viewPosition = UserInfo.ViewPosition(rawValue: userInfo.initialPosition),
+                  let roomID = self.localUserInfo?.roomID
             else { return nil }
             let isHost = userID == hostID
             
-            return UserInfoEntity(
+            return UserInfo(
                 id: userInfo.userID,
                 nickname: userInfo.nickname,
                 isHost: isHost,
-                viewPosition: viewPosition
+                viewPosition: viewPosition,
+                roomID: roomID
             )
         }.compactMap { $0 }
 

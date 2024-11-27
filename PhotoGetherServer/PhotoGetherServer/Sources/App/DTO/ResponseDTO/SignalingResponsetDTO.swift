@@ -1,6 +1,6 @@
 import Foundation
 
-struct SignalingRequestDTO: Decodable {
+struct SignalingResponseDTO: Encodable {
     var messageType: SignalingMessageType
     var message: Data?
     
@@ -9,7 +9,7 @@ struct SignalingRequestDTO: Decodable {
         self.message = message
     }
     
-    enum SignalingMessageType: String, Decodable {
+    enum SignalingMessageType: String, Encodable {
         case offerSDP
         case answerSDP
         case iceCandidate

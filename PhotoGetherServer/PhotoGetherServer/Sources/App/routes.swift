@@ -8,6 +8,6 @@ func routes(_ app: Application) throws {
     
     // MARK: Controller에서 대신 처리
     app.webSocket("signaling") { req, client in
-        webSocketController.handleConnection(req, client: client)
+        await webSocketController.handleConnection(req, client: client)
     }
 }

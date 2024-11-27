@@ -17,11 +17,16 @@ final public class SignalingServiceImpl: SignalingService {
         self.webSocketClient.connect()
     }
     
-    public func send(sdp rtcSdp: RTCSessionDescription, peerID: String, roomID: String) {
-        let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp, peerID: peerID, roomID: roomID))
+    public func send(
+        type: SignalingRequestDTO.SignalingMessageType,
+        sdp rtcSdp: RTCSessionDescription,
+        userID: String,
+        roomID: String
+    ) {
+        let message = SessionDescriptionMessage(from: rtcSdp, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
-            let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
+            let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
             let request = try self.encoder.encode(dto)
             
             self.webSocketClient.send(data: request)
@@ -30,11 +35,16 @@ final public class SignalingServiceImpl: SignalingService {
         }
     }
     
-    public func send(candidate rtcIceCandidate: RTCIceCandidate, peerID: String, roomID: String) {
-        let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate, peerID: peerID, roomID: roomID))
+    public func send(
+        type: SignalingRequestDTO.SignalingMessageType,
+        candidate rtcIceCandidate: RTCIceCandidate,
+        userID: String,
+        roomID: String
+    ) {
+        let message = IceCandidateMessage(from: rtcIceCandidate, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
-            let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
+            let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
             let request = try self.encoder.encode(dto)
             
             self.webSocketClient.send(data: request)
@@ -60,21 +70,29 @@ extension SignalingServiceImpl {
     }
     
     public func webSocket(_ webSocket: WebSocketClient, didReceiveData data: Data) {
-        let message: SignalingMessage
-        do {
-            message = try self.decoder.decode(SignalingMessage.self, from: data)
-        } catch {
-            debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(error)")
+        guard let response = data.toDTO(type: SignalingResponseDTO.self, decoder: decoder)
+        else {
+            debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(data)")
             return
         }
         
-        switch message {
-        case .candidate(let iceCandidate):
+        switch response.messageType {
+        case .iceCandidate:
+            guard let iceCandidate = response.message?.toDTO(type: IceCandidateMessage.self, decoder: decoder)
+            else {
+                debugPrint("IceCandidate decoding에 실패하였습니다.: \(response)")
+                return
+            }
             self.delegate?.signalingService(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
-        case .sdp(let sessionDescription):
-            self.delegate?.signalingService(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
+        case .sdp:
+            guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
+            else {
+                debugPrint("SDP decoding에 실패하였습니다.: \(response)")
+                return
+            }
+            self.delegate?.signalingService(self, didReceiveRemoteSdp: sdp.rtcSessionDescription)
         @unknown default:
-            debugPrint("Unknown Message Type: \(message)")
+            debugPrint("Unknown Message Type: \(response)")
             return
         }
     }

@@ -1,6 +1,7 @@
 import Foundation
+import PhotoGetherNetwork
 
-struct SignalingRequestDTO: Decodable {
+struct SignalingResponseDTO: WebSocketResponsable {
     var messageType: SignalingMessageType
     var message: Data?
     
@@ -10,8 +11,7 @@ struct SignalingRequestDTO: Decodable {
     }
     
     enum SignalingMessageType: String, Decodable {
-        case offerSDP
-        case answerSDP
+        case sdp
         case iceCandidate
     }
 }
