@@ -3,8 +3,11 @@ import DesignSystem
 
 final class CanvasScrollView: UIScrollView {
     let imageView = UIImageView()
+    
+    private var stickerViewDictonary: [UUID: StickerView]
 
     override init(frame: CGRect) {
+        self.stickerViewDictonary = [:]
         super.init(frame: frame)
         
         delegate = self
@@ -12,6 +15,7 @@ final class CanvasScrollView: UIScrollView {
         configureUI()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -31,7 +35,15 @@ final class CanvasScrollView: UIScrollView {
 
         imageView.isUserInteractionEnabled = true
     }
+}
+
+// MARK: - StickerView methods
+extension CanvasScrollView {
     
+}
+
+// MARK: - ImageView setup methods
+extension CanvasScrollView {
     func updateFrameImage(to image: UIImage) {
         imageView.image = image
         
@@ -39,8 +51,11 @@ final class CanvasScrollView: UIScrollView {
         self.setupZoomScale()
         self.contentCentering()
     }
-    
-    func contentCentering() {
+}
+
+// MARK: - Sub method
+extension CanvasScrollView {
+    private func contentCentering() {
         let scrollView = self
         let contentView = imageView
 
@@ -58,7 +73,7 @@ final class CanvasScrollView: UIScrollView {
         )
     }
     
-    func setupZoomScale() {
+    private func setupZoomScale() {
         guard let image = imageView.image else { return }
         
         let widthBaseScale = frame.width / image.size.width
