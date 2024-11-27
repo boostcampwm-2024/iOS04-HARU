@@ -10,14 +10,14 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
     public var remoteVideoView: UIView = CapturableVideoView()
-    public var remoteUserInfo: UserInfoEntity?
+    public var remoteUserInfo: UserInfo?
     
     public var roomID: String = ""
     
     public init(
         signalingService: SignalingService,
         webRTCService: WebRTCService,
-        remoteUserInfo: UserInfoEntity? = nil
+        remoteUserInfo: UserInfo? = nil
     ) {
         self.signalingService = signalingService
         self.webRTCService = webRTCService
@@ -33,7 +33,7 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.bindRemoteVideo()
     }
     
-    public func setRemoteUserInfo(_ remoteUserInfo: UserInfoEntity) {
+    public func setRemoteUserInfo(_ remoteUserInfo: UserInfo) {
         self.remoteUserInfo = remoteUserInfo
     }
     
