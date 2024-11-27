@@ -57,7 +57,7 @@ extension Error {
     }
 }
 
-extension DecodingError {
+public extension DecodingError {
     var fullDescription: String {
         switch self {
         case let .typeMismatch(type, context):
