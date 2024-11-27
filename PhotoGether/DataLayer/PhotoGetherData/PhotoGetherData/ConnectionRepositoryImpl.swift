@@ -21,6 +21,32 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         bindLocalVideo()
         bindNotifyNewUserPublihser()
     }
+    
+    public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
+        return roomService.createRoom().map { [weak self] entity -> RoomOwnerEntity in
+            guard let self else { return entity }
+            return self.setLocalUserInfo(entity: entity)
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    public func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error> {
+        return roomService.joinRoom(to: roomID).map { [weak self] entity -> Bool in
+            guard let self else { return false }
+            guard entity.userList.count <= clients.count else { return false }
+            let setLocalUserInfoResult = setLocalUserInfo(entity: entity)
+            let setRemoteUserInfoResult = setRemoteUserInfo(entity: entity, hostID: hostID)
+            
+            return setLocalUserInfoResult && setRemoteUserInfoResult
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    public func sendOffer() -> Bool {
+        guard let myID = localUserInfo?.id else { return false }
+        clients.forEach { $0.sendOffer(myID: myID) }
+        return true
+    }
 }
 
 extension ConnectionRepositoryImpl {
@@ -57,26 +83,6 @@ extension ConnectionRepositoryImpl {
                 emptyClient?.setRemoteUserInfo(newUserInfoEntity)
             })
             .store(in: &cancellables)
-    }
-
-    public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
-        return roomService.createRoom().map { [weak self] entity -> RoomOwnerEntity in
-            guard let self else { return entity }
-            return self.setLocalUserInfo(entity: entity)
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    public func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error> {
-        return roomService.joinRoom(to: roomID).map { [weak self] entity -> Bool in
-            guard let self else { return false }
-            guard entity.userList.count <= clients.count else { return false }
-            let setLocalUserInfoResult = setLocalUserInfo(entity: entity)
-            let setRemoteUserInfoResult = setRemoteUserInfo(entity: entity, hostID: hostID)
-            
-            return setLocalUserInfoResult && setRemoteUserInfoResult
-        }
-        .eraseToAnyPublisher()
     }
     
     private func setLocalUserInfo(entity: JoinRoomEntity) -> Bool {

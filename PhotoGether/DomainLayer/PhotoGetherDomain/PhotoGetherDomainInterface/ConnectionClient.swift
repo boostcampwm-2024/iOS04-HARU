@@ -8,7 +8,7 @@ public protocol ConnectionClient {
     var receivedDataPublisher: PassthroughSubject<Data, Never> { get }
     
     func setRemoteUserInfo(_ remoteUserInfo: UserInfo)
-    func sendOffer()
+    func sendOffer(myID: String)
     func sendData(data: Data)
     func captureVideo() -> UIImage
     func bindLocalVideo(_ localVideoView: UIView)

@@ -1,5 +1,5 @@
 import Foundation
 
 public protocol SendOfferUseCase {
-    func execute()
+    func execute() -> Bool
 }

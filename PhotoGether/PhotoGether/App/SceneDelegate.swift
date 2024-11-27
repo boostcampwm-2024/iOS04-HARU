@@ -90,7 +90,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             isHost: isHost
         )
         
-        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+        let waitingRoomViewModel: WaitingRoomViewModel = WaitingRoomViewModel(
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
@@ -98,7 +98,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(
-            viewModel: viewModel,
+            viewModel: waitingRoomViewModel,
             photoRoomViewController: photoRoomViewController
         )
         
@@ -120,6 +120,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 viewModel: enterLoadingViewModel,
                 waitingRoomViewController: waitingRoomViewController
             )
+            
+            waitingRoomViewModel.setGuestMode(true)
             
             window?.rootViewController = UINavigationController(rootViewController: enterLoadingViewController)
         } else {

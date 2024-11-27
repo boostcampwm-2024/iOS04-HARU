@@ -21,6 +21,7 @@ public final class WaitingRoomViewModel {
     
     private var cancellables = Set<AnyCancellable>()
     
+    private var isGuest: Bool = false
     private let sendOfferUseCase: SendOfferUseCase
     private let getLocalVideoUseCase: GetLocalVideoUseCase
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
@@ -42,6 +43,9 @@ public final class WaitingRoomViewModel {
         let newMicMuteState = mutateMicMuteButtonDidTap(input)
         let newShouldShowShareSheet = mutateLinkButtonDidTap(input)
         let newNavigateToPhotoRoom = mutateStartButtonDidTap(input)
+        let sendOfferOnGuestTestPublisher = Publishers.MergeMany([
+            newShouldShowShareSheet, sendOfferOnGuestTest(input)
+        ]).eraseToAnyPublisher()
         
         let output = Output(
             localVideo: bindLocalVideo(input),
@@ -49,18 +53,26 @@ public final class WaitingRoomViewModel {
             micMuteState: newMicMuteState,
             shouldShowShareSheet: newShouldShowShareSheet,
             navigateToPhotoRoom: newNavigateToPhotoRoom,
-            shouldShowToast: newShouldShowShareSheet
+            shouldShowToast: sendOfferOnGuestTestPublisher
         )
-        
         return output
     }
+
     
-    func sendOffer() {
-        sendOfferUseCase.execute()
+    public func setGuestMode(_ isGuest: Bool) {
+        self.isGuest = isGuest
     }
 }
 
 private extension WaitingRoomViewModel {
+    func sendOfferOnGuestTest(_ input: Input) -> AnyPublisher<String, Never> {
+        input.viewDidLoad.map { [weak self] _ in
+            guard let self else { return "" }
+            let result = self.sendOfferUseCase.execute()
+            return result ? "Offer sent" : "Error sending offer"
+        }.eraseToAnyPublisher()
+    }
+    
     func bindLocalVideo(_ input: Input) -> AnyPublisher<UIView, Never> {
         input.viewDidLoad.map { [weak self] _ in
             guard let self else { return UIView() }
