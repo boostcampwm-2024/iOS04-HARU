@@ -101,6 +101,10 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
                 switch event {
                 case .showShareSheet:
                     self?.showShareSheet()
+                case .showSaveToast:
+                    self?.showToast(message: "사진이 저장되었습니다.")
+                case .showFailToast:
+                    self?.showToast(message: "저장 실패")
                 case .showAuthorizationAlert:
                     self?.showAutorizationAlert()
                 }

@@ -41,5 +41,16 @@ public final class SharePhotoViewModel {
             output.send(.showAuthorizationAlert)
             return
         }
+        
+        let isSuccess = await savePhoto()
+        output.send(isSuccess ? .showSaveToast : .showFailToast)
+    }
+    
+    private func savePhoto() async -> Bool {
+        return await PhotoLibraryHelper.savePhoto(with: photoData)
+    }
+    
+    private func isAuthorized() async -> Bool {
+        return await PhotoLibraryPermissionManager.checkPhotoPermission()
     }
 }
