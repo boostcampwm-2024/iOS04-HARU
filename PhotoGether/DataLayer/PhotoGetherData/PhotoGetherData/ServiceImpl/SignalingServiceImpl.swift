@@ -23,6 +23,7 @@ final public class SignalingServiceImpl: SignalingService {
         userID: String,
         roomID: String
     ) {
+        PTGDataLogger.log("send SDP type: \(type) userID: \(userID) roomID: \(roomID)")
         let message = SessionDescriptionMessage(from: rtcSdp, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
@@ -31,7 +32,7 @@ final public class SignalingServiceImpl: SignalingService {
             
             self.webSocketClient.send(data: request)
         } catch {
-            debugPrint("Warning: Could not encode sdp: \(error)")
+            PTGDataLogger.log("Warning: Could not encode sdp: \(error)")
         }
     }
     
@@ -41,6 +42,7 @@ final public class SignalingServiceImpl: SignalingService {
         userID: String,
         roomID: String
     ) {
+        PTGDataLogger.log("send Candidate type: \(type) userID: \(userID) roomID: \(roomID)")
         let message = IceCandidateMessage(from: rtcIceCandidate, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
@@ -49,7 +51,7 @@ final public class SignalingServiceImpl: SignalingService {
             
             self.webSocketClient.send(data: request)
         } catch {
-            debugPrint("Warning: Could not encode candidate: \(error)")
+            PTGDataLogger.log("Warning: Could not encode candidate: \(error)")
         }
     }
 }
@@ -64,7 +66,7 @@ extension SignalingServiceImpl {
         self.delegate?.signalingServiceDidDisconnect(self)
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            debugPrint("Signaling server 재연결 시도 중...")
+            PTGDataLogger.log("Signaling server 재연결 시도 중...")
             self.webSocketClient.connect()
         }
     }
@@ -72,7 +74,7 @@ extension SignalingServiceImpl {
     public func webSocket(_ webSocket: WebSocketClient, didReceiveData data: Data) {
         guard let response = data.toDTO(type: SignalingResponseDTO.self, decoder: decoder)
         else {
-            debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(data)")
+            PTGDataLogger.log("수신한 메시지 decoding에 실패하였습니다.: \(data)")
             return
         }
         
@@ -80,19 +82,27 @@ extension SignalingServiceImpl {
         case .iceCandidate:
             guard let iceCandidate = response.message?.toDTO(type: IceCandidateMessage.self, decoder: decoder)
             else {
-                debugPrint("IceCandidate decoding에 실패하였습니다.: \(response)")
+                PTGDataLogger.log("IceCandidate decoding에 실패하였습니다.: \(response)")
                 return
             }
             self.delegate?.signalingService(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
-        case .sdp:
+        case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
             else {
-                debugPrint("SDP decoding에 실패하였습니다.: \(response)")
+                PTGDataLogger.log("SDP decoding에 실패하였습니다.: \(response)")
+                return
+            }
+            self.delegate?.signalingService(self, didReceiveRemoteSdp: sdp.rtcSessionDescription)
+            
+        case .answerSDP:
+            guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
+            else {
+                PTGDataLogger.log("SDP decoding에 실패하였습니다.: \(response)")
                 return
             }
             self.delegate?.signalingService(self, didReceiveRemoteSdp: sdp.rtcSessionDescription)
         @unknown default:
-            debugPrint("Unknown Message Type: \(response)")
+            PTGDataLogger.log("Unknown Message Type: \(response)")
             return
         }
     }

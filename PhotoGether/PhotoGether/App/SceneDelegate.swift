@@ -50,13 +50,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             ]
         )
         
-        let connectionClient: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
-            clients: [connectionClient],
+            clients: [
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                )
+            ],
             roomService: roomService
         )
         
@@ -129,5 +141,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         window?.makeKeyAndVisible()
+    }
+    
+    private func makeConnectionClient(
+        signalingService: SignalingService,
+        webRTCService: WebRTCService
+    ) -> ConnectionClient {
+        return ConnectionClientImpl(
+            signalingService: signalingService,
+            webRTCService: webRTCService
+        )
     }
 }

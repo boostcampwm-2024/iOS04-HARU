@@ -62,7 +62,7 @@ extension ConnectionRepositoryImpl {
                 case .finished:
                     return
                 case .failure(let error):
-                    debugPrint(error.localizedDescription)
+                    PTGDataLogger.log(error.localizedDescription)
                 }
             }, receiveValue: {  [weak self] entity in
                 guard let self else { return }
@@ -82,8 +82,7 @@ extension ConnectionRepositoryImpl {
                 )
                 
                 emptyClient?.setRemoteUserInfo(newUserInfoEntity)
-                let logger = Logger(subsystem: "PhotoGether", category: "ConnectionRepository")
-                logger.log(level: .debug, "New user joined: \(newUserInfoEntity.id)")
+                PTGDataLogger.log("newUser Entered: \(newUserInfoEntity)")
             })
             .store(in: &cancellables)
     }
@@ -113,8 +112,7 @@ extension ConnectionRepositoryImpl {
         let myID = entity.userID
         let clientsInfo = entity.userList
         guard let myInfo = clientsInfo.first(where: { $0.userID == myID }),
-              let viewPosition = UserInfo.ViewPosition(rawValue: myInfo.initialPosition),
-              let roomID = self.localUserInfo?.roomID
+              let viewPosition = UserInfo.ViewPosition(rawValue: myInfo.initialPosition)
         else { return nil }
         
         return UserInfo(
@@ -122,7 +120,7 @@ extension ConnectionRepositoryImpl {
             nickname: myInfo.nickname,
             isHost: false,
             viewPosition: viewPosition,
-            roomID: roomID
+            roomID: entity.roomID
         )
     }
     

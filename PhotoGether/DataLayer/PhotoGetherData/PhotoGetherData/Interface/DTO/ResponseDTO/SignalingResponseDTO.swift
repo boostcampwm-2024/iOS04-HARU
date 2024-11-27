@@ -11,7 +11,8 @@ struct SignalingResponseDTO: WebSocketResponsable {
     }
     
     enum SignalingMessageType: String, Decodable {
-        case sdp
+        case offerSDP
+        case answerSDP
         case iceCandidate
     }
 }
