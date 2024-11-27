@@ -68,6 +68,7 @@ private extension WaitingRoomViewModel {
     func sendOfferOnGuestTest(_ input: Input) -> AnyPublisher<String, Never> {
         input.viewDidLoad.map { [weak self] _ in
             guard let self else { return "" }
+            guard isGuest else { return "" }
             let result = self.sendOfferUseCase.execute()
             return result ? "Offer sent" : "Error sending offer"
         }.eraseToAnyPublisher()
