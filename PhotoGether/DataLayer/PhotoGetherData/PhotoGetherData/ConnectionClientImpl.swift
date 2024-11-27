@@ -37,14 +37,14 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.remoteUserInfo = remoteUserInfo
     }
     
-    public func sendOffer() {
+    public func sendOffer(myID: String) {
         guard let remoteUserInfo else { return }
         
         self.webRTCService.offer { sdp in
             self.signalingService.send(
                 type: .offerSDP,
                 sdp: sdp,
-                userID: remoteUserInfo.id,
+                userID: myID,
                 roomID: remoteUserInfo.roomID
             )
         }

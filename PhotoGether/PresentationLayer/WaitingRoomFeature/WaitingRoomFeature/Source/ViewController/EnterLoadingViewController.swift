@@ -73,7 +73,7 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
                     self.modalPresentationStyle = .fullScreen
                     self.present(waitingRoomViewController, animated: false)
                 } else {
-                    print("방 참여에 실패했습니다 흑흑") // TODO: 토스트 메시지로 변경 예정
+                    self.showToast(message: "방 참여에 실패했습니다 흑흑")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         self.modalPresentationStyle = .fullScreen
                         self.present(self.waitingRoomViewController, animated: false)
