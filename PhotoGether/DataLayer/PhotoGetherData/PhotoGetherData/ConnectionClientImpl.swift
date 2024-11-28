@@ -102,11 +102,11 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
             
             guard self.webRTCService.peerConnection.localDescription == nil else { return }
             
-            self.webRTCService.answer { sdp in                
+            self.webRTCService.answer { sdp in
                 self.signalingService.send(
                     sdp: sdp,
-                    peerID: userInfo.id,
-                    roomID: userInfo.roomID ?? ""
+                    peerID: "",
+                    roomID: ""
                 )
             }
         }
