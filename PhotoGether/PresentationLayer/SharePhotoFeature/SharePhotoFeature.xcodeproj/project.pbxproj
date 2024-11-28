@@ -11,8 +11,13 @@
 		055503C52CDB5608004D34EB /* SharePhotoFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 055503882CDB54AF004D34EB /* SharePhotoFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60B03BF32CE4CEDC00A7C748 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; };
 		60B03BF42CE4CEDC00A7C748 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7B59510F2CDB598E00B89C85 /* FeatureTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */; };
-		7B5951102CDB598E00B89C85 /* FeatureTesting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60CA8C6A2CF7556F00F1A8E5 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; };
+		60CA8C6B2CF7556F00F1A8E5 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60CA8C6F2CF755B400F1A8E5 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */; };
+		60CA8C702CF755B400F1A8E5 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60CA8C712CF755F300F1A8E5 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951512CDB600100B89C85 /* BaseFeature.framework */; };
+		60CA8C722CF755F300F1A8E5 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951512CDB600100B89C85 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		60CA8C782CF7573500F1A8E5 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 60CA8C772CF7573500F1A8E5 /* WebRTC */; };
 		7B5951522CDB600100B89C85 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951512CDB600100B89C85 /* BaseFeature.framework */; };
 		7B5951532CDB600100B89C85 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951512CDB600100B89C85 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951D22CDB664300B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */; };
@@ -36,8 +41,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7B5951102CDB598E00B89C85 /* FeatureTesting.framework in Embed Frameworks */,
+				60CA8C6B2CF7556F00F1A8E5 /* DesignSystem.framework in Embed Frameworks */,
 				055503C52CDB5608004D34EB /* SharePhotoFeature.framework in Embed Frameworks */,
+				60CA8C702CF755B400F1A8E5 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
+				60CA8C722CF755F300F1A8E5 /* BaseFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,6 +68,8 @@
 		055503882CDB54AF004D34EB /* SharePhotoFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharePhotoFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		055503982CDB54F6004D34EB /* SharePhotoFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharePhotoFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60CA8C6C2CF7559C00F1A8E5 /* EditPhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EditPhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60CA8C732CF7563200F1A8E5 /* PhotoGetherDomainTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59510E2CDB598E00B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951512CDB600100B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,8 +117,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B59510F2CDB598E00B89C85 /* FeatureTesting.framework in Frameworks */,
+				60CA8C782CF7573500F1A8E5 /* WebRTC in Frameworks */,
+				60CA8C6A2CF7556F00F1A8E5 /* DesignSystem.framework in Frameworks */,
 				055503C42CDB5608004D34EB /* SharePhotoFeature.framework in Frameworks */,
+				60CA8C6F2CF755B400F1A8E5 /* PhotoGetherDomainInterface.framework in Frameworks */,
+				60CA8C712CF755F300F1A8E5 /* BaseFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +150,8 @@
 		055503C32CDB5608004D34EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				60CA8C732CF7563200F1A8E5 /* PhotoGetherDomainTesting.framework */,
+				60CA8C6C2CF7559C00F1A8E5 /* EditPhotoRoomFeature.framework */,
 				60B03BF22CE4CEDC00A7C748 /* DesignSystem.framework */,
 				7B5951D12CDB664300B89C85 /* PhotoGetherDomainInterface.framework */,
 				7B59517A2CDB62A600B89C85 /* PresentationUtility.framework */,
@@ -203,6 +217,7 @@
 			);
 			name = SharePhotoFeatureDemo;
 			packageProductDependencies = (
+				60CA8C772CF7573500F1A8E5 /* WebRTC */,
 			);
 			productName = SharePhotoFeatureDemo;
 			productReference = 055503982CDB54F6004D34EB /* SharePhotoFeatureDemo.app */;
@@ -235,6 +250,9 @@
 			);
 			mainGroup = 0555037E2CDB54AF004D34EB;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				60CA8C762CF7573500F1A8E5 /* XCRemoteSwiftPackageReference "WebRTC" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 055503892CDB54AF004D34EB /* Products */;
 			projectDirPath = "";
@@ -585,6 +603,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		60CA8C762CF7573500F1A8E5 /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 130.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		60CA8C772CF7573500F1A8E5 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60CA8C762CF7573500F1A8E5 /* XCRemoteSwiftPackageReference "WebRTC" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0555037F2CDB54AF004D34EB /* Project object */;
 }
