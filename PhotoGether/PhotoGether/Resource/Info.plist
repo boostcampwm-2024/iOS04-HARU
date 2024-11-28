@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>사진을 앨범에 저장하려면 접근 권한이 필요합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진 앱에 대한 접근 권한이 필요합니다.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) 카메라 권한이 필요합니다.</string>
 	<key>NSMicrophoneUsageDescription</key>
