@@ -181,13 +181,18 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                 let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
                     shapeRepository: shapeRepositoryImpl
                 )
-                let images = [
+                
+                let imageList = images
+                
+                
+                let tempImages: [UIImage] = [
+                    imageList[safe: 0] ?? PTGImage.temp3.image,
                     PTGImage.temp1.image,
                     PTGImage.temp2.image,
-                    PTGImage.temp3.image,
-                    PTGImage.temp4.image,
+                    imageList[safe: 1] ?? PTGImage.temp4.image
                 ]
-                let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+                
+                let frameImageGenerator = FrameImageGeneratorImpl(images: tempImages)
                 
                 let eventConnectionHostRepository = EventConnectionHostRepositoryImpl(clients: clients)
                 
