@@ -5,14 +5,16 @@ import UIKit
 
 public final class EditPhotoRoomHostViewModel {
     enum Input {
+        case initialState
         case stickerButtonDidTap
         case frameButtonDidTap
         case createSticker(StickerEntity)
+        case deleteSticker(UUID)
         case stickerViewDidTap(UUID)
     }
     
     enum Output {
-        case stickerObjectList([StickerEntity])
+        case stickerList([StickerEntity])
         case frameImage(image: UIImage)
         case presentStickerBottomSheet
     }
@@ -23,7 +25,7 @@ public final class EditPhotoRoomHostViewModel {
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
-    private let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
+    let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
     
     private let stickerListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)
@@ -46,7 +48,7 @@ public final class EditPhotoRoomHostViewModel {
         bind()
     }
     
-    func configureDefaultState() {
+    private func configureInitialState() {
         let defaultFrameType = Constants.defaultFrameType
         mutateFrameTypeLocal(with: defaultFrameType)
         mutateFrameTypeEventHub(with: defaultFrameType)
@@ -55,7 +57,7 @@ public final class EditPhotoRoomHostViewModel {
     private func bind() {
         stickerListSubject
             .sink { [weak self] list in
-                self?.output.send(.stickerObjectList(list))
+                self?.output.send(.stickerList(list))
             }
             .store(in: &cancellables)
         
@@ -83,12 +85,16 @@ public final class EditPhotoRoomHostViewModel {
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
             switch event {
+            case .initialState:
+                self?.configureInitialState()
             case .stickerButtonDidTap:
                 self?.presentStickerBottomSheet()
-            case .createSticker(let sticker):
-                self?.handleCreateSticker(sticker: sticker)
             case .frameButtonDidTap:
                 self?.toggleFrameType()
+            case .createSticker(let sticker):
+                self?.handleCreateSticker(sticker: sticker)
+            case .deleteSticker(let stickerID):
+                self?.handleDeleteSticker(with: stickerID)
             case .stickerViewDidTap(let stickerID):
                 self?.handleStickerViewDidTap(with: stickerID)
             }
@@ -102,14 +108,28 @@ public final class EditPhotoRoomHostViewModel {
 // MARK: Sticker 관련
 extension EditPhotoRoomHostViewModel {
     private func handleCreateSticker(sticker: StickerEntity) {
-        mutateStickerLocal(sticker: sticker)
+        mutateStickerLocal(type: .create, sticker: sticker)
         mutateStickerEventHub(type: .create, with: sticker)
     }
     
-    private func mutateStickerLocal(sticker: StickerEntity) {
-        var stickerList = stickerListSubject.value
-        stickerList.append(sticker)
-        stickerListSubject.send(stickerList)
+    private func handleDeleteSticker(with stickerID: UUID) {
+        let stickerList = stickerListSubject.value
+        guard let sticker = stickerList.find(id: stickerID) else { return }
+        
+        mutateStickerEventHub(type: .delete, with: sticker)
+    }
+    
+    private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
+        switch type {
+        case .create:
+            var stickerList = stickerListSubject.value
+            stickerList.append(sticker)
+            stickerListSubject.send(stickerList)
+        case .delete: break
+        case .update: break
+        case .unlock: break
+        }
+
     }
     
     private func mutateStickerListLocal(stickerList: [StickerEntity]) {
