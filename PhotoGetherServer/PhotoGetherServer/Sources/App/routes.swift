@@ -7,11 +7,11 @@ func routes(_ app: Application) throws {
     let roomManager = RoomManager()
     let webSocketController = WebSocketController(roomManager: roomManager)
     
-    // MARK: Controller에서 대신 처리
-    app.webSocket("signaling") { req, client in
-        await webSocketController.handleConnection(req, client: client)
-    }
-    
+//    // MARK: Controller에서 대신 처리
+//    app.webSocket("signaling") { req, client in
+//        await webSocketController.handleConnection(req, client: client)
+//    }
+//    
     // WebSocket 연결을 처리하는 라우트
     app.webSocket("testing") { request, client in
         connectedClients.append(client)
