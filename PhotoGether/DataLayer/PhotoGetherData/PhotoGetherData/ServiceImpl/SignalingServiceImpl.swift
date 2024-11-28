@@ -66,8 +66,10 @@ extension SignalingServiceImpl {
         } catch {
             if let error = error as? DecodingError {
                 debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(error.fullDescription)")
+                print(String(data: data, encoding: .utf8) ?? "Invalid JSON")
             } else {
                 debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(error)")
+                print(String(data: data, encoding: .utf8) ?? "Invalid JSON")
             }
             return
         }
