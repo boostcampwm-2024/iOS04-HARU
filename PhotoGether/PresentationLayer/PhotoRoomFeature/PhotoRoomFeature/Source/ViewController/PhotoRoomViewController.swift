@@ -129,15 +129,23 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                     eventConnectionRepository: eventConnectionRepository
                 )
                 
-//                let viewModel = EditPhotoRoomHostViewModel(
-//                    frameImageGenerator: frameImageGenerator,
-//                    fetchEmojiListUseCase: fetchEmojiListUseCase,
-//                    receiveStickerListUseCase: receiveStickerListUseCase,
-//                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
-//                )                
-//                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
-                let viewController = UIViewController()
-                self.navigationController?.pushViewController(viewController, animated: true)
+                let frameUseCaseImpl = ReceiveFrameUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
+                let sendStickerToRepoUCIMPL = SendStickerToRepositoryUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
+                let sftrucimpl = SendFrameToRepositoryUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
+                let viewModel = EditPhotoRoomHostViewModel(
+                    frameImageGenerator: frameImageGenerator,
+                    receiveStickerListUseCase: receiveStickerListUseCase,
+                    receiveFrameUseCase: frameUseCaseImpl,
+                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase,
+                    sendFrameToRepositoryUseCase: sftrucimpl
+                )
+                let btvm = StickerBottomSheetViewModel(fetchEmojiListUseCase: fetchEmojiListUseCase)
+                
+                let btvc = StickerBottomSheetViewController(viewModel: btvm)
+                let vc = EditPhotoRoomHostViewController(viewModel: viewModel, bottomSheetViewController: btvc)
+                
+                
+                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
         .store(in: &cancellables)
