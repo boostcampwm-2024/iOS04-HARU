@@ -10,18 +10,15 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
     public var remoteVideoView: UIView = CapturableVideoView()
-    public var userInfo: UserInfoEntity?
     
     public var roomID: String = ""
     
     public init(
         signalingService: SignalingService,
-        webRTCService: WebRTCService,
-        userInfo: UserInfoEntity? = nil
+        webRTCService: WebRTCService
     ) {
         self.signalingService = signalingService
         self.webRTCService = webRTCService
-        self.userInfo = userInfo
         
         self.signalingService.delegate = self
         self.webRTCService.delegate = self
@@ -34,13 +31,11 @@ public final class ConnectionClientImpl: ConnectionClient {
     }
     
     public func sendOffer() {
-        guard let userInfo else { return }
-        
         self.webRTCService.offer { sdp in
             self.signalingService.send(
                 sdp: sdp,
-                peerID: userInfo.id,
-                roomID: userInfo.roomID ?? ""
+                peerID: "",
+                roomID: ""
             )
         }
     }
@@ -105,12 +100,10 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
             guard self.webRTCService.peerConnection.localDescription == nil else { return }
             
             self.webRTCService.answer { sdp in
-                guard let userInfo = self.userInfo else { return }
-                
                 self.signalingService.send(
                     sdp: sdp,
-                    peerID: userInfo.id,
-                    roomID: userInfo.roomID ?? ""
+                    peerID: "",
+                    roomID: ""
                 )
             }
         }
@@ -131,12 +124,10 @@ extension ConnectionClientImpl: WebRTCServiceDelegate {
         _ service: WebRTCService,
         didGenerateLocalCandidate candidate: RTCIceCandidate
     ) {
-        guard let userInfo else { return }
-        
         self.signalingService.send(
             candidate: candidate,
-            peerID: userInfo.id,
-            roomID: userInfo.roomID ?? ""
+            peerID: "",
+            roomID: ""
         )
     }
     

@@ -22,9 +22,8 @@ final public class SignalingServiceImpl: SignalingService {
         let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
-            let request = try self.encoder.encode(dataMessage)
             
-            self.webSocketClient.send(data: request)
+            self.webSocketClient.send(data: dataMessage)
         } catch {
             debugPrint("Warning: Could not encode sdp: \(error)")
         }
@@ -35,9 +34,8 @@ final public class SignalingServiceImpl: SignalingService {
         let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
-            let request = try self.encoder.encode(dataMessage)
             
-            self.webSocketClient.send(data: request)
+            self.webSocketClient.send(data: dataMessage)
         } catch {
             debugPrint("Warning: Could not encode candidate: \(error)")
         }
@@ -66,10 +64,8 @@ extension SignalingServiceImpl {
         } catch {
             if let error = error as? DecodingError {
                 debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(error.fullDescription)")
-                print(String(data: data, encoding: .utf8) ?? "Invalid JSON")
             } else {
                 debugPrint("수신한 메시지 decoding에 실패하였습니다.: \(error)")
-                print(String(data: data, encoding: .utf8) ?? "Invalid JSON")
             }
             return
         }
