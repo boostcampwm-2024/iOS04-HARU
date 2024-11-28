@@ -52,7 +52,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     }
     
     private func bindNoti() {
-        NotificationCenter.default.publisher(for: .startCountDown).sink { [weak self] noti in
+        NotificationCenter.default.publisher(for: .receiveStartCountDown).sink { [weak self] noti in
             self?.isHost = false
             self?.input.send(.cameraButtonTapped)
         }.store(in: &cancellables)

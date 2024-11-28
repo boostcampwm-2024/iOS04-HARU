@@ -11,6 +11,8 @@
 		60CB833B2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60EB7BBB2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */; };
 		60EB7BBC2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7B20D2822CF89C00001325DC /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20D2812CF89C00001325DC /* BaseFeature.framework */; };
+		7B20D2832CF89C00001325DC /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20D2812CF89C00001325DC /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -21,6 +23,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				60CB833B2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
+				7B20D2832CF89C00001325DC /* BaseFeature.framework in Embed Frameworks */,
 				60EB7BBC2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -33,6 +36,7 @@
 		60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B20D2812CF89C00001325DC /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -49,6 +53,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60CB833A2CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework in Frameworks */,
+				7B20D2822CF89C00001325DC /* BaseFeature.framework in Frameworks */,
 				60EB7BBB2CDB9EDE00018E94 /* PhotoGetherNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,6 +81,7 @@
 		60CB83382CDB9E1700873DD6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7B20D2812CF89C00001325DC /* BaseFeature.framework */,
 				60F77C1E2CDB9FAC002630F0 /* DataUtility.framework */,
 				60EB7BBA2CDB9EDE00018E94 /* PhotoGetherNetwork.framework */,
 				60CB83392CDB9E1700873DD6 /* PhotoGetherDomainInterface.framework */,

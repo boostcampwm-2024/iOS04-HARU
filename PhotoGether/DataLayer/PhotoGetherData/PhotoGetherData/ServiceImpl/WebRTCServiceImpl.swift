@@ -1,7 +1,12 @@
 import Foundation
+import Combine
 import WebRTC
+import BaseFeature
 
 public final class WebRTCServiceImpl: NSObject, WebRTCService {
+    private var cancellables: Set<AnyCancellable> = []
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
     private static let peerConnectionFactory: RTCPeerConnectionFactory = {
         RTCInitializeSSL()
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
@@ -55,6 +60,7 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         self.createMediaSenders()
         self.configureAudioSession()
         self.peerConnection.delegate = self
+        self.bindNoti()
     }
 }
 
@@ -233,6 +239,20 @@ public extension WebRTCServiceImpl {
         let buffer = RTCDataBuffer(data: data, isBinary: true)
         self.remoteDataChannel?.sendData(buffer)
     }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .navigateToPhotoRoom).sink { [weak self] noti in
+            guard let self else { return }
+            guard let message = TempNotiType(noti: "navigateToPhotoRoom").toData(encoder: self.encoder) else { return }
+            self.sendData(message)
+        }.store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .startCountDown).sink { [weak self] noti in
+            guard let self else { return }
+            guard let message = TempNotiType(noti: "startCountDown").toData(encoder: self.encoder) else { return }
+            self.sendData(message)
+        }.store(in: &cancellables)
+    }
 }
 
 // MARK: Audio control
@@ -336,5 +356,20 @@ extension WebRTCServiceImpl {
         didReceiveMessageWith buffer: RTCDataBuffer
     ) {
         self.delegate?.webRTCService(self, didReceiveData: buffer.data)
+        
+        if let tempNoti = buffer.data.toDTO(type: TempNotiType.self, decoder: decoder) {
+            switch tempNoti.noti {
+            case "navigateToPhotoRoom":
+                NotificationCenter.default.post(name: .receiveNavigateToPhotoRoom, object: nil)
+            case "startCountDown":
+                NotificationCenter.default.post(name: .receiveStartCountDown, object: nil)
+            default:
+                break
+            }
+        }
     }
+}
+
+struct TempNotiType: Codable {
+    let noti: String
 }
