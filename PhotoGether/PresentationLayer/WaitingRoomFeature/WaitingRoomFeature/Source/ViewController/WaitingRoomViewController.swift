@@ -92,7 +92,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
             let collectionVC = participantsCollectionViewController
             let photoRoomVC = self.photoRoomViewController
             photoRoomVC.setCollectionViewController(collectionVC)
-            
+            NotificationCenter.default.post(name: .navigateToPhotoRoom, object: nil)
             self.navigationController?.pushViewController(photoRoomVC, animated: true)
         }.store(in: &cancellables)
         
