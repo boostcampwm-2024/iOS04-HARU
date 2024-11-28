@@ -18,11 +18,11 @@ final public class SignalingServiceImpl: SignalingService {
     }
     
     public func send(sdp rtcSdp: RTCSessionDescription, peerID: String, roomID: String) {
+        print("Sending SDP to \(peerID) in room \(roomID)")
         let message = SignalingMessage.sdp(SessionDescription(from: rtcSdp, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
-            let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
-            let request = try self.encoder.encode(dto)
+            let request = try self.encoder.encode(dataMessage)
             
             self.webSocketClient.send(data: request)
         } catch {
@@ -31,11 +31,11 @@ final public class SignalingServiceImpl: SignalingService {
     }
     
     public func send(candidate rtcIceCandidate: RTCIceCandidate, peerID: String, roomID: String) {
+        print("Sending ICE candidate to \(peerID) in room \(roomID)")
         let message = SignalingMessage.candidate(IceCandidate(from: rtcIceCandidate, peerID: peerID, roomID: roomID))
         do {
             let dataMessage = try self.encoder.encode(message)
-            let dto = SignalingRequestDTO(messageType: .signaling, message: dataMessage)
-            let request = try self.encoder.encode(dto)
+            let request = try self.encoder.encode(dataMessage)
             
             self.webSocketClient.send(data: request)
         } catch {
