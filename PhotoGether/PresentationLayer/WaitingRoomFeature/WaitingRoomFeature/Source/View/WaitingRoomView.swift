@@ -76,7 +76,7 @@ private extension WaitingRoomView {
 
 extension WaitingRoomView {
     private enum StartButtonTitle: String {
-        case one = "혼자서 촬영시작"
+        case one = "촬영시작"
         case two = "둘이서 촬영시작"
         case three = "셋이서 촬영시작"
         case four = "넷이서 촬영시작"
