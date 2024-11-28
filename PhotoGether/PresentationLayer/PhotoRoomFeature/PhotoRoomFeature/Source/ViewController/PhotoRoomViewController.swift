@@ -106,46 +106,159 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             case .timerCompleted(let images):
                 self.photoRoomBottomView.stopCameraButtonTimer()
                 
+//                let localDataSource = LocalShapeDataSourceImpl()
+//                let remoteDataSource = RemoteShapeDataSourceImpl()
+//                let repository = ShapeRepositoryImpl(
+//                    localDataSource: localDataSource,
+//                    remoteDataSource: remoteDataSource
+//                )
+//                let eventConnectionRepository = EventConnectionHostRepositoryImpl(
+//                    clients: self.connectionRepsitory.clients
+//                )
+//                
+//                let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
+//                    shapeRepository: repository
+//                )
+//                let frameImageGenerator = FrameImageGeneratorImpl(
+//                    images: images
+//                )
+//                let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
+//                    eventConnectionRepository: eventConnectionRepository
+//                )
+//                let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
+//                    eventConnectionRepository: eventConnectionRepository
+//                )
+//                
+//                let frameUseCaseImpl = ReceiveFrameUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
+//                let sendStickerToRepoUCIMPL = SendStickerToRepositoryUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
+//                let sftrucimpl = SendFrameToRepositoryUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
+//                let viewModel = EditPhotoRoomHostViewModel(
+//                    frameImageGenerator: frameImageGenerator,
+//                    receiveStickerListUseCase: receiveStickerListUseCase,
+//                    receiveFrameUseCase: frameUseCaseImpl,
+//                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase,
+//                    sendFrameToRepositoryUseCase: sftrucimpl
+//                )
+//                let btvm = StickerBottomSheetViewModel(fetchEmojiListUseCase: fetchEmojiListUseCase)
+//                
+//                let btvc = StickerBottomSheetViewController(viewModel: btvm)
+//                let vc = EditPhotoRoomHostViewController(viewModel: viewModel, bottomSheetViewController: btvc)
+//                
+//                let vcvc = EditPhotoRoomGuestViewModel(
+//                    frameImageGenerator: frameImageGenerator,
+//                    receiveStickerListUseCase: <#T##any ReceiveStickerListUseCase#>,
+//                    receiveFrameUseCase: <#T##any ReceiveFrameUseCase#>,
+//                    sendStickerToRepositoryUseCase: <#T##any SendStickerToRepositoryUseCase#>,
+//                    sendFrameToRepositoryUseCase: <#T##any SendFrameToRepositoryUseCase#>
+//                )
+//                
+//                let uhmmVC = OfferTempViewController2(
+//                    hostViewController: vc,
+//                    guestViewController: <#T##EditPhotoRoomGuestViewController#>
+//                )
+//
+                
+                let roomService = connectionRepsitory.roomService
+                let clients = connectionRepsitory.clients
+                let repository = ConnectionRepositoryImpl(clients: clients, roomService: roomService)
+                let offerUseCase = SendOfferUseCaseImpl(repository: repository)
                 let localDataSource = LocalShapeDataSourceImpl()
                 let remoteDataSource = RemoteShapeDataSourceImpl()
-                let repository = ShapeRepositoryImpl(
+                let shapeRepositoryImpl = ShapeRepositoryImpl(
                     localDataSource: localDataSource,
                     remoteDataSource: remoteDataSource
                 )
-                let eventConnectionRepository = EventConnectionHostRepositoryImpl(
-                    clients: self.connectionRepsitory.clients
-                )
-                
                 let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
-                    shapeRepository: repository
+                    shapeRepository: shapeRepositoryImpl
                 )
-                let frameImageGenerator = FrameImageGeneratorImpl(
-                    images: images
-                )
-                let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
-                    eventConnectionRepository: eventConnectionRepository
-                )
-                let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
-                    eventConnectionRepository: eventConnectionRepository
+                let images = [
+                    PTGImage.temp1.image,
+                    PTGImage.temp2.image,
+                    PTGImage.temp3.image,
+                    PTGImage.temp4.image,
+                ]
+                let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+                
+                let eventConnectionHostRepository = EventConnectionHostRepositoryImpl(clients: clients)
+                
+                let eventConnectionGuestRepository = EventConnectionGuestRepositoryImpl(clients: clients)
+                
+                let receiveStickerListHostUseCase = ReceiveStickerListUseCaseImpl(
+                    eventConnectionRepository: eventConnectionHostRepository
                 )
                 
-                let frameUseCaseImpl = ReceiveFrameUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
-                let sendStickerToRepoUCIMPL = SendStickerToRepositoryUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
-                let sftrucimpl = SendFrameToRepositoryUseCaseImpl(eventConnectionRepository: eventConnectionRepository)
-                let viewModel = EditPhotoRoomHostViewModel(
+                let sendStickerToRepositoryHostUseCase = SendStickerToRepositoryUseCaseImpl(
+                    eventConnectionRepository: eventConnectionHostRepository
+                )
+                
+                let receiveStickerListGuestUseCase = ReceiveStickerListUseCaseImpl(
+                    eventConnectionRepository: eventConnectionGuestRepository
+                )
+                
+                let sendStickerToRepositoryGuestUseCase = SendStickerToRepositoryUseCaseImpl(
+                    eventConnectionRepository: eventConnectionGuestRepository
+                )
+
+                let sendFrameToRepositoryGuestUseCase = SendFrameToRepositoryUseCaseImpl(
+                    eventConnectionRepository: eventConnectionGuestRepository
+                )
+                
+                let sendFrameToRepositoryHostUseCase = SendFrameToRepositoryUseCaseImpl(
+                    eventConnectionRepository: eventConnectionHostRepository
+                )
+                
+                let receiveFrameHostUseCase = ReceiveFrameUseCaseImpl(
+                    eventConnectionRepository: eventConnectionHostRepository
+                )
+                
+                let receiveFrameGuestUseCase = ReceiveFrameUseCaseImpl(
+                    eventConnectionRepository: eventConnectionGuestRepository
+                )
+                
+                let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
                     frameImageGenerator: frameImageGenerator,
-                    receiveStickerListUseCase: receiveStickerListUseCase,
-                    receiveFrameUseCase: frameUseCaseImpl,
-                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase,
-                    sendFrameToRepositoryUseCase: sftrucimpl
+                    receiveStickerListUseCase: receiveStickerListHostUseCase,
+                    receiveFrameUseCase: receiveFrameHostUseCase,
+                    sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase,
+                    sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase
                 )
-                let btvm = StickerBottomSheetViewModel(fetchEmojiListUseCase: fetchEmojiListUseCase)
                 
-                let btvc = StickerBottomSheetViewController(viewModel: btvm)
-                let vc = EditPhotoRoomHostViewController(viewModel: viewModel, bottomSheetViewController: btvc)
+                let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
+                    fetchEmojiListUseCase: fetchEmojiListUseCase
+                )
                 
+                let stickerBottomSheetGuestViewController = StickerBottomSheetViewController(
+                    viewModel: stickerBottomSheetViewModel
+                )
                 
-                self.navigationController?.pushViewController(vc, animated: true)
+                let stickerBottomSheetHostViewController = StickerBottomSheetViewController(
+                    viewModel: stickerBottomSheetViewModel
+                )
+                
+                let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
+                    viewModel: editPhotoRoomHostViewModel,
+                    bottomSheetViewController: stickerBottomSheetHostViewController
+                )
+                
+                let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
+                    frameImageGenerator: frameImageGenerator,
+                    receiveStickerListUseCase: receiveStickerListGuestUseCase,
+                    receiveFrameUseCase: receiveFrameGuestUseCase,
+                    sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase,
+                    sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase
+                )
+                
+                let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
+                    viewModel: editPhotoRoomGuestViewModel,
+                    bottomSheetViewController: stickerBottomSheetGuestViewController
+                )
+              
+                let offerVC = OfferTempViewController2(
+                    hostViewController: editPhotoRoomHostViewController,
+                    guestViewController: editPhotoRoomGuestViewController
+                )
+                
+                self.navigationController?.pushViewController(offerVC, animated: true)
             }
         }
         .store(in: &cancellables)
