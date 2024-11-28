@@ -252,6 +252,12 @@ public extension WebRTCServiceImpl {
             guard let message = TempNotiType(noti: "startCountDown").toData(encoder: self.encoder) else { return }
             self.sendData(message)
         }.store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .navigateToShareRoom).sink { [weak self] noti in
+            guard let self else { return }
+            guard let message = TempNotiType(noti: "navigateToShareRoom").toData(encoder: self.encoder) else { return }
+            self.sendData(message)
+        }.store(in: &cancellables)
     }
 }
 
@@ -363,6 +369,8 @@ extension WebRTCServiceImpl {
                 NotificationCenter.default.post(name: .receiveNavigateToPhotoRoom, object: nil)
             case "startCountDown":
                 NotificationCenter.default.post(name: .receiveStartCountDown, object: nil)
+            case "navigateToShareRoom":
+                NotificationCenter.default.post(name: .receiveNavigateToShareRoom, object: nil)
             default:
                 break
             }

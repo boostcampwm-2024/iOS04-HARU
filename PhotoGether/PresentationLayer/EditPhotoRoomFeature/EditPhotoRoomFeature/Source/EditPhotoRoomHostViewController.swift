@@ -41,7 +41,16 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
         input.send(.initialState)
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveNavigateToShareRoom)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] noti in
+                self?.showNextView()
+            }.store(in: &cancellables)
     }
     
     public func addViews() {
@@ -93,6 +102,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         bottomView.nextButtonTapped
             .throttle(for: 1, scheduler: RunLoop.main, latest: true)
             .sink { [weak self] in
+                NotificationCenter.default.post(name: .receiveNavigateToShareRoom, object: nil)
                 self?.showNextView()
             }
             .store(in: &cancellables)
