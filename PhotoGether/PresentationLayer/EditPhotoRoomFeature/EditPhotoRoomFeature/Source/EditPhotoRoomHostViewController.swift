@@ -102,7 +102,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         bottomView.nextButtonTapped
             .throttle(for: 1, scheduler: RunLoop.main, latest: true)
             .sink { [weak self] in
-                NotificationCenter.default.post(name: .receiveNavigateToShareRoom, object: nil)
+                NotificationCenter.default.post(name: .navigateToShareRoom, object: nil)
                 self?.showNextView()
             }
             .store(in: &cancellables)
