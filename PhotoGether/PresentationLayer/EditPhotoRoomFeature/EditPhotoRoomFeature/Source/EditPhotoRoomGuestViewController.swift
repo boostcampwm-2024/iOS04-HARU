@@ -60,13 +60,14 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         let viewModel = SharePhotoViewModel(component: component)
         let viewController = SharePhotoViewController(viewModel: viewModel)
         
-        self.present(viewController, animated: true)
+        guard let navigationController else { return }
+        
+        navigationController.pushViewController(viewController, animated: true)
     }
 
     private func renderCanvasImageView() -> Data? {
         return canvasScrollView.makeSharePhoto()
     }
-
     
     public func addViews() {
         [navigationView, canvasScrollView, bottomView].forEach {
