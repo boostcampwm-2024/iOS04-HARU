@@ -45,7 +45,7 @@ final class StickerView: UIImageView {
     private func setupConstraints() {
         nicknameLabel.snp.makeConstraints {
             $0.top.equalTo(snp.bottom)
-            $0.trailing.equalTo(snp.trailing)
+            $0.centerX.equalToSuperview()
         }
         
         layerView.snp.makeConstraints {
