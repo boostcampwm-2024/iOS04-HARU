@@ -1,7 +1,6 @@
 import Vapor
 
-@preconcurrency
-final class WebSocketController {
+actor WebSocketController {
     private var connectedClients = [WebSocket]()
     private let roomManager: RoomManager
     private let decoder: JSONDecoder
