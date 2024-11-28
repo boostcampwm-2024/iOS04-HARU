@@ -102,6 +102,10 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         output.navigateToPhotoRoom.sink { [weak self] _ in
             guard let self else { return }
             NotificationCenter.default.post(name: .navigateToPhotoRoom, object: nil)
+            let collectionVC = participantsCollectionViewController
+            let photoRoomVC = self.photoRoomViewController
+            photoRoomVC.setCollectionViewController(collectionVC)
+            self.navigationController?.pushViewController(photoRoomVC, animated: true)
         }.store(in: &cancellables)
         
         output.localVideo.sink { [weak self] localVideoView in
