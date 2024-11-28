@@ -226,8 +226,8 @@ final class WebSocketController {
             connectedClients.removeAll { $0 === client }
             print("[SYSTEM] :: Client disconnected. Current clients count: \(connectedClients.count)")
             
-            let cleanedCount = await roomManager.cleanRoom()
-            print("[SYSTEM] :: Room cleaned! count: \(cleanedCount)")
+//            let cleanedCount = await roomManager.cleanRoom()
+//            print("[SYSTEM] :: Room cleaned! count: \(cleanedCount)")
         }
     }
     
