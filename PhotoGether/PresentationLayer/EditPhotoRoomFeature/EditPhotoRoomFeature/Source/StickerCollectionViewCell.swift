@@ -32,12 +32,7 @@ final class StickerCollectionViewCell: UICollectionViewCell {
     private func configureUI() { }
     
     func setupImage(by emoji: EmojiEntity) {
-        Task {
-            guard let url = URL(string: emoji.image),
-                  let (data, _) = try? await URLSession.shared.data(from: url)
-            else { return }
-            
-            self.imageView.image = UIImage(data: data)
-        }
+        guard let url = URL(string: emoji.image) else { return }
+        Task { await imageView.setAsyncImage(url) }
     }
 }
