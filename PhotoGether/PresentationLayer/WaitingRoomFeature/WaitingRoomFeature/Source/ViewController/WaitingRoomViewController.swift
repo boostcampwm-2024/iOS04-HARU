@@ -38,6 +38,17 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         configureUI()
         bindOutput()
         setPlaceHolder()
+        bindNoti()
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .navigateToPhotoRoom).sink { [weak self] noti in
+            guard let self else { return }
+            let collectionVC = participantsCollectionViewController
+            let photoRoomVC = self.photoRoomViewController
+            photoRoomVC.setCollectionViewController(collectionVC)
+            self.navigationController?.pushViewController(photoRoomVC, animated: true)
+        }.store(in: &cancellables)
     }
     
     public func addViews() {
@@ -88,12 +99,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         
         output.navigateToPhotoRoom.sink { [weak self] _ in
             guard let self else { return }
-            
-            let collectionVC = participantsCollectionViewController
-            let photoRoomVC = self.photoRoomViewController
-            photoRoomVC.setCollectionViewController(collectionVC)
-            
-            self.navigationController?.pushViewController(photoRoomVC, animated: true)
+            NotificationCenter.default.post(name: .navigateToPhotoRoom, object: nil)
         }.store(in: &cancellables)
         
         output.localVideo.sink { [weak self] localVideoView in

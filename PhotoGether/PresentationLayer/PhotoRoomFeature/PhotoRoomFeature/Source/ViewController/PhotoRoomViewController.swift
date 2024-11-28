@@ -12,8 +12,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     var participantsViewController: ParticipantsCollectionViewController!
     var connectionRepsitory: ConnectionRepository
     private let photoRoomBottomView: PhotoRoomBottomView
-    private let isHost: Bool
-    
+    private var isHost: Bool
     
     private let input = PassthroughSubject<PhotoRoomViewModel.Input, Never>()
     
@@ -45,10 +44,18 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
     }
     
     public func setCollectionViewController(_ viewController: ParticipantsCollectionViewController) {
         self.participantsViewController = viewController
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .startCountDown).sink { [weak self] noti in
+            self?.isHost = false
+            self?.input.send(.cameraButtonTapped)
+        }.store(in: &cancellables)
     }
     
     public func addViews() {
@@ -89,8 +96,8 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             .filter { [weak self] in
                 return self?.isHost ?? false
             }
-            .sink { [weak self] in
-                self?.input.send(.cameraButtonTapped)
+            .sink { _ in
+                NotificationCenter.default.post(name: .startCountDown, object: nil)
             }
             .store(in: &cancellables)
     }
@@ -252,13 +259,11 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                     viewModel: editPhotoRoomGuestViewModel,
                     bottomSheetViewController: stickerBottomSheetGuestViewController
                 )
-              
-                let offerVC = OfferTempViewController2(
-                    hostViewController: editPhotoRoomHostViewController,
-                    guestViewController: editPhotoRoomGuestViewController
-                )
-                
-                self.navigationController?.pushViewController(offerVC, animated: true)
+                if isHost {
+                    self.navigationController?.pushViewController(editPhotoRoomHostViewController, animated: true)
+                } else {
+                    self.navigationController?.pushViewController(editPhotoRoomGuestViewController, animated: true)
+                }
             }
         }
         .store(in: &cancellables)

@@ -121,7 +121,7 @@ public extension WebRTCServiceImpl {
                 let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
                 let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
                 return width1 < width2
-            }).last else { return }
+            }).first else { return }
               
         // 가장 높은 fps 선택
         guard let fps = (format.videoSupportedFrameRateRanges
