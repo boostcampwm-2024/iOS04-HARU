@@ -6,6 +6,7 @@ import DesignSystem
 import PhotoGetherData
 import PhotoGetherDomain
 import PhotoGetherDomainInterface
+import SharePhotoFeature
 
 public class EditPhotoRoomGuestViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -41,8 +42,31 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
         input.send(.initialState)
     }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveNavigateToShareRoom)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.showNextView()
+            }.store(in: &cancellables)
+    }
+    
+    private func showNextView() {
+        guard let imageData = renderCanvasImageView() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        
+        self.present(viewController, animated: true)
+    }
+
+    private func renderCanvasImageView() -> Data? {
+        return canvasScrollView.makeSharePhoto()
+    }
+
     
     public func addViews() {
         [navigationView, canvasScrollView, bottomView].forEach {

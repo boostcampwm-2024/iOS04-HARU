@@ -48,7 +48,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func bindNoti() {
         NotificationCenter.default.publisher(for: .receiveNavigateToShareRoom)
             .receive(on: RunLoop.main)
-            .sink { [weak self] noti in
+            .sink { [weak self] _ in
                 self?.showNextView()
             }.store(in: &cancellables)
     }
