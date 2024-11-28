@@ -4,7 +4,6 @@ import Combine
 
 public protocol ConnectionClient {
     var remoteVideoView: UIView { get }
-    var userInfo: UserInfoEntity? { get }
     var receivedDataPublisher: PassthroughSubject<Data, Never> { get }
     
     func sendOffer()

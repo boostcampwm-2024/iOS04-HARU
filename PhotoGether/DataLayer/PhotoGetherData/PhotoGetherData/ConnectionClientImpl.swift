@@ -10,18 +10,15 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
     
     public var remoteVideoView: UIView = CapturableVideoView()
-    public var userInfo: UserInfoEntity?
     
     public var roomID: String = ""
     
     public init(
         signalingService: SignalingService,
-        webRTCService: WebRTCService,
-        userInfo: UserInfoEntity? = nil
+        webRTCService: WebRTCService
     ) {
         self.signalingService = signalingService
         self.webRTCService = webRTCService
-        self.userInfo = userInfo
         
         self.signalingService.delegate = self
         self.webRTCService.delegate = self
@@ -127,12 +124,10 @@ extension ConnectionClientImpl: WebRTCServiceDelegate {
         _ service: WebRTCService,
         didGenerateLocalCandidate candidate: RTCIceCandidate
     ) {
-        guard let userInfo else { return }
-        
         self.signalingService.send(
             candidate: candidate,
-            peerID: userInfo.id,
-            roomID: userInfo.roomID ?? ""
+            peerID: "",
+            roomID: ""
         )
     }
     
