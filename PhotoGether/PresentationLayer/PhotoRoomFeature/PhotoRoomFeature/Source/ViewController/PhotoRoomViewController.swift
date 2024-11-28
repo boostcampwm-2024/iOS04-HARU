@@ -96,9 +96,8 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             .filter { [weak self] in
                 return self?.isHost ?? false
             }
-            .sink { [weak self] in
+            .sink { _ in
                 NotificationCenter.default.post(name: .startCountDown, object: nil)
-                self?.input.send(.cameraButtonTapped)
             }
             .store(in: &cancellables)
     }
