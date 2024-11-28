@@ -34,13 +34,11 @@ public final class ConnectionClientImpl: ConnectionClient {
     }
     
     public func sendOffer() {
-        guard let userInfo else { return }
-        
         self.webRTCService.offer { sdp in
             self.signalingService.send(
                 sdp: sdp,
-                peerID: userInfo.id,
-                roomID: userInfo.roomID ?? ""
+                peerID: "",
+                roomID: ""
             )
         }
     }

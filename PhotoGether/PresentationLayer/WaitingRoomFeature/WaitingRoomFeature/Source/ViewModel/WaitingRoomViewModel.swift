@@ -46,12 +46,6 @@ public final class WaitingRoomViewModel {
             micMuteState: newMicMuteState,
             navigateToPhotoRoom: newNavigateToPhotoRoom
         )
-        
-        input.linkButtonDidTap.sink { [weak self ] _ in
-            print("linkButtonDidTap")
-            self?.sendOffer()
-        }.store(in: &cancellables)
-        
         return output
     }
     

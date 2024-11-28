@@ -70,6 +70,11 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
             .throttle(for: .seconds(1), scheduler: RunLoop.main, latest: false)
             .eraseToAnyPublisher()
         
+        waitingRoomView.linkButton.tapPublisher.sink { [weak self] _ in
+            print("linkButton did tap")
+            self?.viewModel.sendOffer()
+        }.store(in: &cancellables)
+        
         return WaitingRoomViewModel.Input(
             viewDidLoad: viewDidLoadPublisher,
             micMuteButtonDidTap: waitingRoomView.micButton.tapPublisher,
