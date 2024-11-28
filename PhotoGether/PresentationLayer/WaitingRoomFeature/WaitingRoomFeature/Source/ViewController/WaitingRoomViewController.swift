@@ -128,10 +128,6 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
 
             self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
         }.store(in: &cancellables)
-        
-        output.shouldShowShareSheet.sink { [weak self] message in
-            self?.showShareSheet(message: message)
-        }.store(in: &cancellables)
     }
     
     private func setPlaceHolder() {

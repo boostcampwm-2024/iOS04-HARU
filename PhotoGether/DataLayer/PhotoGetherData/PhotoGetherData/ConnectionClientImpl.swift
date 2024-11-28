@@ -95,6 +95,7 @@ extension ConnectionClientImpl: SignalingServiceDelegate {
         _ signalingService: SignalingService,
         didReceiveRemoteSdp sdp: RTCSessionDescription
     ) {
+        print("didReceiveRemoteSdp")
         guard self.webRTCService.peerConnection.remoteDescription == nil else { return }
         
         // TODO: 컴플리션 핸들러 -> async로 리팩토링

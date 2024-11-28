@@ -14,9 +14,7 @@ public final class WaitingRoomViewModel {
         let localVideo: AnyPublisher<UIView, Never>
         let remoteVideos: AnyPublisher<[UIView], Never>
         let micMuteState: AnyPublisher<Bool, Never>
-        let shouldShowShareSheet: AnyPublisher<String, Never>
         let navigateToPhotoRoom: AnyPublisher<Void, Never>
-        let shouldShowToast: AnyPublisher<String, Never>
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -36,21 +34,23 @@ public final class WaitingRoomViewModel {
         self.getLocalVideoUseCase = getLocalVideoUseCase
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
         self.createRoomUseCase = createRoomUseCase
+        
     }
-    
     func transform(input: Input) -> Output {
         let newMicMuteState = mutateMicMuteButtonDidTap(input)
-        let newShouldShowShareSheet = mutateLinkButtonDidTap(input)
         let newNavigateToPhotoRoom = mutateStartButtonDidTap(input)
         
         let output = Output(
             localVideo: bindLocalVideo(input),
             remoteVideos: bindRemoteVideos(input),
             micMuteState: newMicMuteState,
-            shouldShowShareSheet: newShouldShowShareSheet,
-            navigateToPhotoRoom: newNavigateToPhotoRoom,
-            shouldShowToast: newShouldShowShareSheet
+            navigateToPhotoRoom: newNavigateToPhotoRoom
         )
+        
+        input.linkButtonDidTap.sink { [weak self ] _ in
+            print("linkButtonDidTap")
+            self?.sendOffer()
+        }.store(in: &cancellables)
         
         return output
     }
