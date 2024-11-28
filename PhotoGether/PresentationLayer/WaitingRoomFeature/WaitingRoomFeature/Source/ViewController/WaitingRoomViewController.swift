@@ -42,7 +42,9 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
     }
     
     private func bindNoti() {
-        NotificationCenter.default.publisher(for: .receiveNavigateToPhotoRoom).sink { [weak self] noti in
+        NotificationCenter.default.publisher(for: .receiveNavigateToPhotoRoom)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] noti in
             guard let self else { return }
             let collectionVC = participantsCollectionViewController
             let photoRoomVC = self.photoRoomViewController
