@@ -83,6 +83,7 @@ public final class WaitingRoomViewModel {
     
     private func handleLinkButtonDidTap() {
         createRoomUseCase.execute()
+            .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     debugPrint(error.localizedDescription)

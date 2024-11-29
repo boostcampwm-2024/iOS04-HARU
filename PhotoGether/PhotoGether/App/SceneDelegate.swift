@@ -59,12 +59,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     webRTCService: makeWebRTCService(
                         iceServers: stunServers
                     )
-                ),
-                makeConnectionClient(
-                    signalingService: signalingService,
-                    webRTCService: makeWebRTCService(
-                        iceServers: stunServers
-                    )
                 )
             ],
             roomService: roomService
