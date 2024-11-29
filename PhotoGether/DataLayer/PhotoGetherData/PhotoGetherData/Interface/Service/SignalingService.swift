@@ -6,21 +6,22 @@ import PhotoGetherNetwork
 public protocol SignalingService: WebSocketClientDelegate {
     var didConnectPublisher: AnyPublisher<Void, Never> { get }
     var didDidDisconnectPublisher: AnyPublisher<Void, Never> { get }
-    var didReceiveOfferSdpPublisher: AnyPublisher<RTCSessionDescription, Never> { get }
-    var didReceiveAnswerSdpPublisher: AnyPublisher<RTCSessionDescription, Never> { get }
+    var didReceiveOfferSdpPublisher: AnyPublisher<SessionDescriptionMessage, Never> { get }
+    var didReceiveAnswerSdpPublisher: AnyPublisher<SessionDescriptionMessage, Never> { get }
     var didReceiveCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> { get }
     
     func connect()
     func send(
         type: SignalingRequestDTO.SignalingMessageType,
-        sdp rtcSdp: RTCSessionDescription,
-        userID: String,
-        roomID: String
+        sdp: RTCSessionDescription,
+        roomID: String,
+        offerID: String,
+        answerID: String?
     )
     func send(
         type: SignalingRequestDTO.SignalingMessageType,
-        candidate rtcIceCandidate: RTCIceCandidate,
-        userID: String,
-        roomID: String
+        candidate: RTCIceCandidate,
+        roomID: String,
+        userID: String
     )
 }
