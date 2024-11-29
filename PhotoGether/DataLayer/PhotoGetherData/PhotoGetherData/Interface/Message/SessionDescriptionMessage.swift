@@ -17,13 +17,15 @@ public enum SdpType: String, Codable {
 public struct SessionDescriptionMessage: Codable {
     public let sdp: String
     public let type: SdpType
-    public let userID: String // MARK: Offer를 보내는 사람의 ID
     public let roomID: String // MARK: 참가하려는 방의 ID
+    public let offerID: String // MARK: Offer를 보내는 사람의 ID
+    public let answerID: String? // MARK: Answer를 보내는 사람의 ID
     
-    public init(from rtcSessionDescription: RTCSessionDescription, userID: String, roomID: String) {
+    public init(from rtcSessionDescription: RTCSessionDescription, roomID: String, offerID: String, answerID: String?) {
         self.sdp = rtcSessionDescription.sdp
-        self.userID = userID
         self.roomID = roomID
+        self.offerID = offerID
+        self.answerID = answerID
         
         switch rtcSessionDescription.type {
         case .offer:    self.type = .offer
