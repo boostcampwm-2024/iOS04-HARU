@@ -102,6 +102,12 @@ public final class ConnectionClientImpl: ConnectionClient {
                     PTGDataLogger.log("answer를 받을 remote User가 없어요!! 비상!!!")
                     return
                 }
+                
+                guard userInfo.id == sdpMessage.offerID else {
+                    PTGDataLogger.log("Offer를 보낸 유저가 일치하지 않습니다.")
+                    return
+                }
+                
                 guard self.webRTCService.peerConnection.localDescription == nil else {
                     PTGDataLogger.log("localSDP가 이미 있어요!")
                     return
@@ -112,9 +118,7 @@ public final class ConnectionClientImpl: ConnectionClient {
 
                 if let error { PTGDataLogger.log(error.localizedDescription) }
                 
-                guard self.webRTCService.peerConnection.localDescription == nil else { return }
                 self.webRTCService.answer { sdp in
-                    guard let userInfo = self.remoteUserInfo else { return }
                     self.signalingService.send(
                         type: .answerSDP,
                         sdp: sdp,
@@ -125,6 +129,38 @@ public final class ConnectionClientImpl: ConnectionClient {
                 }
             }
         }.store(in: &cancellables)
+        
+        self.signalingService.didReceiveAnswerSdpPublisher
+            .filter { [weak self] _ in self?.remoteUserInfo != nil }
+            .sink { [weak self] sdpMessage in
+                guard let self else { return }
+                let remoteSDP = sdpMessage.rtcSessionDescription
+                
+                guard let userInfo = remoteUserInfo else {
+                    PTGDataLogger.log("UserInfo가 없어요")
+                    return
+                }
+                
+                guard userInfo.id == sdpMessage.answerID else {
+                    return
+                }
+                
+                guard self.webRTCService.peerConnection.localDescription != nil else {
+                    PTGDataLogger.log("localDescription이 없어요")
+                    return
+                }
+                
+                guard self.webRTCService.peerConnection.remoteDescription == nil else {
+                    PTGDataLogger.log("remoteDescription이 있어요")
+                    return
+                }
+                
+                self.webRTCService.set(remoteSdp: remoteSDP) { error in
+                    if let error = error {
+                        PTGDataLogger.log("Error setting remote SDP: \(error.localizedDescription)")
+                    }
+                }
+            }.store(in: &cancellables)
         
         self.signalingService.didReceiveCandidatePublisher.sink { [weak self] candidate in
             guard let self else { return }
