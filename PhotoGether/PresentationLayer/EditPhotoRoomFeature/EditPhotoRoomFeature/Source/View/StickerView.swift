@@ -5,12 +5,16 @@ import UIKit
 protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, didTap id: UUID)
     func stickerView(_ stickerView: StickerView, didTapDelete id: UUID)
+    func stickerView(_ stickerView: StickerView, willBeginDraging sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didDrag sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity)
 }
 
 final class StickerView: UIImageView {
     private let nicknameLabel = UILabel()
     private let layerView = UIView()
     private let deleteButton = UIButton()
+    private let panGestureRecognizer = UIPanGestureRecognizer()
 
     private var sticker: StickerEntity
     private let user: String
@@ -24,7 +28,7 @@ final class StickerView: UIImageView {
         self.sticker = sticker
         self.user = user
         super.init(frame: sticker.frame)
-        setupTapGesture()
+        setupGesture()
         setupTarget()
         addViews()
         setupConstraints()
@@ -80,11 +84,30 @@ final class StickerView: UIImageView {
         : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
     }
     
-    private func setupTapGesture() {
+    private func setupGesture() {
         isUserInteractionEnabled = true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
+        
+        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
+        
+        addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    @objc private func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .began:
+            
+            delegate?.stickerView(self, willBeginDraging: sticker)
+        case .changed:
+            
+            delegate?.stickerView(self, didDrag: sticker)
+        case .ended:
+            
+            delegate?.stickerView(self, didEndDrag: sticker)
+        default: break
+        }
     }
     
     private func setupTarget() {
