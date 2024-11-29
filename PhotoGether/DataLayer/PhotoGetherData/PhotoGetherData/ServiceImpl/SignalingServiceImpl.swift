@@ -10,7 +10,8 @@ final public class SignalingServiceImpl: SignalingService {
     
     private let didConnectSubject = PassthroughSubject<Void, Never>()
     private let didDisconnectSubject = PassthroughSubject<Void, Never>()
-    private let didReceiveRemoteSdpSubject = PassthroughSubject<RTCSessionDescription, Never>()
+    private let didReceiveOfferSdpSubject = PassthroughSubject<RTCSessionDescription, Never>()
+    private let didReceiveAnswerSdpSubject = PassthroughSubject<RTCSessionDescription, Never>()
     private let didReceiveCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
     
     public var didConnectPublisher: AnyPublisher<Void, Never> {
@@ -19,8 +20,11 @@ final public class SignalingServiceImpl: SignalingService {
     public var didDidDisconnectPublisher: AnyPublisher<Void, Never> {
         self.didDisconnectSubject.eraseToAnyPublisher()
     }
-    public var didReceiveRemoteSdpPublisher: AnyPublisher<RTCSessionDescription, Never> {
-        self.didReceiveRemoteSdpSubject.eraseToAnyPublisher()
+    public var didReceiveOfferSdpPublisher: AnyPublisher<RTCSessionDescription, Never> {
+        self.didReceiveOfferSdpSubject.eraseToAnyPublisher()
+    }
+    public var didReceiveAnswerSdpPublisher: AnyPublisher<RTCSessionDescription, Never> {
+        self.didReceiveAnswerSdpSubject.eraseToAnyPublisher()
     }
     public var didReceiveCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> {
         self.didReceiveCandidateSubject.eraseToAnyPublisher()
@@ -99,12 +103,14 @@ extension SignalingServiceImpl {
         case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
             else { return }
-            self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
+            PTGDataLogger.log("Received Offer SDP: \(sdp)")
+            self.didReceiveOfferSdpSubject.send(sdp.rtcSessionDescription)
             
         case .answerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
             else { return }
-            self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
+            PTGDataLogger.log("Received Answer SDP: \(sdp)")
+            self.didReceiveAnswerSdpSubject.send(sdp.rtcSessionDescription)
         
         @unknown default:
             PTGDataLogger.log("Unknown Message Type: \(response)")

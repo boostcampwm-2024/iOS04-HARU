@@ -82,11 +82,31 @@ public final class ConnectionClientImpl: ConnectionClient {
     }
     
     private func bindSignalingService() {
-        self.signalingService.didReceiveRemoteSdpPublisher.sink { [weak self] sdp in
-            guard let self else { return }
-            
-            guard self.webRTCService.peerConnection.remoteDescription == nil else { return }
-            self.webRTCService.set(remoteSdp: sdp) { error in
+        // MARK: 이미 방에 있던 놈들이 받는 이벤트
+        self.signalingService.didReceiveOfferSdpPublisher
+            .filter { [weak self] _ in self?.remoteUserInfo != nil }
+            .sink { [weak self] remoteSDP in
+                
+                PTGDataLogger.log("didReceiveRemoteSdpPublisher sink!! \(remoteSDP)")
+                
+                // MARK: remoteDescription이 있으면 이미 연결된 클라이언트
+                guard self?.webRTCService.peerConnection.remoteDescription == nil else {
+                    PTGDataLogger.log("remoteSDP가 이미 있어요!")
+                    return
+                }
+                PTGDataLogger.log("remoteSDP가 없어요! remoteSDP 저장하기 직전")
+                guard let userInfo = self?.remoteUserInfo else {
+                    PTGDataLogger.log("answer를 받을 remote User가 없어요!! 비상!!!")
+                    return
+                }
+                guard self?.webRTCService.peerConnection.localDescription == nil else {
+                    PTGDataLogger.log("localSDP가 이미 있어요!")
+                    return
+                }
+                
+            self?.webRTCService.set(remoteSdp: remoteSDP) { error in
+                PTGDataLogger.log("remoteSDP가 저장되었어요!")
+
                 if let error { PTGDataLogger.log(error.localizedDescription) }
                 
                 guard self.webRTCService.peerConnection.localDescription == nil else { return }

@@ -6,7 +6,8 @@ import PhotoGetherNetwork
 public protocol SignalingService: WebSocketClientDelegate {
     var didConnectPublisher: AnyPublisher<Void, Never> { get }
     var didDidDisconnectPublisher: AnyPublisher<Void, Never> { get }
-    var didReceiveRemoteSdpPublisher: AnyPublisher<RTCSessionDescription, Never> { get }
+    var didReceiveOfferSdpPublisher: AnyPublisher<RTCSessionDescription, Never> { get }
+    var didReceiveAnswerSdpPublisher: AnyPublisher<RTCSessionDescription, Never> { get }
     var didReceiveCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> { get }
     
     func connect()
