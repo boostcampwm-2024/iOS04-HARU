@@ -10,15 +10,15 @@ import SharePhotoFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
+    // swiftlint:disable function_body_length
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let urlString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
-        let url = URL(string: urlString)!
+        guard let url = Secrets.BASE_URL else { return }
+        guard let stunServers = Secrets.STUN_SERVERS else { return }
         debugPrint("SignalingServer URL: \(url)")
         
         var isHost: Bool = true
@@ -40,33 +40,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             webSocketClient: webScoketClient
         )
         
-        let webRTCService: WebRTCService = WebRTCServiceImpl(
-            iceServers: [
-                "stun:stun.l.google.com:19302",
-                "stun:stun1.l.google.com:19302",
-                "stun:stun2.l.google.com:19302",
-                "stun:stun3.l.google.com:19302",
-                "stun:stun4.l.google.com:19302"
-            ]
-        )
-        
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
             clients: [
                 makeConnectionClient(
                     signalingService: signalingService,
-                    webRTCService: webRTCService
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
                 ),
                 makeConnectionClient(
                     signalingService: signalingService,
-                    webRTCService: webRTCService
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
                 ),
                 makeConnectionClient(
                     signalingService: signalingService,
-                    webRTCService: webRTCService
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
                 ),
                 makeConnectionClient(
                     signalingService: signalingService,
-                    webRTCService: webRTCService
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
                 )
             ],
             roomService: roomService
@@ -141,6 +139,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         window?.makeKeyAndVisible()
+    }
+    
+    private func makeWebRTCService(
+        iceServers: [String]
+    ) -> WebRTCService {
+        return WebRTCServiceImpl(
+            iceServers: iceServers
+        )
     }
     
     private func makeConnectionClient(
