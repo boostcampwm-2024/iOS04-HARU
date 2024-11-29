@@ -65,12 +65,16 @@ actor RoomManager {
         }
         
         let targetList = targetRoom.userList.filter { $0.id != dto.offerID }
-        let response = SignalingResponseDTO(
-            messageType: .offerSDP,
-            message: dto.toData(encoder)
-        )
         
         targetList.forEach {
+            var responseDTO = dto
+            responseDTO.answerID = $0.id
+            
+            let response = SignalingResponseDTO(
+                messageType: .offerSDP,
+                message: responseDTO.toData(encoder)
+            )
+            
             $0.client.sendDTO(response, encoder: encoder)
         }
     }

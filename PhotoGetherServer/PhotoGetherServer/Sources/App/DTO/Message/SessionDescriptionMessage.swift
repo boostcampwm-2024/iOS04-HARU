@@ -8,7 +8,7 @@ package struct SessionDescriptionMessage: Codable {
     let type: SdpType
     let roomID: String // MARK: 참가하려는 방의 ID
     let offerID: String // MARK: Offer를 보내는 사람의 ID
-    let answerID: String? // MARK: Anwer를 보내는 사람의 ID
+    var answerID: String? // MARK: Anwer를 보내는 사람의 ID
     
     package init(
         sdp: String,
