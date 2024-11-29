@@ -5,6 +5,9 @@ import PhotoGetherDomainInterface
 
 protocol CanvasScrollViewDelegate: AnyObject {
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity)
 }
 
 final class CanvasScrollView: UIScrollView {
