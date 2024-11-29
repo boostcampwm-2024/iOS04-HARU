@@ -90,21 +90,32 @@ final class StickerView: UIImageView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
         
+        panGestureRecognizer.minimumNumberOfTouches = 1
         panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
         
         addGestureRecognizer(panGestureRecognizer)
     }
     
-    @objc private func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        switch sender.state {
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let initialPoint = sticker.frame.origin
+        let translationPoint = gesture.translation(in: self)
+        let changedX = initialPoint.x + translationPoint.x
+        let changedY = initialPoint.y + translationPoint.y
+        let traslationStickerPoint = CGPoint(x: changedX, y: changedY)
+        
+        panGestureRecognizer.setTranslation(.zero, in: self)
+        
+        let newFrame = CGRect(origin: traslationStickerPoint, size: sticker.frame.size)
+        
+        switch gesture.state {
         case .began:
-            
+            updateFrameForDrag(by: newFrame)
             delegate?.stickerView(self, willBeginDraging: sticker)
         case .changed:
-            
+            updateFrameForDrag(by: newFrame)
             delegate?.stickerView(self, didDrag: sticker)
         case .ended:
-            
+            updateFrameForDrag(by: newFrame)
             delegate?.stickerView(self, didEndDrag: sticker)
         default: break
         }
@@ -118,11 +129,21 @@ final class StickerView: UIImageView {
         )
     }
     
+    private func updateFrameForDrag(by frame: CGRect) {
+        sticker.updateFrame(to: frame)
+        self.frame = frame
+    }
+    
     private func updateFrame(to frame: CGRect) {
         guard sticker.frame != frame else { return }
         
-        sticker.updateFrame(to: frame)
-        self.frame = frame
+        switch panGestureRecognizer.state {
+        case .began, .changed:
+            return
+        default:
+            sticker.updateFrame(to: frame)
+            self.frame = frame
+        }
     }
     
     private func updateOwner(to owner: String?) {
