@@ -64,7 +64,7 @@ actor RoomManager {
             return
         }
         
-        let targetList = targetRoom.userList.filter { $0.id != dto.userID }
+        let targetList = targetRoom.userList.filter { $0.id != dto.offerID }
         let response = SignalingResponseDTO(
             messageType: .offerSDP,
             message: dto.toData(encoder)
@@ -81,8 +81,8 @@ actor RoomManager {
             return
         }
         
-        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.userID }).first else {
-            print("[DEBUG] :: Failed To Find User\(dto.userID)")
+        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.offerID }).first else {
+            print("[DEBUG] :: Failed To Find User\(dto.offerID)")
             return
         }
         let response = SignalingResponseDTO(
