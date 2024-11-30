@@ -1,10 +1,20 @@
 import UIKit
+
 import DesignSystem
+import PhotoGetherDomainInterface
+
+protocol CanvasScrollViewDelegate: AnyObject {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity)
+}
 
 final class CanvasScrollView: UIScrollView {
-    let imageView = UIImageView()
+    private let imageView = UIImageView()
+    private var stickerViewDictonary: [UUID: StickerView]
 
+    weak var stickerViewDelegate: CanvasScrollViewDelegate?
+    
     override init(frame: CGRect) {
+        self.stickerViewDictonary = [:]
         super.init(frame: frame)
         
         delegate = self
@@ -12,6 +22,7 @@ final class CanvasScrollView: UIScrollView {
         configureUI()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -28,10 +39,75 @@ final class CanvasScrollView: UIScrollView {
         bouncesZoom = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
-
+        backgroundColor = PTGColor.gray90.color
+        
         imageView.isUserInteractionEnabled = true
     }
+}
+
+// MARK: - StickerView methods
+extension CanvasScrollView {
+    func updateCanvas(
+        _ target: StickerViewActionDelegate,
+        stickerList: [StickerEntity],
+        user: String
+    ) {
+        prepareForApply(stickerList)
+        applyStickerList(target, for: stickerList, user: user)
+    }
     
+    func addStickerView(
+        _ target: StickerViewActionDelegate,
+        with sticker: StickerEntity,
+        user: String
+    ) {
+        let stickerView = StickerView(sticker: sticker, user: user)
+        stickerView.delegate = target
+        
+        stickerViewDictonary[sticker.id] = stickerView
+        imageView.addSubview(stickerView)
+        stickerView.update(with: sticker)
+        
+        stickerViewDelegate?.canvasScrollView(self, didAdd: sticker)
+    }
+    
+    private func updateStickerView(with sticker: StickerEntity) {
+        guard let stickerView = findStickerView(with: sticker.id) else { return }
+        stickerView.update(with: sticker)
+    }
+    
+    private func deleteStickerView(with id: UUID) {
+        guard let stickerView = findStickerView(with: id) else { return }
+        stickerView.removeFromSuperview()
+        stickerViewDictonary[id] = nil
+    }
+    
+    private func prepareForApply(_ stickerList: [StickerEntity]) {
+        let stickerIdList = stickerViewDictonary.keys.map { $0 }
+        
+        Set(stickerIdList)
+            .subtracting(stickerList.map { $0.id })
+            .forEach { deleteStickerView(with: $0) }
+    }
+    
+    private func applyStickerList(
+        _ target: StickerViewActionDelegate,
+        for stickerList: [StickerEntity],
+        user: String
+    ) {
+        stickerList.forEach { sticker in
+            switch isExistStickerView(with: sticker.id) {
+            case true:
+                updateStickerView(with: sticker)
+            case false:
+                addStickerView(target, with: sticker, user: user)
+            }
+        }
+    }
+}
+
+// MARK: - ImageView setup methods
+extension CanvasScrollView {
     func updateFrameImage(to image: UIImage) {
         imageView.image = image
         
@@ -40,7 +116,27 @@ final class CanvasScrollView: UIScrollView {
         self.contentCentering()
     }
     
-    func contentCentering() {
+    func makeSharePhoto() -> Data? {
+        imageView.layoutIfNeeded()
+        let renderer = UIGraphicsImageRenderer(size: imageView.bounds.size)
+        let capturedImage = renderer.image { context in
+            imageView.layer.render(in: context.cgContext)
+        }
+        return capturedImage.pngData()
+    }
+}
+
+// MARK: - Sub method
+extension CanvasScrollView {
+    private func findStickerView(with id: UUID) -> StickerView? {
+        return stickerViewDictonary[id]
+    }
+    
+    private func isExistStickerView(with id: UUID) -> Bool {
+        return stickerViewDictonary.keys.contains(id)
+    }
+    
+    private func contentCentering() {
         let scrollView = self
         let contentView = imageView
 
@@ -58,7 +154,7 @@ final class CanvasScrollView: UIScrollView {
         )
     }
     
-    func setupZoomScale() {
+    private func setupZoomScale() {
         guard let image = imageView.image else { return }
         
         let widthBaseScale = frame.width / image.size.width
