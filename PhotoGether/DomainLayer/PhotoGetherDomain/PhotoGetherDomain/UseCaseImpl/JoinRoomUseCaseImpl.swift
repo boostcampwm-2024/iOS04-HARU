@@ -3,10 +3,9 @@ import Combine
 import PhotoGetherDomainInterface
 
 public final class JoinRoomUseCaseImpl: JoinRoomUseCase {
-    // TODO: 수정 필요
-    public func execute() -> AnyPublisher<Bool, Never> {
-        return Just(true)
-            .delay(for: .seconds(3), scheduler: DispatchQueue.main)
+    public func execute(roomID: String, hostID: String) -> AnyPublisher<Bool, Never> {
+        return connectionRepository.joinRoom(to: roomID, hostID: hostID)
+            .replaceError(with: false)
             .eraseToAnyPublisher()
     }
     

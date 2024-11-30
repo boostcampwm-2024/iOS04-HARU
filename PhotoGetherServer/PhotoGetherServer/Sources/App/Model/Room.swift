@@ -1,5 +1,5 @@
 final class Room {
-    private var users: [User] = []
+    private(set) var userList: [User] = []
     private var maxCount: Int = 4
     let roomID: String
 
@@ -9,15 +9,15 @@ final class Room {
     
     @discardableResult
     func invite(user: User) -> Bool {
-        guard users.count < maxCount else { return false }
-        users.append(user)
+        guard userList.count < maxCount else { return false }
+        userList.append(user)
         return true
     }
     
     @discardableResult
     func kick(userID: String) -> Bool {
-        let filtered = users.filter { $0.id != userID }
-        users = filtered
+        let filtered = userList.filter { $0.id != userID }
+        userList = filtered
         return filtered.isEmpty // 필터에 걸렸으면 찾은 것
     }
 }

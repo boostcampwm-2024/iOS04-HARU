@@ -1,6 +1,7 @@
 import Foundation
+import PhotoGetherNetwork
 
-struct SignalingRequestDTO: Decodable {
+struct SignalingResponseDTO: WebSocketResponsable {
     var messageType: SignalingMessageType
     var message: Data?
     

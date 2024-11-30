@@ -10,7 +10,7 @@ import SharePhotoFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
+    // swiftlint:disable function_body_length
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -50,13 +50,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             ]
         )
         
-        let connectionClient: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
-            clients: [connectionClient],
+            clients: [
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: webRTCService
+                )
+            ],
             roomService: roomService
         )
         
@@ -90,7 +102,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             isHost: isHost
         )
         
-        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+        let waitingRoomViewModel: WaitingRoomViewModel = WaitingRoomViewModel(
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
@@ -98,7 +110,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(
-            viewModel: viewModel,
+            viewModel: waitingRoomViewModel,
             photoRoomViewController: photoRoomViewController
         )
         
@@ -109,13 +121,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 connectionRepository: connectionRepository
             )
             
+            guard let roomOwnerEntity else { return }
+            
             let enterLoadingViewModel = EnterLoadingViewModel(
-                joinRoomUseCase: joinRoomUseCase
+                joinRoomUseCase: joinRoomUseCase,
+                roomID: roomOwnerEntity.roomID,
+                hostID: roomOwnerEntity.hostID
             )
             let enterLoadingViewController = EnterLoadingViewController(
                 viewModel: enterLoadingViewModel,
                 waitingRoomViewController: waitingRoomViewController
             )
+            
+            waitingRoomViewModel.setGuestMode(true)
             
             window?.rootViewController = UINavigationController(rootViewController: enterLoadingViewController)
         } else {
@@ -123,5 +141,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         window?.makeKeyAndVisible()
+    }
+    
+    private func makeConnectionClient(
+        signalingService: SignalingService,
+        webRTCService: WebRTCService
+    ) -> ConnectionClient {
+        return ConnectionClientImpl(
+            signalingService: signalingService,
+            webRTCService: webRTCService
+        )
     }
 }

@@ -132,6 +132,10 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         output.shouldShowShareSheet.sink { [weak self] message in
             self?.showShareSheet(message: message)
         }.store(in: &cancellables)
+        
+        output.shouldShowToast.sink { [weak self] message in
+            self?.showToast(message: message, duration: 3.0)
+        }.store(in: &cancellables)
     }
     
     private func setPlaceHolder() {
