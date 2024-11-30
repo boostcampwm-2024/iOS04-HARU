@@ -151,8 +151,6 @@ extension EditPhotoRoomHostViewModel {
         case .delete: break
         case .update:
             let stickerList = stickerListSubject.value
-            handleStickerViewDidTap(with: sticker.id)
-            
             let newStickerList = stickerList.map { $0.id == sticker.id ? sticker : $0 }
             stickerListSubject.send(newStickerList)
         case .unlock: break
