@@ -109,13 +109,13 @@ final class StickerView: UIImageView {
         
         switch gesture.state {
         case .began:
-            updateFrameForDrag(by: newFrame)
+            updateFrame(to: newFrame)
+            updateOwner(to: user)
             delegate?.stickerView(self, willBeginDraging: sticker)
         case .changed:
-            updateFrameForDrag(by: newFrame)
+            updateFrame(to: newFrame)
             delegate?.stickerView(self, didDrag: sticker)
         case .ended:
-            updateFrameForDrag(by: newFrame)
             delegate?.stickerView(self, didEndDrag: sticker)
         default: break
         }
@@ -137,13 +137,8 @@ final class StickerView: UIImageView {
     private func updateFrame(to frame: CGRect) {
         guard sticker.frame != frame else { return }
         
-        switch panGestureRecognizer.state {
-        case .began, .changed:
-            return
-        default:
-            sticker.updateFrame(to: frame)
-            self.frame = frame
-        }
+        sticker.updateFrame(to: frame)
+        self.frame = frame
     }
     
     private func updateOwner(to owner: String?) {
@@ -193,7 +188,12 @@ final class StickerView: UIImageView {
     }
     
     func update(with sticker: StickerEntity) {
-        updateOwner(to: sticker.owner)
-        updateFrame(to: sticker.frame)
+        switch panGestureRecognizer.state {
+        case .began, .changed:
+            return
+        default:
+            updateOwner(to: sticker.owner)
+            updateFrame(to: sticker.frame)
+        }
     }
 }
