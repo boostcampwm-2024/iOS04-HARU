@@ -188,7 +188,10 @@ final class StickerView: UIImageView {
             return
         default:
             updateOwner(to: sticker.owner)
-            updateFrame(to: sticker.frame)
+            
+            if sticker.owner != user {
+                updateFrame(to: sticker.frame)
+            }
         }
     }
 }
