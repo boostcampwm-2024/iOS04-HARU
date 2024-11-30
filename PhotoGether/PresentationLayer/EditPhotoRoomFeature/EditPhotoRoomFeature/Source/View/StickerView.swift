@@ -129,11 +129,6 @@ final class StickerView: UIImageView {
         )
     }
     
-    private func updateFrameForDrag(by frame: CGRect) {
-        sticker.updateFrame(to: frame)
-        self.frame = frame
-    }
-    
     private func updateFrame(to frame: CGRect) {
         guard sticker.frame != frame else { return }
         
