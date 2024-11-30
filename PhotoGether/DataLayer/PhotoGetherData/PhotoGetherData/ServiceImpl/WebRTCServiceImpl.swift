@@ -46,6 +46,12 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         config.sdpSemantics = .unifiedPlan
         config.continualGatheringPolicy = .gatherContinually
         
+        let audioConfig = RTCAudioSessionConfiguration.webRTC()
+        audioConfig.category = AVAudioSession.Category.playAndRecord.rawValue
+        audioConfig.mode = AVAudioSession.Mode.voiceChat.rawValue
+        audioConfig.categoryOptions = [.defaultToSpeaker]
+        RTCAudioSessionConfiguration.setWebRTC(audioConfig)
+        
         let constraints = RTCMediaConstraints(
             mandatoryConstraints: nil,
             optionalConstraints: [
@@ -216,6 +222,7 @@ public extension WebRTCServiceImpl {
                 mode: .voiceChat,
                 options: .defaultToSpeaker
             )
+            try self.rtcAudioSession.overrideOutputAudioPort(.speaker)
             try self.rtcAudioSession.setActive(true)
         } catch let error {
             PTGDataLogger.log("Error changeing AVAudioSession category: \(error)")
