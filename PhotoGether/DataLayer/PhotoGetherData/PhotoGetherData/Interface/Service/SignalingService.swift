@@ -22,6 +22,7 @@ public protocol SignalingService: WebSocketClientDelegate {
         type: SignalingRequestDTO.SignalingMessageType,
         candidate: RTCIceCandidate,
         roomID: String,
-        userID: String
+        receiverID: String,
+        senderID: String
     )
 }

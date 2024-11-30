@@ -103,8 +103,8 @@ actor RoomManager {
             return
         }
         
-        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.userID }).first else {
-            print("[DEBUG] :: Failed To Find User\(dto.userID)")
+        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.receiverID }).first else {
+            print("[DEBUG] :: Failed To Find User\(dto.receiverID)")
             return
         }
         let response = SignalingResponseDTO(

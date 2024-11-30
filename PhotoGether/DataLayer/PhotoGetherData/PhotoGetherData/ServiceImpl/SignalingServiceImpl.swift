@@ -63,9 +63,10 @@ final public class SignalingServiceImpl: SignalingService {
         type: SignalingRequestDTO.SignalingMessageType,
         candidate: RTCIceCandidate,
         roomID: String,
-        userID: String
+        receiverID: String,
+        senderID: String
     ) {
-        let message = IceCandidateMessage(from: candidate, userID: userID, roomID: roomID)
+        let message = IceCandidateMessage(from: candidate, receiverID: receiverID, senderID: senderID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: type, message: dataMessage)

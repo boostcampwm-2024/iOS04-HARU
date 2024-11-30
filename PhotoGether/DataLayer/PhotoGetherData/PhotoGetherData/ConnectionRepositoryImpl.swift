@@ -140,8 +140,8 @@ extension ConnectionRepositoryImpl {
         self.signalingService.didReceiveCandidatePublisher.sink { [weak self] candidate in
             guard let self else { return }
 
-            guard let candidateReceiver = self.clients.first(where: { $0.remoteUserInfo?.id == candidate.userID }) else {
-                PTGDataLogger.log("candidateReceiver가 없어요! \(candidate.userID)")
+            guard let candidateReceiver = self.clients.first(where: { $0.remoteUserInfo?.id == candidate.senderID }) else {
+                PTGDataLogger.log("candidateReceiver가 없어요! \(candidate.senderID)")
                 return
             }
             Task {
@@ -204,7 +204,8 @@ extension ConnectionRepositoryImpl {
                     type: .iceCandidate,
                     candidate: candidate,
                     roomID: localUserInfo.roomID,
-                    userID: receiverID
+                    receiverID: receiverID,
+                    senderID: localUserInfo.id
                 )
             }.store(in: &cancellables)
         }
