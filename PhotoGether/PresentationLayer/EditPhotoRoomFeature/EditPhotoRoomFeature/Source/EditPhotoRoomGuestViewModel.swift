@@ -10,6 +10,7 @@ public final class EditPhotoRoomGuestViewModel {
         case frameButtonDidTap
         case createSticker(StickerEntity)
         case deleteSticker(UUID)
+        case dragSticker(StickerEntity, DragState)
         case stickerViewDidTap(UUID)
     }
     
@@ -96,6 +97,8 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.handleDeleteSticker(with: stickerID)
             case .stickerViewDidTap(let stickerID):
                 self?.handleStickerViewDidTap(with: stickerID)
+            case .dragSticker(let sticker, let dragState):
+                self?.handleDragSticker(sticker: sticker, state: dragState)
             }
         }
         .store(in: &cancellables)
@@ -122,6 +125,13 @@ extension EditPhotoRoomGuestViewModel {
         var stickerList = stickerListSubject.value
         stickerList.append(sticker)
         stickerListSubject.send(stickerList)
+    private func handleDragSticker(sticker: StickerEntity, state: DragState) {
+        switch state {
+        case .began:
+        case .changed:
+        case .ended:
+        }
+    }
     }
     
     private func mutateStickerListLocal(stickerList: [StickerEntity]) {
@@ -201,8 +211,14 @@ extension EditPhotoRoomGuestViewModel {
     }
 }
 
-private extension EditPhotoRoomGuestViewModel {
-    enum Constants {
+extension EditPhotoRoomGuestViewModel {
+    private enum Constants {
         static let defaultFrameType: FrameType = .defaultBlack
+    }
+    
+    enum DragState {
+        case began
+        case changed
+        case ended
     }
 }

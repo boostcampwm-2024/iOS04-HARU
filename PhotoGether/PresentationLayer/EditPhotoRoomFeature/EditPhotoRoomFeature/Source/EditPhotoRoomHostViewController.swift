@@ -218,14 +218,14 @@ extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
     }
     
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity) {
-         
+        input.send(.dragSticker(sticker, .began))
     }
     
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity) {
-         
+        input.send(.dragSticker(sticker, .changed))
     }
     
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
-         
+        input.send(.dragSticker(sticker, .ended))
     }
 }
