@@ -163,16 +163,16 @@ extension EditPhotoRoomGuestViewController: StickerBottomSheetViewControllerDele
 }
 
 extension EditPhotoRoomGuestViewController: StickerViewActionDelegate {
-    func stickerView(_ stickerView: StickerView, willBeginDraging sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
+    func stickerView(_ stickerView: StickerView, willBeginDraging sticker: StickerEntity) {
+        input.send(.updateSticker(sticker))
     }
     
-    func stickerView(_ stickerView: StickerView, didDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
+    func stickerView(_ stickerView: StickerView, didDrag sticker: StickerEntity) {
+        input.send(.updateSticker(sticker))
     }
     
-    func stickerView(_ stickerView: StickerView, didEndDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
+    func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity) {
+        input.send(.updateSticker(sticker))
     }
     
     func stickerView(_ stickerView: StickerView, didTap id: UUID) {
