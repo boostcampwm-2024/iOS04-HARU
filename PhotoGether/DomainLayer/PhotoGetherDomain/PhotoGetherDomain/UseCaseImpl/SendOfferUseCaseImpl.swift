@@ -2,8 +2,8 @@ import Foundation
 import PhotoGetherDomainInterface
 
 public final class SendOfferUseCaseImpl: SendOfferUseCase {
-    public func execute() -> Bool {
-        repository.sendOffer()
+    public func execute() async throws {
+        try await repository.sendOffer()
     }
     
     private let repository: ConnectionRepository

@@ -18,16 +18,18 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     private let signalingService: SignalingService
     
     public init(
-        clients: [ConnectionClient],
+        signlingService: SignalingService,
         roomService: RoomService,
-        signlingService: SignalingService
+        clients: [ConnectionClient]
     ) {
-        self.clients = clients
-        self.roomService = roomService
         self.signalingService = signlingService
+        self.roomService = roomService
+        self.clients = clients
+        
         connectSignalingService()
         bindLocalVideo()
         bindNotifyNewUserPublihser()
+        bindLocalCandidatePublisher()
     }
     
     public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
@@ -50,27 +52,23 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         .eraseToAnyPublisher()
     }
     
-    public func sendOffer() async -> Bool {
-        guard let myID = localUserInfo?.id else { return false }
-        guard let roomID = localUserInfo?.roomID else { return false }
+    public func sendOffer() async throws {
+        guard let myID = localUserInfo?.id else { throw NSError() }
+        guard let roomID = localUserInfo?.roomID else { throw NSError() }
         
         for client in self.clients {
-            do {
-                let sdp = try await client.createOffer()
-                self.signalingService.send(
-                    type: .offerSDP,
-                    sdp: sdp,
-                    roomID: roomID,
-                    offerID: myID,
-                    answerID: nil
-                )
-            } catch {
-                PTGDataLogger.log("offer 생성 중 에러가 발생했습니다. \(error.localizedDescription)")
-                return false
+            guard let sdp = try? await client.createOffer() else {
+                PTGDataLogger.log("offer 생성 중 에러가 발생했습니다.")
+                throw NSError()
             }
+            self.signalingService.send(
+                type: .offerSDP,
+                sdp: sdp,
+                roomID: roomID,
+                offerID: myID,
+                answerID: nil
+            )
         }
-        
-        return true
     }
 }
 
@@ -82,86 +80,77 @@ extension ConnectionRepositoryImpl {
     private func bindSignalingService() {
         // MARK: 이미 방에 있던 놈들이 받는 이벤트
         self.signalingService.didReceiveOfferSdpPublisher
-            .filter { [weak self] _ in self?.remoteUserInfo != nil }
             .sink { [weak self] sdpMessage in
                 guard let self else { return }
-                let remoteSDP = sdpMessage.rtcSessionDescription
-                
-                PTGDataLogger.log("didReceiveRemoteSdpPublisher sink!! \(remoteSDP)")
-                
-                // MARK: remoteDescription이 있으면 이미 연결된 클라이언트
-                guard self.webRTCService.peerConnection.remoteDescription == nil else {
-                    PTGDataLogger.log("remoteSDP가 이미 있어요!")
-                    return
-                }
-                PTGDataLogger.log("remoteSDP가 없어요! remoteSDP 저장하기 직전")
-                guard let userInfo = self.remoteUserInfo else {
-                    PTGDataLogger.log("answer를 받을 remote User가 없어요!! 비상!!!")
-                    return
-                }
-                
-                guard userInfo.id == sdpMessage.offerID else {
-                    PTGDataLogger.log("Offer를 보낸 유저가 일치하지 않습니다.")
-                    return
-                }
-                
-                guard self.webRTCService.peerConnection.localDescription == nil else {
-                    PTGDataLogger.log("localSDP가 이미 있어요!")
-                    return
-                }
-                
-            self.webRTCService.set(remoteSdp: remoteSDP) { error in
-                PTGDataLogger.log("remoteSDP가 저장되었어요!")
+                PTGDataLogger.log("didReceiveRemoteSdpPublisher sink!! \(sdpMessage.offerID)")
 
-                if let error { PTGDataLogger.log(error.localizedDescription) }
-                
-                self.webRTCService.answer { sdp in
-                    self.signalingService.send(
-                        type: .answerSDP,
-                        sdp: sdp,
-                        roomID: userInfo.roomID,
-                        offerID: userInfo.id,
-                        answerID: sdpMessage.answerID
-                    )
+                guard let localUserInfo = self.localUserInfo else {
+                    PTGDataLogger.log("localUserInfo가 없어요!! 비상!!!")
+                    return
+                }
+
+                Task {
+                    do {
+                        let remoteSDP = sdpMessage.rtcSessionDescription
+                        guard let offerSender = self.clients.first(where: { $0.remoteUserInfo?.id == sdpMessage.offerID }) else {
+                            PTGDataLogger.log("해당 offerID에 해당하는 유저를 찾을 수 없습니다.")
+                            return
+                        }
+                        
+                        try await offerSender.set(remoteSdp: remoteSDP)
+                        guard let answerSDP = try? await offerSender.createAnswer() else {
+                            PTGDataLogger.log("Answer SDP를 생성할 수 없습니다.")
+                            return
+                        }
+                        
+                        self.signalingService.send(
+                            type: .answerSDP,
+                            sdp: answerSDP,
+                            roomID: localUserInfo.roomID,
+                            offerID: sdpMessage.offerID,
+                            answerID: sdpMessage.answerID
+                        )
+                    } catch {
+                        PTGDataLogger.log("Offer SDP 수신 중 에러: \(error.localizedDescription)")
+                    }
                 }
             }
-        }.store(in: &cancellables)
+            .store(in: &cancellables)
         
         self.signalingService.didReceiveAnswerSdpPublisher
-            .filter { [weak self] _ in self?.remoteUserInfo != nil }
             .sink { [weak self] sdpMessage in
                 guard let self else { return }
                 let remoteSDP = sdpMessage.rtcSessionDescription
                 
-                guard let userInfo = remoteUserInfo else {
-                    PTGDataLogger.log("UserInfo가 없어요")
+                guard let answerReceiver = self.clients.first(where: { $0.remoteUserInfo?.id == sdpMessage.answerID }) else {
+                    PTGDataLogger.log("answerReceiver가 없어요! \(String(describing: sdpMessage.answerID))")
                     return
                 }
                 
-                guard userInfo.id == sdpMessage.answerID else {
-                    return
-                }
-                
-                guard self.webRTCService.peerConnection.localDescription != nil else {
-                    PTGDataLogger.log("localDescription이 없어요")
-                    return
-                }
-                
-                guard self.webRTCService.peerConnection.remoteDescription == nil else {
-                    PTGDataLogger.log("remoteDescription이 있어요")
-                    return
-                }
-                
-                self.webRTCService.set(remoteSdp: remoteSDP) { error in
-                    if let error = error {
-                        PTGDataLogger.log("Error setting remote SDP: \(error.localizedDescription)")
+                Task {
+                    do {
+                        try await answerReceiver.set(remoteSdp: remoteSDP)
+                    } catch {
+                        PTGDataLogger.log("Answer SDP 수신 중 에러: \(error.localizedDescription)")
                     }
                 }
             }.store(in: &cancellables)
         
         self.signalingService.didReceiveCandidatePublisher.sink { [weak self] candidate in
             guard let self else { return }
-            self.webRTCService.set(remoteCandidate: candidate) { _ in }
+
+            guard let candidateReceiver = self.clients.first(where: { $0.remoteUserInfo?.id == candidate.userID }) else {
+                PTGDataLogger.log("candidateReceiver가 없어요! \(candidate.userID)")
+                return
+            }
+            Task {
+                do {
+                    try await candidateReceiver.set(remoteCandidate: candidate.rtcIceCandidate)
+                } catch {
+                    PTGDataLogger.log("Candidate 수신 중 에러: \(error.localizedDescription)")
+                }
+            }
+            
         }.store(in: &cancellables)
     }
     
@@ -199,6 +188,25 @@ extension ConnectionRepositoryImpl {
                 PTGDataLogger.log("newUser Entered: \(newUserInfoEntity)")
             })
             .store(in: &cancellables)
+    }
+    
+    private func bindLocalCandidatePublisher() {
+        clients.forEach {
+            $0.didGenerateLocalCandidatePublisher.sink { [weak self] receiverID, candidate in
+                guard let self else { return }
+                guard let localUserInfo = self.localUserInfo else {
+                    PTGDataLogger.log("localUserInfo가 없어요!! 비상!!!")
+                    return
+                }
+                
+                self.signalingService.send(
+                    type: .iceCandidate,
+                    candidate: candidate,
+                    roomID: localUserInfo.roomID,
+                    userID: receiverID
+                )
+            }.store(in: &cancellables)
+        }
     }
     
     private func setLocalUserInfo(entity: JoinRoomEntity) -> Bool {

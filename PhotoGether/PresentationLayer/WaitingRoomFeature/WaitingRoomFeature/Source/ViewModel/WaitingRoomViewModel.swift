@@ -71,8 +71,14 @@ public final class WaitingRoomViewModel {
         output.send(.remoteVideos(remoteVideos))
         
         if !isHost {
-            let message = sendOfferUseCase.execute() ? "연결을 시도합니다." : "연결 중 에러가 발생했어요."
-            output.send(.shouldShowToast(message))
+            Task {
+                do {
+                    try await sendOfferUseCase.execute()
+                    output.send(.shouldShowToast("연결을 시도합니다."))
+                } catch {
+                    output.send(.shouldShowToast("연결 중 에러가 발생했어요."))
+                }
+            }
         }
     }
     
