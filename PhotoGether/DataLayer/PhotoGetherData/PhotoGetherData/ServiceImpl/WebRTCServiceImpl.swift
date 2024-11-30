@@ -74,6 +74,21 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
 
 // MARK: SDP
 public extension WebRTCServiceImpl {
+    func offer() async throws -> RTCSessionDescription {
+        let constraints = RTCMediaConstraints(
+            mandatoryConstraints: self.mediaConstraints,
+            optionalConstraints: nil
+        )
+        
+        // 1. constraints를 통해 내 sdp를 만든다.
+        let sdp = try await self.peerConnection.offer(for: constraints)
+        
+        // 2. sdp를 peerConnection에 저장한다음 소켓을 통해 시그널링 서버를 거쳐 상대에게 전송한다.
+        try await self.peerConnection.setLocalDescription(sdp)
+        
+        return sdp
+    }
+    
     func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constraints = RTCMediaConstraints(
             mandatoryConstraints: self.mediaConstraints,
@@ -91,6 +106,21 @@ public extension WebRTCServiceImpl {
         }
     }
     
+    func answer() async throws -> RTCSessionDescription {
+        let constraints = RTCMediaConstraints(
+            mandatoryConstraints: self.mediaConstraints,
+            optionalConstraints: nil
+        )
+        
+        // 1. constraints를 통해 내 sdp를 만든다.
+        let sdp = try await self.peerConnection.answer(for: constraints)
+        
+        // 2. sdp를 peerConnection에 저장한다음 소켓을 통해 시그널링 서버를 거쳐 상대에게 전송한다.
+        try await self.peerConnection.setLocalDescription(sdp)
+        
+        return sdp
+    }
+    
     func answer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constraints = RTCMediaConstraints(
             mandatoryConstraints: self.mediaConstraints,
@@ -106,6 +136,18 @@ public extension WebRTCServiceImpl {
                 completion(sdp)
             }
         }
+    }
+    
+    func set(remoteSdp: RTCSessionDescription) async throws {
+        return try await self.peerConnection.setRemoteDescription(remoteSdp)
+    }
+    
+    func set(localSdp: RTCSessionDescription) async throws {
+        return try await self.peerConnection.setLocalDescription(localSdp)
+    }
+    
+    func set(remoteCandidate: RTCIceCandidate) async throws {
+        return try await self.peerConnection.add(remoteCandidate)
     }
     
     func set(remoteSdp: RTCSessionDescription, completion: @escaping (Error?) -> Void) {

@@ -7,6 +7,7 @@ public protocol ConnectionClient {
     var remoteUserInfo: UserInfo? { get }
     var receivedDataPublisher: PassthroughSubject<Data, Never> { get }
     
+    func createOffer() async throws -> RTCSessionDescription
     func setRemoteUserInfo(_ remoteUserInfo: UserInfo)
     func sendOffer(myID: String)
     func sendData(data: Data)

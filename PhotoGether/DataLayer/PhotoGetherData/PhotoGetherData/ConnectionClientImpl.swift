@@ -6,7 +6,6 @@ import PhotoGetherDomainInterface
 public final class ConnectionClientImpl: ConnectionClient {
     private var cancellables: Set<AnyCancellable> = []
     
-    private let signalingService: SignalingService
     private let webRTCService: WebRTCService
     
     public var receivedDataPublisher = PassthroughSubject<Data, Never>()
@@ -15,20 +14,15 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var remoteUserInfo: UserInfo?
         
     public init(
-        signalingService: SignalingService,
         webRTCService: WebRTCService,
         remoteUserInfo: UserInfo? = nil
     ) {
-        self.signalingService = signalingService
         self.webRTCService = webRTCService
         self.remoteUserInfo = remoteUserInfo
         
         bindSignalingService()
         bindWebRTCService()
-        
-        // 서버 자동 연결
-        self.connect()
-        
+                
         // VideoTrack과 나와 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
         self.bindRemoteVideo()
     }
@@ -37,19 +31,25 @@ public final class ConnectionClientImpl: ConnectionClient {
         self.remoteUserInfo = remoteUserInfo
     }
     
-    public func sendOffer(myID: String) {
-        guard let remoteUserInfo else { return }
-        
-        self.webRTCService.offer { sdp in
-            self.signalingService.send(
-                type: .offerSDP,
-                sdp: sdp,
-                roomID: remoteUserInfo.roomID,
-                offerID: myID,
-                answerID: nil
-            )
-        }
+    // MARK: 해당 클라이언트에게 보낼 Offer SDP를 생성합니다.
+    public func createOffer() async throws -> RTCSessionDescription {
+        guard remoteUserInfo != nil else { throw NSError() }
+        return try await self.webRTCService.offer()
     }
+    
+//    public func sendOffer(myID: String) {
+//        guard let remoteUserInfo else { return }
+//        
+//        self.webRTCService.offer { sdp in
+//            self.signalingService.send(
+//                type: .offerSDP,
+//                sdp: sdp,
+//                roomID: remoteUserInfo.roomID,
+//                offerID: myID,
+//                answerID: nil
+//            )
+//        }
+//    }
     
     public func sendData(data: Data) {
         self.webRTCService.sendData(data)
@@ -67,9 +67,6 @@ public final class ConnectionClientImpl: ConnectionClient {
         return capturedImage
     }
     
-    private func connect() {
-        self.signalingService.connect()
-    }
     
     /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
     private func bindRemoteVideo() {
