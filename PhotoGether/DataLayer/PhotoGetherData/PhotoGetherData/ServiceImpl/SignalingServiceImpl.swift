@@ -10,7 +10,8 @@ final public class SignalingServiceImpl: SignalingService {
     
     private let didConnectSubject = PassthroughSubject<Void, Never>()
     private let didDisconnectSubject = PassthroughSubject<Void, Never>()
-    private let didReceiveRemoteSdpSubject = PassthroughSubject<RTCSessionDescription, Never>()
+    private let didReceiveOfferSdpSubject = PassthroughSubject<SessionDescriptionMessage, Never>()
+    private let didReceiveAnswerSdpSubject = PassthroughSubject<SessionDescriptionMessage, Never>()
     private let didReceiveCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
     
     public var didConnectPublisher: AnyPublisher<Void, Never> {
@@ -19,8 +20,11 @@ final public class SignalingServiceImpl: SignalingService {
     public var didDidDisconnectPublisher: AnyPublisher<Void, Never> {
         self.didDisconnectSubject.eraseToAnyPublisher()
     }
-    public var didReceiveRemoteSdpPublisher: AnyPublisher<RTCSessionDescription, Never> {
-        self.didReceiveRemoteSdpSubject.eraseToAnyPublisher()
+    public var didReceiveOfferSdpPublisher: AnyPublisher<SessionDescriptionMessage, Never> {
+        self.didReceiveOfferSdpSubject.eraseToAnyPublisher()
+    }
+    public var didReceiveAnswerSdpPublisher: AnyPublisher<SessionDescriptionMessage, Never> {
+        self.didReceiveAnswerSdpSubject.eraseToAnyPublisher()
     }
     public var didReceiveCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> {
         self.didReceiveCandidateSubject.eraseToAnyPublisher()
@@ -37,12 +41,13 @@ final public class SignalingServiceImpl: SignalingService {
     
     public func send(
         type: SignalingRequestDTO.SignalingMessageType,
-        sdp rtcSdp: RTCSessionDescription,
-        userID: String,
-        roomID: String
+        sdp: RTCSessionDescription,
+        roomID: String,
+        offerID: String,
+        answerID: String?
     ) {
-        PTGDataLogger.log("send SDP type: \(type) userID: \(userID) roomID: \(roomID)")
-        let message = SessionDescriptionMessage(from: rtcSdp, userID: userID, roomID: roomID)
+        PTGDataLogger.log("send SDP type: \(type) roomID: \(roomID) offerID: \(offerID) answerID: \(answerID ?? "nil")")
+        let message = SessionDescriptionMessage(from: sdp, roomID: roomID, offerID: offerID, answerID: answerID)
         do {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
@@ -56,11 +61,11 @@ final public class SignalingServiceImpl: SignalingService {
     
     public func send(
         type: SignalingRequestDTO.SignalingMessageType,
-        candidate rtcIceCandidate: RTCIceCandidate,
-        userID: String,
-        roomID: String
+        candidate: RTCIceCandidate,
+        roomID: String,
+        userID: String
     ) {
-        let message = IceCandidateMessage(from: rtcIceCandidate, userID: userID, roomID: roomID)
+        let message = IceCandidateMessage(from: candidate, userID: userID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
@@ -99,12 +104,14 @@ extension SignalingServiceImpl {
         case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
             else { return }
-            self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
+            PTGDataLogger.log("Received Offer SDP: \(sdp)")
+            self.didReceiveOfferSdpSubject.send(sdp)
             
         case .answerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
             else { return }
-            self.didReceiveRemoteSdpSubject.send(sdp.rtcSessionDescription)
+            PTGDataLogger.log("Received Answer SDP: \(sdp)")
+            self.didReceiveAnswerSdpSubject.send(sdp)
         
         @unknown default:
             PTGDataLogger.log("Unknown Message Type: \(response)")
