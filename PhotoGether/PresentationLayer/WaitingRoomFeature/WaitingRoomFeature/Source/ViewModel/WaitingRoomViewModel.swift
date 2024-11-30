@@ -70,7 +70,7 @@ public final class WaitingRoomViewModel {
         let remoteVideos = getRemoteVideoUseCase.execute()
         output.send(.remoteVideos(remoteVideos))
         
-        if isHost {
+        if !isHost {
             let message = sendOfferUseCase.execute() ? "연결을 시도합니다." : "연결 중 에러가 발생했어요."
             output.send(.shouldShowToast(message))
         }
@@ -78,6 +78,7 @@ public final class WaitingRoomViewModel {
     
     private func handleLinkButtonDidTap() {
         createRoomUseCase.execute()
+            .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     debugPrint(error.localizedDescription)
