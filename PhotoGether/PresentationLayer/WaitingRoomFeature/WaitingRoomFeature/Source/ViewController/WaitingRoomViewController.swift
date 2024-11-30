@@ -102,7 +102,7 @@ public final class WaitingRoomViewController: BaseViewController {
     }
 
     private func navigateToPhotoRoom() {
-        let collectionVC = participantsCollectionViewController
+        let collectionVC = ParticipantsCollectionViewController()
         let photoRoomVC = photoRoomViewController
         photoRoomVC.setCollectionViewController(collectionVC)
         navigationController?.pushViewController(photoRoomVC, animated: true)
