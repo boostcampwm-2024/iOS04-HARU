@@ -131,7 +131,7 @@ extension EditPhotoRoomHostViewModel {
         // 로컬반영 -> XXO
         switch state {
         case .began:
-            unlockPreviousSticker()
+            unlockPreviousSticker(stickerId: sticker.id)
             lockTappedSticker(id: sticker.id)
         case .changed:
             break
@@ -172,7 +172,7 @@ extension EditPhotoRoomHostViewModel {
         guard canInteractWithSticker(id: stickerID) else { return }
         
         // MARK: 필요시 이전 스티커를 unlock하고 반영함
-        unlockPreviousSticker()
+        unlockPreviousSticker(stickerId: stickerID)
         
         // MARK: Tap한 스티커를 lock하고 반영한다.
         lockTappedSticker(id: stickerID)
@@ -184,10 +184,11 @@ extension EditPhotoRoomHostViewModel {
         return stickerList.isOwned(id: id, owner: owner)
     }
     
-    private func unlockPreviousSticker() {
+    private func unlockPreviousSticker(stickerId: UUID) {
         var stickerList = stickerListSubject.value
         
-        if let previousSticker = stickerList.lockedSticker(by: owner) {
+        if let previousSticker = stickerList.lockedSticker(by: owner),
+           stickerId != previousSticker.id {
             stickerList.unlock(by: owner)
             mutateStickerEventHub(type: .unlock, with: previousSticker)
         }
