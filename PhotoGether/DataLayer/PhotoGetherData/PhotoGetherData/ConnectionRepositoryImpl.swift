@@ -26,6 +26,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         self.roomService = roomService
         self.clients = clients
         
+        bindSignalingService()
         connectSignalingService()
         bindLocalVideo()
         bindNotifyNewUserPublihser()
