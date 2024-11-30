@@ -57,7 +57,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         guard let myID = localUserInfo?.id else { throw NSError() }
         guard let roomID = localUserInfo?.roomID else { throw NSError() }
         
-        for client in self.clients {
+        for client in self.clients where client.remoteUserInfo != nil {
             guard let sdp = try? await client.createOffer() else {
                 PTGDataLogger.log("offer 생성 중 에러가 발생했습니다.")
                 throw NSError()
