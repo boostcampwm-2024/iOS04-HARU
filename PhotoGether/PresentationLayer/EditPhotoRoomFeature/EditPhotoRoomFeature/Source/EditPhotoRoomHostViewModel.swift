@@ -138,10 +138,14 @@ extension EditPhotoRoomHostViewModel {
             stickerList.append(sticker)
             stickerListSubject.send(stickerList)
         case .delete: break
-        case .update: break
+        case .update:
+            let stickerList = stickerListSubject.value
+            handleStickerViewDidTap(with: sticker.id)
+            
+            let newStickerList = stickerList.map { $0.id == sticker.id ? sticker : $0 }
+            stickerListSubject.send(newStickerList)
         case .unlock: break
         }
-
     }
     
     private func mutateStickerListLocal(stickerList: [StickerEntity]) {

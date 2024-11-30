@@ -137,12 +137,9 @@ extension EditPhotoRoomGuestViewModel {
             let stickerList = stickerListSubject.value
             handleStickerViewDidTap(with: sticker.id)
             
-            let newStickerList = stickerList.map {
-                if $0.id == sticker.id {
-                    return sticker
-                } else {
-                    return $0
-                }
+            let newStickerList = stickerList.map { $0.id == sticker.id ? sticker : $0 }
+            stickerListSubject.send(newStickerList)
+        case .unlock: break
         }
     }
     
