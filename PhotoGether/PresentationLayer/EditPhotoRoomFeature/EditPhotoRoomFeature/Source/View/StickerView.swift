@@ -161,6 +161,16 @@ final class StickerView: UIImageView {
         _ = sticker.owner != user
         ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
         : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
+        
+        updatePanGestureState()
+    }
+    
+    private func updatePanGestureState() {
+        if sticker.owner == user || sticker.owner == nil {
+            panGestureRecognizer.isEnabled = true
+        } else {
+            panGestureRecognizer.isEnabled = false
+        }
     }
     
     private func setImage(to urlString: String) {
