@@ -135,7 +135,7 @@ extension ConnectionRepositoryImpl {
                     do {
                         try await answerReceiver.set(remoteSdp: remoteSDP)
                     } catch {
-                        PTGDataLogger.log("Answer SDP 수신 중 에러: \(error.localizedDescription)")
+                        PTGDataLogger.log("Answer SDP 저장 중 에러: \(error.localizedDescription)")
                     }
                 }
             }.store(in: &cancellables)
@@ -151,7 +151,7 @@ extension ConnectionRepositoryImpl {
                 do {
                     try await candidateReceiver.set(remoteCandidate: candidate.rtcIceCandidate)
                 } catch {
-                    PTGDataLogger.log("Candidate 수신 중 에러: \(error.localizedDescription)")
+                    PTGDataLogger.log("Candidate 저장 중 에러: \(error.localizedDescription) \(candidate.sdp)")
                 }
             }
             
@@ -198,11 +198,11 @@ extension ConnectionRepositoryImpl {
         clients.forEach {
             $0.didGenerateLocalCandidatePublisher.sink { [weak self] receiverID, candidate in
                 guard let self else { return }
+                PTGDataLogger.log("didGenerateLocalCandidatePublisher: \(receiverID)")
                 guard let localUserInfo = self.localUserInfo else {
                     PTGDataLogger.log("localUserInfo가 없어요!! 비상!!!")
                     return
                 }
-                
                 self.signalingService.send(
                     type: .iceCandidate,
                     candidate: candidate,
