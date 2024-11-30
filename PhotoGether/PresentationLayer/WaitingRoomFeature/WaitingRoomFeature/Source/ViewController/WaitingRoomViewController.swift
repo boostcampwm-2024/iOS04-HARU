@@ -39,9 +39,9 @@ public final class WaitingRoomViewController: BaseViewController {
         addViews()
         setupConstraints()
         configureUI()
+        setPlaceHolder()
         bindInput()
         bindOutput()
-        setPlaceHolder()
     }
     
     private func addViews() {
@@ -92,7 +92,8 @@ public final class WaitingRoomViewController: BaseViewController {
     private func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.sink { [weak self] in
+        output
+            .sink { [weak self] in
             guard let self else { return }
             switch $0 {
                 

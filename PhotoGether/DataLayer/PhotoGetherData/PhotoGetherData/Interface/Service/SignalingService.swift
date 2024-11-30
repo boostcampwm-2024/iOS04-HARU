@@ -8,7 +8,7 @@ public protocol SignalingService: WebSocketClientDelegate {
     var didDidDisconnectPublisher: AnyPublisher<Void, Never> { get }
     var didReceiveOfferSdpPublisher: AnyPublisher<SessionDescriptionMessage, Never> { get }
     var didReceiveAnswerSdpPublisher: AnyPublisher<SessionDescriptionMessage, Never> { get }
-    var didReceiveCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> { get }
+    var didReceiveCandidatePublisher: AnyPublisher<IceCandidateMessage, Never> { get }
     
     func connect()
     func send(
@@ -22,6 +22,7 @@ public protocol SignalingService: WebSocketClientDelegate {
         type: SignalingRequestDTO.SignalingMessageType,
         candidate: RTCIceCandidate,
         roomID: String,
-        userID: String
+        receiverID: String,
+        senderID: String
     )
 }

@@ -1,14 +1,19 @@
 import Combine
 import Foundation
 import PhotoGetherDomainInterface
+import PhotoGetherNetwork
 
 final public class ShapeRepositoryImpl: ShapeRepository {
-    // TODO: local 먼저 확인 -> remote 데이터 확인하도록 수정
-    // MARK: JSON 데이터 내부의 URL을 어느 시점에 다운로드 할것인가...?
     public func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never> {
-        return remoteDataSource.fetchEmojiData()
+        return localDataSource.fetchEmojiData(EmojiEndPoint())
+            .catch { [weak self] _ -> AnyPublisher<[EmojiDTO], Never> in
+                guard let self else { return Just([]).eraseToAnyPublisher() }
+                
+                return remoteDataSource.fetchEmojiData(EmojiEndPoint())
+                    .replaceError(with: [])
+                    .eraseToAnyPublisher()
+            }
             .map { $0.map { $0.toEntity() } }
-            .replaceError(with: [])
             .eraseToAnyPublisher()
     }
     
@@ -22,4 +27,17 @@ final public class ShapeRepositoryImpl: ShapeRepository {
         self.localDataSource = localDataSource
         self.remoteDataSource = remoteDataSource
     }
+}
+
+fileprivate struct EmojiEndPoint: EndPoint {
+    var baseURL: URL { URL(string: "https://api.api-ninjas.com")! }
+    var path: String { "v1/emoji" }
+    var method: HTTPMethod { .get }
+    /// offset 기준 30개씩 호출
+    var parameters: [String: Any]? { ["group": "objects", "offset": 0] }
+    var headers: [String: String]? {
+        let apiKey = Bundle.main.object(forInfoDictionaryKey: "EMOJI_API_KEY") as? String ?? ""
+        return ["X-Api-Key": apiKey]
+    }
+    var body: Encodable? { nil }
 }

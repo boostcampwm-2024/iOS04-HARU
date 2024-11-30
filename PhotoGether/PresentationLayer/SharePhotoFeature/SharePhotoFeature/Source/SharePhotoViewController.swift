@@ -10,6 +10,8 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
     private let photoView = UIImageView()
     private let bottomView = SharePhotoBottomView()
     
+    private let input = PassthroughSubject<SharePhotoViewModel.Input, Never>()
+    
     // MARK: Dependencies
     
     private let viewModel: SharePhotoViewModel
@@ -33,6 +35,7 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
         addViews()
         setupConstraints()
         configureUI()
+        bindInput()
         bindOutput()
     }
     
@@ -67,15 +70,44 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
     public func configureUI() {
         view.backgroundColor = PTGColor.gray90.color
         
-        photoView.image = convertToImage(with: viewModel.photoData)
+        let imageData = viewModel.photoData
+        photoView.image = UIImage(data: imageData)
         photoView.backgroundColor = .clear
         photoView.contentMode = .scaleAspectFit
     }
     
-    public func bindOutput() {
+    public func bindInput() {
         bottomView.shareButtonTapped
-            .sink { [weak self] _ in
-                self?.showShareSheet()
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] in
+                self?.input.send(.shareButtonDidTap)
+            }
+            .store(in: &cancellables)
+        
+        bottomView.saveButtonTapped
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] in
+                self?.input.send(.saveButtonDidTap)
+            }
+            .store(in: &cancellables)
+    }
+    
+    public func bindOutput() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+        
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] event in
+                switch event {
+                case .showShareSheet:
+                    self?.showShareSheet()
+                case .showSaveToast:
+                    self?.showToast(message: "사진이 저장되었습니다.")
+                case .showFailToast:
+                    self?.showToast(message: "저장 실패")
+                case .showAuthorizationAlert:
+                    self?.showAutorizationAlert()
+                }
             }
             .store(in: &cancellables)
     }
@@ -92,7 +124,18 @@ public class SharePhotoViewController: BaseViewController, ViewControllerConfigu
         }
     }
     
-    private func convertToImage(with data: Data) -> UIImage? {
-        return UIImage(data: data)
+    private func showAutorizationAlert() {
+        let alert = UIAlertController(
+            title: "사진 앱 접근 권한 필요",
+            message: "사진을 저장하려면 설정에서 사진 앱에 대한 접근 권한을 허용해주세요.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "설정", style: .default, handler: { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }))
+        present(alert, animated: true)
     }
 }

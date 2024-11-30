@@ -17,9 +17,12 @@ public enum SdpType: String, Codable {
 public struct SessionDescriptionMessage: Codable {
     public let sdp: String
     public let type: SdpType
-    public let roomID: String // MARK: 참가하려는 방의 ID
-    public let offerID: String // MARK: Offer를 보내는 사람의 ID
-    public let answerID: String? // MARK: Answer를 보내는 사람의 ID
+    /// 참가하려는 방의 ID
+    public let roomID: String
+    /// Offer를 보내는 사람의 ID
+    public let offerID: String
+    /// Answer를 보내는 사람의 ID
+    public let answerID: String?
     
     public init(from rtcSessionDescription: RTCSessionDescription, roomID: String, offerID: String, answerID: String?) {
         self.sdp = rtcSessionDescription.sdp

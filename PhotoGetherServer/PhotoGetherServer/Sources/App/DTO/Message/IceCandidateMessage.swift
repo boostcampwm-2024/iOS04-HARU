@@ -4,14 +4,16 @@ package struct IceCandidateMessage: Codable {
     let sdp: String
     let sdpMLineIndex: Int32
     let sdpMid: String?
-    let userID: String // MARK: 받는 사람의 ID
+    let receiverID: String // MARK: 받는 사람의 ID
+    let senderID: String // MARK: 보내는 사람의 ID
     let roomID: String // MARK: 참가하려는 방의 ID
     
-    package init(sdp: String, sdpMLineIndex: Int32, sdpMid: String?, userID: String, roomID: String) {
+    package init(sdp: String, sdpMLineIndex: Int32, sdpMid: String?, receiverID: String, senderID: String, roomID: String) {
         self.sdp = sdp
         self.sdpMLineIndex = sdpMLineIndex
         self.sdpMid = sdpMid
-        self.userID = userID
+        self.receiverID = receiverID
+        self.senderID = senderID
         self.roomID = roomID
     }
 }

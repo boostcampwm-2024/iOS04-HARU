@@ -24,22 +24,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
         let signalingService: SignalingService = SignalingServiceImpl(webSocketClient: webScoketClient)
-        
         let webRTCService: WebRTCService = WebRTCServiceImpl(iceServers: [
-            "stun:stun.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-            "stun:stun2.l.google.com:19302",
-            "stun:stun3.l.google.com:19302",
+            "stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302",
+            "stun:stun2.l.google.com:19302", "stun:stun3.l.google.com:19302",
             "stun:stun4.l.google.com:19302"
         ])
         let connectionClient: ConnectionClient = ConnectionClientImpl(
             signalingService: signalingService,
             webRTCService: webRTCService
         )
-        
+
         let repository = ConnectionRepositoryImpl(clients: [connectionClient])
         let offerUseCase = SendOfferUseCaseImpl(repository: repository)
-        
         let localDataSource = LocalShapeDataSourceImpl()
         let remoteDataSource = RemoteShapeDataSourceImpl()
         let shapeRepositoryImpl = ShapeRepositoryImpl(
@@ -80,6 +76,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sendFrameToRepositoryGuestUseCase = SendFrameToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
+        
         let sendFrameToRepositoryHostUseCase = SendFrameToRepositoryUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
@@ -87,6 +84,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let receiveFrameHostUseCase = ReceiveFrameUseCaseImpl(
             eventConnectionRepository: eventConnectionHostRepository
         )
+        
         let receiveFrameGuestUseCase = ReceiveFrameUseCaseImpl(
             eventConnectionRepository: eventConnectionGuestRepository
         )
@@ -103,13 +101,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             fetchEmojiListUseCase: fetchEmojiListUseCase
         )
         
-        let stickerBottomSheetViewController = StickerBottomSheetViewController(
+        let stickerBottomSheetGuestViewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
+        )
+        
+        let stickerBottomSheetHostViewController = StickerBottomSheetViewController(
             viewModel: stickerBottomSheetViewModel
         )
         
         let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
             viewModel: editPhotoRoomHostViewModel,
-            bottomSheetViewController: stickerBottomSheetViewController
+            bottomSheetViewController: stickerBottomSheetHostViewController
         )
         
         let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
@@ -122,7 +124,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
             viewModel: editPhotoRoomGuestViewModel,
-            bottomSheetViewController: stickerBottomSheetViewController
+            bottomSheetViewController: stickerBottomSheetGuestViewController
         )
       
         let offerViewController = OfferTempViewController(

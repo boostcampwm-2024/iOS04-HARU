@@ -1,7 +1,7 @@
 import Foundation
 import PhotoGetherDomainInterface
 
-public struct EmojiDTO: Decodable {
+public struct EmojiDTO: Codable {
     let code: String
     let character: String
     let image: String

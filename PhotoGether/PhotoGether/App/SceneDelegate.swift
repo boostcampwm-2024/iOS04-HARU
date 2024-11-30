@@ -41,33 +41,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
+            signlingService: signalingService,
+            roomService: roomService,
             clients: [
                 makeConnectionClient(
-                    signalingService: signalingService,
                     webRTCService: makeWebRTCService(
                         iceServers: stunServers
                     )
                 ),
                 makeConnectionClient(
-                    signalingService: signalingService,
                     webRTCService: makeWebRTCService(
                         iceServers: stunServers
                     )
                 ),
                 makeConnectionClient(
-                    signalingService: signalingService,
-                    webRTCService: makeWebRTCService(
-                        iceServers: stunServers
-                    )
-                ),
-                makeConnectionClient(
-                    signalingService: signalingService,
                     webRTCService: makeWebRTCService(
                         iceServers: stunServers
                     )
                 )
-            ],
-            roomService: roomService
+            ]
         )
         
         let sendOfferUseCase: SendOfferUseCase = SendOfferUseCaseImpl(
@@ -101,6 +93,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let waitingRoomViewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+            isHost: isHost,
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
@@ -131,8 +124,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 waitingRoomViewController: waitingRoomViewController
             )
             
-            waitingRoomViewModel.setGuestMode(true)
-            
             window?.rootViewController = UINavigationController(rootViewController: enterLoadingViewController)
         } else {
             window?.rootViewController = UINavigationController(rootViewController: waitingRoomViewController)
@@ -150,11 +141,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func makeConnectionClient(
-        signalingService: SignalingService,
         webRTCService: WebRTCService
     ) -> ConnectionClient {
         return ConnectionClientImpl(
-            signalingService: signalingService,
             webRTCService: webRTCService
         )
     }

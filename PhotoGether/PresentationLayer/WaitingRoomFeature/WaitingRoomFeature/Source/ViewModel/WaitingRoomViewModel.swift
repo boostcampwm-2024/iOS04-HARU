@@ -24,33 +24,28 @@ public final class WaitingRoomViewModel {
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
     private let createRoomUseCase: CreateRoomUseCase
     
-    private var isGuest: Bool = false
+    private var isHost: Bool
     private var cancellables = Set<AnyCancellable>()
     private let output = PassthroughSubject<Output, Never>()
     
     public init(
+        isHost: Bool,
         sendOfferUseCase: SendOfferUseCase,
         getLocalVideoUseCase: GetLocalVideoUseCase,
         getRemoteVideoUseCase: GetRemoteVideoUseCase,
         createRoomUseCase: CreateRoomUseCase
     ) {
+        self.isHost = isHost
         self.sendOfferUseCase = sendOfferUseCase
         self.getLocalVideoUseCase = getLocalVideoUseCase
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
         self.createRoomUseCase = createRoomUseCase
     }
     
-    public func setGuestMode(_ isGuest: Bool) {
-        self.isGuest = isGuest
-    }
-    
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input
-            .handleEvents(receiveOutput: { [weak self] event in
-                self?.handleEvent(event)
-            })
-            .sink { _ in }
-            .store(in: &cancellables)
+        input.sink { [weak self] event in
+            self?.handleEvent(event)
+        }.store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
     }
@@ -69,20 +64,31 @@ public final class WaitingRoomViewModel {
     }
     
     private func handleViewDidLoad() {
+        
         let localVideo = getLocalVideoUseCase.execute()
         output.send(.localVideo(localVideo))
         
         let remoteVideos = getRemoteVideoUseCase.execute()
         output.send(.remoteVideos(remoteVideos))
         
-        if isGuest {
-            let message = sendOfferUseCase.execute() ? "연결을 시도합니다." : "연결 중 에러가 발생했어요."
-            output.send(.shouldShowToast(message))
+        if !isHost {
+            let cancellable = sendOfferUseCase.execute().sink { [weak self] completion in
+                switch completion {
+                case .finished:
+                    return
+                case .failure(let error):
+                    self?.output.send(.shouldShowToast("연결 중 에러가 발생했어요."))
+                }
+            } receiveValue: { [weak self] _ in
+                self?.output.send(.shouldShowToast("연결을 시도합니다."))
+            }
+            cancellable.cancel()
         }
     }
     
     private func handleLinkButtonDidTap() {
         createRoomUseCase.execute()
+            .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     debugPrint(error.localizedDescription)

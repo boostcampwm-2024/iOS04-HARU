@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol SendOfferUseCase {
-    func execute() -> Bool
+    func execute() -> AnyPublisher<Void, Error>
 }
