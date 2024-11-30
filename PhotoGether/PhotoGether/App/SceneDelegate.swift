@@ -103,6 +103,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let waitingRoomViewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+            isHost: isHost,
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
@@ -132,8 +133,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 viewModel: enterLoadingViewModel,
                 waitingRoomViewController: waitingRoomViewController
             )
-            
-            waitingRoomViewModel.setGuestMode(true)
             
             window?.rootViewController = UINavigationController(rootViewController: enterLoadingViewController)
         } else {

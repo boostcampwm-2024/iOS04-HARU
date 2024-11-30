@@ -24,33 +24,28 @@ public final class WaitingRoomViewModel {
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
     private let createRoomUseCase: CreateRoomUseCase
     
-    private var isGuest: Bool = false
+    private var isHost: Bool
     private var cancellables = Set<AnyCancellable>()
     private let output = PassthroughSubject<Output, Never>()
     
     public init(
+        isHost: Bool,
         sendOfferUseCase: SendOfferUseCase,
         getLocalVideoUseCase: GetLocalVideoUseCase,
         getRemoteVideoUseCase: GetRemoteVideoUseCase,
         createRoomUseCase: CreateRoomUseCase
     ) {
+        self.isHost = isHost
         self.sendOfferUseCase = sendOfferUseCase
         self.getLocalVideoUseCase = getLocalVideoUseCase
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
         self.createRoomUseCase = createRoomUseCase
     }
     
-    public func setGuestMode(_ isGuest: Bool) {
-        self.isGuest = isGuest
-    }
-    
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input
-            .handleEvents(receiveOutput: { [weak self] event in
+        input.sink { [weak self] event in
                 self?.handleEvent(event)
-            })
-            .sink { _ in }
-            .store(in: &cancellables)
+            }.store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
     }
@@ -75,7 +70,7 @@ public final class WaitingRoomViewModel {
         let remoteVideos = getRemoteVideoUseCase.execute()
         output.send(.remoteVideos(remoteVideos))
         
-        if isGuest {
+        if isHost {
             let message = sendOfferUseCase.execute() ? "연결을 시도합니다." : "연결 중 에러가 발생했어요."
             output.send(.shouldShowToast(message))
         }

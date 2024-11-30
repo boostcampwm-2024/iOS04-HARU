@@ -92,7 +92,9 @@ public final class WaitingRoomViewController: BaseViewController {
     private func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.sink { [weak self] in
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
             guard let self else { return }
             switch $0 {
                 
