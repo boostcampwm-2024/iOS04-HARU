@@ -110,7 +110,7 @@ public final class EditPhotoRoomGuestViewModel {
 // MARK: Sticker 관련
 extension EditPhotoRoomGuestViewModel {
     private func handleCreateSticker(sticker: StickerEntity) {
-        mutateStickerLocal(sticker: sticker)
+        mutateStickerLocal(type: .create, sticker: sticker)
         mutateStickerEventHub(type: .create, with: sticker)
     }
     
@@ -121,17 +121,29 @@ extension EditPhotoRoomGuestViewModel {
         mutateStickerEventHub(type: .delete, with: sticker)
     }
     
-    private func mutateStickerLocal(sticker: StickerEntity) {
-        var stickerList = stickerListSubject.value
-        stickerList.append(sticker)
-        stickerListSubject.send(stickerList)
     private func handleDragSticker(sticker: StickerEntity, state: DragState) {
         switch state {
         case .began:
         case .changed:
         case .ended:
+    private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
+        switch type {
+        case .create:
+            var stickerList = stickerListSubject.value
+            stickerList.append(sticker)
+            stickerListSubject.send(stickerList)
+        case .delete: break
+        case .update:
+            let stickerList = stickerListSubject.value
+            handleStickerViewDidTap(with: sticker.id)
+            
+            let newStickerList = stickerList.map {
+                if $0.id == sticker.id {
+                    return sticker
+                } else {
+                    return $0
+                }
         }
-    }
     }
     
     private func mutateStickerListLocal(stickerList: [StickerEntity]) {
