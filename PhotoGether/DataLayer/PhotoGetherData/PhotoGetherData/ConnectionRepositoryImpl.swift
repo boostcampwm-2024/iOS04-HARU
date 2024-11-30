@@ -44,7 +44,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     public func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error> {
         return roomService.joinRoom(to: roomID).map { [weak self] entity -> Bool in
             guard let self else { return false }
-            guard entity.userList.count <= clients.count else { return false }
+            guard entity.userList.count <= clients.count + 1 else { return false }
             let setLocalUserInfoResult = setLocalUserInfo(entity: entity)
             let setRemoteUserInfoResult = setRemoteUserInfo(entity: entity, hostID: hostID)
             
@@ -62,12 +62,15 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
                 PTGDataLogger.log("offer 생성 중 에러가 발생했습니다.")
                 throw NSError()
             }
+            
+            guard let remoteUserInfo = client.remoteUserInfo else { return }
+            
             self.signalingService.send(
                 type: .offerSDP,
                 sdp: sdp,
                 roomID: roomID,
                 offerID: myID,
-                answerID: nil
+                answerID: remoteUserInfo.id
             )
         }
     }

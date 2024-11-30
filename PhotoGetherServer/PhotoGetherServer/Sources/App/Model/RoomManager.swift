@@ -63,20 +63,18 @@ actor RoomManager {
             print("[DEBUG] :: Failed To Find Room\(dto.roomID)")
             return
         }
-        
-        let targetList = targetRoom.userList.filter { $0.id != dto.offerID }
-        
-        targetList.forEach {
-            var responseDTO = dto
-            responseDTO.answerID = $0.id
-            
-            let response = SignalingResponseDTO(
-                messageType: .offerSDP,
-                message: responseDTO.toData(encoder)
-            )
-            
-            $0.client.sendDTO(response, encoder: encoder)
+
+        guard let receiver = targetRoom.userList.first(where: { $0.id == dto.answerID }) else {
+            print("[DEBUG] :: not found receiver for offerSDP in room \(dto.roomID) \(dto.answerID ?? "nil")")
+            return
         }
+        
+        let response = SignalingResponseDTO(
+            messageType: .offerSDP,
+            message: dto.toData(encoder)
+        )
+        
+        receiver.client.sendDTO(response, encoder: encoder)
     }
     
     func sendAnswerSDP(dto: SessionDescriptionMessage) async {
@@ -85,16 +83,17 @@ actor RoomManager {
             return
         }
         
-        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.offerID }).first else {
-            print("[DEBUG] :: Failed To Find User\(dto.offerID)")
+        guard let receiver = targetRoom.userList.first(where: { $0.id == dto.offerID }) else {
+            print("[DEBUG] :: not found receiver for answerSDP in room \(dto.roomID) \(dto.offerID)")
             return
         }
+        
         let response = SignalingResponseDTO(
             messageType: .answerSDP,
             message: dto.toData(encoder)
         )
         
-        targetUser.client.sendDTO(response, encoder: encoder)
+        receiver.client.sendDTO(response, encoder: encoder)
     }
     
     func sendIceCandidate(dto: IceCandidateMessage) async {
@@ -103,7 +102,7 @@ actor RoomManager {
             return
         }
         
-        guard let targetUser = targetRoom.userList.filter({ $0.id == dto.receiverID }).first else {
+        guard let receiver = targetRoom.userList.first(where: { $0.id == dto.receiverID }) else {
             print("[DEBUG] :: Failed To Find User\(dto.receiverID)")
             return
         }
@@ -112,7 +111,7 @@ actor RoomManager {
             message: dto.toData(encoder)
         )
         
-        targetUser.client.sendDTO(response, encoder: encoder)
+        receiver.client.sendDTO(response, encoder: encoder)
     }
     
     
