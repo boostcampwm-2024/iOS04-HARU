@@ -26,7 +26,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
         self.bottomSheetViewController.delegate = self
-        self.canvasScrollView.stickerViewDelegate = self
+        self.canvasScrollView.canvasScrollViewDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -134,7 +134,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func updateCanvas(with stickerList: [StickerEntity]) {
-        canvasScrollView.updateCanvas(self, stickerList: stickerList, user: viewModel.owner)
+        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.owner)
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
@@ -148,7 +148,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             latestUpdated: Date()
         )
         
-        canvasScrollView.addStickerView(self, with: newSticker, user: viewModel.owner)
+        canvasScrollView.addStickerView(with: newSticker, user: viewModel.owner)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -205,21 +205,27 @@ extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
 }
 
 extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTap id: UUID) {
+        input.send(.stickerViewDidTap(id))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTapDelete id: UUID) {
+        input.send(.deleteSticker(id))
+    }
+    
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity) {
         input.send(.createSticker(sticker))
     }
     
-    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity) {
          
     }
     
-    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity) {
          
     }
     
-    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
          
     }
-    
-
 }
