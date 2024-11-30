@@ -7,7 +7,7 @@ extension WebSocket {
         decoder: JSONDecoder
     ) -> T? {
         guard let dto = data.toDTO(type: type, decoder: decoder) else {
-            print("[DEBUG] :: Decode Failed: \(type) \(data)")
+            print("[DEBUG] :: Decode Failed: \(type) \(data.readableBytes)")
             return nil
         }
         return dto
@@ -19,7 +19,7 @@ extension WebSocket {
         decoder: JSONDecoder
     ) -> T? {
         guard let dto = data.toDTO(type: type, decoder: decoder) else {
-            print("[DEBUG] :: Decode Failed: \(type) \(data)")
+            print("[DEBUG] :: Decode Failed: \(type) \(data.count)")
             return nil
         }
         return dto
