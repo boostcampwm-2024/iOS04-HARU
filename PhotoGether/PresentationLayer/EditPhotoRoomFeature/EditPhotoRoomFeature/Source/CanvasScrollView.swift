@@ -40,7 +40,7 @@ final class CanvasScrollView: UIScrollView {
     
     private func configureUI() {
         isScrollEnabled = true
-        maximumZoomScale = 3
+        maximumZoomScale = 2
         bouncesZoom = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false

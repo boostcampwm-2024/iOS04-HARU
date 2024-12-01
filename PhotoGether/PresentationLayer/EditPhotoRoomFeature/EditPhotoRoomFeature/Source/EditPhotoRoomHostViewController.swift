@@ -138,7 +138,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
-        let imageSize: CGFloat = 64
+        let imageSize: CGFloat = 72
         let frame = calculateCenterPosition(imageSize: imageSize)
         
         let newSticker = StickerEntity(
