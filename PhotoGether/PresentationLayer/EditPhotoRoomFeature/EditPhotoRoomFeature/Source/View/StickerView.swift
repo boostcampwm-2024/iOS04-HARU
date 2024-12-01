@@ -62,9 +62,8 @@ final class StickerView: UIView {
         }
         
         deleteButton.snp.makeConstraints {
-            $0.bottom.equalTo(snp.top).inset(10)
-            $0.trailing.equalTo(snp.trailing).offset(10)
-            $0.width.height.equalTo(20)
+            $0.top.trailing.equalToSuperview()
+            $0.width.height.equalTo(snp.width).multipliedBy(0.3)
         }
     }
     
@@ -75,7 +74,7 @@ final class StickerView: UIView {
         layerView.isUserInteractionEnabled = false
         
         deleteButton.setImage(deleteButtonImage, for: .normal)
-        deleteButton.layer.cornerRadius = 10
+        deleteButton.layer.cornerRadius = deleteButton.bounds.width / 2
         deleteButton.clipsToBounds = true
         
         setImage(to: sticker.image)
