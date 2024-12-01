@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import WebRTC
+import CoreModule
 
 public final class WebRTCServiceImpl: NSObject, WebRTCService {
     private let didGenerateLocalCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()

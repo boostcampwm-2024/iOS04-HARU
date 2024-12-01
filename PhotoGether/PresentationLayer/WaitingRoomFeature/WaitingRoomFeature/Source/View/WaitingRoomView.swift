@@ -1,6 +1,7 @@
 import UIKit
 import DesignSystem
 import BaseFeature
+import CoreModule
 
 final class WaitingRoomView: UIView {
     let bottomBarView = UIView()

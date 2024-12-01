@@ -1,5 +1,6 @@
 import Foundation
 import PhotoGetherNetwork
+import CoreModule
 
 public extension Data {
     func toDTO<T: Decodable>(type: T.Type, decoder: JSONDecoder = JSONDecoder()) -> T? {

@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import WebRTC
 import PhotoGetherNetwork
+import CoreModule
 
 final public class SignalingServiceImpl: SignalingService {
     private let decoder = JSONDecoder()

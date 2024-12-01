@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import PhotoGetherNetwork
 import PhotoGetherDomainInterface
+import CoreModule
 
 public final class RoomServiceImpl: RoomService {
     public var createRoomResponsePublisher: AnyPublisher<RoomOwnerEntity, Error> {

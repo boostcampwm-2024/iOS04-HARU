@@ -2,6 +2,7 @@ import UIKit
 import Combine
 import OSLog
 import PhotoGetherDomainInterface
+import CoreModule
 import WebRTC
 
 public final class ConnectionRepositoryImpl: ConnectionRepository {
