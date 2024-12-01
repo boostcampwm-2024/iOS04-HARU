@@ -10,10 +10,12 @@ protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity)
 }
 
-final class StickerView: UIImageView {
+final class StickerView: UIView {
     private let nicknameLabel = UILabel()
+    private let imageView = UIImageView()
     private let layerView = UIView()
     private let deleteButton = UIButton()
+    private let resizeButton = UIButton()
     private let panGestureRecognizer = UIPanGestureRecognizer()
 
     private var sticker: StickerEntity
@@ -41,25 +43,33 @@ final class StickerView: UIImageView {
     }
     
     private func addViews() {
-        [nicknameLabel, layerView, deleteButton].forEach {
+        [imageView, nicknameLabel, layerView, deleteButton, resizeButton].forEach {
             addSubview($0)
         }
     }
     
     private func setupConstraints() {
+        imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(6)
+        }
+        
         nicknameLabel.snp.makeConstraints {
             $0.top.equalTo(snp.bottom)
             $0.trailing.equalTo(snp.trailing)
         }
         
         layerView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(imageView)
         }
         
         deleteButton.snp.makeConstraints {
-            $0.bottom.equalTo(snp.top).inset(10)
-            $0.trailing.equalTo(snp.trailing).offset(10)
-            $0.width.height.equalTo(20)
+            $0.top.trailing.equalToSuperview()
+            $0.width.height.equalTo(snp.width).multipliedBy(0.3)
+        }
+        
+        resizeButton.snp.makeConstraints {
+            $0.bottom.trailing.equalToSuperview()
+            $0.width.height.equalTo(snp.width).multipliedBy(0.3)
         }
     }
     
@@ -70,18 +80,18 @@ final class StickerView: UIImageView {
         layerView.isUserInteractionEnabled = false
         
         deleteButton.setImage(deleteButtonImage, for: .normal)
-        deleteButton.layer.cornerRadius = 10
+        deleteButton.layer.cornerRadius = deleteButton.bounds.width / 2
         deleteButton.clipsToBounds = true
         
+        let resizeButtonImage = PTGImage.resizeIcon.image
+        resizeButton.setImage(resizeButtonImage, for: .normal)
+        resizeButton.layer.cornerRadius = resizeButton.bounds.width / 2
+        resizeButton.clipsToBounds = true
+        
         setImage(to: sticker.image)
-        
-        sticker.owner != nil
-        ? (layerView.isHidden = false)
-        : (layerView.isHidden = true)
-        
-        _ = sticker.owner != user
-        ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
-        : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
+        updateOwnerUI(owner: sticker.owner)
+        updateDeleteButtonVisibility(for: sticker.owner)
+        updateResizeButtonVisibility(for: sticker.owner)
     }
     
     private func setupGesture() {
@@ -140,6 +150,13 @@ final class StickerView: UIImageView {
         guard sticker.owner != owner else { return }
         
         sticker.updateOwner(to: owner)
+        updateOwnerUI(owner: owner)
+        updateDeleteButtonVisibility(for: owner)
+        updateResizeButtonVisibility(for: owner)
+        updatePanGestureState()
+    }
+    
+    private func updateOwnerUI(owner: String?) {
         if let owner = owner {
             nicknameLabel.text = owner
             layerView.isHidden = false
@@ -147,12 +164,18 @@ final class StickerView: UIImageView {
             nicknameLabel.text = nil
             layerView.isHidden = true
         }
-        
-        _ = sticker.owner != user
-        ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
-        : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
-        
-        updatePanGestureState()
+    }
+
+    private func updateDeleteButtonVisibility(for owner: String?) {
+        let isOwner = owner == user
+        deleteButton.isHidden = !isOwner
+        deleteButton.isUserInteractionEnabled = isOwner
+    }
+    
+    private func updateResizeButtonVisibility(for owner: String?) {
+        let isOwner = owner == user
+        resizeButton.isHidden = !isOwner
+        resizeButton.isUserInteractionEnabled = isOwner
     }
     
     private func updatePanGestureState() {
@@ -165,6 +188,7 @@ final class StickerView: UIImageView {
     
     private func setImage(to urlString: String) {
         guard let url = URL(string: urlString) else { return }
+
         Task { await self.setAsyncImage(url) }
     }
     
@@ -187,5 +211,21 @@ final class StickerView: UIImageView {
                 updateFrame(to: sticker.frame)
             }
         }
+    }
+    
+    func prepareSharePhoto() {
+        guard sticker.owner != nil else { return }
+
+        updateOwnerUI(owner: nil)
+        updateDeleteButtonVisibility(for: nil)
+        updateResizeButtonVisibility(for: nil)
+    }
+    
+    func finishSharePhoto() {
+        guard sticker.owner != nil else { return }
+        
+        updateOwnerUI(owner: sticker.owner)
+        updateDeleteButtonVisibility(for: sticker.owner)
+        updateResizeButtonVisibility(for: sticker.owner)
     }
 }

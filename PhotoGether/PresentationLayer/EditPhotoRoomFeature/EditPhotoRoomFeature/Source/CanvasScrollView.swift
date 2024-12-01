@@ -120,10 +120,12 @@ extension CanvasScrollView {
     
     func makeSharePhoto() -> Data? {
         imageView.layoutIfNeeded()
+        stickerViewDictonary.values.forEach { $0.prepareSharePhoto() }
         let renderer = UIGraphicsImageRenderer(size: imageView.bounds.size)
         let capturedImage = renderer.image { context in
             imageView.layer.render(in: context.cgContext)
         }
+        stickerViewDictonary.values.forEach { $0.finishSharePhoto() }
         return capturedImage.pngData()
     }
 }
