@@ -4,14 +4,19 @@ import DesignSystem
 import PhotoGetherDomainInterface
 
 protocol CanvasScrollViewDelegate: AnyObject {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTap id: UUID)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTapDelete id: UUID)
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity)
 }
 
 final class CanvasScrollView: UIScrollView {
     private let imageView = UIImageView()
     private var stickerViewDictonary: [UUID: StickerView]
 
-    weak var stickerViewDelegate: CanvasScrollViewDelegate?
+    weak var canvasScrollViewDelegate: CanvasScrollViewDelegate?
     
     override init(frame: CGRect) {
         self.stickerViewDictonary = [:]
@@ -48,27 +53,25 @@ final class CanvasScrollView: UIScrollView {
 // MARK: - StickerView methods
 extension CanvasScrollView {
     func updateCanvas(
-        _ target: StickerViewActionDelegate,
         stickerList: [StickerEntity],
         user: String
     ) {
         prepareForApply(stickerList)
-        applyStickerList(target, for: stickerList, user: user)
+        applyStickerList(for: stickerList, user: user)
     }
     
     func addStickerView(
-        _ target: StickerViewActionDelegate,
         with sticker: StickerEntity,
         user: String
     ) {
         let stickerView = StickerView(sticker: sticker, user: user)
-        stickerView.delegate = target
+        stickerView.delegate = self
         
         stickerViewDictonary[sticker.id] = stickerView
         imageView.addSubview(stickerView)
         stickerView.update(with: sticker)
         
-        stickerViewDelegate?.canvasScrollView(self, didAdd: sticker)
+        canvasScrollViewDelegate?.canvasScrollView(self, didAdd: sticker)
     }
     
     private func updateStickerView(with sticker: StickerEntity) {
@@ -91,7 +94,6 @@ extension CanvasScrollView {
     }
     
     private func applyStickerList(
-        _ target: StickerViewActionDelegate,
         for stickerList: [StickerEntity],
         user: String
     ) {
@@ -100,7 +102,7 @@ extension CanvasScrollView {
             case true:
                 updateStickerView(with: sticker)
             case false:
-                addStickerView(target, with: sticker, user: user)
+                addStickerView(with: sticker, user: user)
             }
         }
     }
@@ -170,5 +172,27 @@ extension CanvasScrollView {
 extension CanvasScrollView: UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
+    }
+}
+
+extension CanvasScrollView: StickerViewActionDelegate {
+    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didTap: id)
+    }
+    
+    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didTapDelete: id)
+    }
+    
+    func stickerView(_ stickerView: StickerView, willBeginDraging sticker: StickerEntity) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didBeginDrag: sticker)
+    }
+    
+    func stickerView(_ stickerView: StickerView, didDrag sticker: StickerEntity) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didChangeDrag: sticker)
+    }
+    
+    func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didEndDrag: sticker)
     }
 }

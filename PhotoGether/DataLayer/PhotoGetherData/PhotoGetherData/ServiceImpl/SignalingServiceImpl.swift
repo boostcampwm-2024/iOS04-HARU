@@ -51,9 +51,8 @@ final public class SignalingServiceImpl: SignalingService {
         do {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
-            let request = try self.encoder.encode(dto)
-            
-            self.webSocketClient.send(data: request)
+            let request = try self.encoder.encode(dto)    
+            self.webSocketClient.send(data: dataMessage)
         } catch {
             PTGDataLogger.log("Warning: Could not encode sdp: \(error)")
         }
@@ -70,8 +69,7 @@ final public class SignalingServiceImpl: SignalingService {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
             let request = try self.encoder.encode(dto)
-            
-            self.webSocketClient.send(data: request)
+            self.webSocketClient.send(data: dataMessage)
         } catch {
             PTGDataLogger.log("Warning: Could not encode candidate: \(error)")
         }

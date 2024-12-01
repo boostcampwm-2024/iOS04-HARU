@@ -5,12 +5,16 @@ import UIKit
 protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, didTap id: UUID)
     func stickerView(_ stickerView: StickerView, didTapDelete id: UUID)
+    func stickerView(_ stickerView: StickerView, willBeginDraging sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didDrag sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity)
 }
 
 final class StickerView: UIImageView {
     private let nicknameLabel = UILabel()
     private let layerView = UIView()
     private let deleteButton = UIButton()
+    private let panGestureRecognizer = UIPanGestureRecognizer()
 
     private var sticker: StickerEntity
     private let user: String
@@ -24,7 +28,7 @@ final class StickerView: UIImageView {
         self.sticker = sticker
         self.user = user
         super.init(frame: sticker.frame)
-        setupTapGesture()
+        setupGesture()
         setupTarget()
         addViews()
         setupConstraints()
@@ -80,11 +84,41 @@ final class StickerView: UIImageView {
         : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
     }
     
-    private func setupTapGesture() {
+    private func setupGesture() {
         isUserInteractionEnabled = true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
+        
+        panGestureRecognizer.minimumNumberOfTouches = 1
+        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
+        
+        addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let initialPoint = sticker.frame.origin
+        let translationPoint = gesture.translation(in: self)
+        let changedX = initialPoint.x + translationPoint.x
+        let changedY = initialPoint.y + translationPoint.y
+        let traslationStickerPoint = CGPoint(x: changedX, y: changedY)
+        
+        panGestureRecognizer.setTranslation(.zero, in: self)
+        
+        let newFrame = CGRect(origin: traslationStickerPoint, size: sticker.frame.size)
+        
+        switch gesture.state {
+        case .began:
+            updateFrame(to: newFrame)
+            updateOwner(to: user)
+            delegate?.stickerView(self, willBeginDraging: sticker)
+        case .changed:
+            updateFrame(to: newFrame)
+            delegate?.stickerView(self, didDrag: sticker)
+        case .ended:
+            delegate?.stickerView(self, didEndDrag: sticker)
+        default: break
+        }
     }
     
     private func setupTarget() {
@@ -117,6 +151,16 @@ final class StickerView: UIImageView {
         _ = sticker.owner != user
         ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
         : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
+        
+        updatePanGestureState()
+    }
+    
+    private func updatePanGestureState() {
+        if sticker.owner == user || sticker.owner == nil {
+            panGestureRecognizer.isEnabled = true
+        } else {
+            panGestureRecognizer.isEnabled = false
+        }
     }
     
     private func setImage(to urlString: String) {
@@ -133,7 +177,15 @@ final class StickerView: UIImageView {
     }
     
     func update(with sticker: StickerEntity) {
-        updateOwner(to: sticker.owner)
-        updateFrame(to: sticker.frame)
+        switch panGestureRecognizer.state {
+        case .began, .changed:
+            return
+        default:
+            updateOwner(to: sticker.owner)
+            
+            if sticker.owner != user {
+                updateFrame(to: sticker.frame)
+            }
+        }
     }
 }

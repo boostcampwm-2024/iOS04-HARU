@@ -25,7 +25,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
         self.bottomSheetViewController.delegate = self
-        self.canvasScrollView.stickerViewDelegate = self
+        self.canvasScrollView.canvasScrollViewDelegate = self
     }
     
     @available(*, unavailable)
@@ -102,7 +102,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
                 self?.updateCanvas(with: stickerList)
             case .frameImage(let image):
                 self?.updateFrameImage(to: image)
-            case .stickerBottomSheetPresent:
+            case .presentStickerBottomSheet:
                 self?.presentStickerBottomSheet()
             }
         }
@@ -114,7 +114,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     }
     
     private func updateCanvas(with stickerList: [StickerEntity]) {
-        canvasScrollView.updateCanvas(self, stickerList: stickerList, user: viewModel.owner)
+        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.owner)
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
@@ -128,7 +128,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             latestUpdated: Date()
         )
         
-        canvasScrollView.addStickerView(self, with: newSticker, user: viewModel.owner)
+        canvasScrollView.addStickerView(with: newSticker, user: viewModel.owner)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -162,18 +162,28 @@ extension EditPhotoRoomGuestViewController: StickerBottomSheetViewControllerDele
     }
 }
 
-extension EditPhotoRoomGuestViewController: StickerViewActionDelegate {
-    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
+extension EditPhotoRoomGuestViewController: CanvasScrollViewDelegate {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTap id: UUID) {
         input.send(.stickerViewDidTap(id))
     }
     
-    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTapDelete id: UUID) {
         input.send(.deleteSticker(id))
     }
-}
-
-extension EditPhotoRoomGuestViewController: CanvasScrollViewDelegate {
+    
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity) {
         input.send(.createSticker(sticker))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .ended))
     }
 }
