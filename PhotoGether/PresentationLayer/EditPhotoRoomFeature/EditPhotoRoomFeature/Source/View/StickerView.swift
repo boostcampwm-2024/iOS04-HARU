@@ -165,13 +165,7 @@ final class StickerView: UIImageView {
     
     private func setImage(to urlString: String) {
         guard let url = URL(string: urlString) else { return }
-        
-        Task { [weak self] in
-            guard let (data, _) = try? await URLSession.shared.data(from: url)
-            else { return }
-            
-            self?.image = UIImage(data: data)
-        }
+        Task { await self.setAsyncImage(url) }
     }
     
     @objc private func handleTap() {

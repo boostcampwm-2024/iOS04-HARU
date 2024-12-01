@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import WebRTC
 
 public final class WebRTCServiceImpl: NSObject, WebRTCService {
@@ -12,7 +13,20 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         )
     }()
     
-    public var delegate: WebRTCServiceDelegate?
+    private let didGenerateLocalCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
+    private let didChangeConnectionStateSubject = PassthroughSubject<RTCIceConnectionState, Never>()
+    private let didReceiveDataSubject = PassthroughSubject<Data, Never>()
+    
+    public var didGenerateLocalCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> {
+        self.didGenerateLocalCandidateSubject.eraseToAnyPublisher()
+    }
+    public var didChangeConnectionStatePublisher: AnyPublisher<RTCIceConnectionState, Never> {
+        self.didChangeConnectionStateSubject.eraseToAnyPublisher()
+    }
+    public var didReceiveDataPublisher: AnyPublisher<Data, Never> {
+        self.didReceiveDataSubject.eraseToAnyPublisher()
+    }
+    
     public var peerConnection: RTCPeerConnection
     
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
@@ -115,13 +129,13 @@ public extension WebRTCServiceImpl {
             $0.position == .front
         }) else { return }
               
-        // 가장 높은 해상도 선택
+        // 가장 낮은 해상도 선택
         guard let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera)
             .sorted { frame1, frame2 -> Bool in
                 let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
                 let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
                 return width1 < width2
-            }).last else { return }
+            }).first else { return }
               
         // 가장 높은 fps 선택
         guard let fps = (format.videoSupportedFrameRateRanges
@@ -134,12 +148,22 @@ public extension WebRTCServiceImpl {
             fps: Int(fps.maxFrameRate)
         )
         
+        flipVideoRenderer(renderer)
+        
         self.localVideoTrack?.add(renderer)
     }
     
     /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
+        flipVideoRenderer(renderer)
+        
         self.remoteVideoTrack?.add(renderer)
+    }
+    
+    /// 들어오는 화면에 좌우 반전을 적용합니다
+    private func flipVideoRenderer(_ renderer: RTCVideoRenderer) {
+        guard let renderedView = renderer as? UIView else { return }
+        renderedView.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
     }
     
     private func configureAudioSession() {
@@ -152,7 +176,7 @@ public extension WebRTCServiceImpl {
             )
             try self.rtcAudioSession.setActive(true)
         } catch let error {
-            debugPrint("Error changeing AVAudioSession category: \(error)")
+            PTGDataLogger.log("Error changeing AVAudioSession category: \(error)")
         }
         self.rtcAudioSession.unlockForConfiguration()
     }
@@ -213,7 +237,7 @@ public extension WebRTCServiceImpl {
             forLabel: "WebRTCData",
             configuration: config
         ) else {
-            debugPrint("Warning: Couldn't create data channel.")
+            PTGDataLogger.log("Warning: Couldn't create data channel.")
             return nil
         }
         return dataChannel
@@ -252,63 +276,63 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didChange stateChanged: RTCSignalingState
     ) {
-        debugPrint("peerConnection new signaling state: \(stateChanged)")
+        PTGDataLogger.log("peerConnection new signaling state: \(stateChanged)")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didAdd stream: RTCMediaStream
     ) {
-        debugPrint("peerConnection did add stream")
+        PTGDataLogger.log("peerConnection did add stream")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didRemove stream: RTCMediaStream
     ) {
-        debugPrint("peerConnection did remove stream")
+        PTGDataLogger.log("peerConnection did remove stream")
     }
     
     public func peerConnectionShouldNegotiate(
         _ peerConnection: RTCPeerConnection
     ) {
-        debugPrint("peerConnection should negotiate")
+        PTGDataLogger.log("peerConnection should negotiate")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didChange newState: RTCIceConnectionState
     ) {
-        debugPrint("peerConnection new connection state: \(newState)")
-        self.delegate?.webRTCService(self, didChangeConnectionState: newState)
+        PTGDataLogger.log("peerConnection new connection state: \(newState)")
+        self.didChangeConnectionStateSubject.send(newState)
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didChange newState: RTCIceGatheringState
     ) {
-        debugPrint("peerConnection new gathering state: \(newState)")
+        PTGDataLogger.log("peerConnection new gathering state: \(newState)")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didGenerate candidate: RTCIceCandidate
     ) {
-        self.delegate?.webRTCService(self, didGenerateLocalCandidate: candidate)
+        self.didGenerateLocalCandidateSubject.send(candidate)
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didRemove candidates: [RTCIceCandidate]
     ) {
-        debugPrint("peerConnection did remove candidate(s)")
+        PTGDataLogger.log("peerConnection did remove candidate(s)")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didOpen dataChannel: RTCDataChannel
     ) {
-        debugPrint("peerConnection did open data channel")
+        PTGDataLogger.log("peerConnection did open data channel")
         self.remoteDataChannel = dataChannel
     }
 }
@@ -318,13 +342,13 @@ extension WebRTCServiceImpl {
     public func dataChannelDidChangeState(
         _ dataChannel: RTCDataChannel
     ) {
-        debugPrint("dataChannel did change state: \(dataChannel.readyState)")
+        PTGDataLogger.log("dataChannel did change state: \(dataChannel.readyState)")
     }
     
     public func dataChannel(
         _ dataChannel: RTCDataChannel,
         didReceiveMessageWith buffer: RTCDataBuffer
     ) {
-        self.delegate?.webRTCService(self, didReceiveData: buffer.data)
+        self.didReceiveDataSubject.send(buffer.data)
     }
 }

@@ -29,6 +29,14 @@ let package = Package(
                 .product(name: "XCTVapor", package: "vapor"),
             ],
             swiftSettings: swiftSettings
+        ),
+        .testTarget(
+            name: "RoomManagerTests",
+            dependencies: [
+                .target(name: "App"),
+                .product(name: "XCTVapor", package: "vapor"),
+            ],
+            swiftSettings: swiftSettings
         )
     ],
     swiftLanguageModes: [.v5]

@@ -10,6 +10,8 @@
 	<string>$(BASE_URL)</string>
 	<key>EMOJI_API_KEY</key>
 	<string>$(EMOJI_API_KEY)</string>
+	<key>STUN_SERVERS</key>
+	<string>$(STUN_SERVERS)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

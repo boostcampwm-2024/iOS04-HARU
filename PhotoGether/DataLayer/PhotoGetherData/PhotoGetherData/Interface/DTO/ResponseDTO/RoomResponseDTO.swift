@@ -8,5 +8,6 @@ struct RoomResponseDTO: WebSocketResponsable {
     enum RoomMessageType: String, Decodable {
         case createRoom
         case joinRoom
+        case notifyNewUser
     }
 }

@@ -4,7 +4,7 @@ import DesignSystem
 final class WaitingRoomView: UIView {
     let bottomBarView = UIView()
     let micButton = PTGMicButton(micState: .on)
-    let shareButton = PTGCircleButton(type: .link)
+    let linkButton = PTGCircleButton(type: .link)
     let startButton = PTGPrimaryButton()
     
     init() {
@@ -32,7 +32,7 @@ final class WaitingRoomView: UIView {
 private extension WaitingRoomView {
     func addViews() {
         [bottomBarView, micButton].forEach { addSubview($0) }
-        [shareButton, startButton].forEach {
+        [linkButton, startButton].forEach {
             bottomBarView.addSubview($0)
         }
     }
@@ -45,7 +45,7 @@ private extension WaitingRoomView {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
         
-        shareButton.snp.makeConstraints {
+        linkButton.snp.makeConstraints {
             $0.size.equalTo(Constants.circleButtonSize)
             $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
@@ -53,7 +53,7 @@ private extension WaitingRoomView {
         
         startButton.snp.makeConstraints {
             $0.height.equalTo(Constants.startButtonHeight)
-            $0.leading.equalTo(shareButton.snp.trailing)
+            $0.leading.equalTo(linkButton.snp.trailing)
                 .offset(Constants.bottomBarViewHorizontalInset)
             $0.trailing.equalToSuperview()
             $0.centerY.equalToSuperview()
