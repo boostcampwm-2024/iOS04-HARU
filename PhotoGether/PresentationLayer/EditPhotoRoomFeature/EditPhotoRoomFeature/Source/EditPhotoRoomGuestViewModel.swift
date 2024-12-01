@@ -123,18 +123,19 @@ extension EditPhotoRoomGuestViewModel {
     
     private func handleDragSticker(sticker: StickerEntity, state: DragState) {
         // 소유권 -> OOO (확인)
-        guard canInteractWithSticker(id: sticker.id) else { return }
         
         // Lock 획득 -> OXX
         // 로컬반영 -> XXO
         switch state {
         case .began:
+            guard canInteractWithSticker(id: sticker.id) else { return }
             unlockPreviousSticker(stickerId: sticker.id)
             lockTappedSticker(id: sticker.id)
         case .changed:
-            break
+            guard canInteractWithSticker(id: sticker.id) else { return }
         case .ended:
             mutateStickerLocal(type: .update, sticker: sticker)
+            guard canInteractWithSticker(id: sticker.id) else { return }
         }
         
         mutateStickerEventHub(type: .update, with: sticker)
@@ -149,8 +150,7 @@ extension EditPhotoRoomGuestViewModel {
         case .delete: break
         case .update:
             let stickerList = stickerListSubject.value
-            let newStickerList = stickerList.map { $0.id == sticker.id ? sticker : $0 }
-            stickerListSubject.send(newStickerList)
+            stickerListSubject.send(stickerList)
         case .unlock: break
         }
     }
