@@ -112,6 +112,12 @@ public final class EditPhotoRoomGuestViewModel {
 
 // MARK: Sticker
 extension EditPhotoRoomGuestViewModel {
+    enum PanGestureState {
+        case began
+        case changed
+        case ended
+    }
+    
     private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
         switch type {
         case .create:
@@ -162,13 +168,7 @@ extension EditPhotoRoomGuestViewModel {
 
 // MARK: Sticker Drag
 extension EditPhotoRoomGuestViewModel {
-    enum DragState {
-        case began
-        case changed
-        case ended
-    }
-    
-    private func handleDragSticker(sticker: StickerEntity, state: DragState) {
+    private func handleDragSticker(sticker: StickerEntity, state: PanGestureState) {
         switch state {
         case .began:
             handleDragBegan(sticker: sticker)
