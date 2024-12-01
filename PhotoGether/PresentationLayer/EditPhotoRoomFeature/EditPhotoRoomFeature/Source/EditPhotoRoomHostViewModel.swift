@@ -217,12 +217,23 @@ extension EditPhotoRoomHostViewModel {
     }
     
     private func handleResizeBegan(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
     }
     
     private func handleResizeChanged(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
     }
     
     private func handleResizeEnded(sticker: StickerEntity) {
+        mutateStickerLocal(type: .update, sticker: sticker)
+        
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
     }
 }
 
