@@ -167,13 +167,13 @@ final class StickerView: UIView {
     }
 
     private func updateDeleteButtonVisibility(for owner: String?) {
-        let isOwner = sticker.owner == user
+        let isOwner = owner == user
         deleteButton.isHidden = !isOwner
         deleteButton.isUserInteractionEnabled = isOwner
     }
     
     private func updateResizeButtonVisibility(for owner: String?) {
-        let isOwner = sticker.owner == user
+        let isOwner = owner == user
         resizeButton.isHidden = !isOwner
         resizeButton.isUserInteractionEnabled = isOwner
     }
