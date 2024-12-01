@@ -282,6 +282,7 @@ extension ConnectionRepositoryImpl {
     private func setLocalUserInfo(entity: RoomOwnerEntity) -> RoomOwnerEntity {
         guard let localUserInfo = localUserInfo(for: entity) else { return entity }
         self.localUserInfo = localUserInfo
+        self.didEnterNewUserSubject.send((localUserInfo, localVideoView))
         return entity
     }
     
@@ -313,7 +314,7 @@ extension ConnectionRepositoryImpl {
     private func localUserInfo(for entity: RoomOwnerEntity) -> UserInfo? {
         return UserInfo(
             id: entity.hostID,
-            nickname: "내가 호스트다",
+            nickname: String(entity.hostID.suffix(4)), // TODO: 서버에서 받아온 닉네임으로 변경 예정
             isHost: true,
             viewPosition: .topLeading,
             roomID: entity.roomID
