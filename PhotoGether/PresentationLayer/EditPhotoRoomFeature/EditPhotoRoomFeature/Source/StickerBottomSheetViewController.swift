@@ -78,7 +78,6 @@ public final class StickerBottomSheetViewController: UIViewController, ViewContr
             .sink { [weak self] event in
                 switch event {
                 case .emoji(let entity):
-                    // TODO: 이모지 전달
                     self?.sendEmoji(by: entity)
                 }
             }
@@ -122,10 +121,8 @@ extension StickerBottomSheetViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: StickerCollectionViewCell.identifier,
-            for: indexPath
-        ) as? StickerCollectionViewCell,
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StickerCollectionViewCell.identifier,
+                                                            for: indexPath) as? StickerCollectionViewCell,
               let emojiEntity = viewModel.emojiList.value[safe: indexPath.item]
         else { return UICollectionViewCell() }
         
