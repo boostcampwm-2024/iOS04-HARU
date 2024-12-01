@@ -120,9 +120,10 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     private func createStickerEntity(by entity: EmojiEntity) {
         let imageSize: CGFloat = 64
         let frame = calculateCenterPosition(imageSize: imageSize)
+        guard let emojiURL = entity.emojiURL else { return }
         
         let newSticker = StickerEntity(
-            image: entity.image,
+            image: emojiURL.absoluteString,
             frame: frame,
             owner: nil,
             latestUpdated: Date()
