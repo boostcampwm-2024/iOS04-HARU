@@ -17,7 +17,6 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var didGenerateLocalCandidatePublisher: AnyPublisher<(receiverID: String, RTCIceCandidate), Never> {
         didGenerateLocalCandidateSubejct.eraseToAnyPublisher()
     }
-        
     public var remoteVideoView: UIView = CapturableVideoView()
     public var remoteUserInfo: UserInfo?
         
@@ -85,7 +84,14 @@ public final class ConnectionClientImpl: ConnectionClient {
     
     public func bindLocalVideo(_ localVideoView: UIView) {
         guard let localVideoView = localVideoView as? RTCMTLVideoView else { return }
-        self.webRTCService.startCaptureLocalVideo(renderer: localVideoView)
+        self.webRTCService.renderLocalVideo(to: localVideoView)
+    }
+    
+    public func injectVideoSource(videoSource: RTCVideoSource?) {
+        guard let videoSource else { return }
+        let videoTrack = PeerConnectionSupport.createVideoTrack(videoSource: videoSource)
+        
+        self.webRTCService.connectVideoTrack(videoTrack: videoTrack)
     }
         
     private func bindWebRTCService() {

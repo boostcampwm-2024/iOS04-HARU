@@ -2,6 +2,7 @@ import UIKit
 import Combine
 import OSLog
 import PhotoGetherDomainInterface
+import WebRTC
 
 public final class ConnectionRepositoryImpl: ConnectionRepository {
     private var cancellables: Set<AnyCancellable> = []
@@ -17,6 +18,9 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     private let roomService: RoomService
     private let signalingService: SignalingService
     
+    private var videoCapturer: RTCVideoCapturer?
+    private var videoSource: RTCVideoSource?
+    
     public init(
         signlingService: SignalingService,
         roomService: RoomService,
@@ -26,13 +30,63 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         self.roomService = roomService
         self.clients = clients
         
+        // MARK: local Video 캡쳐
+        initVideoSource()
+        initVideoCapturer()
+        startCaptureLocalVideo()
+
+        // MARK: Clients와 local Video 연결
+        bindLocalVideoSource()
+        bindLocalVideo()
+        
         bindSignalingService()
         connectSignalingService()
-        bindLocalVideo()
+
         bindNotifyNewUserPublihser()
         bindLocalCandidatePublisher()
     }
     
+    private func initVideoSource() {
+        self.videoSource = PeerConnectionSupport.peerConnectionFactory.videoSource()
+    }
+    
+    private func initVideoCapturer() {
+        guard let videoSource else { return }
+        self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
+    }
+    
+    private func startCaptureLocalVideo() {
+        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
+        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
+            $0.position == .front
+        }) else { return }
+                      
+        // 가장 낮은 해상도 선택
+        guard let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera)
+            .sorted { frame1, frame2 -> Bool in
+                let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
+                let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
+                return width1 < width2
+            }).first else { return }
+
+        // 가장 높은 fps 선택
+        guard let fps = (format.videoSupportedFrameRateRanges
+            .sorted { return $0.maxFrameRate < $1.maxFrameRate })
+            .last else { return }
+
+        capturer.startCapture(
+            with: frontCamera,
+            format: format,
+            fps: Int(fps.maxFrameRate)
+        )
+    }
+    
+    private func bindLocalVideoSource() {
+        clients.forEach {
+            $0.injectVideoSource(videoSource: self.videoSource)
+        }
+    }
+
     public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
         return roomService.createRoom().map { [weak self] entity -> RoomOwnerEntity in
             guard let self else { return entity }

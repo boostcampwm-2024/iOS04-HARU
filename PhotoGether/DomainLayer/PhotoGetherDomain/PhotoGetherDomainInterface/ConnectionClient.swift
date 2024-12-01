@@ -20,4 +20,5 @@ public protocol ConnectionClient {
     func sendData(data: Data)
     func captureVideo() -> UIImage
     func bindLocalVideo(_ localVideoView: UIView)
+    func injectVideoSource(videoSource: RTCVideoSource?)
 }

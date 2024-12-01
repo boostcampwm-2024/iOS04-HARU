@@ -23,13 +23,16 @@ public protocol WebRTCService: RTCPeerConnectionDelegate, RTCDataChannelDelegate
     func set(remoteCandidate: RTCIceCandidate, completion: @escaping (Error?) -> Void)
     
     // MARK: Video
-    func startCaptureLocalVideo(renderer: RTCVideoRenderer)
+    func renderLocalVideo(to renderer: RTCVideoRenderer)
     func renderRemoteVideo(to renderer: RTCVideoRenderer)
-    
+    func connectVideoTrack(videoTrack: RTCVideoTrack)
+
     // MARK: Data
     func sendData(_ data: Data)
+    func connectDataChannel(dataChannel: RTCDataChannel?)
     
     // MARK: Audio
     func muteAudio()
     func unmuteAudio()
+    func connectAudioTrack(audioTrack: RTCAudioTrack)
 }

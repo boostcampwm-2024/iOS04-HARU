@@ -3,16 +3,6 @@ import Combine
 import WebRTC
 
 public final class WebRTCServiceImpl: NSObject, WebRTCService {
-    private static let peerConnectionFactory: RTCPeerConnectionFactory = {
-        RTCInitializeSSL()
-        let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
-        let videoDecoderFactory = RTCDefaultVideoDecoderFactory()
-        return RTCPeerConnectionFactory(
-            encoderFactory: videoEncoderFactory,
-            decoderFactory: videoDecoderFactory
-        )
-    }()
-    
     private let didGenerateLocalCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
     private let didChangeConnectionStateSubject = PassthroughSubject<RTCIceConnectionState, Never>()
     private let didReceiveDataSubject = PassthroughSubject<Data, Never>()
@@ -29,22 +19,20 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
     
     public var peerConnection: RTCPeerConnection
     
+    let streamId = "stream"
+    
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
     private let mediaConstraints = [
         kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
         kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue
     ]
-    private var videoCapturer: RTCVideoCapturer?
     private var localVideoTrack: RTCVideoTrack?
     private var remoteVideoTrack: RTCVideoTrack?
     private var localDataChannel: RTCDataChannel?
     private var remoteDataChannel: RTCDataChannel?
     
     public required init(iceServers: [String]) {
-        let config = RTCConfiguration()
-        config.iceServers = [RTCIceServer(urlStrings: iceServers)]
-        config.sdpSemantics = .unifiedPlan
-        config.continualGatheringPolicy = .gatherContinually
+        let config = PeerConnectionSupport.configuration(iceServers: iceServers)
         
         let audioConfig = RTCAudioSessionConfiguration.webRTC()
         audioConfig.category = AVAudioSession.Category.playAndRecord.rawValue
@@ -52,19 +40,14 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         audioConfig.categoryOptions = [.defaultToSpeaker]
         RTCAudioSessionConfiguration.setWebRTC(audioConfig)
         
-        let constraints = RTCMediaConstraints(
-            mandatoryConstraints: nil,
-            optionalConstraints: [
-                "DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue
-            ]
-        )
+        let mediaConstraint = PeerConnectionSupport.mediaConstraint()
         
-        guard let peerConnection = WebRTCServiceImpl.peerConnectionFactory.peerConnection(
+        guard let peerConnection = PeerConnectionSupport.peerConnectionFactory.peerConnection(
             with: config,
-            constraints: constraints,
+            constraints: mediaConstraint,
             delegate: nil
         ) else {
-            // TODO: handle Error
+            PTGDataLogger.log("Could not create new RTCPeerConnection")
             fatalError("Could not create new RTCPeerConnection")
         }
         
@@ -72,8 +55,14 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         
         super.init()
         
-        self.createMediaSenders()
+        // MARK: DataChannel 연결
+        self.connectDataChannel(dataChannel: createDataChannel())
+        
+        // MARK: AudioTrack 연결
+        let audioTrack = PeerConnectionSupport.createAudioTrack()
+        self.connectAudioTrack(audioTrack: audioTrack)
         self.configureAudioSession()
+        
         self.peerConnection.delegate = self
     }
 }
@@ -171,47 +160,16 @@ public extension WebRTCServiceImpl {
 
 // MARK: Video/Audio/Data
 public extension WebRTCServiceImpl {
-    func startCaptureLocalVideo(renderer: RTCVideoRenderer) {
-        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
-        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
-            $0.position == .front
-        }) else { return }
-              
-        // 가장 낮은 해상도 선택
-        guard let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera)
-            .sorted { frame1, frame2 -> Bool in
-                let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
-                let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
-                return width1 < width2
-            }).first else { return }
-              
-        // 가장 높은 fps 선택
-        guard let fps = (format.videoSupportedFrameRateRanges
-            .sorted { return $0.maxFrameRate < $1.maxFrameRate })
-            .last else { return }
-
-        capturer.startCapture(
-            with: frontCamera,
-            format: format,
-            fps: Int(fps.maxFrameRate)
-        )
-        
-        flipVideoRenderer(renderer)
-        
-        self.localVideoTrack?.add(renderer)
+    /// localVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러(View)를 등록합니다.
+    func renderLocalVideo(to renderer: RTCVideoRenderer) {
+        let flippedRenderer = renderer.flipHorizontally()
+        self.localVideoTrack?.add(flippedRenderer)
     }
     
-    /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러를 등록합니다.
+    /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러(View)를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
-        flipVideoRenderer(renderer)
-        
-        self.remoteVideoTrack?.add(renderer)
-    }
-    
-    /// 들어오는 화면에 좌우 반전을 적용합니다
-    private func flipVideoRenderer(_ renderer: RTCVideoRenderer) {
-        guard let renderedView = renderer as? UIView else { return }
-        renderedView.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+        let flippedRenderer = renderer.flipHorizontally()
+        self.remoteVideoTrack?.add(flippedRenderer)
     }
     
     private func configureAudioSession() {
@@ -229,54 +187,24 @@ public extension WebRTCServiceImpl {
         }
         self.rtcAudioSession.unlockForConfiguration()
     }
-    
-    private func createMediaSenders() {
-        let streamId = "stream"
-        
+
+    func connectAudioTrack(audioTrack: RTCAudioTrack) {
         // Audio
-        let audioTrack = self.createAudioTrack()
         self.peerConnection.add(audioTrack, streamIds: [streamId])
-        
+    }
+    
+    func connectVideoTrack(videoTrack: RTCVideoTrack) {
         // Video
-        let videoTrack = self.createVideoTrack()
         self.localVideoTrack = videoTrack
         self.peerConnection.add(videoTrack, streamIds: [streamId])
         self.remoteVideoTrack = self.peerConnection.transceivers
             .first { $0.mediaType == .video }?
             .receiver.track as? RTCVideoTrack
-        
-        // Data
-        if let dataChannel = createDataChannel() {
-            dataChannel.delegate = self
-            self.localDataChannel = dataChannel
-        }
     }
     
-    private func createAudioTrack() -> RTCAudioTrack {
-        let audioConstraints = RTCMediaConstraints(
-            mandatoryConstraints: nil,
-            optionalConstraints: nil
-        )
-        let audioSource = WebRTCServiceImpl.peerConnectionFactory.audioSource(
-            with: audioConstraints
-        )
-        let audioTrack = WebRTCServiceImpl.peerConnectionFactory.audioTrack(
-            with: audioSource,
-            trackId: "audio0"
-        )
-        return audioTrack
-    }
-    
-    private func createVideoTrack() -> RTCVideoTrack {
-        let videoSource = WebRTCServiceImpl.peerConnectionFactory.videoSource()
-        
-        self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
-        
-        let videoTrack = WebRTCServiceImpl.peerConnectionFactory.videoTrack(
-            with: videoSource,
-            trackId: "video0"
-        )
-        return videoTrack
+    func connectDataChannel(dataChannel: RTCDataChannel?) {
+        dataChannel?.delegate = self
+        self.localDataChannel = dataChannel
     }
     
     // MARK: Data Channels
