@@ -20,6 +20,7 @@ extension EmojiDTO {
     func toEntity() -> EmojiEntity {
         return .init(
             emoji: emoji,
+            hexCode: hexcode,
             group: group,
             annotation: annotation
         )

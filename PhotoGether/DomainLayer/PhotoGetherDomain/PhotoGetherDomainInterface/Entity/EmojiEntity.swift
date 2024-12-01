@@ -2,6 +2,7 @@ import Foundation
 
 public struct EmojiEntity: Decodable {
     public let emoji: String
+    public let hexCode: String
     public let group: EmojiGroup
     public let annotation: String
     public var emojiURL: URL? {
@@ -13,7 +14,7 @@ public struct EmojiEntity: Decodable {
         let size = "96"
         
         return emojiURL
-            .appendingPathComponent(emoji)
+            .appendingPathComponent(hexCode)
             .appendingPathComponent(style)
             .appendingPathComponent(ext)
             .appendingPathComponent(size)
@@ -21,10 +22,12 @@ public struct EmojiEntity: Decodable {
     
     public init(
         emoji: String,
+        hexCode: String,
         group: EmojiGroup,
         annotation: String
     ) {
         self.emoji = emoji
+        self.hexCode = hexCode
         self.group = group
         self.annotation = annotation
     }
