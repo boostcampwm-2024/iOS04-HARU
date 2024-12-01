@@ -19,6 +19,6 @@ public protocol ConnectionClient {
     func setRemoteUserInfo(_ remoteUserInfo: UserInfo)
     func sendData(data: Data)
     func captureVideo() -> UIImage
-    func bindLocalVideo(_ localVideoView: UIView)
-    func injectVideoSource(videoSource: RTCVideoSource?)
+    func bindLocalVideo(videoSource: RTCVideoSource?, _ localVideoView: UIView)
+    func bindRemoteVideo()
 }

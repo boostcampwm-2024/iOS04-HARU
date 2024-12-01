@@ -35,9 +35,9 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         initVideoCapturer()
         startCaptureLocalVideo()
 
-        // MARK: Clients와 local Video 연결
-        bindLocalVideoSource()
+        // MARK: Clients와 local Video, remote Video 연결
         bindLocalVideo()
+        bindRemoteVideo()
         
         bindSignalingService()
         connectSignalingService()
@@ -80,11 +80,12 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
             fps: Int(fps.maxFrameRate)
         )
     }
+    private func bindLocalVideo() {
+        self.clients.forEach { $0.bindLocalVideo(videoSource: self.videoSource, _localVideoView) }
+    }
     
-    private func bindLocalVideoSource() {
-        clients.forEach {
-            $0.injectVideoSource(videoSource: self.videoSource)
-        }
+    private func bindRemoteVideo() {
+        self.clients.forEach { $0.bindRemoteVideo() }
     }
 
     public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
@@ -210,10 +211,6 @@ extension ConnectionRepositoryImpl {
             }
             
         }.store(in: &cancellables)
-    }
-    
-    private func bindLocalVideo() {
-        self.clients.forEach { $0.bindLocalVideo(_localVideoView) }
     }
     
     private func bindNotifyNewUserPublihser() {

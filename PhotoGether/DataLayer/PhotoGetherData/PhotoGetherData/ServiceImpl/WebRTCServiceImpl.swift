@@ -169,7 +169,27 @@ public extension WebRTCServiceImpl {
     /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러(View)를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
         let flippedRenderer = renderer.flipHorizontally()
+        PTGDataLogger.log("\(self.remoteVideoTrack?.description ?? "nil")")
         self.remoteVideoTrack?.add(flippedRenderer)
+    }
+    
+    func connectLocalVideoTrack(videoTrack: RTCVideoTrack) {
+        self.localVideoTrack = videoTrack
+        self.peerConnection.add(videoTrack, streamIds: [streamId])
+        self.remoteVideoTrack = self.peerConnection.transceivers
+            .first { $0.mediaType == .video }?
+            .receiver.track as? RTCVideoTrack
+    }
+    
+    func connectRemoteVideoTrack() {
+        self.remoteVideoTrack = self.peerConnection.transceivers
+            .first { $0.mediaType == .video }?
+            .receiver.track as? RTCVideoTrack
+    }
+    
+    private func connectAudioTrack(audioTrack: RTCAudioTrack) {
+        // Audio
+        self.peerConnection.add(audioTrack, streamIds: [streamId])
     }
     
     private func configureAudioSession() {
@@ -187,22 +207,8 @@ public extension WebRTCServiceImpl {
         }
         self.rtcAudioSession.unlockForConfiguration()
     }
-
-    func connectAudioTrack(audioTrack: RTCAudioTrack) {
-        // Audio
-        self.peerConnection.add(audioTrack, streamIds: [streamId])
-    }
     
-    func connectVideoTrack(videoTrack: RTCVideoTrack) {
-        // Video
-        self.localVideoTrack = videoTrack
-        self.peerConnection.add(videoTrack, streamIds: [streamId])
-        self.remoteVideoTrack = self.peerConnection.transceivers
-            .first { $0.mediaType == .video }?
-            .receiver.track as? RTCVideoTrack
-    }
-    
-    func connectDataChannel(dataChannel: RTCDataChannel?) {
+    private func connectDataChannel(dataChannel: RTCDataChannel?) {
         dataChannel?.delegate = self
         self.localDataChannel = dataChannel
     }

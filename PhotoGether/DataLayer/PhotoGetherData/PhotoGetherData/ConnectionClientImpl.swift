@@ -77,21 +77,19 @@ public final class ConnectionClientImpl: ConnectionClient {
     }
     
     /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
-    private func bindRemoteVideo() {
+    public func bindRemoteVideo() {
         guard let remoteVideoView = remoteVideoView as? RTCMTLVideoView else { return }
+        self.webRTCService.connectRemoteVideoTrack()
         self.webRTCService.renderRemoteVideo(to: remoteVideoView)
     }
     
-    public func bindLocalVideo(_ localVideoView: UIView) {
-        guard let localVideoView = localVideoView as? RTCMTLVideoView else { return }
-        self.webRTCService.renderLocalVideo(to: localVideoView)
-    }
-    
-    public func injectVideoSource(videoSource: RTCVideoSource?) {
+    public func bindLocalVideo(videoSource: RTCVideoSource?, _ localVideoView: UIView) {
         guard let videoSource else { return }
         let videoTrack = PeerConnectionSupport.createVideoTrack(videoSource: videoSource)
+        guard let localVideoView = localVideoView as? RTCMTLVideoView else { return }
         
-        self.webRTCService.connectVideoTrack(videoTrack: videoTrack)
+        self.webRTCService.connectLocalVideoTrack(videoTrack: videoTrack)
+        self.webRTCService.renderLocalVideo(to: localVideoView)
     }
         
     private func bindWebRTCService() {
