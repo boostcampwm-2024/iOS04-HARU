@@ -9,9 +9,9 @@ public struct EmojiEntity: Decodable {
         guard let emojiURL = URL(string: "https://www.emoji.family/api/emojis")
         else { return nil }
         
-        let style = emojiStyle.blobmoji.rawValue
+        let style = emojiStyle.twemoji.rawValue
         let ext = "png"
-        let size = "96"
+        let size = "128"
         
         return emojiURL
             .appendingPathComponent(hexCode)
