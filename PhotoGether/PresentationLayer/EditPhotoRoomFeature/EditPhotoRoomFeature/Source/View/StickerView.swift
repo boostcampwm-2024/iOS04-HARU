@@ -217,4 +217,20 @@ final class StickerView: UIView {
             }
         }
     }
+    
+    func prepareSharePhoto() {
+        guard sticker.owner != nil else { return }
+
+        updateOwnerUI(owner: nil)
+        updateDeleteButtonVisibility(for: nil)
+        updateResizeButtonVisibility(for: nil)
+    }
+    
+    func finishSharePhoto() {
+        guard sticker.owner != nil else { return }
+        
+        updateOwnerUI(owner: sticker.owner)
+        updateDeleteButtonVisibility(for: sticker.owner)
+        updateResizeButtonVisibility(for: sticker.owner)
+    }
 }
