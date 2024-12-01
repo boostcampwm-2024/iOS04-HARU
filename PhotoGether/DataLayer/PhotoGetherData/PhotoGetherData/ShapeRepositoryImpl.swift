@@ -32,30 +32,17 @@ final public class ShapeRepositoryImpl: ShapeRepository {
 
 
 fileprivate struct EmojiEndPoint: EndPoint {
-    var group: String = ""
+    let group: EmojiGroup
     
     var baseURL: URL { URL(string: "https://www.emoji.family")! }
     var path: String { "api/emojis" }
     var method: HTTPMethod { .get }
-    var parameters: [String: Any]? { ["group": group, "offset": 0] }
-    var headers: [String: String]? {
-        let apiKey = Bundle.main.object(forInfoDictionaryKey: "EMOJI_API_KEY") as? String ?? ""
-        return ["X-Api-Key": apiKey]
-    }
+    var parameters: [String: Any]? { ["group": group] }
+    var headers: [String: String]? { nil }
     var body: Encodable? { nil }
     
-    func group(_ group: String) -> Self {
-        EmojiEndPoint(group: group)
+    init(group: EmojiGroup) {
+        self.group = group
     }
-    
-    static let groupList = [
-        "smileys-emotion",
-        "people-body",
-        "animals-nature",
-        "food-drink",
-        "travel-places",
-        "activity",
-        "symbols"
-    ]
 }
 
