@@ -58,7 +58,7 @@ final class StickerView: UIView {
         }
         
         layerView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(imageView)
         }
         
         deleteButton.snp.makeConstraints {
