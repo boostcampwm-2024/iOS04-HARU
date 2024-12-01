@@ -182,28 +182,6 @@ extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDeleg
     }
 }
 
-extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
-    func stickerView(_ stickerView: StickerView, willBeginDraging sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
-    }
-    
-    func stickerView(_ stickerView: StickerView, didDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
-    }
-    
-    func stickerView(_ stickerView: StickerView, didEndDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
-    }
-    
-    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
-        input.send(.stickerViewDidTap(id))
-    }
-    
-    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
-        input.send(.deleteSticker(id))
-    }
-}
-
 extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTap id: UUID) {
         input.send(.stickerViewDidTap(id))
