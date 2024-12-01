@@ -168,7 +168,6 @@ public extension WebRTCServiceImpl {
     
     /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러(View)를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
-        let flippedRenderer = renderer.flipHorizontally()
         PTGDataLogger.log("\(self.remoteVideoTrack?.description ?? "nil")")
         self.remoteVideoTrack?.add(flippedRenderer)
     }
