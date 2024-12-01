@@ -81,16 +81,16 @@ public final class WaitingRoomViewController: BaseViewController {
             // MARK: 상대방 비디오 화면 업데이트
             case .remoteVideos(let remoteVideoViews):
                 let guestVideoView1 = remoteVideoViews[safe: 0] ?? UIView()
-                //let guestVideoView2 = remoteVideoViews[safe: 1] ?? UIView()
-                //let guestVideoView3 = remoteVideoViews[safe: 2] ?? UIView()
+                let guestVideoView2 = remoteVideoViews[safe: 1] ?? UIView()
+                let guestVideoView3 = remoteVideoViews[safe: 2] ?? UIView()
                 
                 updateParticipantView(view: guestVideoView1, position: .bottomTrailing)
-                //updateParticipantView(view: guestVideoView2, position: .topTrailing)
-                //updateParticipantView(view: guestVideoView3, position: .bottomLeading)
+                updateParticipantView(view: guestVideoView2, position: .topTrailing)
+                updateParticipantView(view: guestVideoView3, position: .bottomLeading)
                 
                 updateParticipantNickname(nickname: "나는 게스트1", position: .bottomTrailing)
-                //updateParticipantNickname(nickname: "나는 게스트2", position: .topTrailing)
-                //updateParticipantNickname(nickname: "나는 게스트3", position: .bottomLeading)
+                updateParticipantNickname(nickname: "나는 게스트2", position: .topTrailing)
+                updateParticipantNickname(nickname: "나는 게스트3", position: .bottomLeading)
 
             // MARK: 마이크 음소거 UI 업데이트
             case .micMuteState:
