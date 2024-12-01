@@ -27,17 +27,35 @@ final public class ShapeRepositoryImpl: ShapeRepository {
         self.localDataSource = localDataSource
         self.remoteDataSource = remoteDataSource
     }
+    
 }
 
+
 fileprivate struct EmojiEndPoint: EndPoint {
-    var baseURL: URL { URL(string: "https://api.api-ninjas.com")! }
-    var path: String { "v1/emoji" }
+    var group: String = ""
+    
+    var baseURL: URL { URL(string: "https://www.emoji.family")! }
+    var path: String { "api/emojis" }
     var method: HTTPMethod { .get }
-    /// offset 기준 30개씩 호출
-    var parameters: [String: Any]? { ["group": "objects", "offset": 0] }
+    var parameters: [String: Any]? { ["group": group, "offset": 0] }
     var headers: [String: String]? {
         let apiKey = Bundle.main.object(forInfoDictionaryKey: "EMOJI_API_KEY") as? String ?? ""
         return ["X-Api-Key": apiKey]
     }
     var body: Encodable? { nil }
+    
+    func group(_ group: String) -> Self {
+        EmojiEndPoint(group: group)
+    }
+    
+    static let groupList = [
+        "smileys-emotion",
+        "people-body",
+        "animals-nature",
+        "food-drink",
+        "travel-places",
+        "activity",
+        "symbols"
+    ]
 }
+
