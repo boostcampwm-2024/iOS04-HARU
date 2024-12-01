@@ -3,8 +3,8 @@ import PhotoGetherDomainInterface
 
 public final class CaptureVideosUseCaseImpl: CaptureVideosUseCase {
     public func execute() -> [UIImage] {
-        let localImage = [connectionRepository.clients[0].captureVideos()[0]]
-        let remoteImages = connectionRepository.clients.map { $0.captureVideos()[1] }
+        let localImage = [connectionRepository.capturedLocalVideo!]
+        let remoteImages = connectionRepository.clients.map { $0.captureVideo() }
         
         return localImage + remoteImages
     }

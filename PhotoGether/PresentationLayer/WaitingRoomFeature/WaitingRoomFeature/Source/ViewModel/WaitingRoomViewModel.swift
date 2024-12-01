@@ -3,91 +3,90 @@ import Combine
 import PhotoGetherDomainInterface
 
 public final class WaitingRoomViewModel {
-    struct Input {
-        let viewDidLoad: AnyPublisher<Void, Never>
-        let micMuteButtonDidTap: AnyPublisher<Void, Never>
-        let shareButtonDidTap: AnyPublisher<Void, Never>
-        let startButtonDidTap: AnyPublisher<Void, Never>
-    }
-
-    struct Output {
-        let localVideo: AnyPublisher<UIView, Never>
-        let remoteVideos: AnyPublisher<[UIView], Never>
-        let micMuteState: AnyPublisher<Bool, Never>
-        let shouldShowShareSheet: AnyPublisher<String, Never>
-        let navigateToPhotoRoom: AnyPublisher<Void, Never>
-        let shouldShowToast: AnyPublisher<String, Never>
+    enum Input {
+        case viewDidLoad
+        case micMuteButtonDidTap
+        case linkButtonDidTap
+        case startButtonDidTap
     }
     
-    private var cancellables = Set<AnyCancellable>()
+    enum Output {
+        case localVideo(UIView)
+        case remoteVideos([UIView])
+        case micMuteState(Bool)
+        case shouldShowShareSheet(String)
+        case navigateToPhotoRoom
+        case shouldShowToast(String)
+    }
     
     private let sendOfferUseCase: SendOfferUseCase
     private let getLocalVideoUseCase: GetLocalVideoUseCase
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
+    private let createRoomUseCase: CreateRoomUseCase
+    
+    private var isHost: Bool
+    private var cancellables = Set<AnyCancellable>()
+    private let output = PassthroughSubject<Output, Never>()
     
     public init(
+        isHost: Bool,
         sendOfferUseCase: SendOfferUseCase,
         getLocalVideoUseCase: GetLocalVideoUseCase,
-        getRemoteVideoUseCase: GetRemoteVideoUseCase
+        getRemoteVideoUseCase: GetRemoteVideoUseCase,
+        createRoomUseCase: CreateRoomUseCase
     ) {
+        self.isHost = isHost
         self.sendOfferUseCase = sendOfferUseCase
         self.getLocalVideoUseCase = getLocalVideoUseCase
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
+        self.createRoomUseCase = createRoomUseCase
     }
     
-    func transform(input: Input) -> Output {
-        let newMicMuteState = mutateMicMuteButtonDidTap(input)
-        let newShouldShowShareSheet = mutateShareButtonDidTap(input)
-        let newNavigateToPhotoRoom = mutateStartButtonDidTap(input)
+    func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+        input.sink { [weak self] event in
+                self?.handleEvent(event)
+            }.store(in: &cancellables)
         
-        let output = Output(
-            localVideo: bindLocalVideo(input),
-            remoteVideos: bindRemoteVideos(input),
-            micMuteState: newMicMuteState,
-            shouldShowShareSheet: newShouldShowShareSheet,
-            navigateToPhotoRoom: newNavigateToPhotoRoom,
-            shouldShowToast: newShouldShowShareSheet
-        )
-        
-        return output
+        return output.eraseToAnyPublisher()
     }
     
-    func sendOffer() {
-        sendOfferUseCase.execute()
-    }
-}
-
-private extension WaitingRoomViewModel {
-    func bindLocalVideo(_ input: Input) -> AnyPublisher<UIView, Never> {
-        input.viewDidLoad.map { [weak self] _ in
-            guard let self else { return UIView() }
-            return self.getLocalVideoUseCase.execute()
-        }.eraseToAnyPublisher()
-    }
-    
-    func bindRemoteVideos(_ input: Input) -> AnyPublisher<[UIView], Never> {
-        input.viewDidLoad.map { [weak self] _ in
-            guard let self else { return [] }
-            return self.getRemoteVideoUseCase.execute()
-        }.eraseToAnyPublisher()
-    }
-    
-    func mutateMicMuteButtonDidTap(_ input: Input) -> AnyPublisher<Bool, Never> {
-        input.micMuteButtonDidTap.map { _ -> Bool in
-            return true
-        }.eraseToAnyPublisher()
-    }
-    
-    func mutateShareButtonDidTap(_ input: Input) -> AnyPublisher<String, Never> {
-        input.shareButtonDidTap.map { [weak self] _ -> String in
-            guard let self else { return "레전드 에러 발생" }
-            self.sendOfferUseCase.execute()
-            return "연결을 시도합니다."
+    private func handleEvent(_ event: Input) {
+        switch event {
+        case .viewDidLoad:
+            handleViewDidLoad()
+        case .micMuteButtonDidTap:
+            output.send(.micMuteState(true)) // 예제에서는 항상 true 반환
+        case .linkButtonDidTap:
+            handleLinkButtonDidTap()
+        case .startButtonDidTap:
+            output.send(.navigateToPhotoRoom)
         }
-        .eraseToAnyPublisher()
     }
     
-    func mutateStartButtonDidTap(_ input: Input) -> AnyPublisher<Void, Never> {
-        return input.startButtonDidTap.eraseToAnyPublisher()
+    private func handleViewDidLoad() {
+        let localVideo = getLocalVideoUseCase.execute()
+        output.send(.localVideo(localVideo))
+        
+        let remoteVideos = getRemoteVideoUseCase.execute()
+        output.send(.remoteVideos(remoteVideos))
+        
+        if !isHost {
+            let message = sendOfferUseCase.execute() ? "연결을 시도합니다." : "연결 중 에러가 발생했어요."
+            output.send(.shouldShowToast(message))
+        }
+    }
+    
+    private func handleLinkButtonDidTap() {
+        createRoomUseCase.execute()
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    debugPrint(error.localizedDescription)
+                    self?.output.send(.shouldShowToast("Failed to create room"))
+                }
+            }, receiveValue: { [weak self] roomLink in
+                self?.output.send(.shouldShowShareSheet(roomLink))
+            })
+            .store(in: &cancellables)
     }
 }

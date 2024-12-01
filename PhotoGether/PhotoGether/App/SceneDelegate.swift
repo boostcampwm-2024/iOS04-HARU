@@ -10,22 +10,24 @@ import SharePhotoFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
+    // swiftlint:disable function_body_length
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let urlString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
-        let url = URL(string: urlString)!
+        guard let url = Secrets.BASE_URL else { return }
+        guard let stunServers = Secrets.STUN_SERVERS else { return }
         debugPrint("SignalingServer URL: \(url)")
         
         var isHost: Bool = true
+        var roomOwnerEntity: RoomOwnerEntity?
         
         if let urlContext = connectionOptions.urlContexts.first {
             // MARK: 딥링크로 들어온지 여부로 호스트 게스트 판단
             isHost = false
+            roomOwnerEntity = DeepLinkParser.parseRoomInfo(from: urlContext.url)
         }
         
         let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
@@ -38,23 +40,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             webSocketClient: webScoketClient
         )
         
-        let webRTCService: WebRTCService = WebRTCServiceImpl(
-            iceServers: [
-                "stun:stun.l.google.com:19302",
-                "stun:stun1.l.google.com:19302",
-                "stun:stun2.l.google.com:19302",
-                "stun:stun3.l.google.com:19302",
-                "stun:stun4.l.google.com:19302"
-            ]
-        )
-        
-        let connectionClient: ConnectionClient = ConnectionClientImpl(
-            signalingService: signalingService,
-            webRTCService: webRTCService
-        )
-        
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
-            clients: [connectionClient]
+            clients: [
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
+                ),
+                makeConnectionClient(
+                    signalingService: signalingService,
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
+                )
+            ],
+            roomService: roomService
         )
         
         let sendOfferUseCase: SendOfferUseCase = SendOfferUseCaseImpl(
@@ -73,6 +80,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let createRoomUseCase: CreateRoomUseCase = CreateRoomUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase
         )
@@ -83,19 +94,61 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             isHost: isHost
         )
         
-        let viewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+        let waitingRoomViewModel: WaitingRoomViewModel = WaitingRoomViewModel(
+            isHost: isHost,
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
-            getRemoteVideoUseCase: getRemoteVideoUseCase
+            getRemoteVideoUseCase: getRemoteVideoUseCase,
+            createRoomUseCase: createRoomUseCase
         )
         
-        let viewController: WaitingRoomViewController = WaitingRoomViewController(
-            viewModel: viewModel,
+        let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(
+            viewModel: waitingRoomViewModel,
             photoRoomViewController: photoRoomViewController
         )
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: viewController)
+        
+        if !isHost {
+            let joinRoomUseCase: JoinRoomUseCase = JoinRoomUseCaseImpl(
+                connectionRepository: connectionRepository
+            )
+            
+            guard let roomOwnerEntity else { return }
+            
+            let enterLoadingViewModel = EnterLoadingViewModel(
+                joinRoomUseCase: joinRoomUseCase,
+                roomID: roomOwnerEntity.roomID,
+                hostID: roomOwnerEntity.hostID
+            )
+            let enterLoadingViewController = EnterLoadingViewController(
+                viewModel: enterLoadingViewModel,
+                waitingRoomViewController: waitingRoomViewController
+            )
+            
+            window?.rootViewController = UINavigationController(rootViewController: enterLoadingViewController)
+        } else {
+            window?.rootViewController = UINavigationController(rootViewController: waitingRoomViewController)
+        }
+        
         window?.makeKeyAndVisible()
+    }
+    
+    private func makeWebRTCService(
+        iceServers: [String]
+    ) -> WebRTCService {
+        return WebRTCServiceImpl(
+            iceServers: iceServers
+        )
+    }
+    
+    private func makeConnectionClient(
+        signalingService: SignalingService,
+        webRTCService: WebRTCService
+    ) -> ConnectionClient {
+        return ConnectionClientImpl(
+            signalingService: signalingService,
+            webRTCService: webRTCService
+        )
     }
 }

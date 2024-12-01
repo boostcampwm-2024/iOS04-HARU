@@ -5,13 +5,15 @@ import PhotoRoomFeature
 import DesignSystem
 import PhotoGetherDomainInterface
 
-public final class WaitingRoomViewController: BaseViewController, ViewControllerConfigure {
+public final class WaitingRoomViewController: BaseViewController {
     private let viewModel: WaitingRoomViewModel
     private let waitingRoomView = WaitingRoomView()
     private let participantsCollectionViewController = ParticipantsCollectionViewController()
     private let photoRoomViewController: PhotoRoomViewController
     
     private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
+    
+    private let input = PassthroughSubject<WaitingRoomViewModel.Input, Never>()
     
     public init(
         viewModel: WaitingRoomViewModel,
@@ -22,6 +24,7 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -36,22 +39,22 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         addViews()
         setupConstraints()
         configureUI()
-        bindOutput()
         setPlaceHolder()
+        bindInput()
+        bindOutput()
     }
     
-    public func addViews() {
+    private func addViews() {
         addChild(participantsCollectionViewController)
         participantsCollectionViewController.didMove(toParent: self)
         
-        let collectionView = participantsCollectionViewController.view!
+        let collectionView = participantsCollectionViewController.view ?? UIView()
         let micButton = waitingRoomView.micButton
         waitingRoomView.insertSubview(collectionView, belowSubview: micButton)
-       
     }
     
-    public func setupConstraints() {
-        let collectionView = participantsCollectionViewController.view!
+    private func setupConstraints() {
+        let collectionView = participantsCollectionViewController.view ?? UIView()
         let topOffset: CGFloat = APP_HEIGHT() > 667 ? 44 : 0 // 최소사이즈 기기 SE2 기준
         collectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(topOffset)
@@ -60,78 +63,101 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         }
     }
     
-    public func configureUI() {
+    private func configureUI() {
         participantsCollectionViewController.collectionView.backgroundColor = PTGColor.gray90.color
     }
-    
-    private func createInput() -> WaitingRoomViewModel.Input {
-        let viewDidLoadPublisher = viewDidLoadSubject.eraseToAnyPublisher()
-        let startButtonTapPublisher = waitingRoomView.startButton.tapPublisher
-            .throttle(for: .seconds(1), scheduler: RunLoop.main, latest: false)
-            .eraseToAnyPublisher()
+
+    private func bindInput() {
+        viewDidLoadSubject.sink { [weak self] _ in
+            self?.input.send(.viewDidLoad)
+        }.store(in: &cancellables)
         
-        return WaitingRoomViewModel.Input(
-            viewDidLoad: viewDidLoadPublisher,
-            micMuteButtonDidTap: waitingRoomView.micButton.tapPublisher,
-            shareButtonDidTap: waitingRoomView.shareButton.tapPublisher,
-            startButtonDidTap: startButtonTapPublisher
-        )
+        waitingRoomView.micButton.tapPublisher
+            .sink { [weak self] _ in
+                self?.input.send(.micMuteButtonDidTap)
+            }.store(in: &cancellables)
+        
+        waitingRoomView.linkButton.tapPublisher
+            .sink { [weak self] _ in
+                self?.input.send(.linkButtonDidTap)
+            }.store(in: &cancellables)
+        
+        waitingRoomView.startButton.tapPublisher
+            .throttle(for: .seconds(1), scheduler: RunLoop.main, latest: false)
+            .sink { [weak self] _ in
+                self?.input.send(.startButtonDidTap)
+            }.store(in: &cancellables)
     }
     
-    public func bindOutput() {
-        let output = viewModel.transform(input: createInput())
+    private func bindOutput() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.navigateToPhotoRoom.sink { [weak self] _ in
+        output
+            .sink { [weak self] in
             guard let self else { return }
-            
-            let collectionVC = participantsCollectionViewController
-            let photoRoomVC = self.photoRoomViewController
-            photoRoomVC.setCollectionViewController(collectionVC)
-            
-            self.navigationController?.pushViewController(photoRoomVC, animated: true)
+            switch $0 {
+                
+            // MARK: 네비게이션 처리
+            case .navigateToPhotoRoom:
+                self.navigateToPhotoRoom()
+                
+            // MARK: 내 비디오 화면 업데이트
+            case .localVideo(let localVideoView):
+                self.updateParticipantView(
+                    position: .host,
+                    nickname: "나는 호스트",
+                    videoView: localVideoView
+                )
+                
+            // MARK: 상대방 비디오 화면 업데이트
+            case .remoteVideos(let remoteVideoViews):
+                guard let remoteVideoView = remoteVideoViews.first else { return }
+                self.updateParticipantView(
+                    position: .guest3,
+                    nickname: "나는 게스트",
+                    videoView: remoteVideoView
+                )
+            // MARK: 마이크 음소거 UI 업데이트
+            case .micMuteState:
+                return
+                
+            // MARK: 초대를 위한 공유시트 present
+            case .shouldShowShareSheet(let urlScheme):
+                self.showShareSheet(message: urlScheme)
+
+            // MARK: 토스트 메시지 노출
+            case .shouldShowToast(let message):
+                self.showToast(message: message, duration: 3.0)
+            }
         }.store(in: &cancellables)
+    }
+
+    private func navigateToPhotoRoom() {
+        let collectionVC = participantsCollectionViewController
+        let photoRoomVC = photoRoomViewController
+        photoRoomVC.setCollectionViewController(collectionVC)
+        navigationController?.pushViewController(photoRoomVC, animated: true)
+    }
+
+    private func updateParticipantView(
+        position: ParticipantsSectionItem.Position,
+        nickname: String,
+        videoView: UIView
+    ) {
+        var snapshot = participantsCollectionViewController.dataSource.snapshot()
+        var items = snapshot.itemIdentifiers
         
-        output.localVideo.sink { [weak self] localVideoView in
-            guard let self else { return }
-            
-            var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
-            var items = snapshot.itemIdentifiers
-            guard let hostIndex = items.firstIndex(where: { $0.position == .host }) else { return }
-            
-            let newItem = SectionItem(position: .host, nickname: "나는 호스트", videoView: localVideoView)
-
-            items.remove(at: hostIndex)
-            items.insert(newItem, at: hostIndex)
-            
-            snapshot.deleteItems(items)
-            snapshot.appendItems(items, toSection: 0)
-
-            self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
-
-        }.store(in: &cancellables)
+        guard let index = items.firstIndex(where: { $0.position == position }) else { return }
         
-        output.remoteVideos.sink { [weak self] remoteVideoViews in
-            guard let self else { return }
-            guard let remoteVideoView = remoteVideoViews.first else { return }
-            
-            var snapshot = self.participantsCollectionViewController.dataSource.snapshot()
-            var items = snapshot.itemIdentifiers
-            guard let guestIndex = items.firstIndex(where: { $0.position == .guest3 }) else { return }
-            
-            let newItem = SectionItem(position: .guest3, nickname: "나는 게스트", videoView: remoteVideoView)
-
-            items.remove(at: guestIndex)
-            items.insert(newItem, at: guestIndex)
-            
-            snapshot.deleteItems(items)
-            snapshot.appendItems(items, toSection: 0)
-
-            self.participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
-        }.store(in: &cancellables)
+        let newItem = SectionItem(position: position, nickname: nickname, videoView: videoView)
         
-        output.shouldShowToast.sink { [weak self] message in
-            print(message)
-        }.store(in: &cancellables)
+        items.remove(at: index)
+        items.insert(newItem, at: index)
+        
+        snapshot.deleteItems(items)
+        snapshot.appendItems(items, toSection: 0)
+        
+        participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func setPlaceHolder() {
@@ -145,5 +171,13 @@ public final class WaitingRoomViewController: BaseViewController, ViewController
         snapshot.appendSections([0])
         snapshot.appendItems(placeHolder, toSection: 0)
         participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    private func showShareSheet(message: String) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [message],
+            applicationActivities: nil
+        )
+        present(activityViewController, animated: true)
     }
 }

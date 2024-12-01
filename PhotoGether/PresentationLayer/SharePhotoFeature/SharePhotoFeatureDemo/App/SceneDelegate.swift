@@ -1,5 +1,4 @@
 import DesignSystem
-import EditPhotoRoomFeature
 import PhotoGetherDomainInterface
 import SharePhotoFeature
 import UIKit
@@ -15,18 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         
-        // MARK: PhotoRoom -> EditPhotoRoom
-        let images: [UIImage] = [
-            PTGImage.temp1.image,
-            PTGImage.temp2.image,
-            PTGImage.temp3.image,
-            PTGImage.temp4.image
-        ]
-        
-        // MARK: EditPhotoRoom ~ ing
-        let imageGenerator: FrameImageGenerator = FrameImageGeneratorImpl(images: images)
-        imageGenerator.changeFrame(to: .defaultWhite)
-        let image = imageGenerator.generate()
+        let image = PTGImage.sampleImage.image
         
         // MARK: EditPhotoRoom -> SharePhotoRoom
         let imageData = image.pngData() ?? Data()

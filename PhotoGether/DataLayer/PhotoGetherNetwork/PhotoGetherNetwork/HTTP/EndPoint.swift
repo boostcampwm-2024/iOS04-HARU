@@ -18,7 +18,10 @@ extension EndPoint {
         var url = baseURL.appendingPathComponent(path)
         var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         
-        urlComponents.queryItems = parameters?.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+        urlComponents.queryItems = parameters?
+            .sorted { $0.key < $1.key }
+            .map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+        
         url = urlComponents.url!
         
         var request = URLRequest(url: url)

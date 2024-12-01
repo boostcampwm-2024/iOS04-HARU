@@ -6,7 +6,27 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7B20C8172CF59C2A001325DC /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20C8162CF59C2A001325DC /* DesignSystem.framework */; };
+		7B20C8182CF59C2A001325DC /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20C8162CF59C2A001325DC /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7B20C8192CF59C2A001325DC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7B20C8182CF59C2A001325DC /* DesignSystem.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		7B20C8162CF59C2A001325DC /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951382CDB5E5500B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -23,16 +43,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B20C8172CF59C2A001325DC /* DesignSystem.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7B20C8152CF59C2A001325DC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7B20C8162CF59C2A001325DC /* DesignSystem.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7B59512E2CDB5E5500B89C85 = {
 			isa = PBXGroup;
 			children = (
 				7B17465C2CE8E97F00E01D1A /* BaseFeature */,
+				7B20C8152CF59C2A001325DC /* Frameworks */,
 				7B5951392CDB5E5500B89C85 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,6 +96,7 @@
 				7B5951342CDB5E5500B89C85 /* Sources */,
 				7B5951352CDB5E5500B89C85 /* Frameworks */,
 				7B5951362CDB5E5500B89C85 /* Resources */,
+				7B20C8192CF59C2A001325DC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
