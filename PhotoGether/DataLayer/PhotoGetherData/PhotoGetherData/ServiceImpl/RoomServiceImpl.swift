@@ -32,7 +32,7 @@ public final class RoomServiceImpl: RoomService {
         let createRoomRequest = RoomRequestDTO(messageType: .createRoom)
         
         guard let data = createRoomRequest.toData(encoder: encoder) else {
-            PTGDataLogger.log("방 생성 요청 데이터 인코딩 실패: \(createRoomRequest)")
+            PTGLogger.default.log("방 생성 요청 데이터 인코딩 실패: \(createRoomRequest)")
             return Fail(error: RoomServiceError.failedToEncoding).eraseToAnyPublisher()
         }
         
@@ -45,7 +45,7 @@ public final class RoomServiceImpl: RoomService {
         let joinRoomRequest = RoomRequestDTO(messageType: .joinRoom, message: joinRoomMessage)
         
         guard let data = joinRoomRequest.toData(encoder: encoder) else {
-            PTGDataLogger.log("방 참가 요청 데이터 인코딩 실패: \(joinRoomRequest)")
+            PTGLogger.default.log("방 참가 요청 데이터 인코딩 실패: \(joinRoomRequest)")
             return Fail(error: RoomServiceError.failedToEncoding).eraseToAnyPublisher()
         }
         
@@ -67,31 +67,31 @@ public final class RoomServiceImpl: RoomService {
                         type: CreateRoomResponseMessage.self,
                         decoder: decoder
                     ) else {
-                        PTGDataLogger.log("Decode Failed to CreateRoomMessage: \(message)")
+                        PTGLogger.default.log("Decode Failed to CreateRoomMessage: \(message)")
                         return
                     }
                     let roomOwnerEntity = message.toEntity()
                     _createRoomResponsePublisher.send(roomOwnerEntity)
                     
-                    PTGDataLogger.log("방 생성 성공: \(message.roomID) \n 유저 아이디: \(message.hostID)")
+                    PTGLogger.default.log("방 생성 성공: \(message.roomID) \n 유저 아이디: \(message.hostID)")
                 case .joinRoom:
                     guard let message = decodeMessage(
                         response.message,
                         type: JoinRoomResponseMessage.self
                     ) else {
-                        PTGDataLogger.log("Decode Failed to JoinRoomEntity: \(String(describing: response.message))")
+                        PTGLogger.default.log("Decode Failed to JoinRoomEntity: \(String(describing: response.message))")
                         return
                     }
                     let joinRoomEntity = message.toEntity()
                     _joinRoomResponsePublisher.send(joinRoomEntity)
                     
-                    PTGDataLogger.log("방 참가 성공\n 유저 아이디: \(message.userID) \n 방 유저목록: \(message.userList)")
+                    PTGLogger.default.log("방 참가 성공\n 유저 아이디: \(message.userID) \n 방 유저목록: \(message.userList)")
                 case .notifyNewUser:
                     guard let message = decodeMessage(
                         response.message,
                         type: NotifyNewUserMessage.self
                     ) else {
-                        PTGDataLogger.log("Decode Failed to JoinRoomEntity: \(String(describing: response.message))")
+                        PTGLogger.default.log("Decode Failed to JoinRoomEntity: \(String(describing: response.message))")
                         return
                     }
                     let notifyNewUserEntity = message.toEntity()
@@ -103,7 +103,7 @@ public final class RoomServiceImpl: RoomService {
     private func decodeMessage<T: Decodable>(_ message: Data?, type: T.Type) -> T? {
         guard let message = message else { return nil }
         guard let dto = message.toDTO(type: type, decoder: decoder) else {
-            PTGDataLogger.log("Decode Failed to: \(message)")
+            PTGLogger.default.log("Decode Failed to: \(message)")
             return nil
         }
         

@@ -7,9 +7,9 @@ public extension Data {
         do {
             return try decoder.decode(type, from: self)
         } catch let decodingError as DecodingError {
-            PTGDataLogger.log("Decoding Error: \(decodingError.fullDescription)", level: .debug)
+            PTGLogger.default.log("Decoding Error: \(decodingError.fullDescription)", level: .debug)
         } catch {
-            PTGDataLogger.log("Unknown Decoding error: \(error.localizedDescription)", level: .debug)
+            PTGLogger.default.log("Unknown Decoding error: \(error.localizedDescription)", level: .debug)
         }
         return nil
     }
