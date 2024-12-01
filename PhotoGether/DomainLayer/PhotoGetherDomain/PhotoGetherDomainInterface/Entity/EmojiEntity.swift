@@ -9,3 +9,15 @@ public struct EmojiEntity: Decodable {
         self.name = name
     }
 }
+
+public enum EmojiGroup: String, Codable {
+    case smileysEmotion = "smileys-emotion"
+    case peopleBody = "people-body"
+    case component = "component"
+    case animalsNature = "animals-nature"
+    case foodDrink = "food-drink"
+    case travelPlaces = "travel-places"
+    case activities = "activities"
+    case objects = "objects"
+    case symbols = "symbols"
+}
