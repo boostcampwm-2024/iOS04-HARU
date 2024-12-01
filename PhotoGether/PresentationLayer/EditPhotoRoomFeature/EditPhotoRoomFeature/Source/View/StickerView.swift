@@ -16,7 +16,7 @@ final class StickerView: UIView {
     private let layerView = UIView()
     private let deleteButton = UIButton()
     private let resizeButton = UIButton()
-    private let panGestureRecognizer = UIPanGestureRecognizer()
+    private let dragPanGestureRecognizer = UIPanGestureRecognizer()
     private let resizePanGestureRecognizer = UIPanGestureRecognizer()
 
     private var sticker: StickerEntity
@@ -101,23 +101,23 @@ final class StickerView: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
         
-        panGestureRecognizer.minimumNumberOfTouches = 1
-        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
-        addGestureRecognizer(panGestureRecognizer)
+        dragPanGestureRecognizer.minimumNumberOfTouches = 1
+        dragPanGestureRecognizer.addTarget(self, action: #selector(handleDragPanGesture))
+        addGestureRecognizer(dragPanGestureRecognizer)
         
         resizePanGestureRecognizer.minimumNumberOfTouches = 1
         resizePanGestureRecognizer.addTarget(self, action: #selector(handleResizePanGesture))
         resizeButton.addGestureRecognizer(resizePanGestureRecognizer)
     }
     
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+    @objc private func handleDragPanGesture(_ gesture: UIPanGestureRecognizer) {
         let initialPoint = sticker.frame.origin
         let translationPoint = gesture.translation(in: self)
         let changedX = initialPoint.x + translationPoint.x
         let changedY = initialPoint.y + translationPoint.y
         let traslationStickerPoint = CGPoint(x: changedX, y: changedY)
         
-        panGestureRecognizer.setTranslation(.zero, in: self)
+        dragPanGestureRecognizer.setTranslation(.zero, in: self)
         
         let newFrame = CGRect(origin: traslationStickerPoint, size: sticker.frame.size)
         
@@ -209,9 +209,9 @@ final class StickerView: UIView {
     
     private func updatePanGestureState() {
         if sticker.owner == user || sticker.owner == nil {
-            panGestureRecognizer.isEnabled = true
+            dragPanGestureRecognizer.isEnabled = true
         } else {
-            panGestureRecognizer.isEnabled = false
+            dragPanGestureRecognizer.isEnabled = false
         }
     }
     
@@ -235,7 +235,7 @@ final class StickerView: UIView {
     }
     
     func update(with sticker: StickerEntity) {
-        switch panGestureRecognizer.state {
+        switch dragPanGestureRecognizer.state {
         case .began, .changed:
             return
         default:
