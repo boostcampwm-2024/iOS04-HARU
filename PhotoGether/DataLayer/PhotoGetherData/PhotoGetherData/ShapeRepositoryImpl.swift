@@ -4,12 +4,12 @@ import PhotoGetherDomainInterface
 import PhotoGetherNetwork
 
 final public class ShapeRepositoryImpl: ShapeRepository {
-    public func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never> {
-        return localDataSource.fetchEmojiData(EmojiEndPoint())
+    public func fetchEmojiList(_ group: EmojiGroup) -> AnyPublisher<[EmojiEntity], Never> {
+        return localDataSource.fetchEmojiData(EmojiEndPoint(group: group))
             .catch { [weak self] _ -> AnyPublisher<[EmojiDTO], Never> in
                 guard let self else { return Just([]).eraseToAnyPublisher() }
                 
-                return remoteDataSource.fetchEmojiData(EmojiEndPoint())
+                return remoteDataSource.fetchEmojiData(EmojiEndPoint(group: group))
                     .replaceError(with: [])
                     .eraseToAnyPublisher()
             }
