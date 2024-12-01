@@ -1,12 +1,18 @@
 import Foundation
 
 public struct EmojiEntity: Decodable {
-    public let image: String
-    public let name: String
+    public let emoji: String
+    public let group: EmojiGroup
+    public let annotation: String
 
-    public init(image: String, name: String) {
-        self.image = image
-        self.name = name
+    public init(
+        emoji: String,
+        group: EmojiGroup,
+        annotation: String
+    ) {
+        self.emoji = emoji
+        self.group = group
+        self.annotation = annotation
     }
 }
 
