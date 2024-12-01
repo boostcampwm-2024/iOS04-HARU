@@ -105,6 +105,3 @@ extension PTGParticipantsGridView {
         static let itemSpacing: CGFloat = 11
     }
 }
-
-
-
