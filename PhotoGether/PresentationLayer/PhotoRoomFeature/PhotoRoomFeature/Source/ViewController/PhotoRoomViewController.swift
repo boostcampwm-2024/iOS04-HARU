@@ -9,7 +9,7 @@ import PhotoGetherDomainInterface
 
 public final class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
-    var participantsViewController: ParticipantsCollectionViewController!
+    var participantsGridView: PTGParticipantsGridView!
     var connectionRepsitory: ConnectionRepository
     private let photoRoomBottomView: PhotoRoomBottomView
     private let isHost: Bool
@@ -39,6 +39,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         addViews()
         setupConstraints()
@@ -47,15 +48,12 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         bindOutput()
     }
     
-    public func setCollectionViewController(_ viewController: ParticipantsCollectionViewController) {
-        self.participantsViewController = viewController
+    public func setParticipantsGridView(_ participantsGridView: PTGParticipantsGridView) {
+        self.participantsGridView = participantsGridView
     }
     
     public func addViews() {
-        self.addChild(participantsViewController)
-        participantsViewController.didMove(toParent: self)
-        
-        [navigationView, participantsViewController.view, photoRoomBottomView].forEach {
+        [navigationView, participantsGridView, photoRoomBottomView].forEach {
             view.addSubview($0)
         }
     }
@@ -67,7 +65,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             $0.height.equalTo(Constants.navigationHeight)
         }
         
-        participantsViewController.view.snp.makeConstraints {
+        participantsGridView.snp.makeConstraints {
             $0.top.equalTo(navigationView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(photoRoomBottomView.snp.top)
