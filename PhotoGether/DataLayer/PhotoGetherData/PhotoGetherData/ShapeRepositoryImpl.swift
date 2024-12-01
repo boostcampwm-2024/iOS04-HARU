@@ -37,7 +37,7 @@ fileprivate struct EmojiEndPoint: EndPoint {
     var baseURL: URL { URL(string: "https://www.emoji.family")! }
     var path: String { "api/emojis" }
     var method: HTTPMethod { .get }
-    var parameters: [String: Any]? { ["group": group] }
+    var parameters: [String: Any]? { ["group": group.rawValue] }
     var headers: [String: String]? { nil }
     var body: Encodable? { nil }
     
