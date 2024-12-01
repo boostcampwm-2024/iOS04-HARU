@@ -122,21 +122,34 @@ extension EditPhotoRoomGuestViewModel {
     }
     
     private func handleDragSticker(sticker: StickerEntity, state: DragState) {
-        // 소유권 -> OOO (확인)
-        
-        // Lock 획득 -> OXX
-        // 로컬반영 -> XXO
         switch state {
         case .began:
-            guard canInteractWithSticker(id: sticker.id) else { return }
-            unlockPreviousSticker(stickerId: sticker.id)
-            lockTappedSticker(id: sticker.id)
+            handleDragBegan(sticker: sticker)
         case .changed:
-            guard canInteractWithSticker(id: sticker.id) else { return }
+            handleDragChanged(sticker: sticker)
         case .ended:
-            mutateStickerLocal(type: .update, sticker: sticker)
-            guard canInteractWithSticker(id: sticker.id) else { return }
+            handleDragEnded(sticker: sticker)
         }
+    }
+    
+    private func handleDragBegan(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        unlockPreviousSticker(stickerId: sticker.id)
+        lockTappedSticker(id: sticker.id)
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleDragChanged(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleDragEnded(sticker: StickerEntity) {
+        mutateStickerLocal(type: .update, sticker: sticker)
+        
+        guard canInteractWithSticker(id: sticker.id) else { return }
         
         mutateStickerEventHub(type: .update, with: sticker)
     }
