@@ -102,7 +102,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
                 self?.updateCanvas(with: stickerList)
             case .frameImage(let image):
                 self?.updateFrameImage(to: image)
-            case .stickerBottomSheetPresent:
+            case .presentStickerBottomSheet:
                 self?.presentStickerBottomSheet()
             }
         }

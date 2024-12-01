@@ -108,18 +108,62 @@ public final class EditPhotoRoomHostViewModel {
     }
 }
 
-// MARK: Sticker 관련
+// MARK: Sticker
 extension EditPhotoRoomHostViewModel {
-    private func handleCreateSticker(sticker: StickerEntity) {
-        mutateStickerLocal(type: .create, sticker: sticker)
-        mutateStickerEventHub(type: .create, with: sticker)
+    private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
+        switch type {
+        case .create:
+            var stickerList = stickerListSubject.value
+            stickerList.append(sticker)
+            stickerListSubject.send(stickerList)
+        case .delete: break
+        case .update:
+            let stickerList = stickerListSubject.value
+            stickerListSubject.send(stickerList)
+        case .unlock: break
+        }
     }
     
-    private func handleDeleteSticker(with stickerID: UUID) {
+    private func mutateStickerListLocal(stickerList: [StickerEntity]) {
+        stickerListSubject.send(stickerList)
+    }
+    
+    private func mutateStickerEventHub(type: EventType, with sticker: StickerEntity) {
+        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
+    }
+    
+    private func canInteractWithSticker(id: UUID) -> Bool {
         let stickerList = stickerListSubject.value
-        guard let sticker = stickerList.find(id: stickerID) else { return }
         
-        mutateStickerEventHub(type: .delete, with: sticker)
+        return stickerList.isOwned(id: id, owner: owner)
+    }
+    
+    private func unlockPreviousSticker(stickerId: UUID) {
+        var stickerList = stickerListSubject.value
+        
+        if let previousSticker = stickerList.lockedSticker(by: owner),
+           stickerId != previousSticker.id {
+            stickerList.unlock(by: owner)
+            mutateStickerEventHub(type: .unlock, with: previousSticker)
+        }
+    }
+    
+    private func lockTappedSticker(id: UUID) {
+        var stickerList = stickerListSubject.value
+        
+        if let tappedSticker = stickerList.lock(by: id, owner: owner) {
+            mutateStickerListLocal(stickerList: stickerList)
+            mutateStickerEventHub(type: .update, with: tappedSticker)
+        }
+    }
+}
+
+// MARK: Sticker Drag
+extension EditPhotoRoomHostViewModel {
+    enum DragState {
+        case began
+        case changed
+        case ended
     }
     
     private func handleDragSticker(sticker: StickerEntity, state: DragState) {
@@ -154,29 +198,10 @@ extension EditPhotoRoomHostViewModel {
         
         mutateStickerEventHub(type: .update, with: sticker)
     }
-    
-    private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
-        switch type {
-        case .create:
-            var stickerList = stickerListSubject.value
-            stickerList.append(sticker)
-            stickerListSubject.send(stickerList)
-        case .delete: break
-        case .update:
-            let stickerList = stickerListSubject.value
-            stickerListSubject.send(stickerList)
-        case .unlock: break
-        }
-    }
-    
-    private func mutateStickerListLocal(stickerList: [StickerEntity]) {
-        stickerListSubject.send(stickerList)
-    }
-    
-    private func mutateStickerEventHub(type: EventType, with sticker: StickerEntity) {
-        sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
-    }
-    
+}
+
+// MARK: Sticker Tap
+extension EditPhotoRoomHostViewModel {
     private func handleStickerViewDidTap(with stickerID: UUID) {
         // MARK: 선택할 수 있는 객체인지 확인함
         guard canInteractWithSticker(id: stickerID) else { return }
@@ -187,74 +212,62 @@ extension EditPhotoRoomHostViewModel {
         // MARK: Tap한 스티커를 lock하고 반영한다.
         lockTappedSticker(id: stickerID)
     }
-    
-    private func canInteractWithSticker(id: UUID) -> Bool {
+}
+
+// MARK: Sticker Create
+extension EditPhotoRoomHostViewModel {
+    private func handleCreateSticker(sticker: StickerEntity) {
+        mutateStickerLocal(type: .create, sticker: sticker)
+        mutateStickerEventHub(type: .create, with: sticker)
+    }
+}
+
+// MARK: Sticker Delete
+extension EditPhotoRoomHostViewModel {
+    private func handleDeleteSticker(with stickerID: UUID) {
         let stickerList = stickerListSubject.value
+        guard let sticker = stickerList.find(id: stickerID) else { return }
         
-        return stickerList.isOwned(id: id, owner: owner)
-    }
-    
-    private func unlockPreviousSticker(stickerId: UUID) {
-        var stickerList = stickerListSubject.value
-        
-        if let previousSticker = stickerList.lockedSticker(by: owner),
-           stickerId != previousSticker.id {
-            stickerList.unlock(by: owner)
-            mutateStickerEventHub(type: .unlock, with: previousSticker)
-        }
-    }
-    
-    private func lockTappedSticker(id: UUID) {
-        var stickerList = stickerListSubject.value
-        
-        if let tappedSticker = stickerList.lock(by: id, owner: owner) {
-            mutateStickerListLocal(stickerList: stickerList)
-            mutateStickerEventHub(type: .update, with: tappedSticker)
-        }
-    }
-    
-    private func presentStickerBottomSheet() {
-        output.send(.presentStickerBottomSheet)
+        mutateStickerEventHub(type: .delete, with: sticker)
     }
 }
 
 // MARK: Frame 관련
 extension EditPhotoRoomHostViewModel {
+    private enum Constants {
+        static let defaultFrameType: FrameType = .defaultBlack
+    }
+    
     private func toggleFrameType() {
         let oldFrameImageType = frameTypeSubject.value
         let newFrameImageType = (oldFrameImageType == .defaultBlack)
         ? FrameType.defaultWhite
         : FrameType.defaultBlack
-        
+
         mutateFrameTypeLocal(with: newFrameImageType)
         mutateFrameTypeEventHub(with: newFrameImageType)
     }
-    
+
     private func mutateFrameTypeLocal(with frameType: FrameType) {
         frameTypeSubject.send(frameType)
     }
-    
+
     private func mutateFrameTypeEventHub(with frameType: FrameType) {
         let frameEntity = FrameEntity(frameType: frameType, owner: owner, latestUpdated: Date())
         sendFrameToRepositoryUseCase.execute(type: .update, frame: frameEntity)
     }
-    
+
     private func applyFrameImage(with frameType: FrameType) {
         frameImageGenerator.changeFrame(to: frameType)
         let frameImage = frameImageGenerator.generate()
-        
+
         output.send(.frameImage(image: frameImage))
     }
 }
 
+// MARK: Show Bottom Sheet
 extension EditPhotoRoomHostViewModel {
-    private enum Constants {
-        static let defaultFrameType: FrameType = .defaultBlack
-    }
-    
-    enum DragState {
-        case began
-        case changed
-        case ended
+    private func presentStickerBottomSheet() {
+        output.send(.presentStickerBottomSheet)
     }
 }
