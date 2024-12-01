@@ -19,6 +19,12 @@ final class StickerCollectionViewCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        imageView.image = nil
+    }
+    
     private func addViews() {
         [imageView].forEach { self.addSubview($0) }
     }
