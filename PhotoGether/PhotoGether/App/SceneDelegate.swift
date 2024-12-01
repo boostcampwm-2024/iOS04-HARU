@@ -49,16 +49,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         iceServers: stunServers
                     )
                 ),
-//                makeConnectionClient(
-//                    webRTCService: makeWebRTCService(
-//                        iceServers: stunServers
-//                    )
-//                ),
-//                makeConnectionClient(
-//                    webRTCService: makeWebRTCService(
-//                        iceServers: stunServers
-//                    )
-//                )
+                makeConnectionClient(
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
+                ),
+                makeConnectionClient(
+                    webRTCService: makeWebRTCService(
+                        iceServers: stunServers
+                    )
+                )
             ]
         )
         

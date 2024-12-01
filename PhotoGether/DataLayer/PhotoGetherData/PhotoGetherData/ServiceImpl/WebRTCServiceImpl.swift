@@ -185,6 +185,7 @@ public extension WebRTCServiceImpl {
         self.remoteVideoTrack = self.peerConnection.transceivers
             .first { $0.mediaType == .video }?
             .receiver.track as? RTCVideoTrack
+        PTGDataLogger.log("\(remoteVideoTrack?.description ?? "nil")")
     }
     
     private func connectAudioTrack(audioTrack: RTCAudioTrack) {
