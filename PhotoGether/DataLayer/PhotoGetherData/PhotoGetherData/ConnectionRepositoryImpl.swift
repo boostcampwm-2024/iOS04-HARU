@@ -85,6 +85,13 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
             fps: Int(fps.maxFrameRate)
         )
     }
+    
+    public func stopCaptureLocalVideo() -> Bool {
+        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return false }
+        capturer.stopCapture()
+        return true
+    }
+    
     private func bindLocalVideo() {
         self.clients.forEach { $0.bindLocalVideo(videoSource: self.videoSource, _localVideoView) }
     }
