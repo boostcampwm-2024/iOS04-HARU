@@ -2,6 +2,10 @@ import UIKit
 import Combine
 
 public protocol ConnectionRepository {
+    var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> { get }
+
+    var localUserInfo: UserInfo? { get }
+
     var clients: [ConnectionClient] { get }
     var localVideoView: UIView { get }
     var capturedLocalVideo: UIImage? { get }

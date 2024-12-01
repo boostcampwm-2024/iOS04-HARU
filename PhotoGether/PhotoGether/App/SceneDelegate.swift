@@ -82,6 +82,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase = DidEnterNewUserPublisherUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase
         )
@@ -97,7 +101,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
-            createRoomUseCase: createRoomUseCase
+            createRoomUseCase: createRoomUseCase,
+            didEnterNewUserPublisherUseCase: didEnterNewUserPublisherUseCase
         )
         
         let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(

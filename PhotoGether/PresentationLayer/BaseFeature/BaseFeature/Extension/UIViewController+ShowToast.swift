@@ -2,7 +2,17 @@ import UIKit
 import DesignSystem
 
 public extension UIViewController {
+    private struct ToastState {
+        static var presentedToast: UIView?
+    }
+    
     func showToast(message: String, duration: TimeInterval = 2.0) {
+        // 이미 토스트가 있다면 제거
+        if let existingToast = ToastState.presentedToast {
+            existingToast.removeFromSuperview()
+            ToastState.presentedToast = nil
+        }
+        
         let padding = UIEdgeInsets(top: 8, left: 20, bottom: 8, right: 20)
         let toastLabel: PTGPaddingLabel = {
             let lbl = PTGPaddingLabel(padding: padding)
@@ -23,6 +33,7 @@ public extension UIViewController {
         }()
 
         view.addSubview(toastLabel)
+        ToastState.presentedToast = toastLabel
         
         let maxWidth: CGFloat = view.frame.width > 0 ? view.frame.width * 0.7 : 300
 

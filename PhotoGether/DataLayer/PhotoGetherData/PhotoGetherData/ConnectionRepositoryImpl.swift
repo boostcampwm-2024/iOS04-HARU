@@ -9,8 +9,12 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     
     public var clients: [ConnectionClient]
     
+    private let didEnterNewUserSubject = PassthroughSubject<(UserInfo, UIView), Never>()
+    public var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> {
+        didEnterNewUserSubject.eraseToAnyPublisher()
+    }
     private let _localVideoView = CapturableVideoView()
-    private var localUserInfo: UserInfo?
+    public private(set) var localUserInfo: UserInfo?
     
     public var localVideoView: UIView { _localVideoView }
     public var capturedLocalVideo: UIImage? { _localVideoView.capturedImage }
@@ -225,7 +229,10 @@ extension ConnectionRepositoryImpl {
             }, receiveValue: {  [weak self] entity in
                 guard let self else { return }
                 let newUser = entity.newUser
-                let emptyClient = clients.first(where: { $0.remoteUserInfo == nil })
+                guard let emptyClient = clients.first(where: { $0.remoteUserInfo == nil }) else {
+                    PTGDataLogger.log("방이 가득 찼는데 누군가 입장했어요!")
+                    return
+                }
                 
                 guard let viewPosition = UserInfo.ViewPosition(rawValue: newUser.initialPosition),
                       let roomID = self.localUserInfo?.roomID
@@ -238,8 +245,9 @@ extension ConnectionRepositoryImpl {
                     viewPosition: viewPosition,
                     roomID: roomID
                 )
-                
-                emptyClient?.setRemoteUserInfo(newUserInfoEntity)
+                                
+                emptyClient.setRemoteUserInfo(newUserInfoEntity)
+                didEnterNewUserSubject.send((newUserInfoEntity, emptyClient.remoteVideoView))
                 PTGDataLogger.log("newUser Entered: \(newUserInfoEntity)")
             })
             .store(in: &cancellables)

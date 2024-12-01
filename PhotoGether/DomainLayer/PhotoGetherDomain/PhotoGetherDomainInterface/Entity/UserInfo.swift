@@ -9,9 +9,9 @@ public struct UserInfo: Identifiable {
     
     public enum ViewPosition: Int {
         case topLeading
+        case bottomTrailing
         case topTrailing
         case bottomLeading
-        case bottomTrailing
     }
     
     public init(

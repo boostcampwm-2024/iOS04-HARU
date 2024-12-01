@@ -65,33 +65,25 @@ public final class WaitingRoomViewController: BaseViewController {
     private func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.sink { [weak self] in
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
             guard let self else { return }
             switch $0 {
             // MARK: 네비게이션 처리
             case .navigateToPhotoRoom:
                 self.navigateToPhotoRoom()
                 
-            // MARK: 내 비디오 화면 업데이트
-            case .localVideo(let localVideoView):
-                print(localVideoView)
-                updateParticipantView(view: localVideoView, position: .topLeading)
-                updateParticipantNickname(nickname: "나는 호스트야", position: .topLeading)
-                
-            // MARK: 상대방 비디오 화면 업데이트
-            case .remoteVideos(let remoteVideoViews):
-                let guestVideoView1 = remoteVideoViews[safe: 0] ?? UIView()
-                let guestVideoView2 = remoteVideoViews[safe: 1] ?? UIView()
-                let guestVideoView3 = remoteVideoViews[safe: 2] ?? UIView()
-                
-                updateParticipantView(view: guestVideoView1, position: .bottomTrailing)
-                updateParticipantView(view: guestVideoView2, position: .topTrailing)
-                updateParticipantView(view: guestVideoView3, position: .bottomLeading)
-                
-                updateParticipantNickname(nickname: "나는 게스트1", position: .bottomTrailing)
-                updateParticipantNickname(nickname: "나는 게스트2", position: .topTrailing)
-                updateParticipantNickname(nickname: "나는 게스트3", position: .bottomLeading)
-
+            // MARK: 화면 업데이트
+            case let .shouldUpdateVideoView(videoView, viewPosition):
+                guard let participantPosition = ParticipantPosition(rawValue: viewPosition) else { return }
+                updateParticipantView(view: videoView, position: participantPosition)
+            
+            // MARK: 닉네임 업데이트
+            case let .shouldUpdateNickname(nickname, viewPosition):
+                guard let participantPosition = ParticipantPosition(rawValue: viewPosition) else { return }
+                updateParticipantNickname(nickname: nickname, position: participantPosition)
+            
             // MARK: 마이크 음소거 UI 업데이트
             case .micMuteState:
                 return
