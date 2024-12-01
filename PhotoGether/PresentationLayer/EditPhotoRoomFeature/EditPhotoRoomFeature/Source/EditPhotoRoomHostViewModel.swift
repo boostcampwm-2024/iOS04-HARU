@@ -10,7 +10,8 @@ public final class EditPhotoRoomHostViewModel {
         case frameButtonDidTap
         case createSticker(StickerEntity)
         case deleteSticker(UUID)
-        case dragSticker(StickerEntity, DragState)
+        case dragSticker(StickerEntity, PanGestureState)
+        case resizeSticker(StickerEntity, PanGestureState)
         case stickerViewDidTap(UUID)
     }
     
@@ -100,6 +101,8 @@ public final class EditPhotoRoomHostViewModel {
                 self?.handleStickerViewDidTap(with: stickerID)
             case .dragSticker(let sticker, let dragState):
                 self?.handleDragSticker(sticker: sticker, state: dragState)
+            case .resizeSticker(let sticker, let resizeState):
+                self?.handleResizeSticker(sticker: sticker, state: resizeState)
             }
         }
         .store(in: &cancellables)
@@ -197,6 +200,29 @@ extension EditPhotoRoomHostViewModel {
         guard canInteractWithSticker(id: sticker.id) else { return }
         
         mutateStickerEventHub(type: .update, with: sticker)
+    }
+}
+
+// MARK: Sticker Resize
+extension EditPhotoRoomHostViewModel {
+    private func handleResizeSticker(sticker: StickerEntity, state: PanGestureState) {
+        switch state {
+        case .began:
+            handleResizeBegan(sticker: sticker)
+        case .changed:
+            handleResizeChanged(sticker: sticker)
+        case .ended:
+            handleResizeEnded(sticker: sticker)
+        }
+    }
+    
+    private func handleResizeBegan(sticker: StickerEntity) {
+    }
+    
+    private func handleResizeChanged(sticker: StickerEntity) {
+    }
+    
+    private func handleResizeEnded(sticker: StickerEntity) {
     }
 }
 

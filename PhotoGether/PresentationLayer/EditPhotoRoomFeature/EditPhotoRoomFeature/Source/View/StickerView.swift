@@ -8,6 +8,9 @@ protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, willBeginDraging sticker: StickerEntity)
     func stickerView(_ stickerView: StickerView, didDrag sticker: StickerEntity)
     func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, willBeginResizing sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didResize sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didEndResize sticker: StickerEntity)
 }
 
 final class StickerView: UIView {
@@ -149,13 +152,12 @@ final class StickerView: UIView {
         switch gesture.state {
         case .began:
             updateFrame(to: newFrame)
-//            delegate?.stickerView(self, willBeginDraging: sticker)
+            delegate?.stickerView(self, willBeginResizing: sticker)
         case .changed:
             updateFrame(to: newFrame)
-//            delegate?.stickerView(self, didDrag: sticker)
+            delegate?.stickerView(self, didResize: sticker)
         case .ended:
-            break
-//            delegate?.stickerView(self, didEndDrag: sticker)
+            delegate?.stickerView(self, didEndResize: sticker)
         default: break
         }
     }

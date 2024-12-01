@@ -10,6 +10,9 @@ protocol CanvasScrollViewDelegate: AnyObject {
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity)
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity)
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginResize sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeResize sticker: StickerEntity)
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndResize sticker: StickerEntity)
 }
 
 final class CanvasScrollView: UIScrollView {
@@ -196,5 +199,17 @@ extension CanvasScrollView: StickerViewActionDelegate {
     
     func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity) {
         canvasScrollViewDelegate?.canvasScrollView(self, didEndDrag: sticker)
+    }
+    
+    func stickerView(_ stickerView: StickerView, willBeginResizing sticker: StickerEntity) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didBeginResize: sticker)
+    }
+    
+    func stickerView(_ stickerView: StickerView, didResize sticker: StickerEntity) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didChangeResize: sticker)
+    }
+    
+    func stickerView(_ stickerView: StickerView, didEndResize sticker: StickerEntity) {
+        canvasScrollViewDelegate?.canvasScrollView(self, didEndResize: sticker)
     }
 }

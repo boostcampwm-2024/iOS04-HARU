@@ -186,4 +186,16 @@ extension EditPhotoRoomGuestViewController: CanvasScrollViewDelegate {
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
         input.send(.dragSticker(sticker, .ended))
     }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .ended))
+    }
 }
