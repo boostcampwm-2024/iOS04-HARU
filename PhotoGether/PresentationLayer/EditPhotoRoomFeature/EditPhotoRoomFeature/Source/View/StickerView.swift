@@ -78,14 +78,8 @@ final class StickerView: UIView {
         deleteButton.clipsToBounds = true
         
         setImage(to: sticker.image)
-        
-        sticker.owner != nil
-        ? (layerView.isHidden = false)
-        : (layerView.isHidden = true)
-        
-        _ = sticker.owner != user
-        ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
-        : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
+        updateOwnerUI(owner: sticker.owner)
+        updateDeleteButtonVisibility(for: sticker.owner)
     }
     
     private func setupGesture() {
@@ -144,6 +138,12 @@ final class StickerView: UIView {
         guard sticker.owner != owner else { return }
         
         sticker.updateOwner(to: owner)
+        updateOwnerUI(owner: owner)
+        updateDeleteButtonVisibility(for: owner)
+        updatePanGestureState()
+    }
+    
+    private func updateOwnerUI(owner: String?) {
         if let owner = owner {
             nicknameLabel.text = owner
             layerView.isHidden = false
@@ -151,12 +151,12 @@ final class StickerView: UIView {
             nicknameLabel.text = nil
             layerView.isHidden = true
         }
-        
-        _ = sticker.owner != user
-        ? (deleteButton.isHidden = true, deleteButton.isUserInteractionEnabled = false)
-        : (deleteButton.isHidden = false, deleteButton.isUserInteractionEnabled = true)
-        
-        updatePanGestureState()
+    }
+
+    private func updateDeleteButtonVisibility(for owner: String?) {
+        let isOwner = sticker.owner == user
+        deleteButton.isHidden = !isOwner
+        deleteButton.isUserInteractionEnabled = isOwner
     }
     
     private func updatePanGestureState() {
