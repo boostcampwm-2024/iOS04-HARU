@@ -31,7 +31,7 @@ final class StickerCollectionViewCell: UICollectionViewCell {
     
     private func configureUI() { }
     
-    func setupImage(by emoji: EmojiEntity) {
+    func setImage(by emoji: EmojiEntity) {
         guard let url = emoji.emojiURL else { return }
         Task { await imageView.setAsyncImage(url) }
     }

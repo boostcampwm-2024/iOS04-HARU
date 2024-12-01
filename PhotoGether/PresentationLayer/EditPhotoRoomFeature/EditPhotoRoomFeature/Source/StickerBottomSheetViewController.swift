@@ -126,7 +126,7 @@ extension StickerBottomSheetViewController: UICollectionViewDataSource {
               let emojiEntity = viewModel.emojiList.value[safe: indexPath.item]
         else { return UICollectionViewCell() }
         
-        cell.setupImage(by: emojiEntity)
+        cell.setImage(by: emojiEntity)
 
         return cell
     }
