@@ -10,8 +10,9 @@ protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity)
 }
 
-final class StickerView: UIImageView {
+final class StickerView: UIView {
     private let nicknameLabel = UILabel()
+    private let imageView = UIImageView()
     private let layerView = UIView()
     private let deleteButton = UIButton()
     private let panGestureRecognizer = UIPanGestureRecognizer()
@@ -41,12 +42,16 @@ final class StickerView: UIImageView {
     }
     
     private func addViews() {
-        [nicknameLabel, layerView, deleteButton].forEach {
+        [imageView, nicknameLabel, layerView, deleteButton].forEach {
             addSubview($0)
         }
     }
     
     private func setupConstraints() {
+        imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(6)
+        }
+        
         nicknameLabel.snp.makeConstraints {
             $0.top.equalTo(snp.bottom)
             $0.trailing.equalTo(snp.trailing)
@@ -170,7 +175,7 @@ final class StickerView: UIImageView {
             guard let (data, _) = try? await URLSession.shared.data(from: url)
             else { return }
             
-            self?.image = UIImage(data: data)
+            self?.imageView.image = UIImage(data: data)
         }
     }
     
