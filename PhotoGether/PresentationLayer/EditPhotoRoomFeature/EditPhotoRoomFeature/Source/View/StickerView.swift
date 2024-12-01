@@ -17,6 +17,7 @@ final class StickerView: UIView {
     private let deleteButton = UIButton()
     private let resizeButton = UIButton()
     private let panGestureRecognizer = UIPanGestureRecognizer()
+    private let resizePanGestureRecognizer = UIPanGestureRecognizer()
 
     private var sticker: StickerEntity
     private let user: String
@@ -102,8 +103,11 @@ final class StickerView: UIView {
         
         panGestureRecognizer.minimumNumberOfTouches = 1
         panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
-        
         addGestureRecognizer(panGestureRecognizer)
+        
+        resizePanGestureRecognizer.minimumNumberOfTouches = 1
+        resizePanGestureRecognizer.addTarget(self, action: #selector(handleResizePanGesture))
+        resizeButton.addGestureRecognizer(resizePanGestureRecognizer)
     }
     
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
@@ -127,6 +131,31 @@ final class StickerView: UIView {
             delegate?.stickerView(self, didDrag: sticker)
         case .ended:
             delegate?.stickerView(self, didEndDrag: sticker)
+        default: break
+        }
+    }
+    
+    @objc private func handleResizePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let initialSize = sticker.frame.size
+        let translationPoint = gesture.translation(in: self)
+        let delta = min(translationPoint.x, translationPoint.y)
+        let changedWidth = min(128, max(initialSize.width + delta, 48))
+        let changedHeight = changedWidth
+        let traslationStickerSize = CGSize(width: changedWidth, height: changedHeight)
+        
+        resizePanGestureRecognizer.setTranslation(.zero, in: resizeButton)
+        let newFrame = CGRect(origin: sticker.frame.origin, size: traslationStickerSize)
+        
+        switch gesture.state {
+        case .began:
+            updateFrame(to: newFrame)
+//            delegate?.stickerView(self, willBeginDraging: sticker)
+        case .changed:
+            updateFrame(to: newFrame)
+//            delegate?.stickerView(self, didDrag: sticker)
+        case .ended:
+            break
+//            delegate?.stickerView(self, didEndDrag: sticker)
         default: break
         }
     }
