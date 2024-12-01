@@ -48,7 +48,6 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
         label.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(activityIndicator.snp.bottom).offset(10)
-            $0.horizontalEdges.equalToSuperview().inset(20)
         }
     }
     
