@@ -64,12 +64,12 @@ final class StickerView: UIView {
         
         deleteButton.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
-            $0.width.height.equalTo(snp.width).multipliedBy(0.3)
+            $0.width.height.equalTo(20)
         }
         
         resizeButton.snp.makeConstraints {
             $0.bottom.trailing.equalToSuperview()
-            $0.width.height.equalTo(snp.width).multipliedBy(0.3)
+            $0.width.height.equalTo(20)
         }
     }
     
