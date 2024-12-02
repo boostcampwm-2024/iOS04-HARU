@@ -69,7 +69,7 @@ public final class ConnectionClientImpl: ConnectionClient {
             return UIImage()
         }
         
-        guard let capturedImage = videoView.capturedImage else {
+        guard let capturedImage = videoView.capture() else {
             return UIImage()
         }
         
@@ -80,7 +80,8 @@ public final class ConnectionClientImpl: ConnectionClient {
     public func bindRemoteVideo() {
         guard let remoteVideoView = remoteVideoView as? RTCMTLVideoView else { return }
         self.webRTCService.connectRemoteVideoTrack()
-        self.webRTCService.renderRemoteVideo(to: remoteVideoView)
+        let flipedRemoteVideoView = remoteVideoView.flipHorizontally() // 기본이 전면카메라이므로 좌우반전으로 시작
+        self.webRTCService.renderRemoteVideo(to: flipedRemoteVideoView)
     }
     
     public func bindLocalVideo(videoSource: RTCVideoSource?, _ localVideoView: UIView) {

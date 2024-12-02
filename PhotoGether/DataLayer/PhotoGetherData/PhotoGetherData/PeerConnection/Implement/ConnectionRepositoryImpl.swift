@@ -8,26 +8,32 @@ import WebRTC
 public final class ConnectionRepositoryImpl: ConnectionRepository {
     private var cancellables: Set<AnyCancellable> = []
     
-    public var clients: [ConnectionClient]
-    
-    private let didEnterNewUserSubject = PassthroughSubject<(UserInfo, UIView), Never>()
-    public var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> {
-        didEnterNewUserSubject.eraseToAnyPublisher()
-    }
-    private let _localVideoView = CapturableVideoView()
-    public private(set) var localUserInfo: UserInfo?
-    
-    public var localVideoView: UIView { _localVideoView }
-    public var capturedLocalVideo: UIImage? { _localVideoView.capturedImage }
+    // MARK: Service
     
     private let roomService: RoomService
     private let signalingService: SignalingService
     
-    private var videoCapturer: RTCVideoCapturer?
-    private var videoSource: RTCVideoSource?
+    // MARK: Manager
     
     private let localVideoCaptureManager = VideoCaptureManager()
     
+    // MARK: Private State
+    
+    private let didEnterNewUserSubject = PassthroughSubject<(UserInfo, UIView), Never>()
+    private var _localVideoView = CapturableVideoView()
+    private var videoCapturer: RTCVideoCapturer?
+    private var videoSource: RTCVideoSource?
+    
+    // MARK: Public State
+    
+    public var clients: [ConnectionClient]
+    public var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> {
+        didEnterNewUserSubject.eraseToAnyPublisher()
+    }
+    public var localVideoView: UIView { _localVideoView }
+    public var capturedLocalVideo: UIImage? { _localVideoView.capture() }
+    public private(set) var localUserInfo: UserInfo?
+
     public init(
         signlingService: SignalingService,
         roomService: RoomService,
@@ -44,7 +50,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         // MARK: Manager를 통해 Video를 제어합니다.
         localVideoCaptureManager.setVideoSource(self.videoSource)
         localVideoCaptureManager.setVideoCapturer(self.videoCapturer)
-        localVideoCaptureManager.startCaptureLocalVideo()
+        Task { await localVideoCaptureManager.startCaptureLocalVideo() }
 
         // MARK: Clients와 local Video, remote Video 연결
         bindLocalVideo()
@@ -73,11 +79,15 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     
     /// 카메라 전후면을 전환하고 다시 비디오 캡쳐를 시작합니다.
     public func toggleCameraPosition() {
-        localVideoCaptureManager.toggleCameraPosition()
+        Task {
+            await localVideoCaptureManager.toggleCameraPosition()
+            await _localVideoView.flipHorizontally()
+        }
     }
     
     private func bindLocalVideo() {
-        self.clients.forEach { $0.bindLocalVideo(videoSource: self.videoSource, _localVideoView) }
+        let flipedVideoView = _localVideoView.flipHorizontally() // 기본이 전면카메라이므로 좌우반전으로 시작
+        self.clients.forEach { $0.bindLocalVideo(videoSource: self.videoSource, flipedVideoView) }
     }
     
     private func bindRemoteVideo() {
