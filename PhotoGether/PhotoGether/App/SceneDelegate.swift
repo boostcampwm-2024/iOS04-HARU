@@ -92,7 +92,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase,
-            stopVideoCaptureUseCase: stopVideoCaptureUseCase
+            stopVideoCaptureUseCase: stopVideoCaptureUseCase,
+            getUserInfoUseCase: getLocalVideoUseCase
         )
         
         let localDataSource = LocalShapeDataSourceImpl()
