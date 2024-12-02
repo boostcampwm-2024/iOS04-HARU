@@ -12,7 +12,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     var participantsGridView: PTGParticipantsGridView!
     var connectionRepsitory: ConnectionRepository
     private let photoRoomBottomView: PhotoRoomBottomView
-    private let isHost: Bool
+    private var isHost: Bool
     
     
     private let input = PassthroughSubject<PhotoRoomViewModel.Input, Never>()
@@ -46,6 +46,16 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveStartCountDown)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+            self?.isHost = false
+            self?.input.send(.cameraButtonTapped)
+        }.store(in: &cancellables)
     }
     
     public func setParticipantsGridView(_ participantsGridView: PTGParticipantsGridView) {
@@ -87,7 +97,8 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             .filter { [weak self] in
                 return self?.isHost ?? false
             }
-            .sink { [weak self] in
+            .sink { [weak self] _ in
+                NotificationCenter.default.post(name: .startCountDown, object: nil)
                 self?.input.send(.cameraButtonTapped)
             }
             .store(in: &cancellables)
@@ -103,37 +114,6 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                 self.photoRoomBottomView.setCameraButtonTimer(count)
             case .timerCompleted(let images):
                 self.photoRoomBottomView.stopCameraButtonTimer()
-                
-                let localDataSource = LocalShapeDataSourceImpl()
-                let remoteDataSource = RemoteShapeDataSourceImpl()
-                let repository = ShapeRepositoryImpl(
-                    localDataSource: localDataSource,
-                    remoteDataSource: remoteDataSource
-                )
-                let eventConnectionRepository = EventConnectionHostRepositoryImpl(
-                    clients: self.connectionRepsitory.clients
-                )
-                
-                let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
-                    shapeRepository: repository
-                )
-                let frameImageGenerator = FrameImageGeneratorImpl(
-                    images: images
-                )
-                let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
-                    eventConnectionRepository: eventConnectionRepository
-                )
-                let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
-                    eventConnectionRepository: eventConnectionRepository
-                )
-                
-//                let viewModel = EditPhotoRoomHostViewModel(
-//                    frameImageGenerator: frameImageGenerator,
-//                    fetchEmojiListUseCase: fetchEmojiListUseCase,
-//                    receiveStickerListUseCase: receiveStickerListUseCase,
-//                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
-//                )                
-//                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
                 let viewController = UIViewController()
                 self.navigationController?.pushViewController(viewController, animated: true)
             }
