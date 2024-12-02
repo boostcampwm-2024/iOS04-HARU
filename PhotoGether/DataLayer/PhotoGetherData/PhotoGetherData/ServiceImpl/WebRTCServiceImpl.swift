@@ -75,19 +75,19 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
     private func bindNoti() {
         NotificationCenter.default.publisher(for: .navigateToPhotoRoom).sink { [weak self] noti in
             guard let self else { return }
-            guard let message = TempNotiType(noti: "navigateToPhotoRoom").toData(encoder: self.encoder) else { return }
+            guard let message = SyncNotification(name: "navigateToPhotoRoom").toData(encoder: self.encoder) else { return }
             self.sendData(message)
         }.store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: .startCountDown).sink { [weak self] noti in
             guard let self else { return }
-            guard let message = TempNotiType(noti: "startCountDown").toData(encoder: self.encoder) else { return }
+            guard let message = SyncNotification(name: "startCountDown").toData(encoder: self.encoder) else { return }
             self.sendData(message)
         }.store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: .navigateToShareRoom).sink { [weak self] noti in
             guard let self else { return }
-            guard let message = TempNotiType(noti: "navigateToShareRoom").toData(encoder: self.encoder) else { return }
+            guard let message = SyncNotification(name: "navigateToShareRoom").toData(encoder: self.encoder) else { return }
             self.sendData(message)
         }.store(in: &cancellables)
     }
@@ -361,8 +361,8 @@ extension WebRTCServiceImpl {
     ) {
         self.didReceiveDataSubject.send(buffer.data)
         
-        if let tempNoti = buffer.data.toDTO(type: TempNotiType.self, decoder: decoder) {
-            switch tempNoti.noti {
+        if let tempNoti = buffer.data.toDTO(type: SyncNotification.self, decoder: decoder) {
+            switch tempNoti.name {
             case "navigateToPhotoRoom":
                 NotificationCenter.default.post(name: .receiveNavigateToPhotoRoom, object: nil)
             case "startCountDown":
@@ -377,6 +377,6 @@ extension WebRTCServiceImpl {
     }
 }
 
-struct TempNotiType: Codable {
-    let noti: String
+struct SyncNotification: Codable {
+    let name: String
 }
