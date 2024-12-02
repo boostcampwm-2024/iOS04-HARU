@@ -10,7 +10,8 @@ public final class EditPhotoRoomHostViewModel {
         case frameButtonDidTap
         case createSticker(StickerEntity)
         case deleteSticker(UUID)
-        case dragSticker(StickerEntity, DragState)
+        case dragSticker(StickerEntity, PanGestureState)
+        case resizeSticker(StickerEntity, PanGestureState)
         case stickerViewDidTap(UUID)
     }
     
@@ -100,6 +101,8 @@ public final class EditPhotoRoomHostViewModel {
                 self?.handleStickerViewDidTap(with: stickerID)
             case .dragSticker(let sticker, let dragState):
                 self?.handleDragSticker(sticker: sticker, state: dragState)
+            case .resizeSticker(let sticker, let resizeState):
+                self?.handleResizeSticker(sticker: sticker, state: resizeState)
             }
         }
         .store(in: &cancellables)
@@ -110,6 +113,12 @@ public final class EditPhotoRoomHostViewModel {
 
 // MARK: Sticker
 extension EditPhotoRoomHostViewModel {
+    enum PanGestureState {
+        case began
+        case changed
+        case ended
+    }
+    
     private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
         switch type {
         case .create:
@@ -160,13 +169,7 @@ extension EditPhotoRoomHostViewModel {
 
 // MARK: Sticker Drag
 extension EditPhotoRoomHostViewModel {
-    enum DragState {
-        case began
-        case changed
-        case ended
-    }
-    
-    private func handleDragSticker(sticker: StickerEntity, state: DragState) {
+    private func handleDragSticker(sticker: StickerEntity, state: PanGestureState) {
         switch state {
         case .began:
             handleDragBegan(sticker: sticker)
@@ -192,6 +195,40 @@ extension EditPhotoRoomHostViewModel {
     }
     
     private func handleDragEnded(sticker: StickerEntity) {
+        mutateStickerLocal(type: .update, sticker: sticker)
+        
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+}
+
+// MARK: Sticker Resize
+extension EditPhotoRoomHostViewModel {
+    private func handleResizeSticker(sticker: StickerEntity, state: PanGestureState) {
+        switch state {
+        case .began:
+            handleResizeBegan(sticker: sticker)
+        case .changed:
+            handleResizeChanged(sticker: sticker)
+        case .ended:
+            handleResizeEnded(sticker: sticker)
+        }
+    }
+    
+    private func handleResizeBegan(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleResizeChanged(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleResizeEnded(sticker: StickerEntity) {
         mutateStickerLocal(type: .update, sticker: sticker)
         
         guard canInteractWithSticker(id: sticker.id) else { return }

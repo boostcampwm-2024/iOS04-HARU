@@ -8,6 +8,9 @@ protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, willBeginDraging sticker: StickerEntity)
     func stickerView(_ stickerView: StickerView, didDrag sticker: StickerEntity)
     func stickerView(_ stickerView: StickerView, didEndDrag sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, willBeginResizing sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didResize sticker: StickerEntity)
+    func stickerView(_ stickerView: StickerView, didEndResize sticker: StickerEntity)
 }
 
 final class StickerView: UIView {
@@ -16,7 +19,8 @@ final class StickerView: UIView {
     private let layerView = UIView()
     private let deleteButton = UIButton()
     private let resizeButton = UIButton()
-    private let panGestureRecognizer = UIPanGestureRecognizer()
+    private let dragPanGestureRecognizer = UIPanGestureRecognizer()
+    private let resizePanGestureRecognizer = UIPanGestureRecognizer()
 
     private var sticker: StickerEntity
     private let user: String
@@ -64,12 +68,12 @@ final class StickerView: UIView {
         
         deleteButton.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
-            $0.width.height.equalTo(snp.width).multipliedBy(0.3)
+            $0.width.height.equalTo(20)
         }
         
         resizeButton.snp.makeConstraints {
             $0.bottom.trailing.equalToSuperview()
-            $0.width.height.equalTo(snp.width).multipliedBy(0.3)
+            $0.width.height.equalTo(20)
         }
     }
     
@@ -100,20 +104,23 @@ final class StickerView: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
         
-        panGestureRecognizer.minimumNumberOfTouches = 1
-        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
+        dragPanGestureRecognizer.minimumNumberOfTouches = 1
+        dragPanGestureRecognizer.addTarget(self, action: #selector(handleDragPanGesture))
+        addGestureRecognizer(dragPanGestureRecognizer)
         
-        addGestureRecognizer(panGestureRecognizer)
+        resizePanGestureRecognizer.minimumNumberOfTouches = 1
+        resizePanGestureRecognizer.addTarget(self, action: #selector(handleResizePanGesture))
+        resizeButton.addGestureRecognizer(resizePanGestureRecognizer)
     }
     
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+    @objc private func handleDragPanGesture(_ gesture: UIPanGestureRecognizer) {
         let initialPoint = sticker.frame.origin
         let translationPoint = gesture.translation(in: self)
         let changedX = initialPoint.x + translationPoint.x
         let changedY = initialPoint.y + translationPoint.y
         let traslationStickerPoint = CGPoint(x: changedX, y: changedY)
         
-        panGestureRecognizer.setTranslation(.zero, in: self)
+        dragPanGestureRecognizer.setTranslation(.zero, in: self)
         
         let newFrame = CGRect(origin: traslationStickerPoint, size: sticker.frame.size)
         
@@ -127,6 +134,30 @@ final class StickerView: UIView {
             delegate?.stickerView(self, didDrag: sticker)
         case .ended:
             delegate?.stickerView(self, didEndDrag: sticker)
+        default: break
+        }
+    }
+    
+    @objc private func handleResizePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let initialSize = sticker.frame.size
+        let translationPoint = gesture.translation(in: self)
+        let delta = min(translationPoint.x, translationPoint.y)
+        let changedWidth = min(128, max(initialSize.width + delta, 48))
+        let changedHeight = changedWidth
+        let traslationStickerSize = CGSize(width: changedWidth, height: changedHeight)
+        
+        resizePanGestureRecognizer.setTranslation(.zero, in: resizeButton)
+        let newFrame = CGRect(origin: sticker.frame.origin, size: traslationStickerSize)
+        
+        switch gesture.state {
+        case .began:
+            updateFrame(to: newFrame)
+            delegate?.stickerView(self, willBeginResizing: sticker)
+        case .changed:
+            updateFrame(to: newFrame)
+            delegate?.stickerView(self, didResize: sticker)
+        case .ended:
+            delegate?.stickerView(self, didEndResize: sticker)
         default: break
         }
     }
@@ -180,9 +211,9 @@ final class StickerView: UIView {
     
     private func updatePanGestureState() {
         if sticker.owner == user || sticker.owner == nil {
-            panGestureRecognizer.isEnabled = true
+            dragPanGestureRecognizer.isEnabled = true
         } else {
-            panGestureRecognizer.isEnabled = false
+            dragPanGestureRecognizer.isEnabled = false
         }
     }
     
@@ -201,7 +232,7 @@ final class StickerView: UIView {
     }
     
     func update(with sticker: StickerEntity) {
-        switch panGestureRecognizer.state {
+        switch dragPanGestureRecognizer.state {
         case .began, .changed:
             return
         default:

@@ -118,7 +118,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
-        let imageSize: CGFloat = 64
+        let imageSize: CGFloat = 72
         let frame = calculateCenterPosition(imageSize: imageSize)
         
         let newSticker = StickerEntity(
@@ -185,5 +185,17 @@ extension EditPhotoRoomGuestViewController: CanvasScrollViewDelegate {
     
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
         input.send(.dragSticker(sticker, .ended))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .ended))
     }
 }

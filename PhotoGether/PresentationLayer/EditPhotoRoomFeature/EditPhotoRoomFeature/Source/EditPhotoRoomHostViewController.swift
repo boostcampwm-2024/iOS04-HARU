@@ -138,7 +138,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
-        let imageSize: CGFloat = 64
+        let imageSize: CGFloat = 72
         let frame = calculateCenterPosition(imageSize: imageSize)
         
         let newSticker = StickerEntity(
@@ -182,28 +182,6 @@ extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDeleg
     }
 }
 
-extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
-    func stickerView(_ stickerView: StickerView, willBeginDraging sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
-    }
-    
-    func stickerView(_ stickerView: StickerView, didDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
-    }
-    
-    func stickerView(_ stickerView: StickerView, didEndDrag sticker: PhotoGetherDomainInterface.StickerEntity) {
-         
-    }
-    
-    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
-        input.send(.stickerViewDidTap(id))
-    }
-    
-    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
-        input.send(.deleteSticker(id))
-    }
-}
-
 extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTap id: UUID) {
         input.send(.stickerViewDidTap(id))
@@ -227,5 +205,17 @@ extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
     
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
         input.send(.dragSticker(sticker, .ended))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .ended))
     }
 }
