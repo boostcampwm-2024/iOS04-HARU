@@ -1,6 +1,8 @@
+import UIKit
+
+import BaseFeature
 import DesignSystem
 import PhotoGetherDomainInterface
-import UIKit
 
 protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, didTap id: UUID)
