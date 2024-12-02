@@ -11,6 +11,8 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     private let navigationView = UIView()
     var participantsGridView: PTGParticipantsGridView!
     var connectionRepsitory: ConnectionRepository
+    private let editPhotoRoomHostViewController: EditPhotoRoomHostViewController
+    private let editPhotoRoomGuestViewController: EditPhotoRoomGuestViewController
     private let photoRoomBottomView: PhotoRoomBottomView
     private var isHost: Bool
     
@@ -20,10 +22,14 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     private let viewModel: PhotoRoomViewModel
     
     public init(
+        editPhotoRoomHostViewController: EditPhotoRoomHostViewController,
+        editPhotoRoomGuestViewController: EditPhotoRoomGuestViewController,
         connectionRepsitory: ConnectionRepository,
         viewModel: PhotoRoomViewModel,
         isHost: Bool
     ) {
+        self.editPhotoRoomHostViewController = editPhotoRoomHostViewController
+        self.editPhotoRoomGuestViewController = editPhotoRoomGuestViewController
         self.connectionRepsitory = connectionRepsitory
         self.viewModel = viewModel
         self.isHost = isHost
@@ -114,8 +120,15 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                 self.photoRoomBottomView.setCameraButtonTimer(count)
             case .timerCompleted(let images):
                 self.photoRoomBottomView.stopCameraButtonTimer()
-                let viewController = UIViewController()
-                self.navigationController?.pushViewController(viewController, animated: true)
+                
+                let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+                if isHost {
+                    editPhotoRoomHostViewController.setFrameImageGenerator(frameImageGenerator)
+                    self.navigationController?.pushViewController(editPhotoRoomHostViewController, animated: true)
+                } else {
+                    editPhotoRoomGuestViewController.setFrameImageGenerator(frameImageGenerator)
+                    self.navigationController?.pushViewController(editPhotoRoomGuestViewController, animated: true)
+                }
             }
         }
         .store(in: &cancellables)
