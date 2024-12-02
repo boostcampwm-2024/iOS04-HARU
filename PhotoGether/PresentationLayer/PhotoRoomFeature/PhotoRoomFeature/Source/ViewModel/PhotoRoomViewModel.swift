@@ -8,6 +8,7 @@ public final class PhotoRoomViewModel {
     
     enum Input {
         case cameraButtonTapped
+        case cameraPositionToggled
     }
     
     enum Output {
@@ -20,15 +21,18 @@ public final class PhotoRoomViewModel {
     private let captureVideosUseCase: CaptureVideosUseCase
     private let stopVideoCaptureUseCase: StopVideoCaptureUseCase
     private let getUserInfoUseCase: GetLocalVideoUseCase
+    private let toggleCameraPositionUseCase: ToggleCameraPositionUseCase
     
     public init(
         captureVideosUseCase: CaptureVideosUseCase,
         stopVideoCaptureUseCase: StopVideoCaptureUseCase,
-        getUserInfoUseCase: GetLocalVideoUseCase
+        getUserInfoUseCase: GetLocalVideoUseCase,
+        toggleCameraPositionUseCase: ToggleCameraPositionUseCase
     ) {
         self.captureVideosUseCase = captureVideosUseCase
         self.stopVideoCaptureUseCase = stopVideoCaptureUseCase
         self.getUserInfoUseCase = getUserInfoUseCase
+        self.toggleCameraPositionUseCase = toggleCameraPositionUseCase
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -38,6 +42,8 @@ public final class PhotoRoomViewModel {
             switch $0 {
             case .cameraButtonTapped:
                 self.startTimer()
+            case .cameraPositionToggled:
+                self.handleCameraPositionToggled()
             }
         }.store(in: &cancellables)
         
@@ -70,5 +76,9 @@ public final class PhotoRoomViewModel {
                 timer.invalidate()
             }
         }
+    }
+    
+    private func handleCameraPositionToggled() {
+        self.toggleCameraPositionUseCase.execute()
     }
 }

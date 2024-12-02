@@ -14,6 +14,12 @@ final class PhotoRoomBottomView: UIView {
             .eraseToAnyPublisher()
     }
     
+    var switchCameraButtonTapped: AnyPublisher<Void, Never> {
+        switchCameraButton.tapPublisher
+            .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: false)
+            .eraseToAnyPublisher()
+    }
+    
     // MARK: init
     init(isHost: Bool) {
         self.isHost = isHost

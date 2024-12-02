@@ -90,10 +90,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let toggleCameraPositionUseCase: ToggleCameraPositionUseCase = ToggleCameraPositionUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase,
             stopVideoCaptureUseCase: stopVideoCaptureUseCase,
-            getUserInfoUseCase: getLocalVideoUseCase
+            getUserInfoUseCase: getLocalVideoUseCase,
+            toggleCameraPositionUseCase: toggleCameraPositionUseCase
         )
         
         let localDataSource = LocalShapeDataSourceImpl()

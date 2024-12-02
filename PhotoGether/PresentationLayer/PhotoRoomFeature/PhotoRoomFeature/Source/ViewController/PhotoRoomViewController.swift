@@ -99,6 +99,12 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     }
     
     public func bindInput() {
+        photoRoomBottomView.switchCameraButtonTapped
+            .sink { [weak self] _ in
+                self?.input.send(.cameraPositionToggled)
+            }
+            .store(in: &cancellables)
+        
         photoRoomBottomView.cameraButtonTapped
             .filter { [weak self] in
                 return self?.isHost ?? false
