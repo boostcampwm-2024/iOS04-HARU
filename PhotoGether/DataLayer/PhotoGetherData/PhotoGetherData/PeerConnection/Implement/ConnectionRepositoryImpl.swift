@@ -26,6 +26,8 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     private var videoCapturer: RTCVideoCapturer?
     private var videoSource: RTCVideoSource?
     
+    private let localVideoCaptureManager = VideoCaptureManager()
+    
     public init(
         signlingService: SignalingService,
         roomService: RoomService,
@@ -38,7 +40,11 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         // MARK: local Video 캡쳐
         initVideoSource()
         initVideoCapturer()
-        startCaptureLocalVideo()
+        
+        // MARK: Manager를 통해 Video를 제어합니다.
+        localVideoCaptureManager.setVideoSource(self.videoSource)
+        localVideoCaptureManager.setVideoCapturer(self.videoCapturer)
+        localVideoCaptureManager.startCaptureLocalVideo()
 
         // MARK: Clients와 local Video, remote Video 연결
         bindLocalVideo()
@@ -60,36 +66,9 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
     }
     
-    private func startCaptureLocalVideo() {
-        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
-        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
-            $0.position == .front
-        }) else { return }
-                      
-        // 가장 낮은 해상도 선택
-        guard let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera)
-            .sorted { frame1, frame2 -> Bool in
-                let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
-                let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
-                return width1 < width2
-            }).first else { return }
-
-        // 가장 높은 fps 선택
-        guard let fps = (format.videoSupportedFrameRateRanges
-            .sorted { return $0.maxFrameRate < $1.maxFrameRate })
-            .last else { return }
-
-        capturer.startCapture(
-            with: frontCamera,
-            format: format,
-            fps: Int(fps.maxFrameRate)
-        )
-    }
-    
+    /// local Video 캡쳐를 중지합니다.
     public func stopCaptureLocalVideo() -> Bool {
-        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return false }
-        capturer.stopCapture()
-        return true
+        localVideoCaptureManager.stopCaptureLocalVideo()
     }
     
     private func bindLocalVideo() {
