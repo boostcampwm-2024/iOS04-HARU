@@ -13,5 +13,6 @@ public protocol ConnectionRepository {
     func createRoom() -> AnyPublisher<RoomOwnerEntity, Error>
     func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error>
     func sendOffer() async throws
-    func stopCaptureLocalVideo() -> Bool 
+    func stopCaptureLocalVideo() -> Bool
+    func toggleCameraPosition()
 }

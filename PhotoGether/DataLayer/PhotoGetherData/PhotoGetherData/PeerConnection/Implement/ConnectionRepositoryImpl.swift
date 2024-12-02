@@ -71,6 +71,11 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         localVideoCaptureManager.stopCaptureLocalVideo()
     }
     
+    /// 카메라 전후면을 전환하고 다시 비디오 캡쳐를 시작합니다.
+    public func toggleCameraPosition() {
+        localVideoCaptureManager.toggleCameraPosition()
+    }
+    
     private func bindLocalVideo() {
         self.clients.forEach { $0.bindLocalVideo(videoSource: self.videoSource, _localVideoView) }
     }

@@ -37,7 +37,7 @@ class VideoCaptureManager {
     }
     
     /// 카메라 전후면을 전환하고 다시 비디오 캡쳐를 시작합니다.
-    func toggleCamera() {
+    func toggleCameraPosition() {
         currentCameraPosition = currentCameraPosition == .front ? .back : .front
         startCaptureLocalVideo()
     }
