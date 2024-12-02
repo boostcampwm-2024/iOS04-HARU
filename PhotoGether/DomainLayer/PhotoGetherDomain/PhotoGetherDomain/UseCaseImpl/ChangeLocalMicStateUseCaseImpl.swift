@@ -1,7 +1,7 @@
 import Combine
 import PhotoGetherDomainInterface
 
-public final class ChangeLocalMicStateUseCaseImpl: ChangeLcoalMicStateUseCase {
+public final class ChangeLocalMicStateUseCaseImpl: ChangeLocalMicStateUseCase {
     public func execute() -> AnyPublisher<Bool, Never> {
         connectionRepository.switchLocalAudioTrackState()
         return connectionRepository.didChangeLocalAudioTrackStatePublisher

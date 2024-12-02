@@ -25,7 +25,7 @@ public final class WaitingRoomViewModel {
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
     private let createRoomUseCase: CreateRoomUseCase
     private let didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase
-    private let changeLocalMicStateUseCase: ChangeLcoalMicStateUseCase
+    private let changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
     
     private var isHost: Bool
     private var cancellables = Set<AnyCancellable>()
@@ -38,7 +38,7 @@ public final class WaitingRoomViewModel {
         getRemoteVideoUseCase: GetRemoteVideoUseCase,
         createRoomUseCase: CreateRoomUseCase,
         didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase,
-        changeLocalMicStateUseCase: ChangeLcoalMicStateUseCase
+        changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
     ) {
         self.isHost = isHost
         self.sendOfferUseCase = sendOfferUseCase

@@ -1,5 +1,5 @@
 import Combine
 
-public protocol ChangeLcoalMicStateUseCase {
+public protocol ChangeLocalMicStateUseCase {
     func execute() -> AnyPublisher<Bool, Never>
 }

@@ -30,14 +30,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             roomOwnerEntity = DeepLinkParser.parseRoomInfo(from: urlContext.url)
         }
         
-        let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
+        let webSocketClient: WebSocketClient = WebSocketClientImpl(url: url)
         
         let roomService: RoomService = RoomServiceImpl(
-            webSocketClient: webScoketClient
+            webSocketClient: webSocketClient
         )
         
         let signalingService: SignalingService = SignalingServiceImpl(
-            webSocketClient: webScoketClient
+            webSocketClient: webSocketClient
         )
         
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
@@ -97,7 +97,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase,
             stopVideoCaptureUseCase: stopVideoCaptureUseCase,
-            getUserInfoUseCase: getLocalVideoUseCase
+            getUserInfoUseCase: getLocalVideoUseCase,
+            changeLocalMicStateUseCase: changeLocalMicStateUseCase
         )
         
         let localDataSource = LocalShapeDataSourceImpl()
