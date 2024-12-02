@@ -182,6 +182,9 @@ final class StickerEventManager {
 
         if oldSticker.owner == nil || oldSticker.owner == newOwner {
             // OldOwner가 nil이거나 Old,New Owner가 서로 같을 때
+            if let beforeSticker = stickerDictionary.first(where: { $1.owner == newOwner }) {
+                stickerDictionary[beforeSticker.value.id]?.updateOwner(to: nil)
+            }
             stickerDictionary[sticker.id] = sticker
 
             broadcastSubject.send(currenntStickerList)
