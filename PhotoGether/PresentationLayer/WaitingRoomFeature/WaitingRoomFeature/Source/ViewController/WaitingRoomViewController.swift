@@ -45,7 +45,9 @@ public final class WaitingRoomViewController: BaseViewController {
     private func bindNoti() {
         NotificationCenter.default.publisher(for: .receiveNavigateToPhotoRoom)
             .receive(on: RunLoop.main)
+            .first()
             .sink { [weak self] _ in
+                print("DEBUG: 노티 받음")
             guard let self else { return }
             let photoRoomVC = self.photoRoomViewController
                 photoRoomVC.setParticipantsGridView(waitingRoomView.particiapntsGridView)
