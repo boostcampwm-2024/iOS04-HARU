@@ -25,7 +25,10 @@ final class EventQueue {
     }
     
     func lastEventPayload() -> EventPayload? {
-        return queue.last?.payload
+        guard !queue.isEmpty,
+            let payload = queue.last?.payload else { return nil }
+        
+        return payload
     }
 }
 
