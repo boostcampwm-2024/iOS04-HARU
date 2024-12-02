@@ -5,13 +5,8 @@ import WebRTC
 public class CapturableVideoView: RTCMTLVideoView {
     private var capturedCGImage: CGImage?
     
-    public var capturedImage: UIImage? {
-        guard let capturedCGImage,
-              let flipedImage = flipCgImageHorizontally(cgImage: capturedCGImage)
-        else { return nil }
-        
-        return UIImage(cgImage: flipedImage)
-    }
+    // transform.a 는 CGAffineTransform.scaleX와 같음. x축의 scale 값이 -1.0인지 확인
+    private var isFlipped: Bool { transform.a == -1 }
     
     public override func setSize(_ size: CGSize) {
         super.setSize(size)
@@ -24,6 +19,14 @@ public class CapturableVideoView: RTCMTLVideoView {
         capturedCGImage = convertFrameToImage(frame)
     }
     
+    public func capture() -> UIImage? {
+        guard let capturedCGImage,
+                let flippedCGImage = flipCgImageHorizontally(cgImage: capturedCGImage)
+        else { return nil }
+        
+        return isFlipped ? UIImage(cgImage: flippedCGImage) : UIImage(cgImage: capturedCGImage)
+    }
+    
     private func convertFrameToImage(_ frame: RTCVideoFrame) -> CGImage? {
         // frame의 버퍼를 CVPixelBuffer로 가져옴
         guard let pixelBuffer = (frame.buffer as? RTCCVPixelBuffer)?.pixelBuffer else { return nil }
@@ -31,7 +34,6 @@ public class CapturableVideoView: RTCMTLVideoView {
         // CVPixelBuffer를 CIImage로 변환
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer).oriented(.right)
         
-        // CIImage를 UIImage로 변환
         let context = CIContext(options: nil)
         
         if let cgImage = context.createCGImage(ciImage, from: ciImage.extent) {
