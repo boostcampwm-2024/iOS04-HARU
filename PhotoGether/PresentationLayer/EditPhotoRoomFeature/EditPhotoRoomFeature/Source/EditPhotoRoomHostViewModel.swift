@@ -163,6 +163,18 @@ extension EditPhotoRoomHostViewModel {
             mutateStickerEventHub(type: .update, with: tappedSticker)
         }
     }
+    
+    private func changeLockSticker(to id: UUID?) {
+        var stickerList = stickerListSubject.value
+        
+        let (unlockSticker, lockSticker) = stickerList.changeLock(by: userInfo, to: id)
+        if let lockSticker {
+            print("LOCK DEBUG: lock sticker is \(lockSticker.id.uuidString.prefix(4))")
+            print("LOCK DEBUG: sticker list is \(stickerList.map { "sticker: \($0.id.uuidString.prefix(4)), owner: \($0.owner?.nickname ?? "nil")" })")
+            mutateStickerListLocal(stickerList: stickerList)
+            mutateStickerEventHub(type: .update, with: lockSticker)
+        }
+    }
 }
 
 // MARK: Sticker Drag
@@ -181,8 +193,9 @@ extension EditPhotoRoomHostViewModel {
     private func handleDragBegan(sticker: StickerEntity) {
         guard canInteractWithSticker(id: sticker.id) else { return }
         
-        unlockPreviousSticker(stickerId: sticker.id)
-        lockTappedSticker(id: sticker.id)
+        changeLockSticker(to: sticker.id)
+//        unlockPreviousSticker(stickerId: sticker.id)
+//        lockTappedSticker(id: sticker.id)
         mutateStickerEventHub(type: .update, with: sticker)
     }
     
@@ -241,11 +254,13 @@ extension EditPhotoRoomHostViewModel {
         // MARK: 선택할 수 있는 객체인지 확인함
         guard canInteractWithSticker(id: stickerID) else { return }
         
-        // MARK: 필요시 이전 스티커를 unlock하고 반영함
-        unlockPreviousSticker(stickerId: stickerID)
+        changeLockSticker(to: stickerID)
         
-        // MARK: Tap한 스티커를 lock하고 반영한다.
-        lockTappedSticker(id: stickerID)
+//        // MARK: 필요시 이전 스티커를 unlock하고 반영함
+//        unlockPreviousSticker(stickerId: stickerID)
+//
+//        // MARK: Tap한 스티커를 lock하고 반영한다.
+//        lockTappedSticker(id: stickerID)
     }
 }
 

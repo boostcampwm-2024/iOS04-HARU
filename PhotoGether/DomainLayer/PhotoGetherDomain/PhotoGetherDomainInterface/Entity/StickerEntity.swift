@@ -120,4 +120,27 @@ extension Array where Element == StickerEntity {
         }
         return nil
     }
+    
+    public mutating func changeLock(
+        by owner: UserInfo,
+        to sticker: UUID?
+    ) -> (unlock: StickerEntity?, lock: StickerEntity?) {
+        // unlock before sticker
+        var unlock: StickerEntity?
+        
+        if let index = firstIndex(where: { $0.owner == owner }) {
+            self[index].updateOwner(to: nil)
+            unlock = self[index]
+        }
+        
+        if let index = firstIndex(where: { $0.id == sticker }) {
+            self[index].updateOwner(to: owner)
+            switch unlock == self[index] {
+            case true: return (nil, nil)
+            case false: return (unlock, self[index])
+            }
+        }
+        
+        return (unlock, nil)
+    }
 }
