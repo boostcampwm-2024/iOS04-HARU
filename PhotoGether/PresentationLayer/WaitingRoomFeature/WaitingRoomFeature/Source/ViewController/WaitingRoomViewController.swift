@@ -35,6 +35,7 @@ public final class WaitingRoomViewController: BaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         defer { viewDidLoadSubject.send(()) }
+        navigationController?.setNavigationBarHidden(true, animated: false)
         bindInput()
         bindOutput()
     }
@@ -74,17 +75,22 @@ public final class WaitingRoomViewController: BaseViewController {
             // MARK: 내 비디오 화면 업데이트
             case .localVideo(let localVideoView):
                 print(localVideoView)
-                self.waitingRoomView.updateParticipantView(view: localVideoView, position: .topLeading)
+                updateParticipantView(view: localVideoView, position: .topLeading)
+                updateParticipantNickname(nickname: "나는 호스트야", position: .topLeading)
                 
             // MARK: 상대방 비디오 화면 업데이트
             case .remoteVideos(let remoteVideoViews):
-                let guest1 = remoteVideoViews[safe: 0] ?? UIView()
-                let guest2 = remoteVideoViews[safe: 1] ?? UIView()
-                let guest3 = remoteVideoViews[safe: 2] ?? UIView()
+                let guestVideoView1 = remoteVideoViews[safe: 0] ?? UIView()
+                let guestVideoView2 = remoteVideoViews[safe: 1] ?? UIView()
+                let guestVideoView3 = remoteVideoViews[safe: 2] ?? UIView()
                 
-                self.waitingRoomView.updateParticipantView(view: guest1, position: .topTrailing)
-                self.waitingRoomView.updateParticipantView(view: guest2, position: .bottomLeading)
-                self.waitingRoomView.updateParticipantView(view: guest3, position: .bottomTrailing)
+                updateParticipantView(view: guestVideoView1, position: .bottomTrailing)
+                updateParticipantView(view: guestVideoView2, position: .topTrailing)
+                updateParticipantView(view: guestVideoView3, position: .bottomLeading)
+                
+                updateParticipantNickname(nickname: "나는 게스트1", position: .bottomTrailing)
+                updateParticipantNickname(nickname: "나는 게스트2", position: .topTrailing)
+                updateParticipantNickname(nickname: "나는 게스트3", position: .bottomLeading)
 
             // MARK: 마이크 음소거 UI 업데이트
             case .micMuteState:
@@ -101,10 +107,19 @@ public final class WaitingRoomViewController: BaseViewController {
         }.store(in: &cancellables)
     }
 
+    private func updateParticipantView(view: UIView, position: ParticipantPosition) {
+        self.waitingRoomView.particiapntsGridView.updateParticipantView(view: view, position: position)
+    }
+    
+    private func updateParticipantNickname(nickname: String, position: ParticipantPosition) {
+        self.waitingRoomView.particiapntsGridView.updateParticipantNickname(nickName: nickname, position: position)
+    }
+    
+    // MARK: 현재 뷰의 하이어라키에선 particiapntsGridView가 사라짐
     private func navigateToPhotoRoom() {
-        let collectionVC = ParticipantsCollectionViewController()
+        let particiapntsGridView = self.waitingRoomView.particiapntsGridView
         let photoRoomVC = photoRoomViewController
-        photoRoomVC.setCollectionViewController(collectionVC)
+        photoRoomVC.setParticipantsGridView(particiapntsGridView)
         navigationController?.pushViewController(photoRoomVC, animated: true)
     }
     
