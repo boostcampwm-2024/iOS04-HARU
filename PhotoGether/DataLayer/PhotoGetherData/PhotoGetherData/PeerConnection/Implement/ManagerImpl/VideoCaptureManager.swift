@@ -1,4 +1,5 @@
 import WebRTC
+import CoreModule
 
 class VideoCaptureManager {
     private(set) weak var videoCapturer: RTCVideoCapturer?
@@ -17,16 +18,20 @@ class VideoCaptureManager {
     }
     
     /// 비디오 캡쳐를 시작합니다.
-    func startCaptureLocalVideo() {
+    func startCaptureLocalVideo() async {
         guard let capturer = videoCapturer as? RTCCameraVideoCapturer else { return }
         guard let cameraDevice = cameraDevice(for: currentCameraPosition) else { return }
         guard let selection = selectFormatAndFrameRate(for: cameraDevice) else { return }
 
-        capturer.startCapture(
-            with: cameraDevice,
-            format: selection.format,
-            fps: Int(selection.frameRate)
-        )
+        do {
+            try await capturer.startCapture(
+                with: cameraDevice,
+                format: selection.format,
+                fps: Int(selection.frameRate)
+            )
+        } catch {
+            PTGLogger.default.log(error.localizedDescription)
+        }
     }
     
     /// 비디오 캡쳐를 중지합니다.
@@ -37,9 +42,9 @@ class VideoCaptureManager {
     }
     
     /// 카메라 전후면을 전환하고 다시 비디오 캡쳐를 시작합니다.
-    func toggleCameraPosition() {
+    func toggleCameraPosition() async {
         currentCameraPosition = currentCameraPosition == .front ? .back : .front
-        startCaptureLocalVideo()
+        await startCaptureLocalVideo()
     }
     
     /// 주어진 카메라 포지션에 맞는 디바이스를 반환합니다.
