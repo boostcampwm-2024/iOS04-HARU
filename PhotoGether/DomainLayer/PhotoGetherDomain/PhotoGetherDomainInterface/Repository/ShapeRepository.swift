@@ -2,5 +2,5 @@ import Combine
 import Foundation
 
 public protocol ShapeRepository {
-    func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never>
+    func fetchEmojiList(_ group: EmojiGroup) -> AnyPublisher<[EmojiEntity], Never>
 }

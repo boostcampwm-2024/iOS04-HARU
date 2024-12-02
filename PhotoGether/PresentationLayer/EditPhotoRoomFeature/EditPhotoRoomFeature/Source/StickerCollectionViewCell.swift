@@ -1,5 +1,6 @@
 import UIKit
 
+import BaseFeature
 import PhotoGetherDomainInterface
 
 // TODO: 이미지가 Repo로 부터 도착하면 image 주입
@@ -19,6 +20,12 @@ final class StickerCollectionViewCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        imageView.image = nil
+    }
+    
     private func addViews() {
         [imageView].forEach { self.addSubview($0) }
     }
@@ -31,8 +38,8 @@ final class StickerCollectionViewCell: UICollectionViewCell {
     
     private func configureUI() { }
     
-    func setupImage(by emoji: EmojiEntity) {
-        guard let url = URL(string: emoji.image) else { return }
+    func setImage(by emoji: EmojiEntity) {
+        guard let url = emoji.emojiURL else { return }
         Task { await imageView.setAsyncImage(url) }
     }
 }
