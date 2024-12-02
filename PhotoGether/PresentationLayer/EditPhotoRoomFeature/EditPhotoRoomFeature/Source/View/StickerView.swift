@@ -193,9 +193,11 @@ final class StickerView: UIView {
         if let owner = owner {
             nicknameLabel.text = owner.nickname
             layerView.isHidden = false
+            nicknameLabel.isHidden = false
         } else {
             nicknameLabel.text = nil
             layerView.isHidden = true
+            nicknameLabel.isHidden = true
         }
         
         if owner == user {
