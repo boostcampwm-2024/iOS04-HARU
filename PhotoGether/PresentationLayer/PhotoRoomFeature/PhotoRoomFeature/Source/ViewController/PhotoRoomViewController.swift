@@ -34,7 +34,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         self.viewModel = viewModel
         self.isHost = isHost
         self.photoRoomBottomView = PhotoRoomBottomView(isHost: isHost)
-        self.micButton = PTGMicButton(micState: .on)
+        self.micButton = PTGMicButton(micState: .off)
         
         super.init(nibName: nil, bundle: nil)
     }

@@ -5,7 +5,7 @@ import CoreModule
 
 final class WaitingRoomView: UIView {
     let bottomBarView = UIView()
-    let micButton = PTGMicButton(micState: .on)
+    let micButton = PTGMicButton(micState: .off)
     let linkButton = PTGCircleButton(type: .link)
     let startButton = PTGPrimaryButton()
     let particiapntsGridView = PTGParticipantsGridView()

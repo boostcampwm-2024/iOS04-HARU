@@ -14,7 +14,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     public var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> {
         didEnterNewUserSubject.eraseToAnyPublisher()
     }
-    private let didChangeLocalAudioTrackStateSubject = CurrentValueSubject<Bool, Never>(true)
+    private let didChangeLocalAudioTrackStateSubject = CurrentValueSubject<Bool, Never>(false)
     public var didChangeLocalAudioTrackStatePublisher: AnyPublisher<Bool, Never> {
         didChangeLocalAudioTrackStateSubject
             .eraseToAnyPublisher()
