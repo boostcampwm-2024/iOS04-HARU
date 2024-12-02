@@ -4,12 +4,12 @@ import PhotoGetherDomainInterface
 import PhotoGetherNetwork
 
 final public class ShapeRepositoryImpl: ShapeRepository {
-    public func fetchEmojiList() -> AnyPublisher<[EmojiEntity], Never> {
-        return localDataSource.fetchEmojiData(EmojiEndPoint())
+    public func fetchEmojiList(_ group: EmojiGroup) -> AnyPublisher<[EmojiEntity], Never> {
+        return localDataSource.fetchEmojiData(EmojiEndPoint(group: group))
             .catch { [weak self] _ -> AnyPublisher<[EmojiDTO], Never> in
                 guard let self else { return Just([]).eraseToAnyPublisher() }
                 
-                return remoteDataSource.fetchEmojiData(EmojiEndPoint())
+                return remoteDataSource.fetchEmojiData(EmojiEndPoint(group: group))
                     .replaceError(with: [])
                     .eraseToAnyPublisher()
             }
@@ -27,17 +27,22 @@ final public class ShapeRepositoryImpl: ShapeRepository {
         self.localDataSource = localDataSource
         self.remoteDataSource = remoteDataSource
     }
+    
 }
 
+
 fileprivate struct EmojiEndPoint: EndPoint {
-    var baseURL: URL { URL(string: "https://api.api-ninjas.com")! }
-    var path: String { "v1/emoji" }
+    let group: EmojiGroup
+    
+    var baseURL: URL { URL(string: "https://www.emoji.family")! }
+    var path: String { "api/emojis" }
     var method: HTTPMethod { .get }
-    /// offset 기준 30개씩 호출
-    var parameters: [String: Any]? { ["group": "objects", "offset": 0] }
-    var headers: [String: String]? {
-        let apiKey = Bundle.main.object(forInfoDictionaryKey: "EMOJI_API_KEY") as? String ?? ""
-        return ["X-Api-Key": apiKey]
-    }
+    var parameters: [String: Any]? { ["group": group.rawValue] }
+    var headers: [String: String]? { nil }
     var body: Encodable? { nil }
+    
+    init(group: EmojiGroup) {
+        self.group = group
+    }
 }
+

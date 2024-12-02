@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import CoreModule
 
 public final class PTGParticipantsView: UIView {
     private let nicknameLabel = PTGPaddingLabel()

@@ -2,5 +2,5 @@ import Combine
 import Foundation
 
 public protocol FetchEmojiListUseCase {
-    func execute() -> AnyPublisher<[EmojiEntity], Never>
+    func execute(_ group: EmojiGroup) -> AnyPublisher<[EmojiEntity], Never>
 }

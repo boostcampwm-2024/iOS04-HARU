@@ -182,6 +182,9 @@ final class StickerEventManager {
             stickerDictionary[sticker.id] = sticker
 
             broadcastSubject.send(currenntStickerList)
+        } else {
+            // TODO: 경쟁상황에서 진 클라이언트만 특정하여 브로드캐스팅
+            broadcastSubject.send(currenntStickerList)
         }
     }
     
