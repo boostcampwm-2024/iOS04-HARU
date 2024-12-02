@@ -14,11 +14,8 @@
 		60B05BD02CEDAEF500843377 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B1745512CE35CD500E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B1745502CE35CD500E01D1A /* WebRTC */; };
 		7B20008E2CFD686F001325DC /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603C68C02CEC4C3400BE7AF9 /* DesignSystem.framework */; };
-		7B20008F2CFD686F001325DC /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 603C68C02CEC4C3400BE7AF9 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951BE2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; };
-		7B5951BF2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951C32CDB655B00B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; };
-		7B5951C42CDB655B00B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,29 +75,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				60B05BD02CEDAEF500843377 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7B5951C22CDB655500B89C85 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				7B5951BF2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
-				7B20008F2CFD686F001325DC /* DesignSystem.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7B5951C72CDB655B00B89C85 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				7B5951C42CDB655B00B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,7 +283,6 @@
 				7B5951832CDB647A00B89C85 /* Sources */,
 				7B5951842CDB647A00B89C85 /* Frameworks */,
 				7B5951852CDB647A00B89C85 /* Resources */,
-				7B5951C22CDB655500B89C85 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -358,7 +331,6 @@
 				7B5951A32CDB64F800B89C85 /* Sources */,
 				7B5951A42CDB64F800B89C85 /* Frameworks */,
 				7B5951A52CDB64F800B89C85 /* Resources */,
-				7B5951C72CDB655B00B89C85 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
