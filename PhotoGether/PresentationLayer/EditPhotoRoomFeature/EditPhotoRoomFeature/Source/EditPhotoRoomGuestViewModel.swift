@@ -21,7 +21,7 @@ public final class EditPhotoRoomGuestViewModel {
         case presentStickerBottomSheet
     }
     
-    private let frameImageGenerator: FrameImageGenerator
+    private var frameImageGenerator: FrameImageGenerator?
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let receiveFrameUseCase: ReceiveFrameUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
@@ -36,13 +36,11 @@ public final class EditPhotoRoomGuestViewModel {
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        frameImageGenerator: FrameImageGenerator,
         receiveStickerListUseCase: ReceiveStickerListUseCase,
         receiveFrameUseCase: ReceiveFrameUseCase,
         sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
         sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     ) {
-        self.frameImageGenerator = frameImageGenerator
         self.receiveStickerListUseCase = receiveStickerListUseCase
         self.receiveFrameUseCase = receiveFrameUseCase
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
@@ -294,10 +292,14 @@ extension EditPhotoRoomGuestViewModel {
     }
 
     private func applyFrameImage(with frameType: FrameType) {
-        frameImageGenerator.changeFrame(to: frameType)
-        let frameImage = frameImageGenerator.generate()
+        frameImageGenerator?.changeFrame(to: frameType)
+        guard let frameImage = frameImageGenerator?.generate() else { return }
 
         output.send(.frameImage(image: frameImage))
+    }
+    
+    func setFrameImageGenerator(_ frameImageGenerator: FrameImageGenerator) {
+        self.frameImageGenerator = frameImageGenerator
     }
 }
 

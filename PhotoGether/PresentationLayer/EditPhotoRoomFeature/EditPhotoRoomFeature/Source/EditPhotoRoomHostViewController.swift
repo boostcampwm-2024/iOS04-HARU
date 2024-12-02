@@ -182,6 +182,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func presentStickerBottomSheet() {
         self.present(bottomSheetViewController, animated: true)
     }
+    
+    public func setFrameImageGenerator(_ frameImageGenerator: FrameImageGenerator) {
+        viewModel.setFrameImageGenerator(frameImageGenerator)
+    }
 }
 
 extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDelegate {
