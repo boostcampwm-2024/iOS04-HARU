@@ -1,17 +1,12 @@
 import Foundation
 import Combine
 import WebRTC
+import CoreModule
 
 public final class WebRTCServiceImpl: NSObject, WebRTCService {
-    private static let peerConnectionFactory: RTCPeerConnectionFactory = {
-        RTCInitializeSSL()
-        let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
-        let videoDecoderFactory = RTCDefaultVideoDecoderFactory()
-        return RTCPeerConnectionFactory(
-            encoderFactory: videoEncoderFactory,
-            decoderFactory: videoDecoderFactory
-        )
-    }()
+    private var cancellables: Set<AnyCancellable> = []
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
     
     private let didGenerateLocalCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
     private let didChangeConnectionStateSubject = PassthroughSubject<RTCIceConnectionState, Never>()
@@ -29,36 +24,35 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
     
     public var peerConnection: RTCPeerConnection
     
+    let streamId = "stream"
+    
     private let rtcAudioSession =  RTCAudioSession.sharedInstance()
     private let mediaConstraints = [
         kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
         kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue
     ]
-    private var videoCapturer: RTCVideoCapturer?
     private var localVideoTrack: RTCVideoTrack?
     private var remoteVideoTrack: RTCVideoTrack?
     private var localDataChannel: RTCDataChannel?
     private var remoteDataChannel: RTCDataChannel?
     
     public required init(iceServers: [String]) {
-        let config = RTCConfiguration()
-        config.iceServers = [RTCIceServer(urlStrings: iceServers)]
-        config.sdpSemantics = .unifiedPlan
-        config.continualGatheringPolicy = .gatherContinually
+        let config = PeerConnectionSupport.configuration(iceServers: iceServers)
         
-        let constraints = RTCMediaConstraints(
-            mandatoryConstraints: nil,
-            optionalConstraints: [
-                "DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue
-            ]
-        )
+        let audioConfig = RTCAudioSessionConfiguration.webRTC()
+        audioConfig.category = AVAudioSession.Category.playAndRecord.rawValue
+        audioConfig.mode = AVAudioSession.Mode.voiceChat.rawValue
+        audioConfig.categoryOptions = [.defaultToSpeaker]
+        RTCAudioSessionConfiguration.setWebRTC(audioConfig)
         
-        guard let peerConnection = WebRTCServiceImpl.peerConnectionFactory.peerConnection(
+        let mediaConstraint = PeerConnectionSupport.mediaConstraint()
+        
+        guard let peerConnection = PeerConnectionSupport.peerConnectionFactory.peerConnection(
             with: config,
-            constraints: constraints,
+            constraints: mediaConstraint,
             delegate: nil
         ) else {
-            // TODO: handle Error
+            PTGLogger.default.log("Could not create new RTCPeerConnection")
             fatalError("Could not create new RTCPeerConnection")
         }
         
@@ -66,9 +60,36 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         
         super.init()
         
-        self.createMediaSenders()
+        // MARK: DataChannel 연결
+        self.connectDataChannel(dataChannel: createDataChannel())
+        
+        // MARK: AudioTrack 연결
+        let audioTrack = PeerConnectionSupport.createAudioTrack()
+        self.connectAudioTrack(audioTrack: audioTrack)
         self.configureAudioSession()
+        
         self.peerConnection.delegate = self
+        self.bindNoti()
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .navigateToPhotoRoom).sink { [weak self] noti in
+            guard let self else { return }
+            guard let message = SyncNotification(name: "navigateToPhotoRoom").toData(encoder: self.encoder) else { return }
+            self.sendData(message)
+        }.store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .startCountDown).sink { [weak self] noti in
+            guard let self else { return }
+            guard let message = SyncNotification(name: "startCountDown").toData(encoder: self.encoder) else { return }
+            self.sendData(message)
+        }.store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .navigateToShareRoom).sink { [weak self] noti in
+            guard let self else { return }
+            guard let message = SyncNotification(name: "navigateToShareRoom").toData(encoder: self.encoder) else { return }
+            self.sendData(message)
+        }.store(in: &cancellables)
     }
 }
 
@@ -165,47 +186,37 @@ public extension WebRTCServiceImpl {
 
 // MARK: Video/Audio/Data
 public extension WebRTCServiceImpl {
-    func startCaptureLocalVideo(renderer: RTCVideoRenderer) {
-        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
-        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
-            $0.position == .front
-        }) else { return }
-              
-        // 가장 낮은 해상도 선택
-        guard let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera)
-            .sorted { frame1, frame2 -> Bool in
-                let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
-                let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
-                return width1 < width2
-            }).first else { return }
-              
-        // 가장 높은 fps 선택
-        guard let fps = (format.videoSupportedFrameRateRanges
-            .sorted { return $0.maxFrameRate < $1.maxFrameRate })
-            .last else { return }
-
-        capturer.startCapture(
-            with: frontCamera,
-            format: format,
-            fps: Int(fps.maxFrameRate)
-        )
-        
-        flipVideoRenderer(renderer)
-        
-        self.localVideoTrack?.add(renderer)
+    /// localVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러(View)를 등록합니다.
+    func renderLocalVideo(to renderer: RTCVideoRenderer) {
+        let flippedRenderer = renderer.flipHorizontally()
+        self.localVideoTrack?.add(flippedRenderer)
     }
     
-    /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러를 등록합니다.
+    /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러(View)를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
-        flipVideoRenderer(renderer)
-        
-        self.remoteVideoTrack?.add(renderer)
+        let flippedRenderer = renderer.flipHorizontally()
+        PTGLogger.default.log("\(self.remoteVideoTrack?.description ?? "nil")")
+        self.remoteVideoTrack?.add(flippedRenderer)
     }
     
-    /// 들어오는 화면에 좌우 반전을 적용합니다
-    private func flipVideoRenderer(_ renderer: RTCVideoRenderer) {
-        guard let renderedView = renderer as? UIView else { return }
-        renderedView.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+    func connectLocalVideoTrack(videoTrack: RTCVideoTrack) {
+        self.localVideoTrack = videoTrack
+        self.peerConnection.add(videoTrack, streamIds: [streamId])
+        self.remoteVideoTrack = self.peerConnection.transceivers
+            .first { $0.mediaType == .video }?
+            .receiver.track as? RTCVideoTrack
+    }
+    
+    func connectRemoteVideoTrack() {
+        self.remoteVideoTrack = self.peerConnection.transceivers
+            .first { $0.mediaType == .video }?
+            .receiver.track as? RTCVideoTrack
+        PTGLogger.default.log("\(remoteVideoTrack?.description ?? "nil")")
+    }
+    
+    private func connectAudioTrack(audioTrack: RTCAudioTrack) {
+        // Audio
+        self.peerConnection.add(audioTrack, streamIds: [streamId])
     }
     
     private func configureAudioSession() {
@@ -216,60 +227,17 @@ public extension WebRTCServiceImpl {
                 mode: .voiceChat,
                 options: .defaultToSpeaker
             )
+            try self.rtcAudioSession.overrideOutputAudioPort(.speaker)
             try self.rtcAudioSession.setActive(true)
         } catch let error {
-            PTGDataLogger.log("Error changeing AVAudioSession category: \(error)")
+            PTGLogger.default.log("Error changeing AVAudioSession category: \(error)")
         }
         self.rtcAudioSession.unlockForConfiguration()
     }
     
-    private func createMediaSenders() {
-        let streamId = "stream"
-        
-        // Audio
-        let audioTrack = self.createAudioTrack()
-        self.peerConnection.add(audioTrack, streamIds: [streamId])
-        
-        // Video
-        let videoTrack = self.createVideoTrack()
-        self.localVideoTrack = videoTrack
-        self.peerConnection.add(videoTrack, streamIds: [streamId])
-        self.remoteVideoTrack = self.peerConnection.transceivers
-            .first { $0.mediaType == .video }?
-            .receiver.track as? RTCVideoTrack
-        
-        // Data
-        if let dataChannel = createDataChannel() {
-            dataChannel.delegate = self
-            self.localDataChannel = dataChannel
-        }
-    }
-    
-    private func createAudioTrack() -> RTCAudioTrack {
-        let audioConstraints = RTCMediaConstraints(
-            mandatoryConstraints: nil,
-            optionalConstraints: nil
-        )
-        let audioSource = WebRTCServiceImpl.peerConnectionFactory.audioSource(
-            with: audioConstraints
-        )
-        let audioTrack = WebRTCServiceImpl.peerConnectionFactory.audioTrack(
-            with: audioSource,
-            trackId: "audio0"
-        )
-        return audioTrack
-    }
-    
-    private func createVideoTrack() -> RTCVideoTrack {
-        let videoSource = WebRTCServiceImpl.peerConnectionFactory.videoSource()
-        
-        self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
-        
-        let videoTrack = WebRTCServiceImpl.peerConnectionFactory.videoTrack(
-            with: videoSource,
-            trackId: "video0"
-        )
-        return videoTrack
+    private func connectDataChannel(dataChannel: RTCDataChannel?) {
+        dataChannel?.delegate = self
+        self.localDataChannel = dataChannel
     }
     
     // MARK: Data Channels
@@ -279,7 +247,7 @@ public extension WebRTCServiceImpl {
             forLabel: "WebRTCData",
             configuration: config
         ) else {
-            PTGDataLogger.log("Warning: Couldn't create data channel.")
+            PTGLogger.default.log("Warning: Couldn't create data channel.")
             return nil
         }
         return dataChannel
@@ -318,34 +286,34 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didChange stateChanged: RTCSignalingState
     ) {
-        PTGDataLogger.log("peerConnection new signaling state: \(stateChanged)")
+        PTGLogger.default.log("peerConnection new signaling state: \(stateChanged)")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didAdd stream: RTCMediaStream
     ) {
-        PTGDataLogger.log("peerConnection did add stream")
+        PTGLogger.default.log("peerConnection did add stream")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didRemove stream: RTCMediaStream
     ) {
-        PTGDataLogger.log("peerConnection did remove stream")
+        PTGLogger.default.log("peerConnection did remove stream")
     }
     
     public func peerConnectionShouldNegotiate(
         _ peerConnection: RTCPeerConnection
     ) {
-        PTGDataLogger.log("peerConnection should negotiate")
+        PTGLogger.default.log("peerConnection should negotiate")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didChange newState: RTCIceConnectionState
     ) {
-        PTGDataLogger.log("peerConnection new connection state: \(newState)")
+        PTGLogger.default.log("peerConnection new connection state: \(newState)")
         self.didChangeConnectionStateSubject.send(newState)
     }
     
@@ -353,7 +321,7 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didChange newState: RTCIceGatheringState
     ) {
-        PTGDataLogger.log("peerConnection new gathering state: \(newState)")
+        PTGLogger.default.log("peerConnection new gathering state: \(newState)")
     }
     
     public func peerConnection(
@@ -367,14 +335,14 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didRemove candidates: [RTCIceCandidate]
     ) {
-        PTGDataLogger.log("peerConnection did remove candidate(s)")
+        PTGLogger.default.log("peerConnection did remove candidate(s)")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didOpen dataChannel: RTCDataChannel
     ) {
-        PTGDataLogger.log("peerConnection did open data channel")
+        PTGLogger.default.log("peerConnection did open data channel")
         self.remoteDataChannel = dataChannel
     }
 }
@@ -384,7 +352,7 @@ extension WebRTCServiceImpl {
     public func dataChannelDidChangeState(
         _ dataChannel: RTCDataChannel
     ) {
-        PTGDataLogger.log("dataChannel did change state: \(dataChannel.readyState)")
+        PTGLogger.default.log("dataChannel did change state: \(dataChannel.readyState)")
     }
     
     public func dataChannel(
@@ -392,5 +360,23 @@ extension WebRTCServiceImpl {
         didReceiveMessageWith buffer: RTCDataBuffer
     ) {
         self.didReceiveDataSubject.send(buffer.data)
+        
+        if let tempNoti = buffer.data.toDTO(type: SyncNotification.self, decoder: decoder) {
+            switch tempNoti.name {
+            case "navigateToPhotoRoom":
+                NotificationCenter.default.post(name: .receiveNavigateToPhotoRoom, object: nil)
+            case "startCountDown":
+                NotificationCenter.default.post(name: .receiveStartCountDown, object: nil)
+            case "navigateToShareRoom":
+                NotificationCenter.default.post(name: .receiveNavigateToShareRoom, object: nil)
+            default:
+                break
+            }
+        }
+
     }
+}
+
+struct SyncNotification: Codable {
+    let name: String
 }

@@ -1,11 +1,14 @@
 import UIKit
 import DesignSystem
+import BaseFeature
+import CoreModule
 
 final class WaitingRoomView: UIView {
     let bottomBarView = UIView()
     let micButton = PTGMicButton(micState: .on)
     let linkButton = PTGCircleButton(type: .link)
     let startButton = PTGPrimaryButton()
+    let particiapntsGridView = PTGParticipantsGridView()
     
     init() {
         super.init(frame: .zero)
@@ -31,13 +34,21 @@ final class WaitingRoomView: UIView {
 
 private extension WaitingRoomView {
     func addViews() {
-        [bottomBarView, micButton].forEach { addSubview($0) }
-        [linkButton, startButton].forEach {
-            bottomBarView.addSubview($0)
-        }
+        [particiapntsGridView, bottomBarView, micButton].forEach { addSubview($0) }
+        [linkButton, startButton].forEach { bottomBarView.addSubview($0) }
     }
     
     func setConstraints() {
+        let horizontalSpacing = Constants.horizontalSpacing * 2
+        let itemWidth = (UIScreen.main.bounds.width - horizontalSpacing - Constants.itemSpacing) / 2
+        let verticalOffset: CGFloat = APP_HEIGHT() > 667 ? 44 : 0 // 최소사이즈 기기 SE2 기준
+        
+        particiapntsGridView.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(verticalOffset)
+            $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalSpacing)
+            $0.bottom.equalTo(bottomBarView.snp.top).offset(-verticalOffset)
+        }
+        
         bottomBarView.snp.makeConstraints {
             $0.height.equalTo(Constants.bottomBarViewHeight)
             $0.horizontalEdges.equalToSuperview()
@@ -69,8 +80,7 @@ private extension WaitingRoomView {
     
     func configureUI() {
         self.backgroundColor = PTGColor.gray90.color
-        
-        startButton.setTitle(to: StartButtonTitle.one.rawValue)
+        startButton.setTitle(to: "촬영시작")
     }
 }
 
@@ -98,5 +108,7 @@ extension WaitingRoomView {
         static let circleButtonSize: CGSize = CGSize(width: 52, height: 52)
         static let startButtonHeight: CGFloat = 52
         static let micButtonBottomSpacing: CGFloat = -4
+        static let horizontalSpacing: CGFloat = 12
+        static let itemSpacing: CGFloat = 11
     }
 }

@@ -1,16 +1,17 @@
 import UIKit
-import BaseFeature
-import DesignSystem
+import SnapKit
+import CoreModule
 
-public final class ParticipantsCollectionViewCell: UICollectionViewCell {
+public final class PTGParticipantsView: UIView {
     private let nicknameLabel = PTGPaddingLabel()
-    private weak var view: UIView?
+    private let placeholderView = PTGParticipantsPlaceHolderView()
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
         setConstraints()
         configureUI()
+        nicknameLabel.isHidden = true
     }
     
     public required init?(coder: NSCoder) {
@@ -19,25 +20,44 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     
     public func setNickname(_ nickname: String) {
         nicknameLabel.text = nickname
+        nicknameLabel.isHidden = false
     }
     
-    public func setView(_ view: UIView) {
-        self.view = view
-        
-        guard let view = self.view else { return }
-        
-        contentView.insertSubview(view, belowSubview: nicknameLabel)
-        
-        view.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+    public func setVideoView(_ videoView: UIView) {
+        if self.subviews.count == 2 { // 처음 설정하는 경우
+            insertSubview(videoView, belowSubview: nicknameLabel)
+        } else if self.subviews.count >= 3 { // 덮어씌우는 경우
+            if removeAlreadyExistVideoView() {
+                insertSubview(videoView, belowSubview: nicknameLabel)
+            } else {
+                print("기존 VideoView를 찾지 못했습니다.")
+            }
+        } else {
+            print("SubView 구성이 맞지 않습니다. subView Count: \(subviews.count)")
         }
+        
+        videoView.clipsToBounds = true
+        videoView.snp.makeConstraints { $0.edges.equalToSuperview() }
+    }
+    
+    public func removeAlreadyExistVideoView() -> Bool {
+        guard let alreadyExistVideoView = subviews[safe: 1] else { return false }
+        guard alreadyExistVideoView === nicknameLabel else { return false }
+        guard alreadyExistVideoView === placeholderView else { return false }
+        alreadyExistVideoView.removeFromSuperview()
+        return true
     }
     
     private func addViews() {
-        contentView.addSubview(nicknameLabel)
+        addSubview(placeholderView)
+        addSubview(nicknameLabel)
     }
     
     private func setConstraints() {
+        placeholderView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
         nicknameLabel.snp.makeConstraints {
             $0.width.greaterThanOrEqualTo(Constants.nicknameLabelMinWidth)
             $0.width.lessThanOrEqualTo(Constants.nicknameLabelMaxWidth)
@@ -49,10 +69,8 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     
     private func configureUI() {
         backgroundColor = PTGColor.gray50.color
-        contentView.clipsToBounds = true
-
+        
         nicknameLabel.font = .systemFont(ofSize: 11)
-        nicknameLabel.setKern()
         nicknameLabel.textColor = .white.withAlphaComponent(0.8)
         nicknameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         nicknameLabel.layer.cornerRadius = 10
@@ -60,7 +78,7 @@ public final class ParticipantsCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension ParticipantsCollectionViewCell {
+extension PTGParticipantsView {
     private enum Constants {
         static let nicknameLabelMinWidth: CGFloat = 40
         static let nicknameLabelMaxWidth: CGFloat = 120

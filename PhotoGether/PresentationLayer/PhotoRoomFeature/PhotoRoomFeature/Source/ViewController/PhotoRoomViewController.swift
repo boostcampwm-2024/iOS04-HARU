@@ -9,10 +9,12 @@ import PhotoGetherDomainInterface
 
 public final class PhotoRoomViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
-    var participantsViewController: ParticipantsCollectionViewController!
+    var participantsGridView: PTGParticipantsGridView!
     var connectionRepsitory: ConnectionRepository
+    private let editPhotoRoomHostViewController: EditPhotoRoomHostViewController
+    private let editPhotoRoomGuestViewController: EditPhotoRoomGuestViewController
     private let photoRoomBottomView: PhotoRoomBottomView
-    private let isHost: Bool
+    private var isHost: Bool
     
     
     private let input = PassthroughSubject<PhotoRoomViewModel.Input, Never>()
@@ -20,10 +22,14 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     private let viewModel: PhotoRoomViewModel
     
     public init(
+        editPhotoRoomHostViewController: EditPhotoRoomHostViewController,
+        editPhotoRoomGuestViewController: EditPhotoRoomGuestViewController,
         connectionRepsitory: ConnectionRepository,
         viewModel: PhotoRoomViewModel,
         isHost: Bool
     ) {
+        self.editPhotoRoomHostViewController = editPhotoRoomHostViewController
+        self.editPhotoRoomGuestViewController = editPhotoRoomGuestViewController
         self.connectionRepsitory = connectionRepsitory
         self.viewModel = viewModel
         self.isHost = isHost
@@ -39,23 +45,31 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         addViews()
         setupConstraints()
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
     }
     
-    public func setCollectionViewController(_ viewController: ParticipantsCollectionViewController) {
-        self.participantsViewController = viewController
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveStartCountDown)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+            self?.isHost = false
+            self?.input.send(.cameraButtonTapped)
+        }.store(in: &cancellables)
+    }
+    
+    public func setParticipantsGridView(_ participantsGridView: PTGParticipantsGridView) {
+        self.participantsGridView = participantsGridView
     }
     
     public func addViews() {
-        self.addChild(participantsViewController)
-        participantsViewController.didMove(toParent: self)
-        
-        [navigationView, participantsViewController.view, photoRoomBottomView].forEach {
+        [navigationView, participantsGridView, photoRoomBottomView].forEach {
             view.addSubview($0)
         }
     }
@@ -67,7 +81,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             $0.height.equalTo(Constants.navigationHeight)
         }
         
-        participantsViewController.view.snp.makeConstraints {
+        participantsGridView.snp.makeConstraints {
             $0.top.equalTo(navigationView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(photoRoomBottomView.snp.top)
@@ -89,7 +103,8 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             .filter { [weak self] in
                 return self?.isHost ?? false
             }
-            .sink { [weak self] in
+            .sink { [weak self] _ in
+                NotificationCenter.default.post(name: .startCountDown, object: nil)
                 self?.input.send(.cameraButtonTapped)
             }
             .store(in: &cancellables)
@@ -98,7 +113,9 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     public func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output.sink { [weak self] in
+        output
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
             guard let self else { return }
             switch $0 {
             case .timer(let count):
@@ -106,38 +123,14 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             case .timerCompleted(let images):
                 self.photoRoomBottomView.stopCameraButtonTimer()
                 
-                let localDataSource = LocalShapeDataSourceImpl()
-                let remoteDataSource = RemoteShapeDataSourceImpl()
-                let repository = ShapeRepositoryImpl(
-                    localDataSource: localDataSource,
-                    remoteDataSource: remoteDataSource
-                )
-                let eventConnectionRepository = EventConnectionHostRepositoryImpl(
-                    clients: self.connectionRepsitory.clients
-                )
-                
-                let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
-                    shapeRepository: repository
-                )
-                let frameImageGenerator = FrameImageGeneratorImpl(
-                    images: images
-                )
-                let sendStickerToRepositoryUseCase = SendStickerToRepositoryUseCaseImpl(
-                    eventConnectionRepository: eventConnectionRepository
-                )
-                let receiveStickerListUseCase = ReceiveStickerListUseCaseImpl(
-                    eventConnectionRepository: eventConnectionRepository
-                )
-                
-//                let viewModel = EditPhotoRoomHostViewModel(
-//                    frameImageGenerator: frameImageGenerator,
-//                    fetchEmojiListUseCase: fetchEmojiListUseCase,
-//                    receiveStickerListUseCase: receiveStickerListUseCase,
-//                    sendStickerToRepositoryUseCase: sendStickerToRepositoryUseCase
-//                )                
-//                let viewController = EditPhotoRoomHostViewController(viewModel: viewModel)
-                let viewController = UIViewController()
-                self.navigationController?.pushViewController(viewController, animated: true)
+                let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+                if isHost {
+                    editPhotoRoomHostViewController.setFrameImageGenerator(frameImageGenerator)
+                    self.navigationController?.pushViewController(editPhotoRoomHostViewController, animated: true)
+                } else {
+                    editPhotoRoomGuestViewController.setFrameImageGenerator(frameImageGenerator)
+                    self.navigationController?.pushViewController(editPhotoRoomGuestViewController, animated: true)
+                }
             }
         }
         .store(in: &cancellables)

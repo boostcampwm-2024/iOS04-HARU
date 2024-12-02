@@ -28,7 +28,7 @@ public final class StickerBottomSheetViewModel {
     }
     
     private func bind() {
-        fetchEmojiListUseCase.execute()
+        fetchEmojiListUseCase.execute(.objects)
             .sink { [weak self] emojiEntities in
                 self?.emojiList.send(emojiEntities)
             }

@@ -20,6 +20,8 @@
 		60B061EE2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951C82CDB656D00B89C85 /* PhotoGetherDomainInterface.framework */; };
 		60B061EF2CEF1F2900843377 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951C82CDB656D00B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B17455F2CE49EB100E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B17455E2CE49EB100E01D1A /* WebRTC */; };
+		7B20F8E12CFD41D7001325DC /* CoreModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20F8E02CFD41D7001325DC /* CoreModule.framework */; };
+		7B20F8E22CFD41D7001325DC /* CoreModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20F8E02CFD41D7001325DC /* CoreModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951462CDB5FF200B89C85 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951452CDB5FF200B89C85 /* BaseFeature.framework */; };
 		7B5951472CDB5FF200B89C85 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951452CDB5FF200B89C85 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951C92CDB656D00B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5951C82CDB656D00B89C85 /* PhotoGetherDomainInterface.framework */; };
@@ -67,6 +69,7 @@
 				7BD847D02CEC31DD006C8AAD /* PhotoRoomFeature.framework in Embed Frameworks */,
 				7B5951CA2CDB656D00B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
 				7B5951472CDB5FF200B89C85 /* BaseFeature.framework in Embed Frameworks */,
+				7B20F8E22CFD41D7001325DC /* CoreModule.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,6 +84,7 @@
 		60348F332CE49013002D1CEE /* PhotoGetherNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60348F382CE49627002D1CEE /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		607567692CEDA2E6001110DB /* PhotoGetherData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B20F8E02CFD41D7001325DC /* CoreModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951052CDB597600B89C85 /* FeatureTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FeatureTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951452CDB5FF200B89C85 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5951712CDB629B00B89C85 /* PresentationUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +127,7 @@
 				7BD847CF2CEC31DD006C8AAD /* PhotoRoomFeature.framework in Frameworks */,
 				7B5951C92CDB656D00B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
 				7B5951462CDB5FF200B89C85 /* BaseFeature.framework in Frameworks */,
+				7B20F8E12CFD41D7001325DC /* CoreModule.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +170,7 @@
 		6013799C2CDB4B4500CA430A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7B20F8E02CFD41D7001325DC /* CoreModule.framework */,
 				607567692CEDA2E6001110DB /* PhotoGetherData.framework */,
 				7BD847CE2CEC31DD006C8AAD /* PhotoRoomFeature.framework */,
 				60348F382CE49627002D1CEE /* DesignSystem.framework */,
@@ -331,7 +337,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -369,7 +375,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

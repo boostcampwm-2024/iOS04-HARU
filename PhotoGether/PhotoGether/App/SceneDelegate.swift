@@ -82,11 +82,108 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase = DidEnterNewUserPublisherUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
+        let stopVideoCaptureUseCase: StopVideoCaptureUseCase = StopVideoCaptureUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
-            captureVideosUseCase: captureVideosUseCase
+            captureVideosUseCase: captureVideosUseCase,
+            stopVideoCaptureUseCase: stopVideoCaptureUseCase
+        )
+        
+        let localDataSource = LocalShapeDataSourceImpl()
+        let remoteDataSource = RemoteShapeDataSourceImpl()
+        let shapeRepositoryImpl = ShapeRepositoryImpl(
+            localDataSource: localDataSource,
+            remoteDataSource: remoteDataSource
+        )
+        let fetchEmojiListUseCase = FetchEmojiListUseCaseImpl(
+            shapeRepository: shapeRepositoryImpl
+        )
+        
+        let eventConnectionHostRepository = EventConnectionHostRepositoryImpl(
+            clients: connectionRepository.clients
+        )
+        
+        let eventConnectionGuestRepository = EventConnectionGuestRepositoryImpl(
+            clients: connectionRepository.clients
+        )
+        
+        let receiveStickerListHostUseCase = ReceiveStickerListUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
+        
+        let sendStickerToRepositoryHostUseCase = SendStickerToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
+        
+        let receiveStickerListGuestUseCase = ReceiveStickerListUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        
+        let sendStickerToRepositoryGuestUseCase = SendStickerToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+
+        let sendFrameToRepositoryGuestUseCase = SendFrameToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        
+        let sendFrameToRepositoryHostUseCase = SendFrameToRepositoryUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
+        
+        let receiveFrameHostUseCase = ReceiveFrameUseCaseImpl(
+            eventConnectionRepository: eventConnectionHostRepository
+        )
+        
+        let receiveFrameGuestUseCase = ReceiveFrameUseCaseImpl(
+            eventConnectionRepository: eventConnectionGuestRepository
+        )
+        
+        let editPhotoRoomHostViewModel = EditPhotoRoomHostViewModel(
+            receiveStickerListUseCase: receiveStickerListHostUseCase,
+            receiveFrameUseCase: receiveFrameHostUseCase,
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase,
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase
+        )
+        
+        let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
+            fetchEmojiListUseCase: fetchEmojiListUseCase
+        )
+        
+        let stickerBottomSheetGuestViewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
+        )
+        
+        let stickerBottomSheetHostViewController = StickerBottomSheetViewController(
+            viewModel: stickerBottomSheetViewModel
+        )
+        
+        let editPhotoRoomHostViewController = EditPhotoRoomHostViewController(
+            viewModel: editPhotoRoomHostViewModel,
+            bottomSheetViewController: stickerBottomSheetHostViewController
+        )
+        
+        let editPhotoRoomGuestViewModel = EditPhotoRoomGuestViewModel(
+            receiveStickerListUseCase: receiveStickerListGuestUseCase,
+            receiveFrameUseCase: receiveFrameGuestUseCase,
+            sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase,
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase
+        )
+        
+        let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
+            viewModel: editPhotoRoomGuestViewModel,
+            bottomSheetViewController: stickerBottomSheetGuestViewController
         )
         
         let photoRoomViewController: PhotoRoomViewController = PhotoRoomViewController(
+            editPhotoRoomHostViewController: editPhotoRoomHostViewController,
+            editPhotoRoomGuestViewController: editPhotoRoomGuestViewController,
             connectionRepsitory: connectionRepository,
             viewModel: photoRoomViewModel,
             isHost: isHost
@@ -97,7 +194,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             sendOfferUseCase: sendOfferUseCase,
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
-            createRoomUseCase: createRoomUseCase
+            createRoomUseCase: createRoomUseCase,
+            didEnterNewUserPublisherUseCase: didEnterNewUserPublisherUseCase
         )
         
         let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(

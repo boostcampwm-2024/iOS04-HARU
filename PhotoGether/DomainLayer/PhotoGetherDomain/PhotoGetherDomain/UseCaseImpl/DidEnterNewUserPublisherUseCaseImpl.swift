@@ -1,12 +1,11 @@
-import Foundation
 import UIKit
+import Combine
 import PhotoGetherDomainInterface
 
-public final class GetLocalVideoUseCaseImpl: GetLocalVideoUseCase {
-    public func execute() -> (UserInfo?, UIView) {
-        return (connectionRepository.localUserInfo, connectionRepository.localVideoView)
+public final class DidEnterNewUserPublisherUseCaseImpl: DidEnterNewUserPublisherUseCase {
+    public func publisher() -> AnyPublisher<(UserInfo, UIView), Never> {
+        return connectionRepository.didEnterNewUserPublisher
     }
-    
     private let connectionRepository: ConnectionRepository
     
     public init(connectionRepository: ConnectionRepository) {

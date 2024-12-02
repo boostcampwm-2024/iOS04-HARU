@@ -1,10 +1,11 @@
 import Foundation
-import UIKit
+import Combine
 import PhotoGetherDomainInterface
 
-public final class GetLocalVideoUseCaseImpl: GetLocalVideoUseCase {
-    public func execute() -> (UserInfo?, UIView) {
-        return (connectionRepository.localUserInfo, connectionRepository.localVideoView)
+public final class StopVideoCaptureUseCaseImpl: StopVideoCaptureUseCase {
+    @discardableResult
+    public func execute() -> Bool {
+        connectionRepository.stopCaptureLocalVideo()
     }
     
     private let connectionRepository: ConnectionRepository

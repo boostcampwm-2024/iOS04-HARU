@@ -46,4 +46,11 @@
          location = "group:DesignSystem/DesignSystem.xcodeproj">
       </FileRef>
    </Group>
+   <Group
+      location = "group:Core"
+      name = "Core">
+      <FileRef
+         location = "group:CoreModule/CoreModule.xcodeproj">
+      </FileRef>
+   </Group>
 </Workspace>

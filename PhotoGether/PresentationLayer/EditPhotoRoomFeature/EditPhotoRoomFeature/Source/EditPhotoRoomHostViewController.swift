@@ -26,7 +26,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
         self.bottomSheetViewController.delegate = self
-        self.canvasScrollView.stickerViewDelegate = self
+        self.canvasScrollView.canvasScrollViewDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -73,6 +73,7 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     public func configureUI() {
         view.backgroundColor = PTGColor.gray90.color
         navigationView.backgroundColor = PTGColor.gray70.color
+        navigationView.isHidden = true
     }
     
     public func bindInput() {
@@ -93,22 +94,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         bottomView.nextButtonTapped
             .throttle(for: 1, scheduler: RunLoop.main, latest: true)
             .sink { [weak self] in
+                NotificationCenter.default.post(name: .navigateToShareRoom, object: nil)
                 self?.showNextView()
             }
             .store(in: &cancellables)
-    }
-    
-    private func showNextView() {
-        guard let imageData = renderCanvasImageView() else { return }
-        let component = SharePhotoComponent(imageData: imageData)
-        let viewModel = SharePhotoViewModel(component: component)
-        let viewController = SharePhotoViewController(viewModel: viewModel)
-        
-        self.present(viewController, animated: true)
-    }
-    
-    private func renderCanvasImageView() -> Data? {
-        return canvasScrollView.makeSharePhoto()
     }
     
     public func bindOutput() {
@@ -129,26 +118,42 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             .store(in: &cancellables)
     }
 
+    private func showNextView() {
+        NotificationCenter.default.post(name: .navigateToShareRoom, object: nil)
+        
+        guard let imageData = renderCanvasImageView() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func renderCanvasImageView() -> Data? {
+        return canvasScrollView.makeSharePhoto()
+    }
+    
     private func updateFrameImage(to image: UIImage) {
         canvasScrollView.updateFrameImage(to: image)
     }
     
     private func updateCanvas(with stickerList: [StickerEntity]) {
-        canvasScrollView.updateCanvas(self, stickerList: stickerList, user: viewModel.owner)
+        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.owner)
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
-        let imageSize: CGFloat = 64
+        let imageSize: CGFloat = 72
         let frame = calculateCenterPosition(imageSize: imageSize)
+        guard let emojiURL = entity.emojiURL else { return }
         
         let newSticker = StickerEntity(
-            image: entity.image,
+            image: emojiURL.absoluteString,
             frame: frame,
             owner: nil,
             latestUpdated: Date()
         )
         
-        canvasScrollView.addStickerView(self, with: newSticker, user: viewModel.owner)
+        canvasScrollView.addStickerView(with: newSticker, user: viewModel.owner)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -171,6 +176,10 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
     private func presentStickerBottomSheet() {
         self.present(bottomSheetViewController, animated: true)
     }
+    
+    public func setFrameImageGenerator(_ frameImageGenerator: FrameImageGenerator) {
+        viewModel.setFrameImageGenerator(frameImageGenerator)
+    }
 }
 
 extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDelegate {
@@ -182,19 +191,40 @@ extension EditPhotoRoomHostViewController: StickerBottomSheetViewControllerDeleg
     }
 }
 
-extension EditPhotoRoomHostViewController: StickerViewActionDelegate {
-    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
+extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTap id: UUID) {
         input.send(.stickerViewDidTap(id))
     }
     
-    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTapDelete id: UUID) {
         input.send(.deleteSticker(id))
     }
-}
-
-extension EditPhotoRoomHostViewController: CanvasScrollViewDelegate {
+    
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity) {
         input.send(.createSticker(sticker))
     }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .ended))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .ended))
+    }
 }
-

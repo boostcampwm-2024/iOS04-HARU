@@ -2,20 +2,29 @@ import UIKit
 import Combine
 import OSLog
 import PhotoGetherDomainInterface
+import CoreModule
+import WebRTC
 
 public final class ConnectionRepositoryImpl: ConnectionRepository {
     private var cancellables: Set<AnyCancellable> = []
     
     public var clients: [ConnectionClient]
     
+    private let didEnterNewUserSubject = PassthroughSubject<(UserInfo, UIView), Never>()
+    public var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> {
+        didEnterNewUserSubject.eraseToAnyPublisher()
+    }
     private let _localVideoView = CapturableVideoView()
-    private var localUserInfo: UserInfo?
+    public private(set) var localUserInfo: UserInfo?
     
     public var localVideoView: UIView { _localVideoView }
     public var capturedLocalVideo: UIImage? { _localVideoView.capturedImage }
     
     private let roomService: RoomService
     private let signalingService: SignalingService
+    
+    private var videoCapturer: RTCVideoCapturer?
+    private var videoSource: RTCVideoSource?
     
     public init(
         signlingService: SignalingService,
@@ -26,13 +35,71 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         self.roomService = roomService
         self.clients = clients
         
+        // MARK: local Video 캡쳐
+        initVideoSource()
+        initVideoCapturer()
+        startCaptureLocalVideo()
+
+        // MARK: Clients와 local Video, remote Video 연결
+        bindLocalVideo()
+        bindRemoteVideo()
+        
         bindSignalingService()
         connectSignalingService()
-        bindLocalVideo()
+
         bindNotifyNewUserPublihser()
         bindLocalCandidatePublisher()
     }
     
+    private func initVideoSource() {
+        self.videoSource = PeerConnectionSupport.peerConnectionFactory.videoSource()
+    }
+    
+    private func initVideoCapturer() {
+        guard let videoSource else { return }
+        self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
+    }
+    
+    private func startCaptureLocalVideo() {
+        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
+        guard let frontCamera = RTCCameraVideoCapturer.captureDevices().first(where: {
+            $0.position == .front
+        }) else { return }
+                      
+        // 가장 낮은 해상도 선택
+        guard let format = (RTCCameraVideoCapturer.supportedFormats(for: frontCamera)
+            .sorted { frame1, frame2 -> Bool in
+                let width1 = CMVideoFormatDescriptionGetDimensions(frame1.formatDescription).width
+                let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
+                return width1 < width2
+            }).first else { return }
+
+        // 가장 높은 fps 선택
+        guard let fps = (format.videoSupportedFrameRateRanges
+            .sorted { return $0.maxFrameRate < $1.maxFrameRate })
+            .last else { return }
+
+        capturer.startCapture(
+            with: frontCamera,
+            format: format,
+            fps: Int(fps.maxFrameRate)
+        )
+    }
+    
+    public func stopCaptureLocalVideo() -> Bool {
+        guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return false }
+        capturer.stopCapture()
+        return true
+    }
+    
+    private func bindLocalVideo() {
+        self.clients.forEach { $0.bindLocalVideo(videoSource: self.videoSource, _localVideoView) }
+    }
+    
+    private func bindRemoteVideo() {
+        self.clients.forEach { $0.bindRemoteVideo() }
+    }
+
     public func createRoom() -> AnyPublisher<RoomOwnerEntity, Error> {
         return roomService.createRoom().map { [weak self] entity -> RoomOwnerEntity in
             guard let self else { return entity }
@@ -54,12 +121,15 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     }
     
     public func sendOffer() async throws {
-        guard let myID = localUserInfo?.id else { throw NSError() }
+        guard let myID = localUserInfo?.id else {
+            PTGLogger.default.log("sendOffer: localUserInfo 가 nil 입니다.")
+            throw NSError()
+        }
         guard let roomID = localUserInfo?.roomID else { throw NSError() }
         
-        for client in self.clients {
+        for client in self.clients where client.remoteUserInfo != nil {
             guard let sdp = try? await client.createOffer() else {
-                PTGDataLogger.log("offer 생성 중 에러가 발생했습니다.")
+                PTGLogger.default.log("offer 생성 중 에러가 발생했습니다.")
                 throw NSError()
             }
             
@@ -86,10 +156,10 @@ extension ConnectionRepositoryImpl {
         self.signalingService.didReceiveOfferSdpPublisher
             .sink { [weak self] sdpMessage in
                 guard let self else { return }
-                PTGDataLogger.log("didReceiveRemoteSdpPublisher sink!! \(sdpMessage.offerID)")
+                PTGLogger.default.log("didReceiveRemoteSdpPublisher sink!! \(sdpMessage.offerID)")
 
                 guard let localUserInfo = self.localUserInfo else {
-                    PTGDataLogger.log("localUserInfo가 없어요!! 비상!!!")
+                    PTGLogger.default.log("localUserInfo가 없어요!! 비상!!!")
                     return
                 }
 
@@ -97,13 +167,13 @@ extension ConnectionRepositoryImpl {
                     do {
                         let remoteSDP = sdpMessage.rtcSessionDescription
                         guard let offerSender = self.clients.first(where: { $0.remoteUserInfo?.id == sdpMessage.offerID }) else {
-                            PTGDataLogger.log("해당 offerID에 해당하는 유저를 찾을 수 없습니다.")
+                            PTGLogger.default.log("해당 offerID에 해당하는 유저를 찾을 수 없습니다.")
                             return
                         }
                         
                         try await offerSender.set(remoteSdp: remoteSDP)
                         guard let answerSDP = try? await offerSender.createAnswer() else {
-                            PTGDataLogger.log("Answer SDP를 생성할 수 없습니다.")
+                            PTGLogger.default.log("Answer SDP를 생성할 수 없습니다.")
                             return
                         }
                         
@@ -115,7 +185,7 @@ extension ConnectionRepositoryImpl {
                             answerID: sdpMessage.answerID
                         )
                     } catch {
-                        PTGDataLogger.log("Offer SDP 수신 중 에러: \(error.localizedDescription)")
+                        PTGLogger.default.log("Offer SDP 수신 중 에러: \(error.localizedDescription)")
                     }
                 }
             }
@@ -127,7 +197,7 @@ extension ConnectionRepositoryImpl {
                 let remoteSDP = sdpMessage.rtcSessionDescription
                 
                 guard let answerReceiver = self.clients.first(where: { $0.remoteUserInfo?.id == sdpMessage.answerID }) else {
-                    PTGDataLogger.log("answerReceiver가 없어요! \(String(describing: sdpMessage.answerID))")
+                    PTGLogger.default.log("answerReceiver가 없어요! \(String(describing: sdpMessage.answerID))")
                     return
                 }
                 
@@ -135,7 +205,7 @@ extension ConnectionRepositoryImpl {
                     do {
                         try await answerReceiver.set(remoteSdp: remoteSDP)
                     } catch {
-                        PTGDataLogger.log("Answer SDP 수신 중 에러: \(error.localizedDescription)")
+                        PTGLogger.default.log("Answer SDP 저장 중 에러: \(error.localizedDescription)")
                     }
                 }
             }.store(in: &cancellables)
@@ -144,22 +214,18 @@ extension ConnectionRepositoryImpl {
             guard let self else { return }
 
             guard let candidateReceiver = self.clients.first(where: { $0.remoteUserInfo?.id == candidate.senderID }) else {
-                PTGDataLogger.log("candidateReceiver가 없어요! \(candidate.senderID)")
+                PTGLogger.default.log("candidateReceiver가 없어요! \(candidate.senderID)")
                 return
             }
             Task {
                 do {
                     try await candidateReceiver.set(remoteCandidate: candidate.rtcIceCandidate)
                 } catch {
-                    PTGDataLogger.log("Candidate 수신 중 에러: \(error.localizedDescription)")
+                    PTGLogger.default.log("Candidate 저장 중 에러: \(error.localizedDescription) \(candidate.sdp)")
                 }
             }
             
         }.store(in: &cancellables)
-    }
-    
-    private func bindLocalVideo() {
-        self.clients.forEach { $0.bindLocalVideo(_localVideoView) }
     }
     
     private func bindNotifyNewUserPublihser() {
@@ -169,12 +235,15 @@ extension ConnectionRepositoryImpl {
                 case .finished:
                     return
                 case .failure(let error):
-                    PTGDataLogger.log(error.localizedDescription)
+                    PTGLogger.default.log(error.localizedDescription)
                 }
             }, receiveValue: {  [weak self] entity in
                 guard let self else { return }
                 let newUser = entity.newUser
-                let emptyClient = clients.first(where: { $0.remoteUserInfo == nil })
+                guard let emptyClient = clients.first(where: { $0.remoteUserInfo == nil }) else {
+                    PTGLogger.default.log("방이 가득 찼는데 누군가 입장했어요!")
+                    return
+                }
                 
                 guard let viewPosition = UserInfo.ViewPosition(rawValue: newUser.initialPosition),
                       let roomID = self.localUserInfo?.roomID
@@ -187,9 +256,10 @@ extension ConnectionRepositoryImpl {
                     viewPosition: viewPosition,
                     roomID: roomID
                 )
-                
-                emptyClient?.setRemoteUserInfo(newUserInfoEntity)
-                PTGDataLogger.log("newUser Entered: \(newUserInfoEntity)")
+                                
+                emptyClient.setRemoteUserInfo(newUserInfoEntity)
+                didEnterNewUserSubject.send((newUserInfoEntity, emptyClient.remoteVideoView))
+                PTGLogger.default.log("newUser Entered: \(newUserInfoEntity)")
             })
             .store(in: &cancellables)
     }
@@ -198,11 +268,11 @@ extension ConnectionRepositoryImpl {
         clients.forEach {
             $0.didGenerateLocalCandidatePublisher.sink { [weak self] receiverID, candidate in
                 guard let self else { return }
+                PTGLogger.default.log("didGenerateLocalCandidatePublisher: \(receiverID)")
                 guard let localUserInfo = self.localUserInfo else {
-                    PTGDataLogger.log("localUserInfo가 없어요!! 비상!!!")
+                    PTGLogger.default.log("localUserInfo가 없어요!! 비상!!!")
                     return
                 }
-                
                 self.signalingService.send(
                     type: .iceCandidate,
                     candidate: candidate,
@@ -223,6 +293,7 @@ extension ConnectionRepositoryImpl {
     private func setLocalUserInfo(entity: RoomOwnerEntity) -> RoomOwnerEntity {
         guard let localUserInfo = localUserInfo(for: entity) else { return entity }
         self.localUserInfo = localUserInfo
+        self.didEnterNewUserSubject.send((localUserInfo, localVideoView))
         return entity
     }
     
@@ -254,7 +325,7 @@ extension ConnectionRepositoryImpl {
     private func localUserInfo(for entity: RoomOwnerEntity) -> UserInfo? {
         return UserInfo(
             id: entity.hostID,
-            nickname: "내가 호스트다",
+            nickname: String(entity.hostID.suffix(4)), // TODO: 서버에서 받아온 닉네임으로 변경 예정
             isHost: true,
             viewPosition: .topLeading,
             roomID: entity.roomID

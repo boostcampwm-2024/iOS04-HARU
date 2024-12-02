@@ -18,9 +18,14 @@ public final class PhotoRoomViewModel {
     private var output = PassthroughSubject<Output, Never>()
     
     private let captureVideosUseCase: CaptureVideosUseCase
+    private let stopVideoCaptureUseCase: StopVideoCaptureUseCase
     
-    public init(captureVideosUseCase: CaptureVideosUseCase) {
+    public init(
+        captureVideosUseCase: CaptureVideosUseCase,
+        stopVideoCaptureUseCase: StopVideoCaptureUseCase
+    ) {
         self.captureVideosUseCase = captureVideosUseCase
+        self.stopVideoCaptureUseCase = stopVideoCaptureUseCase
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -53,6 +58,7 @@ public final class PhotoRoomViewModel {
                 
                 let images = self.captureVideosUseCase.execute()
                 let result = Output.timerCompleted(images: images)
+                self.stopVideoCaptureUseCase.execute()
                 
                 self.output.send(result)
                 timer.invalidate()

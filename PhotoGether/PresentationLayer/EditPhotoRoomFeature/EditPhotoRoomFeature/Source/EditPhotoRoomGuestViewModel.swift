@@ -10,16 +10,18 @@ public final class EditPhotoRoomGuestViewModel {
         case frameButtonDidTap
         case createSticker(StickerEntity)
         case deleteSticker(UUID)
+        case dragSticker(StickerEntity, PanGestureState)
+        case resizeSticker(StickerEntity, PanGestureState)
         case stickerViewDidTap(UUID)
     }
     
     enum Output {
         case stickerList([StickerEntity])
         case frameImage(image: UIImage)
-        case stickerBottomSheetPresent
+        case presentStickerBottomSheet
     }
     
-    private let frameImageGenerator: FrameImageGenerator
+    private var frameImageGenerator: FrameImageGenerator?
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let receiveFrameUseCase: ReceiveFrameUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
@@ -34,13 +36,11 @@ public final class EditPhotoRoomGuestViewModel {
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        frameImageGenerator: FrameImageGenerator,
         receiveStickerListUseCase: ReceiveStickerListUseCase,
         receiveFrameUseCase: ReceiveFrameUseCase,
         sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
         sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     ) {
-        self.frameImageGenerator = frameImageGenerator
         self.receiveStickerListUseCase = receiveStickerListUseCase
         self.receiveFrameUseCase = receiveFrameUseCase
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
@@ -96,6 +96,10 @@ public final class EditPhotoRoomGuestViewModel {
                 self?.handleDeleteSticker(with: stickerID)
             case .stickerViewDidTap(let stickerID):
                 self?.handleStickerViewDidTap(with: stickerID)
+            case .dragSticker(let sticker, let dragState):
+                self?.handleDragSticker(sticker: sticker, state: dragState)
+            case .resizeSticker(let sticker, let resizeState):
+                self?.handleResizeSticker(sticker: sticker, state: resizeState)
             }
         }
         .store(in: &cancellables)
@@ -104,24 +108,26 @@ public final class EditPhotoRoomGuestViewModel {
     }
 }
 
-// MARK: Sticker 관련
+// MARK: Sticker
 extension EditPhotoRoomGuestViewModel {
-    private func handleCreateSticker(sticker: StickerEntity) {
-        mutateStickerLocal(sticker: sticker)
-        mutateStickerEventHub(type: .create, with: sticker)
+    enum PanGestureState {
+        case began
+        case changed
+        case ended
     }
     
-    private func handleDeleteSticker(with stickerID: UUID) {
-        let stickerList = stickerListSubject.value
-        guard let sticker = stickerList.find(id: stickerID) else { return }
-        
-        mutateStickerEventHub(type: .delete, with: sticker)
-    }
-    
-    private func mutateStickerLocal(sticker: StickerEntity) {
-        var stickerList = stickerListSubject.value
-        stickerList.append(sticker)
-        stickerListSubject.send(stickerList)
+    private func mutateStickerLocal(type: EventType, sticker: StickerEntity) {
+        switch type {
+        case .create:
+            var stickerList = stickerListSubject.value
+            stickerList.append(sticker)
+            stickerListSubject.send(stickerList)
+        case .delete: break
+        case .update:
+            let stickerList = stickerListSubject.value
+            stickerListSubject.send(stickerList)
+        case .unlock: break
+        }
     }
     
     private func mutateStickerListLocal(stickerList: [StickerEntity]) {
@@ -132,27 +138,17 @@ extension EditPhotoRoomGuestViewModel {
         sendStickerToRepositoryUseCase.execute(type: type, sticker: sticker)
     }
     
-    private func handleStickerViewDidTap(with stickerID: UUID) {
-        // MARK: 선택할 수 있는 객체인지 확인함
-        guard canInteractWithSticker(id: stickerID) else { return }
-        
-        // MARK: 필요시 이전 스티커를 unlock하고 반영함
-        unlockPreviousSticker()
-        
-        // MARK: Tap한 스티커를 lock하고 반영한다.
-        lockTappedSticker(id: stickerID)
-    }
-    
     private func canInteractWithSticker(id: UUID) -> Bool {
         let stickerList = stickerListSubject.value
         
         return stickerList.isOwned(id: id, owner: owner)
     }
     
-    private func unlockPreviousSticker() {
+    private func unlockPreviousSticker(stickerId: UUID) {
         var stickerList = stickerListSubject.value
         
-        if let previousSticker = stickerList.lockedSticker(by: owner) {
+        if let previousSticker = stickerList.lockedSticker(by: owner),
+           stickerId != previousSticker.id {
             stickerList.unlock(by: owner)
             mutateStickerEventHub(type: .unlock, with: previousSticker)
         }
@@ -166,14 +162,116 @@ extension EditPhotoRoomGuestViewModel {
             mutateStickerEventHub(type: .update, with: tappedSticker)
         }
     }
+}
 
-    private func presentStickerBottomSheet() {
-        output.send(.stickerBottomSheetPresent)
+// MARK: Sticker Drag
+extension EditPhotoRoomGuestViewModel {
+    private func handleDragSticker(sticker: StickerEntity, state: PanGestureState) {
+        switch state {
+        case .began:
+            handleDragBegan(sticker: sticker)
+        case .changed:
+            handleDragChanged(sticker: sticker)
+        case .ended:
+            handleDragEnded(sticker: sticker)
+        }
+    }
+    
+    private func handleDragBegan(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        unlockPreviousSticker(stickerId: sticker.id)
+        lockTappedSticker(id: sticker.id)
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleDragChanged(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleDragEnded(sticker: StickerEntity) {
+        mutateStickerLocal(type: .update, sticker: sticker)
+        
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+}
+
+// MARK: Sticker Resize
+extension EditPhotoRoomGuestViewModel {
+    private func handleResizeSticker(sticker: StickerEntity, state: PanGestureState) {
+        switch state {
+        case .began:
+            handleResizeBegan(sticker: sticker)
+        case .changed:
+            handleResizeChanged(sticker: sticker)
+        case .ended:
+            handleResizeEnded(sticker: sticker)
+        }
+    }
+    
+    private func handleResizeBegan(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleResizeChanged(sticker: StickerEntity) {
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+    
+    private func handleResizeEnded(sticker: StickerEntity) {
+        mutateStickerLocal(type: .update, sticker: sticker)
+        
+        guard canInteractWithSticker(id: sticker.id) else { return }
+        
+        mutateStickerEventHub(type: .update, with: sticker)
+    }
+}
+
+// MARK: Sticker Tap
+extension EditPhotoRoomGuestViewModel {
+    private func handleStickerViewDidTap(with stickerID: UUID) {
+        // MARK: 선택할 수 있는 객체인지 확인함
+        guard canInteractWithSticker(id: stickerID) else { return }
+        
+        // MARK: 필요시 이전 스티커를 unlock하고 반영함
+        unlockPreviousSticker(stickerId: stickerID)
+        
+        // MARK: Tap한 스티커를 lock하고 반영한다.
+        lockTappedSticker(id: stickerID)
+    }
+}
+
+// MARK: Sticker Create
+extension EditPhotoRoomGuestViewModel {
+    private func handleCreateSticker(sticker: StickerEntity) {
+        mutateStickerLocal(type: .create, sticker: sticker)
+        mutateStickerEventHub(type: .create, with: sticker)
+    }
+}
+
+// MARK: Sticker Delete
+extension EditPhotoRoomGuestViewModel {
+    private func handleDeleteSticker(with stickerID: UUID) {
+        let stickerList = stickerListSubject.value
+        guard let sticker = stickerList.find(id: stickerID) else { return }
+        
+        mutateStickerEventHub(type: .delete, with: sticker)
     }
 }
 
 // MARK: Frame 관련
 extension EditPhotoRoomGuestViewModel {
+    private enum Constants {
+        static let defaultFrameType: FrameType = .defaultBlack
+    }
+    
     private func toggleFrameType() {
         let oldFrameImageType = frameTypeSubject.value
         let newFrameImageType = (oldFrameImageType == .defaultBlack)
@@ -194,15 +292,20 @@ extension EditPhotoRoomGuestViewModel {
     }
 
     private func applyFrameImage(with frameType: FrameType) {
-        frameImageGenerator.changeFrame(to: frameType)
-        let frameImage = frameImageGenerator.generate()
+        frameImageGenerator?.changeFrame(to: frameType)
+        guard let frameImage = frameImageGenerator?.generate() else { return }
 
         output.send(.frameImage(image: frameImage))
     }
+    
+    func setFrameImageGenerator(_ frameImageGenerator: FrameImageGenerator) {
+        self.frameImageGenerator = frameImageGenerator
+    }
 }
 
-private extension EditPhotoRoomGuestViewModel {
-    enum Constants {
-        static let defaultFrameType: FrameType = .defaultBlack
+// MARK: Show Bottom Sheet
+extension EditPhotoRoomGuestViewModel {
+    private func presentStickerBottomSheet() {
+        output.send(.presentStickerBottomSheet)
     }
 }

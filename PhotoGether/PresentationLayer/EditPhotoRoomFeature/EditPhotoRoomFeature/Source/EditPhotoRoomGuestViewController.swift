@@ -6,6 +6,7 @@ import DesignSystem
 import PhotoGetherData
 import PhotoGetherDomain
 import PhotoGetherDomainInterface
+import SharePhotoFeature
 
 public class EditPhotoRoomGuestViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -25,7 +26,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         self.bottomSheetViewController = bottomSheetViewController
         super.init(nibName: nil, bundle: nil)
         self.bottomSheetViewController.delegate = self
-        self.canvasScrollView.stickerViewDelegate = self
+        self.canvasScrollView.canvasScrollViewDelegate = self
     }
     
     @available(*, unavailable)
@@ -41,7 +42,16 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
         input.send(.initialState)
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveNavigateToShareRoom)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.showNextView()
+            }.store(in: &cancellables)
     }
     
     public func addViews() {
@@ -73,6 +83,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     public func configureUI() {
         view.backgroundColor = PTGColor.gray90.color
         navigationView.backgroundColor = PTGColor.gray70.color
+        navigationView.isHidden = true
     }
     
     public func bindInput() {
@@ -102,11 +113,24 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
                 self?.updateCanvas(with: stickerList)
             case .frameImage(let image):
                 self?.updateFrameImage(to: image)
-            case .stickerBottomSheetPresent:
+            case .presentStickerBottomSheet:
                 self?.presentStickerBottomSheet()
             }
         }
         .store(in: &cancellables)
+    }
+    
+    private func showNextView() {
+        guard let imageData = renderCanvasImageView() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func renderCanvasImageView() -> Data? {
+        return canvasScrollView.makeSharePhoto()
     }
     
     private func updateFrameImage(to image: UIImage) {
@@ -114,21 +138,22 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     }
     
     private func updateCanvas(with stickerList: [StickerEntity]) {
-        canvasScrollView.updateCanvas(self, stickerList: stickerList, user: viewModel.owner)
+        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.owner)
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
-        let imageSize: CGFloat = 64
+        let imageSize: CGFloat = 72
         let frame = calculateCenterPosition(imageSize: imageSize)
+        guard let emojiURL = entity.emojiURL else { return }
         
         let newSticker = StickerEntity(
-            image: entity.image,
+            image: emojiURL.absoluteString,
             frame: frame,
             owner: nil,
             latestUpdated: Date()
         )
         
-        canvasScrollView.addStickerView(self, with: newSticker, user: viewModel.owner)
+        canvasScrollView.addStickerView(with: newSticker, user: viewModel.owner)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -151,6 +176,10 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     private func presentStickerBottomSheet() {
         self.present(bottomSheetViewController, animated: true)
     }
+    
+    public func setFrameImageGenerator(_ frameImageGenerator: FrameImageGenerator) {
+        viewModel.setFrameImageGenerator(frameImageGenerator)
+    }
 }
 
 extension EditPhotoRoomGuestViewController: StickerBottomSheetViewControllerDelegate {
@@ -162,18 +191,40 @@ extension EditPhotoRoomGuestViewController: StickerBottomSheetViewControllerDele
     }
 }
 
-extension EditPhotoRoomGuestViewController: StickerViewActionDelegate {
-    func stickerView(_ stickerView: StickerView, didTap id: UUID) {
+extension EditPhotoRoomGuestViewController: CanvasScrollViewDelegate {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTap id: UUID) {
         input.send(.stickerViewDidTap(id))
     }
     
-    func stickerView(_ stickerView: StickerView, didTapDelete id: UUID) {
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didTapDelete id: UUID) {
         input.send(.deleteSticker(id))
     }
-}
-
-extension EditPhotoRoomGuestViewController: CanvasScrollViewDelegate {
+    
     func canvasScrollView(_ canvasScrollView: CanvasScrollView, didAdd sticker: StickerEntity) {
         input.send(.createSticker(sticker))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndDrag sticker: StickerEntity) {
+        input.send(.dragSticker(sticker, .ended))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didBeginResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .began))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didChangeResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .changed))
+    }
+    
+    func canvasScrollView(_ canvasScrollView: CanvasScrollView, didEndResize sticker: StickerEntity) {
+        input.send(.resizeSticker(sticker, .ended))
     }
 }
