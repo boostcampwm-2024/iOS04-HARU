@@ -25,6 +25,7 @@ public final class WaitingRoomViewModel {
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
     private let createRoomUseCase: CreateRoomUseCase
     private let didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase
+    private let changeLocalMicStateUseCase: ChangeLcoalMicStateUseCase
     
     private var isHost: Bool
     private var cancellables = Set<AnyCancellable>()
@@ -36,7 +37,8 @@ public final class WaitingRoomViewModel {
         getLocalVideoUseCase: GetLocalVideoUseCase,
         getRemoteVideoUseCase: GetRemoteVideoUseCase,
         createRoomUseCase: CreateRoomUseCase,
-        didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase
+        didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase,
+        changeLocalMicStateUseCase: ChangeLcoalMicStateUseCase
     ) {
         self.isHost = isHost
         self.sendOfferUseCase = sendOfferUseCase
@@ -44,6 +46,7 @@ public final class WaitingRoomViewModel {
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
         self.createRoomUseCase = createRoomUseCase
         self.didEnterNewUserPublisherUseCase = didEnterNewUserPublisherUseCase
+        self.changeLocalMicStateUseCase = changeLocalMicStateUseCase
         
         bindSideEffects()
     }
@@ -71,7 +74,7 @@ public final class WaitingRoomViewModel {
         case .viewDidLoad:
             handleViewDidLoad()
         case .micMuteButtonDidTap:
-            output.send(.micMuteState(true)) // 예제에서는 항상 true 반환
+            handleMicButtonDidTap()
         case .linkButtonDidTap:
             handleLinkButtonDidTap()
         case .startButtonDidTap:
@@ -138,5 +141,12 @@ public final class WaitingRoomViewModel {
                 self?.output.send(.shouldShowShareSheet(roomLink))
             })
             .store(in: &cancellables)
+    }
+    
+    private func handleMicButtonDidTap() {
+        changeLocalMicStateUseCase.execute()
+            .sink { [weak self] state in
+                self?.output.send(.micMuteState(state))
+            }.store(in: &cancellables)
     }
 }
