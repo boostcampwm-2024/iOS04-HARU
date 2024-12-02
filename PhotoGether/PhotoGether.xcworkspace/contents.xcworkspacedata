@@ -40,9 +40,6 @@
          location = "group:SharePhotoFeature/SharePhotoFeature.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:FeatureTesting/FeatureTesting.xcodeproj">
-      </FileRef>
-      <FileRef
          location = "group:DesignSystem/DesignSystem.xcodeproj">
       </FileRef>
    </Group>
