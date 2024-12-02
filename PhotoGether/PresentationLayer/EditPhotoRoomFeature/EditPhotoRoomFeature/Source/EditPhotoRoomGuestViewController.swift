@@ -138,7 +138,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     }
     
     private func updateCanvas(with stickerList: [StickerEntity]) {
-        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.owner)
+        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.userInfo)
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
@@ -153,7 +153,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             latestUpdated: Date()
         )
         
-        canvasScrollView.addStickerView(with: newSticker, user: viewModel.owner)
+        canvasScrollView.addStickerView(with: newSticker, user: viewModel.userInfo)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -177,8 +177,9 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         self.present(bottomSheetViewController, animated: true)
     }
     
-    public func setFrameImageGenerator(_ frameImageGenerator: FrameImageGenerator) {
-        viewModel.setFrameImageGenerator(frameImageGenerator)
+    public func inject(_ frameImageGenerator: FrameImageGenerator, userInfo: UserInfo?) {
+        guard let userInfo else { return }
+        viewModel.setViewModel(frameImageGenerator, userInfo: userInfo)
     }
 }
 

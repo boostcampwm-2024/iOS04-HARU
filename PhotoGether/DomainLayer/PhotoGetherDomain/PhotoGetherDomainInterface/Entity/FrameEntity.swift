@@ -7,13 +7,13 @@ public struct FrameEntity: Equatable, Codable {
     
     public let id: UUID
     public let frameType: FrameType
-    public private(set) var owner: String?
+    public private(set) var owner: UserInfo?
     public private(set) var latestUpdated: Date
     
     public init(
         id: UUID = UUID(),
         frameType: FrameType,
-        owner: String?,
+        owner: UserInfo?,
         latestUpdated: Date
     ) {
         self.id = id

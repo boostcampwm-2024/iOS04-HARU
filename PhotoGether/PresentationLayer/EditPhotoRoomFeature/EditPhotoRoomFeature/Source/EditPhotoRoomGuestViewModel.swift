@@ -27,7 +27,7 @@ public final class EditPhotoRoomGuestViewModel {
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
-    let owner = "GUEST" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
+    private(set) var userInfo: UserInfo!
     
     private let stickerListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)
@@ -141,15 +141,15 @@ extension EditPhotoRoomGuestViewModel {
     private func canInteractWithSticker(id: UUID) -> Bool {
         let stickerList = stickerListSubject.value
         
-        return stickerList.isOwned(id: id, owner: owner)
+        return stickerList.isOwned(id: id, owner: userInfo)
     }
     
     private func unlockPreviousSticker(stickerId: UUID) {
         var stickerList = stickerListSubject.value
         
-        if let previousSticker = stickerList.lockedSticker(by: owner),
+        if let previousSticker = stickerList.lockedSticker(by: userInfo),
            stickerId != previousSticker.id {
-            stickerList.unlock(by: owner)
+            stickerList.unlock(by: userInfo)
             mutateStickerEventHub(type: .unlock, with: previousSticker)
         }
     }
@@ -157,7 +157,7 @@ extension EditPhotoRoomGuestViewModel {
     private func lockTappedSticker(id: UUID) {
         var stickerList = stickerListSubject.value
         
-        if let tappedSticker = stickerList.lock(by: id, owner: owner) {
+        if let tappedSticker = stickerList.lock(by: id, owner: userInfo) {
             mutateStickerListLocal(stickerList: stickerList)
             mutateStickerEventHub(type: .update, with: tappedSticker)
         }
@@ -287,7 +287,7 @@ extension EditPhotoRoomGuestViewModel {
     }
 
     private func mutateFrameTypeEventHub(with frameType: FrameType) {
-        let frameEntity = FrameEntity(frameType: frameType, owner: owner, latestUpdated: Date())
+        let frameEntity = FrameEntity(frameType: frameType, owner: userInfo, latestUpdated: Date())
         sendFrameToRepositoryUseCase.execute(type: .update, frame: frameEntity)
     }
 
@@ -298,8 +298,9 @@ extension EditPhotoRoomGuestViewModel {
         output.send(.frameImage(image: frameImage))
     }
     
-    func setFrameImageGenerator(_ frameImageGenerator: FrameImageGenerator) {
+    func setViewModel(_ frameImageGenerator: FrameImageGenerator, userInfo: UserInfo) {
         self.frameImageGenerator = frameImageGenerator
+        self.userInfo = userInfo
     }
 }
 

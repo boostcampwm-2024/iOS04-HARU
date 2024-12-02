@@ -16,7 +16,7 @@ protocol StickerViewActionDelegate: AnyObject {
 }
 
 final class StickerView: UIView {
-    private let nicknameLabel = UILabel()
+    private let nicknameLabel = PTGPaddingLabel()
     private let imageView = UIImageView()
     private let layerView = UIView()
     private let deleteButton = UIButton()
@@ -25,13 +25,13 @@ final class StickerView: UIView {
     private let resizePanGestureRecognizer = UIPanGestureRecognizer()
 
     private var sticker: StickerEntity
-    private let user: String
+    private let user: UserInfo?
 
     weak var delegate: StickerViewActionDelegate?
     
     init(
         sticker: StickerEntity,
-        user: String
+        user: UserInfo?
     ) {
         self.sticker = sticker
         self.user = user
@@ -61,7 +61,7 @@ final class StickerView: UIView {
         
         nicknameLabel.snp.makeConstraints {
             $0.top.equalTo(snp.bottom)
-            $0.trailing.equalTo(snp.trailing)
+            $0.centerX.equalTo(imageView)
         }
         
         layerView.snp.makeConstraints {
@@ -81,7 +81,7 @@ final class StickerView: UIView {
     
     private func configureUI() {
         let deleteButtonImage = PTGImage.xmarkIcon.image
-        layerView.layer.borderWidth = 1
+        layerView.layer.borderWidth = 2
         layerView.layer.borderColor = PTGColor.primaryGreen.color.cgColor
         layerView.isUserInteractionEnabled = false
         
@@ -179,7 +179,7 @@ final class StickerView: UIView {
         self.frame = frame
     }
     
-    private func updateOwner(to owner: String?) {
+    private func updateOwner(to owner: UserInfo?) {
         guard sticker.owner != owner else { return }
         
         sticker.updateOwner(to: owner)
@@ -189,23 +189,29 @@ final class StickerView: UIView {
         updatePanGestureState()
     }
     
-    private func updateOwnerUI(owner: String?) {
+    private func updateOwnerUI(owner: UserInfo?) {
         if let owner = owner {
-            nicknameLabel.text = owner
+            nicknameLabel.text = owner.nickname
             layerView.isHidden = false
         } else {
             nicknameLabel.text = nil
             layerView.isHidden = true
         }
+        
+        if owner == user {
+            layerView.layer.borderColor = PTGColor.primaryGreen.color.cgColor
+        } else {
+            layerView.layer.borderColor = PTGColor.gray70.color.cgColor
+        }
     }
 
-    private func updateDeleteButtonVisibility(for owner: String?) {
+    private func updateDeleteButtonVisibility(for owner: UserInfo?) {
         let isOwner = owner == user
         deleteButton.isHidden = !isOwner
         deleteButton.isUserInteractionEnabled = isOwner
     }
     
-    private func updateResizeButtonVisibility(for owner: String?) {
+    private func updateResizeButtonVisibility(for owner: UserInfo?) {
         let isOwner = owner == user
         resizeButton.isHidden = !isOwner
         resizeButton.isUserInteractionEnabled = isOwner

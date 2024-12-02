@@ -120,15 +120,16 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             switch $0 {
             case .timer(let count):
                 self.photoRoomBottomView.setCameraButtonTimer(count)
-            case .timerCompleted(let images):
+            case .timerCompleted(let images, let userInfo):
                 self.photoRoomBottomView.stopCameraButtonTimer()
                 
                 let frameImageGenerator = FrameImageGeneratorImpl(images: images)
+                
                 if isHost {
-                    editPhotoRoomHostViewController.setFrameImageGenerator(frameImageGenerator)
+                    editPhotoRoomHostViewController.inject(frameImageGenerator, userInfo: userInfo)
                     self.navigationController?.pushViewController(editPhotoRoomHostViewController, animated: true)
                 } else {
-                    editPhotoRoomGuestViewController.setFrameImageGenerator(frameImageGenerator)
+                    editPhotoRoomGuestViewController.inject(frameImageGenerator, userInfo: userInfo)
                     self.navigationController?.pushViewController(editPhotoRoomGuestViewController, animated: true)
                 }
             }

@@ -12,20 +12,23 @@ public final class PhotoRoomViewModel {
     
     enum Output {
         case timer(count: Int)
-        case timerCompleted(images: [UIImage])
+        case timerCompleted(images: [UIImage], userInfo: UserInfo?)
     }
     
     private var output = PassthroughSubject<Output, Never>()
-    
+    private var userInfo: UserInfo?
     private let captureVideosUseCase: CaptureVideosUseCase
     private let stopVideoCaptureUseCase: StopVideoCaptureUseCase
+    private let getUserInfoUseCase: GetLocalVideoUseCase
     
     public init(
         captureVideosUseCase: CaptureVideosUseCase,
-        stopVideoCaptureUseCase: StopVideoCaptureUseCase
+        stopVideoCaptureUseCase: StopVideoCaptureUseCase,
+        getUserInfoUseCase: GetLocalVideoUseCase
     ) {
         self.captureVideosUseCase = captureVideosUseCase
         self.stopVideoCaptureUseCase = stopVideoCaptureUseCase
+        self.getUserInfoUseCase = getUserInfoUseCase
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -42,6 +45,9 @@ public final class PhotoRoomViewModel {
     }
     
     private func startTimer() {
+        guard let userInfo = getUserInfoUseCase.execute().0 else { return }
+        self.userInfo = userInfo
+        
         output.send(.timer(count: timerCount))
         
         let _ = Timer.scheduledTimer(
@@ -57,7 +63,7 @@ public final class PhotoRoomViewModel {
                 self.timerCount = 3
                 
                 let images = self.captureVideosUseCase.execute()
-                let result = Output.timerCompleted(images: images)
+                let result = Output.timerCompleted(images: images, userInfo: userInfo)
                 self.stopVideoCaptureUseCase.execute()
                 
                 self.output.send(result)
