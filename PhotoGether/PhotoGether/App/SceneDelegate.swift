@@ -90,6 +90,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let changeLocalMicStateUseCase = ChangeLocalMicStateUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase,
             stopVideoCaptureUseCase: stopVideoCaptureUseCase,
@@ -196,7 +200,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
             createRoomUseCase: createRoomUseCase,
-            didEnterNewUserPublisherUseCase: didEnterNewUserPublisherUseCase
+            didEnterNewUserPublisherUseCase: didEnterNewUserPublisherUseCase,
+            changeLocalMicStateUseCase: changeLocalMicStateUseCase
         )
         
         let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(
