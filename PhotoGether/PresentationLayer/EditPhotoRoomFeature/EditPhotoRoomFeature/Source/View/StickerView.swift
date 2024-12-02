@@ -80,6 +80,8 @@ final class StickerView: UIView {
     }
     
     private func configureUI() {
+        isExclusiveTouch = true
+        
         let deleteButtonImage = PTGImage.xmarkIcon.image
         layerView.layer.borderWidth = 2
         layerView.layer.borderColor = PTGColor.primaryGreen.color.cgColor
@@ -88,11 +90,13 @@ final class StickerView: UIView {
         deleteButton.setImage(deleteButtonImage, for: .normal)
         deleteButton.layer.cornerRadius = deleteButton.bounds.width / 2
         deleteButton.clipsToBounds = true
+        deleteButton.isExclusiveTouch = true
         
         let resizeButtonImage = PTGImage.resizeIcon.image
         resizeButton.setImage(resizeButtonImage, for: .normal)
         resizeButton.layer.cornerRadius = resizeButton.bounds.width / 2
         resizeButton.clipsToBounds = true
+        resizeButton.isExclusiveTouch = true
         
         setImage(to: sticker.image)
         updateOwnerUI(owner: sticker.owner)
@@ -104,7 +108,6 @@ final class StickerView: UIView {
         isUserInteractionEnabled = true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        self.isExclusiveTouch = true
         addGestureRecognizer(tapGesture)
         
         dragPanGestureRecognizer.minimumNumberOfTouches = 1
