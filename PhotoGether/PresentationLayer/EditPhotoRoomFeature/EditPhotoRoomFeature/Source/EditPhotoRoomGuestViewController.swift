@@ -83,6 +83,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     public func configureUI() {
         view.backgroundColor = PTGColor.gray90.color
         navigationView.backgroundColor = PTGColor.gray70.color
+        navigationView.isHidden = true
     }
     
     public func bindInput() {
