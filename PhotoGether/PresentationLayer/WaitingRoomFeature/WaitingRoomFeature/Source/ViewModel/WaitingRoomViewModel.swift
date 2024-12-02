@@ -75,7 +75,9 @@ public final class WaitingRoomViewModel {
         case .linkButtonDidTap:
             handleLinkButtonDidTap()
         case .startButtonDidTap:
-            output.send(.navigateToPhotoRoom)
+            if isHost {
+                output.send(.navigateToPhotoRoom)
+            }
         }
     }
     

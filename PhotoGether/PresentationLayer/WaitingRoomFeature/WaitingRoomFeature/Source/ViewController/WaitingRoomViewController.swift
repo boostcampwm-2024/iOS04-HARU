@@ -126,6 +126,11 @@ public final class WaitingRoomViewController: BaseViewController {
     // MARK: 현재 뷰의 하이어라키에선 particiapntsGridView가 사라짐
     private func navigateToPhotoRoom() {
         NotificationCenter.default.post(name: .navigateToPhotoRoom, object: nil)
+        
+        let photoRoomVC = self.photoRoomViewController
+            photoRoomVC.setParticipantsGridView(waitingRoomView.particiapntsGridView)
+            
+        self.navigationController?.pushViewController(photoRoomVC, animated: true)
     }
     
     private func showShareSheet(message: String) {
