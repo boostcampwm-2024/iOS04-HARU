@@ -1,7 +1,7 @@
 import UIKit
 
-extension UIFont {
-    static func PTGFont(size fontSize: CGFloat, weight: UIFont.Weight) -> UIFont {
+public extension UIFont {
+    public static func PTGFont(size fontSize: CGFloat, weight: UIFont.Weight) -> UIFont {
         let familyName = "Pretendard"
         
         var weightString: String

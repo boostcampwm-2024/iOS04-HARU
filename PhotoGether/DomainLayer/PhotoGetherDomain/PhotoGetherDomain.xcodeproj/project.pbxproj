@@ -13,6 +13,8 @@
 		60B05BCF2CEDAEF500843377 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; platformFilter = ios; };
 		60B05BD02CEDAEF500843377 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B1745512CE35CD500E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B1745502CE35CD500E01D1A /* WebRTC */; };
+		7B20008E2CFD686F001325DC /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603C68C02CEC4C3400BE7AF9 /* DesignSystem.framework */; };
+		7B20008F2CFD686F001325DC /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 603C68C02CEC4C3400BE7AF9 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951BE2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; };
 		7B5951BF2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B5951C32CDB655B00B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B59519A2CDB64E000B89C85 /* PhotoGetherDomainInterface.framework */; };
@@ -87,6 +89,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7B5951BF2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Embed Frameworks */,
+				7B20008F2CFD686F001325DC /* DesignSystem.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B5951BE2CDB655500B89C85 /* PhotoGetherDomainInterface.framework in Frameworks */,
+				7B20008E2CFD686F001325DC /* DesignSystem.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,6 +4,7 @@ import BaseFeature
 import PhotoRoomFeature
 import DesignSystem
 import PhotoGetherDomainInterface
+import CoreModule
 
 public final class WaitingRoomViewController: BaseViewController {
     private let viewModel: WaitingRoomViewModel
@@ -38,6 +39,21 @@ public final class WaitingRoomViewController: BaseViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         bindInput()
         bindOutput()
+        bindNoti()
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveNavigateToPhotoRoom)
+            .receive(on: RunLoop.main)
+            .first()
+            .sink { [weak self] _ in
+                print("DEBUG: 노티 받음")
+            guard let self else { return }
+            let photoRoomVC = self.photoRoomViewController
+                photoRoomVC.setParticipantsGridView(waitingRoomView.particiapntsGridView)
+                
+            self.navigationController?.pushViewController(photoRoomVC, animated: true)
+        }.store(in: &cancellables)
     }
     
     private func bindInput() {
@@ -109,10 +125,12 @@ public final class WaitingRoomViewController: BaseViewController {
     
     // MARK: 현재 뷰의 하이어라키에선 particiapntsGridView가 사라짐
     private func navigateToPhotoRoom() {
-        let particiapntsGridView = self.waitingRoomView.particiapntsGridView
-        let photoRoomVC = photoRoomViewController
-        photoRoomVC.setParticipantsGridView(particiapntsGridView)
-        navigationController?.pushViewController(photoRoomVC, animated: true)
+        NotificationCenter.default.post(name: .navigateToPhotoRoom, object: nil)
+        
+        let photoRoomVC = self.photoRoomViewController
+            photoRoomVC.setParticipantsGridView(waitingRoomView.particiapntsGridView)
+            
+        self.navigationController?.pushViewController(photoRoomVC, animated: true)
     }
     
     private func showShareSheet(message: String) {

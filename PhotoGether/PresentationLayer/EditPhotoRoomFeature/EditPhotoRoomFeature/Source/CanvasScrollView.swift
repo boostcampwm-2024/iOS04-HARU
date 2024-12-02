@@ -57,7 +57,7 @@ final class CanvasScrollView: UIScrollView {
 extension CanvasScrollView {
     func updateCanvas(
         stickerList: [StickerEntity],
-        user: String
+        user: UserInfo
     ) {
         prepareForApply(stickerList)
         applyStickerList(for: stickerList, user: user)
@@ -65,7 +65,7 @@ extension CanvasScrollView {
     
     func addStickerView(
         with sticker: StickerEntity,
-        user: String
+        user: UserInfo
     ) {
         let stickerView = StickerView(sticker: sticker, user: user)
         stickerView.delegate = self
@@ -98,7 +98,7 @@ extension CanvasScrollView {
     
     private func applyStickerList(
         for stickerList: [StickerEntity],
-        user: String
+        user: UserInfo
     ) {
         stickerList.forEach { sticker in
             switch isExistStickerView(with: sticker.id) {

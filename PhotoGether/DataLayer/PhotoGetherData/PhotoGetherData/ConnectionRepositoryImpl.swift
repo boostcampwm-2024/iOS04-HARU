@@ -121,7 +121,10 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     }
     
     public func sendOffer() async throws {
-        guard let myID = localUserInfo?.id else { throw NSError() }
+        guard let myID = localUserInfo?.id else {
+            PTGLogger.default.log("sendOffer: localUserInfo 가 nil 입니다.")
+            throw NSError()
+        }
         guard let roomID = localUserInfo?.roomID else { throw NSError() }
         
         for client in self.clients where client.remoteUserInfo != nil {

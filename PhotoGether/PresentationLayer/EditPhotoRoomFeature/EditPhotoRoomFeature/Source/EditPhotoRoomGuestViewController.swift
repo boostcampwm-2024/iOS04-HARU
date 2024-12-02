@@ -6,6 +6,7 @@ import DesignSystem
 import PhotoGetherData
 import PhotoGetherDomain
 import PhotoGetherDomainInterface
+import SharePhotoFeature
 
 public class EditPhotoRoomGuestViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
@@ -41,7 +42,16 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
         input.send(.initialState)
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveNavigateToShareRoom)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.showNextView()
+            }.store(in: &cancellables)
     }
     
     public func addViews() {
@@ -73,6 +83,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     public func configureUI() {
         view.backgroundColor = PTGColor.gray90.color
         navigationView.backgroundColor = PTGColor.gray70.color
+        navigationView.isHidden = true
     }
     
     public func bindInput() {
@@ -109,12 +120,25 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         .store(in: &cancellables)
     }
     
+    private func showNextView() {
+        guard let imageData = renderCanvasImageView() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func renderCanvasImageView() -> Data? {
+        return canvasScrollView.makeSharePhoto()
+    }
+    
     private func updateFrameImage(to image: UIImage) {
         canvasScrollView.updateFrameImage(to: image)
     }
     
     private func updateCanvas(with stickerList: [StickerEntity]) {
-        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.owner)
+        canvasScrollView.updateCanvas(stickerList: stickerList, user: viewModel.userInfo)
     }
     
     private func createStickerEntity(by entity: EmojiEntity) {
@@ -129,7 +153,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             latestUpdated: Date()
         )
         
-        canvasScrollView.addStickerView(with: newSticker, user: viewModel.owner)
+        canvasScrollView.addStickerView(with: newSticker, user: viewModel.userInfo)
     }
     
     private func calculateCenterPosition(imageSize: CGFloat) -> CGRect {
@@ -151,6 +175,11 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     
     private func presentStickerBottomSheet() {
         self.present(bottomSheetViewController, animated: true)
+    }
+    
+    public func inject(_ frameImageGenerator: FrameImageGenerator, userInfo: UserInfo?) {
+        guard let userInfo else { return }
+        viewModel.setViewModel(frameImageGenerator, userInfo: userInfo)
     }
 }
 

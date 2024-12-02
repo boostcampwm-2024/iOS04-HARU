@@ -1,13 +1,17 @@
 import Foundation
 
-public struct UserInfo: Identifiable {
+public struct UserInfo: Identifiable, Equatable, Codable {
+    public static func == (lhs: UserInfo, rhs: UserInfo) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     public var id: String
     public var nickname: String
     public var isHost: Bool
     public var viewPosition: ViewPosition
     public var roomID: String
     
-    public enum ViewPosition: Int {
+    public enum ViewPosition: Int, Codable {
         case topLeading
         case bottomTrailing
         case topTrailing

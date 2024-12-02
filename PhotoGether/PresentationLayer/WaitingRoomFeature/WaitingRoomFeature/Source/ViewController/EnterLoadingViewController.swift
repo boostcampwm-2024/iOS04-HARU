@@ -70,11 +70,11 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
             case .didJoinRoom(let isSuccess):
                 self.waitingRoomViewController.modalPresentationStyle = .fullScreen
                 if isSuccess {
-                    self.present(waitingRoomViewController, animated: false)
+                    self.navigationController?.pushViewController(waitingRoomViewController, animated: false)
                 } else {
                     self.showToast(message: "방 참여에 실패했습니다 흑흑")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        self.present(self.waitingRoomViewController, animated: false)
+                        self.navigationController?.pushViewController(self.waitingRoomViewController, animated: false)
                     }
                 }
             }

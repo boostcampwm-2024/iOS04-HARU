@@ -75,7 +75,9 @@ public final class WaitingRoomViewModel {
         case .linkButtonDidTap:
             handleLinkButtonDidTap()
         case .startButtonDidTap:
-            output.send(.navigateToPhotoRoom)
+            if isHost {
+                output.send(.navigateToPhotoRoom)
+            }
         }
     }
     
@@ -110,7 +112,7 @@ public final class WaitingRoomViewModel {
     }
     
     private func sendOffer() {
-        _ = sendOfferUseCase.execute().sink { [weak self] completion in
+        let cancellable = sendOfferUseCase.execute().sink { [weak self] completion in
             switch completion {
             case .finished:
                 return
@@ -121,6 +123,7 @@ public final class WaitingRoomViewModel {
         } receiveValue: { [weak self] _ in
             self?.output.send(.shouldShowToast("연결을 시도합니다."))
         }
+        cancellable.cancel()
     }
     
     private func handleLinkButtonDidTap() {

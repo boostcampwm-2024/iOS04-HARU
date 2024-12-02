@@ -6,6 +6,7 @@ public final class PTGPaddingLabel: UILabel {
     public init(padding: UIEdgeInsets = UIEdgeInsets(top: 3.5, left: 8.0, bottom: 3.5, right: 8.0)) {
         self.padding = padding
         super.init(frame: .zero)
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -23,5 +24,13 @@ public final class PTGPaddingLabel: UILabel {
         contentSize.width += padding.left + padding.right
         
         return contentSize
+    }
+    
+    private func configure() {
+        font = .PTGFont(size: 14, weight: .semibold)
+        textColor = .white.withAlphaComponent(0.8)
+        backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        layer.cornerRadius = 10
+        clipsToBounds = true
     }
 }

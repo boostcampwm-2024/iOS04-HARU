@@ -21,13 +21,13 @@ public final class EditPhotoRoomHostViewModel {
         case presentStickerBottomSheet
     }
     
-    private let frameImageGenerator: FrameImageGenerator
+    private var frameImageGenerator: FrameImageGenerator?
     private let receiveStickerListUseCase: ReceiveStickerListUseCase
     private let receiveFrameUseCase: ReceiveFrameUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     
-    let owner = "Host" + UUID().uuidString.prefix(4) // MARK: 임시 값(추후 ConnectionClient에서 받아옴)
+    private(set) var userInfo: UserInfo!
     
     private let stickerListSubject = CurrentValueSubject<[StickerEntity], Never>([])
     private let frameTypeSubject = CurrentValueSubject<FrameType, Never>(Constants.defaultFrameType)
@@ -36,13 +36,11 @@ public final class EditPhotoRoomHostViewModel {
     private var output = PassthroughSubject<Output, Never>()
     
     public init(
-        frameImageGenerator: FrameImageGenerator,
         receiveStickerListUseCase: ReceiveStickerListUseCase,
         receiveFrameUseCase: ReceiveFrameUseCase,
         sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
         sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
     ) {
-        self.frameImageGenerator = frameImageGenerator
         self.receiveStickerListUseCase = receiveStickerListUseCase
         self.receiveFrameUseCase = receiveFrameUseCase
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
@@ -144,15 +142,15 @@ extension EditPhotoRoomHostViewModel {
     private func canInteractWithSticker(id: UUID) -> Bool {
         let stickerList = stickerListSubject.value
         
-        return stickerList.isOwned(id: id, owner: owner)
+        return stickerList.isOwned(id: id, owner: userInfo)
     }
     
     private func unlockPreviousSticker(stickerId: UUID) {
         var stickerList = stickerListSubject.value
         
-        if let previousSticker = stickerList.lockedSticker(by: owner),
+        if let previousSticker = stickerList.lockedSticker(by: userInfo),
            stickerId != previousSticker.id {
-            stickerList.unlock(by: owner)
+            stickerList.unlock(by: userInfo)
             mutateStickerEventHub(type: .unlock, with: previousSticker)
         }
     }
@@ -160,7 +158,7 @@ extension EditPhotoRoomHostViewModel {
     private func lockTappedSticker(id: UUID) {
         var stickerList = stickerListSubject.value
         
-        if let tappedSticker = stickerList.lock(by: id, owner: owner) {
+        if let tappedSticker = stickerList.lock(by: id, owner: userInfo) {
             mutateStickerListLocal(stickerList: stickerList)
             mutateStickerEventHub(type: .update, with: tappedSticker)
         }
@@ -290,15 +288,20 @@ extension EditPhotoRoomHostViewModel {
     }
 
     private func mutateFrameTypeEventHub(with frameType: FrameType) {
-        let frameEntity = FrameEntity(frameType: frameType, owner: owner, latestUpdated: Date())
+        let frameEntity = FrameEntity(frameType: frameType, owner: userInfo, latestUpdated: Date())
         sendFrameToRepositoryUseCase.execute(type: .update, frame: frameEntity)
     }
-
+    
     private func applyFrameImage(with frameType: FrameType) {
-        frameImageGenerator.changeFrame(to: frameType)
-        let frameImage = frameImageGenerator.generate()
+        frameImageGenerator?.changeFrame(to: frameType)
+        guard let frameImage = frameImageGenerator?.generate() else { return }
 
         output.send(.frameImage(image: frameImage))
+    }
+    
+    func setViewModel(_ frameImageGenerator: FrameImageGenerator, userInfo: UserInfo) {
+        self.frameImageGenerator = frameImageGenerator
+        self.userInfo = userInfo
     }
 }
 
