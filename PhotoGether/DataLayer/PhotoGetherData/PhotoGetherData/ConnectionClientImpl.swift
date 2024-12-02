@@ -76,6 +76,10 @@ public final class ConnectionClientImpl: ConnectionClient {
         return capturedImage
     }
     
+    public func switchLocalAudioTrackState(isEnable: Bool) {
+        self.webRTCService.changeLocalAudioState(isEnable)
+    }
+    
     /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
     public func bindRemoteVideo() {
         guard let remoteVideoView = remoteVideoView as? RTCMTLVideoView else { return }

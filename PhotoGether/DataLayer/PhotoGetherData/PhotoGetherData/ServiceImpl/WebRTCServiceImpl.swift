@@ -33,6 +33,7 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
     ]
     private var localVideoTrack: RTCVideoTrack?
     private var remoteVideoTrack: RTCVideoTrack?
+    private var localAudioTrack: RTCAudioTrack
     private var localDataChannel: RTCDataChannel?
     private var remoteDataChannel: RTCDataChannel?
     
@@ -61,6 +62,8 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         }
         
         self.peerConnection = peerConnection
+        // MARK: AudioTrack 생성
+        self.localAudioTrack = PeerConnectionSupport.createAudioTrack()
         
         super.init()
         
@@ -68,8 +71,7 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         self.connectDataChannel(dataChannel: createDataChannel())
         
         // MARK: AudioTrack 연결
-        let audioTrack = PeerConnectionSupport.createAudioTrack()
-        self.connectAudioTrack(audioTrack: audioTrack)
+        self.connectAudioTrack(audioTrack: self.localAudioTrack)
         self.configureAudioSession()
         
         self.peerConnection.delegate = self
@@ -271,6 +273,10 @@ public extension WebRTCServiceImpl {
     
     func unmuteAudio() {
         self.setAudioEnabled(true)
+    }
+    
+    func changeLocalAudioState(_ isEnabled: Bool) {
+        self.localAudioTrack.isEnabled = isEnabled
     }
     
     private func setAudioEnabled(_ isEnabled: Bool) {
