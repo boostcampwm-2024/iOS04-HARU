@@ -48,7 +48,6 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
         label.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(activityIndicator.snp.bottom).offset(10)
-            $0.horizontalEdges.equalToSuperview().inset(20)
         }
     }
     
@@ -69,13 +68,12 @@ public final class EnterLoadingViewController: BaseViewController, ViewControlle
             guard let self else { return }
             switch $0 {
             case .didJoinRoom(let isSuccess):
+                self.waitingRoomViewController.modalPresentationStyle = .fullScreen
                 if isSuccess {
-                    self.modalPresentationStyle = .fullScreen
                     self.present(waitingRoomViewController, animated: false)
                 } else {
                     self.showToast(message: "방 참여에 실패했습니다 흑흑")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        self.modalPresentationStyle = .fullScreen
                         self.present(self.waitingRoomViewController, animated: false)
                     }
                 }
