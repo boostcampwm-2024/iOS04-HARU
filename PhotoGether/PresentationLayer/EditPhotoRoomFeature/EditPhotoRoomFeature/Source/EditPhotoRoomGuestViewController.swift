@@ -41,7 +41,21 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         configureUI()
         bindInput()
         bindOutput()
+        bindNoti()
         input.send(.initialState)
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveNavigateToShareRoom)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.showNextView()
+            }.store(in: &cancellables)
+    }
+    
+    private func showNextView() {
+        let viewController = UIViewController()
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     public func addViews() {
