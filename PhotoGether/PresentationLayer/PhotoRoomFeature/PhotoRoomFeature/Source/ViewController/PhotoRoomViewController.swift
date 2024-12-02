@@ -14,8 +14,8 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     private let editPhotoRoomHostViewController: EditPhotoRoomHostViewController
     private let editPhotoRoomGuestViewController: EditPhotoRoomGuestViewController
     private let photoRoomBottomView: PhotoRoomBottomView
+    private let micButton: PTGMicButton
     private var isHost: Bool
-    
     
     private let input = PassthroughSubject<PhotoRoomViewModel.Input, Never>()
     
@@ -34,6 +34,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         self.viewModel = viewModel
         self.isHost = isHost
         self.photoRoomBottomView = PhotoRoomBottomView(isHost: isHost)
+        self.micButton = PTGMicButton(micState: .on)
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -69,7 +70,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     }
     
     public func addViews() {
-        [navigationView, participantsGridView, photoRoomBottomView].forEach {
+        [navigationView, participantsGridView, photoRoomBottomView, micButton].forEach {
             view.addSubview($0)
         }
     }
@@ -92,6 +93,14 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(Constants.bottomViewHeight)
         }
+        
+        micButton.snp.makeConstraints {
+            $0.bottom.equalTo(photoRoomBottomView.snp.top)
+                .inset(Constants.micButtonBottomSpacing)
+            $0.leading.equalTo(view.safeAreaLayoutGuide)
+                .offset(Constants.micButtonLeadingSpacing)
+            $0.size.equalTo(Constants.circleButtonSize)
+        }
     }
     
     public func configureUI() {
@@ -108,6 +117,11 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                 self?.input.send(.cameraButtonTapped)
             }
             .store(in: &cancellables)
+        
+        micButton.tapPublisher
+            .sink { [weak self] in
+                self?.input.send(.micButtonTapped)
+            }.store(in: &cancellables)
     }
     
     public func bindOutput() {
@@ -132,6 +146,9 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                     editPhotoRoomGuestViewController.inject(frameImageGenerator, userInfo: userInfo)
                     self.navigationController?.pushViewController(editPhotoRoomGuestViewController, animated: true)
                 }
+            case .micMuteState(let isOn):
+                micButton.changeMicState(isOn)
+                return
             }
         }
         .store(in: &cancellables)
@@ -142,5 +159,8 @@ extension PhotoRoomViewController {
     private enum Constants {
         static let bottomViewHeight: CGFloat = 80
         static let navigationHeight: CGFloat = 48
+        static let circleButtonSize: CGSize = CGSize(width: 52, height: 52)
+        static let micButtonBottomSpacing: CGFloat = -4
+        static let micButtonLeadingSpacing: CGFloat = 16
     }
 }

@@ -8,11 +8,13 @@ public final class PhotoRoomViewModel {
     
     enum Input {
         case cameraButtonTapped
+        case micButtonTapped
     }
     
     enum Output {
         case timer(count: Int)
         case timerCompleted(images: [UIImage], userInfo: UserInfo?)
+        case micMuteState(Bool)
     }
     
     private var output = PassthroughSubject<Output, Never>()
@@ -20,15 +22,18 @@ public final class PhotoRoomViewModel {
     private let captureVideosUseCase: CaptureVideosUseCase
     private let stopVideoCaptureUseCase: StopVideoCaptureUseCase
     private let getUserInfoUseCase: GetLocalVideoUseCase
+    private let changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
     
     public init(
         captureVideosUseCase: CaptureVideosUseCase,
         stopVideoCaptureUseCase: StopVideoCaptureUseCase,
-        getUserInfoUseCase: GetLocalVideoUseCase
+        getUserInfoUseCase: GetLocalVideoUseCase,
+        changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
     ) {
         self.captureVideosUseCase = captureVideosUseCase
         self.stopVideoCaptureUseCase = stopVideoCaptureUseCase
         self.getUserInfoUseCase = getUserInfoUseCase
+        self.changeLocalMicStateUseCase = changeLocalMicStateUseCase
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -38,6 +43,8 @@ public final class PhotoRoomViewModel {
             switch $0 {
             case .cameraButtonTapped:
                 self.startTimer()
+            case .micButtonTapped:
+                self.handleMicButtonDidTap()
             }
         }.store(in: &cancellables)
         
@@ -70,5 +77,12 @@ public final class PhotoRoomViewModel {
                 timer.invalidate()
             }
         }
+    }
+    
+    private func handleMicButtonDidTap() {
+        changeLocalMicStateUseCase.execute()
+            .sink { [weak self] state in
+                self?.output.send(.micMuteState(state))
+            }.store(in: &cancellables)
     }
 }
