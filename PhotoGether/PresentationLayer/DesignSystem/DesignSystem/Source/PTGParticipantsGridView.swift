@@ -1,11 +1,21 @@
 import UIKit
 import SnapKit
 
-public enum ParticipantPosition {
+public enum ParticipantPosition: Int {
     case topLeading
+    case bottomTrailing
     case topTrailing
     case bottomLeading
-    case bottomTrailing
+    
+    public init?(rawValue: Int) {
+        switch rawValue {
+        case 0: self = .topLeading
+        case 1: self = .bottomTrailing
+        case 2: self = .topTrailing
+        case 3: self = .bottomLeading
+        default: return nil
+        }
+    }
 }
 
 public final class PTGParticipantsGridView: UIView {
@@ -105,6 +115,3 @@ extension PTGParticipantsGridView {
         static let itemSpacing: CGFloat = 11
     }
 }
-
-
-
