@@ -38,6 +38,19 @@ public final class WaitingRoomViewController: BaseViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         bindInput()
         bindOutput()
+        bindNoti()
+    }
+    
+    private func bindNoti() {
+        NotificationCenter.default.publisher(for: .receiveNavigateToPhotoRoom)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] noti in
+            guard let self else { return }
+            let photoRoomVC = self.photoRoomViewController
+                photoRoomVC.setParticipantsGridView(waitingRoomView.particiapntsGridView)
+                
+            self.navigationController?.pushViewController(photoRoomVC, animated: true)
+        }.store(in: &cancellables)
     }
     
     private func bindInput() {
