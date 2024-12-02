@@ -8,22 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7B20C8172CF59C2A001325DC /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20C8162CF59C2A001325DC /* DesignSystem.framework */; };
-		7B20C8182CF59C2A001325DC /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20C8162CF59C2A001325DC /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		7B20C8192CF59C2A001325DC /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				7B20C8182CF59C2A001325DC /* DesignSystem.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7B20C8162CF59C2A001325DC /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,7 +81,6 @@
 				7B5951342CDB5E5500B89C85 /* Sources */,
 				7B5951352CDB5E5500B89C85 /* Frameworks */,
 				7B5951362CDB5E5500B89C85 /* Resources */,
-				7B20C8192CF59C2A001325DC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

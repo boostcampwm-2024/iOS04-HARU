@@ -8,23 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7B20F8E52CFD41F1001325DC /* CoreModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20F8E42CFD41F1001325DC /* CoreModule.framework */; };
-		7B20F8E62CFD41F1001325DC /* CoreModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20F8E42CFD41F1001325DC /* CoreModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B20F8EF2CFD42B1001325DC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7B20F8EE2CFD42B1001325DC /* SnapKit */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		7B20F8E72CFD41F2001325DC /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				7B20F8E62CFD41F1001325DC /* CoreModule.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7B20F8E42CFD41F1001325DC /* CoreModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,7 +96,6 @@
 				7B5951172CDB5A7000B89C85 /* Sources */,
 				7B5951182CDB5A7000B89C85 /* Frameworks */,
 				7B5951192CDB5A7000B89C85 /* Resources */,
-				7B20F8E72CFD41F2001325DC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

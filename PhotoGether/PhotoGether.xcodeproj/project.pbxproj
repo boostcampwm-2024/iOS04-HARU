@@ -14,6 +14,8 @@
 		7B17454D2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */; };
 		7B17454E2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B17458F2CE6189000E01D1A /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7B17458E2CE6189000E01D1A /* WebRTC */; };
+		7B2006A02CFDB7A2001325DC /* CoreModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20069F2CFDB7A2001325DC /* CoreModule.framework */; };
+		7B2006A12CFDB7A2001325DC /* CoreModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B20069F2CFDB7A2001325DC /* CoreModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B6F29AE2CEF744200A72959 /* BaseFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B6F29AD2CEF744200A72959 /* BaseFeature.framework */; };
 		7B6F29AF2CEF744200A72959 /* BaseFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B6F29AD2CEF744200A72959 /* BaseFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B6F29B12CEF744400A72959 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B6F29B02CEF744400A72959 /* DesignSystem.framework */; };
@@ -46,6 +48,7 @@
 				7B6F29BE2CEF746500A72959 /* WaitingRoomFeature.framework in Embed Frameworks */,
 				7B6F29B22CEF744400A72959 /* DesignSystem.framework in Embed Frameworks */,
 				7B17454B2CE35AE100E01D1A /* PhotoGetherDomain.framework in Embed Frameworks */,
+				7B2006A12CFDB7A2001325DC /* CoreModule.framework in Embed Frameworks */,
 				053986062CDCAC3000E709AC /* PhotoGetherNetwork.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -58,6 +61,7 @@
 		60CB81DA2CDA442700873DD6 /* PhotoGether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoGether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B1745492CE35AE100E01D1A /* PhotoGetherDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B17454C2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoGetherDomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B20069F2CFDB7A2001325DC /* CoreModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B6F29AD2CEF744200A72959 /* BaseFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B6F29B02CEF744400A72959 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B6F29B32CEF744700A72959 /* EditPhotoRoomFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EditPhotoRoomFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +104,7 @@
 				7B6F29B42CEF744700A72959 /* EditPhotoRoomFeature.framework in Frameworks */,
 				7B6F29B72CEF745600A72959 /* PhotoRoomFeature.framework in Frameworks */,
 				7B17454D2CE35AE700E01D1A /* PhotoGetherDomainInterface.framework in Frameworks */,
+				7B2006A02CFDB7A2001325DC /* CoreModule.framework in Frameworks */,
 				7BD84E262CEDC4F3006C8AAD /* PhotoGetherData.framework in Frameworks */,
 				7B6F29AE2CEF744200A72959 /* BaseFeature.framework in Frameworks */,
 				7B6F29BD2CEF746500A72959 /* WaitingRoomFeature.framework in Frameworks */,
@@ -113,6 +118,7 @@
 		053986032CDCAC3000E709AC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7B20069F2CFDB7A2001325DC /* CoreModule.framework */,
 				7B6F29BC2CEF746500A72959 /* WaitingRoomFeature.framework */,
 				7B6F29B92CEF746200A72959 /* SharePhotoFeature.framework */,
 				7B6F29B62CEF745600A72959 /* PhotoRoomFeature.framework */,
