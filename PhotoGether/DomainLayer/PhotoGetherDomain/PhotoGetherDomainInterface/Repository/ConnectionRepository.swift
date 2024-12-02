@@ -3,6 +3,7 @@ import Combine
 
 public protocol ConnectionRepository {
     var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> { get }
+    var didChangeLocalAudioTrackStatePublisher: AnyPublisher<Bool, Never> { get }
 
     var localUserInfo: UserInfo? { get }
 
@@ -13,5 +14,6 @@ public protocol ConnectionRepository {
     func createRoom() -> AnyPublisher<RoomOwnerEntity, Error>
     func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error>
     func sendOffer() async throws
-    func stopCaptureLocalVideo() -> Bool 
+    func stopCaptureLocalVideo() -> Bool
+    func switchLocalAudioTrackState()
 }
