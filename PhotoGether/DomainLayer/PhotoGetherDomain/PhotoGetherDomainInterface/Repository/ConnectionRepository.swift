@@ -8,5 +8,5 @@ public protocol ConnectionRepository {
     
     func createRoom() -> AnyPublisher<RoomOwnerEntity, Error>
     func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error>
-    func sendOffer() -> Bool
+    func sendOffer() async throws
 }

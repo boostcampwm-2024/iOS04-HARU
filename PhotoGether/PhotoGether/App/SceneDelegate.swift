@@ -41,27 +41,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
+            signlingService: signalingService,
+            roomService: roomService,
             clients: [
                 makeConnectionClient(
-                    signalingService: signalingService,
                     webRTCService: makeWebRTCService(
                         iceServers: stunServers
                     )
                 ),
                 makeConnectionClient(
-                    signalingService: signalingService,
                     webRTCService: makeWebRTCService(
                         iceServers: stunServers
                     )
                 ),
                 makeConnectionClient(
-                    signalingService: signalingService,
                     webRTCService: makeWebRTCService(
                         iceServers: stunServers
                     )
                 )
-            ],
-            roomService: roomService
+            ]
         )
         
         let sendOfferUseCase: SendOfferUseCase = SendOfferUseCaseImpl(
@@ -143,11 +141,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func makeConnectionClient(
-        signalingService: SignalingService,
         webRTCService: WebRTCService
     ) -> ConnectionClient {
         return ConnectionClientImpl(
-            signalingService: signalingService,
             webRTCService: webRTCService
         )
     }

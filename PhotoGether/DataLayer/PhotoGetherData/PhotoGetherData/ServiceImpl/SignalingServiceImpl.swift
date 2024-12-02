@@ -12,7 +12,7 @@ final public class SignalingServiceImpl: SignalingService {
     private let didDisconnectSubject = PassthroughSubject<Void, Never>()
     private let didReceiveOfferSdpSubject = PassthroughSubject<SessionDescriptionMessage, Never>()
     private let didReceiveAnswerSdpSubject = PassthroughSubject<SessionDescriptionMessage, Never>()
-    private let didReceiveCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
+    private let didReceiveCandidateSubject = PassthroughSubject<IceCandidateMessage, Never>()
     
     public var didConnectPublisher: AnyPublisher<Void, Never> {
         self.didConnectSubject.eraseToAnyPublisher()
@@ -26,7 +26,7 @@ final public class SignalingServiceImpl: SignalingService {
     public var didReceiveAnswerSdpPublisher: AnyPublisher<SessionDescriptionMessage, Never> {
         self.didReceiveAnswerSdpSubject.eraseToAnyPublisher()
     }
-    public var didReceiveCandidatePublisher: AnyPublisher<RTCIceCandidate, Never> {
+    public var didReceiveCandidatePublisher: AnyPublisher<IceCandidateMessage, Never> {
         self.didReceiveCandidateSubject.eraseToAnyPublisher()
     }
     
@@ -62,9 +62,10 @@ final public class SignalingServiceImpl: SignalingService {
         type: SignalingRequestDTO.SignalingMessageType,
         candidate: RTCIceCandidate,
         roomID: String,
-        userID: String
+        receiverID: String,
+        senderID: String
     ) {
-        let message = IceCandidateMessage(from: candidate, userID: userID, roomID: roomID)
+        let message = IceCandidateMessage(from: candidate, receiverID: receiverID, senderID: senderID, roomID: roomID)
         do {
             let dataMessage = try self.encoder.encode(message)
             let dto = SignalingRequestDTO(messageType: type, message: dataMessage)
@@ -97,7 +98,7 @@ extension SignalingServiceImpl {
         case .iceCandidate:
             guard let iceCandidate = response.message?.toDTO(type: IceCandidateMessage.self, decoder: decoder)
             else { return }
-            self.didReceiveCandidateSubject.send(iceCandidate.rtcIceCandidate)
+            self.didReceiveCandidateSubject.send(iceCandidate)
         
         case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)

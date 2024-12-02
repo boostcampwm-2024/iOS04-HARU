@@ -8,7 +8,6 @@ import PhotoGetherDomainInterface
 public final class WaitingRoomViewController: BaseViewController {
     private let viewModel: WaitingRoomViewModel
     private let waitingRoomView = WaitingRoomView()
-    private let participantsCollectionViewController = ParticipantsCollectionViewController()
     private let photoRoomViewController: PhotoRoomViewController
     
     private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
@@ -36,37 +35,10 @@ public final class WaitingRoomViewController: BaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         defer { viewDidLoadSubject.send(()) }
-        addViews()
-        setupConstraints()
-        configureUI()
-        setPlaceHolder()
         bindInput()
         bindOutput()
     }
     
-    private func addViews() {
-        addChild(participantsCollectionViewController)
-        participantsCollectionViewController.didMove(toParent: self)
-        
-        let collectionView = participantsCollectionViewController.view ?? UIView()
-        let micButton = waitingRoomView.micButton
-        waitingRoomView.insertSubview(collectionView, belowSubview: micButton)
-    }
-    
-    private func setupConstraints() {
-        let collectionView = participantsCollectionViewController.view ?? UIView()
-        let topOffset: CGFloat = APP_HEIGHT() > 667 ? 44 : 0 // 최소사이즈 기기 SE2 기준
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(topOffset)
-            $0.bottom.equalTo(waitingRoomView.bottomBarView.snp.top)
-            $0.horizontalEdges.equalToSuperview()
-        }
-    }
-    
-    private func configureUI() {
-        participantsCollectionViewController.collectionView.backgroundColor = PTGColor.gray90.color
-    }
-
     private func bindInput() {
         viewDidLoadSubject.sink { [weak self] _ in
             self?.input.send(.viewDidLoad)
@@ -92,31 +64,28 @@ public final class WaitingRoomViewController: BaseViewController {
     private func bindOutput() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        output
-            .sink { [weak self] in
+        output.sink { [weak self] in
             guard let self else { return }
             switch $0 {
-                
             // MARK: 네비게이션 처리
             case .navigateToPhotoRoom:
                 self.navigateToPhotoRoom()
                 
             // MARK: 내 비디오 화면 업데이트
             case .localVideo(let localVideoView):
-                self.updateParticipantView(
-                    position: .host,
-                    nickname: "나는 호스트",
-                    videoView: localVideoView
-                )
+                print(localVideoView)
+                self.waitingRoomView.updateParticipantView(view: localVideoView, position: .topLeading)
                 
             // MARK: 상대방 비디오 화면 업데이트
             case .remoteVideos(let remoteVideoViews):
-                guard let remoteVideoView = remoteVideoViews.first else { return }
-                self.updateParticipantView(
-                    position: .guest3,
-                    nickname: "나는 게스트",
-                    videoView: remoteVideoView
-                )
+                let guest1 = remoteVideoViews[safe: 0] ?? UIView()
+                let guest2 = remoteVideoViews[safe: 1] ?? UIView()
+                let guest3 = remoteVideoViews[safe: 2] ?? UIView()
+                
+                self.waitingRoomView.updateParticipantView(view: guest1, position: .topTrailing)
+                self.waitingRoomView.updateParticipantView(view: guest2, position: .bottomLeading)
+                self.waitingRoomView.updateParticipantView(view: guest3, position: .bottomTrailing)
+
             // MARK: 마이크 음소거 UI 업데이트
             case .micMuteState:
                 return
@@ -133,44 +102,10 @@ public final class WaitingRoomViewController: BaseViewController {
     }
 
     private func navigateToPhotoRoom() {
-        let collectionVC = participantsCollectionViewController
+        let collectionVC = ParticipantsCollectionViewController()
         let photoRoomVC = photoRoomViewController
         photoRoomVC.setCollectionViewController(collectionVC)
         navigationController?.pushViewController(photoRoomVC, animated: true)
-    }
-
-    private func updateParticipantView(
-        position: ParticipantsSectionItem.Position,
-        nickname: String,
-        videoView: UIView
-    ) {
-        var snapshot = participantsCollectionViewController.dataSource.snapshot()
-        var items = snapshot.itemIdentifiers
-        
-        guard let index = items.firstIndex(where: { $0.position == position }) else { return }
-        
-        let newItem = SectionItem(position: position, nickname: nickname, videoView: videoView)
-        
-        items.remove(at: index)
-        items.insert(newItem, at: index)
-        
-        snapshot.deleteItems(items)
-        snapshot.appendItems(items, toSection: 0)
-        
-        participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
-    }
-    
-    private func setPlaceHolder() {
-        let placeHolder = [
-            ParticipantsSectionItem(position: .host, nickname: "host"),
-            ParticipantsSectionItem(position: .guest1, nickname: "guest1"),
-            ParticipantsSectionItem(position: .guest2, nickname: "guest2"),
-            ParticipantsSectionItem(position: .guest3, nickname: "guest3")
-        ]
-        var snapshot = participantsCollectionViewController.dataSource.snapshot()
-        snapshot.appendSections([0])
-        snapshot.appendItems(placeHolder, toSection: 0)
-        participantsCollectionViewController.dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func showShareSheet(message: String) {

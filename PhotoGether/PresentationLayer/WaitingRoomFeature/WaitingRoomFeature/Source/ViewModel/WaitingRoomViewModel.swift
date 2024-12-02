@@ -44,8 +44,8 @@ public final class WaitingRoomViewModel {
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
-                self?.handleEvent(event)
-            }.store(in: &cancellables)
+            self?.handleEvent(event)
+        }.store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
     }
@@ -64,6 +64,7 @@ public final class WaitingRoomViewModel {
     }
     
     private func handleViewDidLoad() {
+        
         let localVideo = getLocalVideoUseCase.execute()
         output.send(.localVideo(localVideo))
         
@@ -71,8 +72,17 @@ public final class WaitingRoomViewModel {
         output.send(.remoteVideos(remoteVideos))
         
         if !isHost {
-            let message = sendOfferUseCase.execute() ? "연결을 시도합니다." : "연결 중 에러가 발생했어요."
-            output.send(.shouldShowToast(message))
+            let cancellable = sendOfferUseCase.execute().sink { [weak self] completion in
+                switch completion {
+                case .finished:
+                    return
+                case .failure(let error):
+                    self?.output.send(.shouldShowToast("연결 중 에러가 발생했어요."))
+                }
+            } receiveValue: { [weak self] _ in
+                self?.output.send(.shouldShowToast("연결을 시도합니다."))
+            }
+            cancellable.cancel()
         }
     }
     

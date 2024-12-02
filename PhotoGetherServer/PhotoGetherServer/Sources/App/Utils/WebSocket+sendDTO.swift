@@ -7,7 +7,7 @@ extension WebSocket {
         encoder: JSONEncoder
     ) -> Bool {
         guard let data = dto.toData(encoder) else {
-            print("[DEBUG] :: Encode Failed: \(dto)")
+            print("[DEBUG] :: Encode Failed: \(dto.self)")
             return false
         }
         self.send(data)
