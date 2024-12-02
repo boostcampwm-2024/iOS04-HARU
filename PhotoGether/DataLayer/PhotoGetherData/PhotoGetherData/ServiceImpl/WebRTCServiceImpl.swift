@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import WebRTC
+import CoreModule
 
 public final class WebRTCServiceImpl: NSObject, WebRTCService {
     private let didGenerateLocalCandidateSubject = PassthroughSubject<RTCIceCandidate, Never>()
@@ -47,7 +48,7 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
             constraints: mediaConstraint,
             delegate: nil
         ) else {
-            PTGDataLogger.log("Could not create new RTCPeerConnection")
+            PTGLogger.default.log("Could not create new RTCPeerConnection")
             fatalError("Could not create new RTCPeerConnection")
         }
         
@@ -168,8 +169,9 @@ public extension WebRTCServiceImpl {
     
     /// remoteVideoTrack에서 수신된 모든 프레임을 렌더링할 렌더러(View)를 등록합니다.
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
-        PTGDataLogger.log("\(self.remoteVideoTrack?.description ?? "nil")")
-        self.remoteVideoTrack?.add(renderer)
+        let flippedRenderer = renderer.flipHorizontally()
+        PTGLogger.default.log("\(self.remoteVideoTrack?.description ?? "nil")")
+        self.remoteVideoTrack?.add(flippedRenderer)
     }
     
     func connectLocalVideoTrack(videoTrack: RTCVideoTrack) {
@@ -184,7 +186,7 @@ public extension WebRTCServiceImpl {
         self.remoteVideoTrack = self.peerConnection.transceivers
             .first { $0.mediaType == .video }?
             .receiver.track as? RTCVideoTrack
-        PTGDataLogger.log("\(remoteVideoTrack?.description ?? "nil")")
+        PTGLogger.default.log("\(remoteVideoTrack?.description ?? "nil")")
     }
     
     private func connectAudioTrack(audioTrack: RTCAudioTrack) {
@@ -203,7 +205,7 @@ public extension WebRTCServiceImpl {
             try self.rtcAudioSession.overrideOutputAudioPort(.speaker)
             try self.rtcAudioSession.setActive(true)
         } catch let error {
-            PTGDataLogger.log("Error changeing AVAudioSession category: \(error)")
+            PTGLogger.default.log("Error changeing AVAudioSession category: \(error)")
         }
         self.rtcAudioSession.unlockForConfiguration()
     }
@@ -220,7 +222,7 @@ public extension WebRTCServiceImpl {
             forLabel: "WebRTCData",
             configuration: config
         ) else {
-            PTGDataLogger.log("Warning: Couldn't create data channel.")
+            PTGLogger.default.log("Warning: Couldn't create data channel.")
             return nil
         }
         return dataChannel
@@ -259,34 +261,34 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didChange stateChanged: RTCSignalingState
     ) {
-        PTGDataLogger.log("peerConnection new signaling state: \(stateChanged)")
+        PTGLogger.default.log("peerConnection new signaling state: \(stateChanged)")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didAdd stream: RTCMediaStream
     ) {
-        PTGDataLogger.log("peerConnection did add stream")
+        PTGLogger.default.log("peerConnection did add stream")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didRemove stream: RTCMediaStream
     ) {
-        PTGDataLogger.log("peerConnection did remove stream")
+        PTGLogger.default.log("peerConnection did remove stream")
     }
     
     public func peerConnectionShouldNegotiate(
         _ peerConnection: RTCPeerConnection
     ) {
-        PTGDataLogger.log("peerConnection should negotiate")
+        PTGLogger.default.log("peerConnection should negotiate")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didChange newState: RTCIceConnectionState
     ) {
-        PTGDataLogger.log("peerConnection new connection state: \(newState)")
+        PTGLogger.default.log("peerConnection new connection state: \(newState)")
         self.didChangeConnectionStateSubject.send(newState)
     }
     
@@ -294,7 +296,7 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didChange newState: RTCIceGatheringState
     ) {
-        PTGDataLogger.log("peerConnection new gathering state: \(newState)")
+        PTGLogger.default.log("peerConnection new gathering state: \(newState)")
     }
     
     public func peerConnection(
@@ -308,14 +310,14 @@ extension WebRTCServiceImpl {
         _ peerConnection: RTCPeerConnection,
         didRemove candidates: [RTCIceCandidate]
     ) {
-        PTGDataLogger.log("peerConnection did remove candidate(s)")
+        PTGLogger.default.log("peerConnection did remove candidate(s)")
     }
     
     public func peerConnection(
         _ peerConnection: RTCPeerConnection,
         didOpen dataChannel: RTCDataChannel
     ) {
-        PTGDataLogger.log("peerConnection did open data channel")
+        PTGLogger.default.log("peerConnection did open data channel")
         self.remoteDataChannel = dataChannel
     }
 }
@@ -325,7 +327,7 @@ extension WebRTCServiceImpl {
     public func dataChannelDidChangeState(
         _ dataChannel: RTCDataChannel
     ) {
-        PTGDataLogger.log("dataChannel did change state: \(dataChannel.readyState)")
+        PTGLogger.default.log("dataChannel did change state: \(dataChannel.readyState)")
     }
     
     public func dataChannel(

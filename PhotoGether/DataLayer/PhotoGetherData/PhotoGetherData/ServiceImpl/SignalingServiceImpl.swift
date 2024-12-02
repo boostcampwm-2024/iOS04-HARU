@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import WebRTC
 import PhotoGetherNetwork
+import CoreModule
 
 final public class SignalingServiceImpl: SignalingService {
     private let decoder = JSONDecoder()
@@ -46,7 +47,7 @@ final public class SignalingServiceImpl: SignalingService {
         offerID: String,
         answerID: String?
     ) {
-        PTGDataLogger.log("send SDP type: \(type) roomID: \(roomID) offerID: \(offerID) answerID: \(answerID ?? "nil")")
+        PTGLogger.default.log("send SDP type: \(type) roomID: \(roomID) offerID: \(offerID) answerID: \(answerID ?? "nil")")
         let message = SessionDescriptionMessage(from: sdp, roomID: roomID, offerID: offerID, answerID: answerID)
         do {
             let dataMessage = try self.encoder.encode(message)
@@ -54,7 +55,7 @@ final public class SignalingServiceImpl: SignalingService {
             let request = try self.encoder.encode(dto)    
             self.webSocketClient.send(data: dataMessage)
         } catch {
-            PTGDataLogger.log("Warning: Could not encode sdp: \(error)")
+            PTGLogger.default.log("Warning: Could not encode sdp: \(error)")
         }
     }
     
@@ -72,7 +73,7 @@ final public class SignalingServiceImpl: SignalingService {
             let request = try self.encoder.encode(dto)
             self.webSocketClient.send(data: dataMessage)
         } catch {
-            PTGDataLogger.log("Warning: Could not encode candidate: \(error)")
+            PTGLogger.default.log("Warning: Could not encode candidate: \(error)")
         }
     }
 }
@@ -87,7 +88,7 @@ extension SignalingServiceImpl {
         self.didDisconnectSubject.send(())
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            PTGDataLogger.log("Signaling server 재연결 시도 중...")
+            PTGLogger.default.log("Signaling server 재연결 시도 중...")
             self.webSocketClient.connect()
         }
     }
@@ -103,17 +104,17 @@ extension SignalingServiceImpl {
         case .offerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
             else { return }
-            PTGDataLogger.log("Received Offer SDP: \(sdp)")
+            PTGLogger.default.log("Received Offer SDP: \(sdp)")
             self.didReceiveOfferSdpSubject.send(sdp)
             
         case .answerSDP:
             guard let sdp = response.message?.toDTO(type: SessionDescriptionMessage.self, decoder: decoder)
             else { return }
-            PTGDataLogger.log("Received Answer SDP: \(sdp)")
+            PTGLogger.default.log("Received Answer SDP: \(sdp)")
             self.didReceiveAnswerSdpSubject.send(sdp)
         
         @unknown default:
-            PTGDataLogger.log("Unknown Message Type: \(response)")
+            PTGLogger.default.log("Unknown Message Type: \(response)")
             return
         }
     }
