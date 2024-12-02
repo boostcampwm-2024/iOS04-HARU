@@ -17,7 +17,6 @@ public final class ConnectionClientImpl: ConnectionClient {
     public var didGenerateLocalCandidatePublisher: AnyPublisher<(receiverID: String, RTCIceCandidate), Never> {
         didGenerateLocalCandidateSubejct.eraseToAnyPublisher()
     }
-        
     public var remoteVideoView: UIView = CapturableVideoView()
     public var remoteUserInfo: UserInfo?
         
@@ -78,14 +77,19 @@ public final class ConnectionClientImpl: ConnectionClient {
     }
     
     /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.
-    private func bindRemoteVideo() {
+    public func bindRemoteVideo() {
         guard let remoteVideoView = remoteVideoView as? RTCMTLVideoView else { return }
+        self.webRTCService.connectRemoteVideoTrack()
         self.webRTCService.renderRemoteVideo(to: remoteVideoView)
     }
     
-    public func bindLocalVideo(_ localVideoView: UIView) {
+    public func bindLocalVideo(videoSource: RTCVideoSource?, _ localVideoView: UIView) {
+        guard let videoSource else { return }
+        let videoTrack = PeerConnectionSupport.createVideoTrack(videoSource: videoSource)
         guard let localVideoView = localVideoView as? RTCMTLVideoView else { return }
-        self.webRTCService.startCaptureLocalVideo(renderer: localVideoView)
+        
+        self.webRTCService.connectLocalVideoTrack(videoTrack: videoTrack)
+        self.webRTCService.renderLocalVideo(to: localVideoView)
     }
         
     private func bindWebRTCService() {
