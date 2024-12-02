@@ -139,6 +139,21 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             .store(in: &cancellables)
     }
 
+    private func showNextView() {
+        NotificationCenter.default.post(name: .navigateToShareRoom, object: nil)
+        
+        guard let imageData = renderCanvasImageView() else { return }
+        let component = SharePhotoComponent(imageData: imageData)
+        let viewModel = SharePhotoViewModel(component: component)
+        let viewController = SharePhotoViewController(viewModel: viewModel)
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func renderCanvasImageView() -> Data? {
+        return canvasScrollView.makeSharePhoto()
+    }
+    
     private func updateFrameImage(to image: UIImage) {
         canvasScrollView.updateFrameImage(to: image)
     }
