@@ -125,6 +125,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         let component = SharePhotoComponent(imageData: imageData)
         let viewModel = SharePhotoViewModel(component: component)
         let viewController = SharePhotoViewController(viewModel: viewModel)
+        bottomSheetViewController.dismiss(animated: false)
         
         self.navigationController?.pushViewController(viewController, animated: true)
     }
