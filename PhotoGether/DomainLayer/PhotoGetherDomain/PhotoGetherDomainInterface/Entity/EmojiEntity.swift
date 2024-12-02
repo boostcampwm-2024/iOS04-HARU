@@ -9,7 +9,7 @@ public struct EmojiEntity: Decodable {
         guard let emojiURL = URL(string: "https://www.emoji.family/api/emojis")
         else { return nil }
         
-        let style = emojiStyle.twemoji.rawValue
+        let style = EmojiStyle.twemoji.rawValue
         let ext = "png"
         let size = "128"
         
@@ -32,7 +32,7 @@ public struct EmojiEntity: Decodable {
         self.annotation = annotation
     }
     
-    private enum emojiStyle: String {
+    private enum EmojiStyle: String {
         case noto, twemoji, openmoji, blobmoji, fluent, fluentflat
     }
 }

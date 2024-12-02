@@ -15,7 +15,6 @@ public struct EmojiDTO: Codable {
     let skintoneCombination, skintoneBase: String?
 }
 
-
 extension EmojiDTO {
     func toEntity() -> EmojiEntity {
         return .init(
