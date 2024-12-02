@@ -73,6 +73,7 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         // MARK: AudioTrack 연결
         self.connectAudioTrack(audioTrack: self.localAudioTrack)
         self.configureAudioSession()
+        self.localAudioTrack.isEnabled = false
         
         self.peerConnection.delegate = self
         self.bindNoti()
