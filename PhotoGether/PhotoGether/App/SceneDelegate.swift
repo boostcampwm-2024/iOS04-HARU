@@ -86,8 +86,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let stopVideoCaptureUseCase: StopVideoCaptureUseCase = StopVideoCaptureUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
-            captureVideosUseCase: captureVideosUseCase
+            captureVideosUseCase: captureVideosUseCase,
+            stopVideoCaptureUseCase: stopVideoCaptureUseCase
         )
         
         let photoRoomViewController: PhotoRoomViewController = PhotoRoomViewController(
