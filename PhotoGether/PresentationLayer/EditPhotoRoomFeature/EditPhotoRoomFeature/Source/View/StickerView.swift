@@ -1,6 +1,7 @@
+import UIKit
+import BaseFeature
 import DesignSystem
 import PhotoGetherDomainInterface
-import UIKit
 
 protocol StickerViewActionDelegate: AnyObject {
     func stickerView(_ stickerView: StickerView, didTap id: UUID)
@@ -220,7 +221,7 @@ final class StickerView: UIView {
     private func setImage(to urlString: String) {
         guard let url = URL(string: urlString) else { return }
 
-        Task { await self.setAsyncImage(url) }
+        Task { await imageView.setAsyncImage(url) }
     }
     
     @objc private func handleTap() {
