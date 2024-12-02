@@ -44,9 +44,9 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         audioConfig.category = AVAudioSession.Category.playAndRecord.rawValue
         audioConfig.mode = AVAudioSession.Mode.voiceChat.rawValue
         audioConfig.categoryOptions = [
-            .defaultToSpeaker,
-            .allowBluetooth,
-            .allowAirPlay
+            .defaultToSpeaker, // 하단 스피커를 기본으로 설정
+            .allowBluetooth, // 블루투스 기기의 음성 입출력 지원
+            .allowAirPlay // AirPlay를 통해 연결된 다른 기기로 음성 출력 지원
         ]
         RTCAudioSessionConfiguration.setWebRTC(audioConfig)
         
