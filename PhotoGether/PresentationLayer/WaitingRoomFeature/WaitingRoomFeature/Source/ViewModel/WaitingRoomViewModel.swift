@@ -1,6 +1,7 @@
 import UIKit
 import Combine
 import PhotoGetherDomainInterface
+import CoreModule
 
 public final class WaitingRoomViewModel {
     enum Input {
@@ -109,17 +110,17 @@ public final class WaitingRoomViewModel {
     }
     
     private func sendOffer() {
-        let cancellable = sendOfferUseCase.execute().sink { [weak self] completion in
+        _ = sendOfferUseCase.execute().sink { [weak self] completion in
             switch completion {
             case .finished:
                 return
             case .failure(let error):
                 self?.output.send(.shouldShowToast("연결 중 에러가 발생했어요."))
+                PTGLogger.default.log(error.localizedDescription)
             }
         } receiveValue: { [weak self] _ in
             self?.output.send(.shouldShowToast("연결을 시도합니다."))
         }
-        cancellable.cancel()
     }
     
     private func handleLinkButtonDidTap() {

@@ -80,8 +80,7 @@ private extension WaitingRoomView {
     
     func configureUI() {
         self.backgroundColor = PTGColor.gray90.color
-
-        startButton.setTitle(to: StartButtonTitle.one.rawValue)
+        startButton.setTitle(to: "촬영시작")
     }
 }
 
