@@ -104,6 +104,7 @@ final class StickerView: UIView {
         isUserInteractionEnabled = true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.isExclusiveTouch = true
         addGestureRecognizer(tapGesture)
         
         dragPanGestureRecognizer.minimumNumberOfTouches = 1
