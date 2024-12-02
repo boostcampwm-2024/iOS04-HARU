@@ -1,5 +1,6 @@
 import UIKit
 
+import BaseFeature
 import PhotoGetherDomainInterface
 
 // TODO: 이미지가 Repo로 부터 도착하면 image 주입
