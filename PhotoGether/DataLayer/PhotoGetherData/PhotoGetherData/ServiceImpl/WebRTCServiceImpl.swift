@@ -275,7 +275,7 @@ public extension WebRTCServiceImpl {
         self.setAudioEnabled(true)
     }
     
-    func changeLocalAudioState(_ isEnabled: Bool) {
+    func setLocalAudioState(_ isEnabled: Bool) {
         self.localAudioTrack.isEnabled = isEnabled
     }
     

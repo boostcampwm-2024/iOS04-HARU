@@ -19,7 +19,7 @@ public protocol ConnectionClient {
     func setRemoteUserInfo(_ remoteUserInfo: UserInfo)
     func sendData(data: Data)
     func captureVideo() -> UIImage
-    func switchLocalAudioTrackState(isEnable: Bool)
+    func toggleLocalAudioTrackState(isEnable: Bool)
     func bindLocalVideo(videoSource: RTCVideoSource?, _ localVideoView: UIView)
     func bindRemoteVideo()
 }

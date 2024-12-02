@@ -25,7 +25,7 @@ public final class WaitingRoomViewModel {
     private let getRemoteVideoUseCase: GetRemoteVideoUseCase
     private let createRoomUseCase: CreateRoomUseCase
     private let didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase
-    private let changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
+    private let toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
     
     private var isHost: Bool
     private var cancellables = Set<AnyCancellable>()
@@ -38,7 +38,7 @@ public final class WaitingRoomViewModel {
         getRemoteVideoUseCase: GetRemoteVideoUseCase,
         createRoomUseCase: CreateRoomUseCase,
         didEnterNewUserPublisherUseCase: DidEnterNewUserPublisherUseCase,
-        changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
+        toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
     ) {
         self.isHost = isHost
         self.sendOfferUseCase = sendOfferUseCase
@@ -46,7 +46,7 @@ public final class WaitingRoomViewModel {
         self.getRemoteVideoUseCase = getRemoteVideoUseCase
         self.createRoomUseCase = createRoomUseCase
         self.didEnterNewUserPublisherUseCase = didEnterNewUserPublisherUseCase
-        self.changeLocalMicStateUseCase = changeLocalMicStateUseCase
+        self.toggleLocalMicStateUseCase = toggleLocalMicStateUseCase
         
         bindSideEffects()
     }
@@ -144,7 +144,7 @@ public final class WaitingRoomViewModel {
     }
     
     private func handleMicButtonDidTap() {
-        changeLocalMicStateUseCase.execute()
+        toggleLocalMicStateUseCase.execute()
             .sink { [weak self] state in
                 self?.output.send(.micMuteState(state))
             }.store(in: &cancellables)

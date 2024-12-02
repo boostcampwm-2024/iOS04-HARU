@@ -22,8 +22,8 @@ final class WaitingRoomView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func changeMicButtonState(isOn: Bool) {
-        micButton.changeMicState(isOn)
+    func toggleMicButtonState(isOn: Bool) {
+        micButton.toggleMicState(isOn)
     }
     
     func updateStartButtonTitle(count: Int) {

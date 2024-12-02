@@ -90,7 +90,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
-        let changeLocalMicStateUseCase = ChangeLocalMicStateUseCaseImpl(
+        let toggleLocalMicStateUseCaseImpl = ToggleLocalMicStateUseCaseImpl(
             connectionRepository: connectionRepository
         )
         
@@ -98,7 +98,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             captureVideosUseCase: captureVideosUseCase,
             stopVideoCaptureUseCase: stopVideoCaptureUseCase,
             getUserInfoUseCase: getLocalVideoUseCase,
-            changeLocalMicStateUseCase: changeLocalMicStateUseCase
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl
         )
         
         let localDataSource = LocalShapeDataSourceImpl()
@@ -202,7 +202,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             getRemoteVideoUseCase: getRemoteVideoUseCase,
             createRoomUseCase: createRoomUseCase,
             didEnterNewUserPublisherUseCase: didEnterNewUserPublisherUseCase,
-            changeLocalMicStateUseCase: changeLocalMicStateUseCase
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl
         )
         
         let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(

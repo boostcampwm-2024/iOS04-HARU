@@ -1,5 +1,5 @@
 import Combine
 
-public protocol ChangeLocalMicStateUseCase {
+public protocol ToggleLocalMicStateUseCase {
     func execute() -> AnyPublisher<Bool, Never>
 }

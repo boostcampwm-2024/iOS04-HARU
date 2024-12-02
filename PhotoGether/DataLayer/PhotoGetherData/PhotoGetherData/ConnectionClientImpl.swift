@@ -76,8 +76,8 @@ public final class ConnectionClientImpl: ConnectionClient {
         return capturedImage
     }
     
-    public func switchLocalAudioTrackState(isEnable: Bool) {
-        self.webRTCService.changeLocalAudioState(isEnable)
+    public func toggleLocalAudioTrackState(isEnable: Bool) {
+        self.webRTCService.setLocalAudioState(isEnable)
     }
     
     /// remoteVideoTrack과 상대방의 화면을 볼 수 있는 뷰를 바인딩합니다.

@@ -152,7 +152,7 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     public func switchLocalAudioTrackState() {
         let presentAudioState = didChangeLocalAudioTrackStateSubject.value
         clients.forEach {
-            $0.switchLocalAudioTrackState(isEnable: !presentAudioState)
+            $0.toggleLocalAudioTrackState(isEnable: !presentAudioState)
         }
         didChangeLocalAudioTrackStateSubject.send(!presentAudioState)
     }

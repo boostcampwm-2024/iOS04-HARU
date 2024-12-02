@@ -22,18 +22,18 @@ public final class PhotoRoomViewModel {
     private let captureVideosUseCase: CaptureVideosUseCase
     private let stopVideoCaptureUseCase: StopVideoCaptureUseCase
     private let getUserInfoUseCase: GetLocalVideoUseCase
-    private let changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
+    private let toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
     
     public init(
         captureVideosUseCase: CaptureVideosUseCase,
         stopVideoCaptureUseCase: StopVideoCaptureUseCase,
         getUserInfoUseCase: GetLocalVideoUseCase,
-        changeLocalMicStateUseCase: ChangeLocalMicStateUseCase
+        toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
     ) {
         self.captureVideosUseCase = captureVideosUseCase
         self.stopVideoCaptureUseCase = stopVideoCaptureUseCase
         self.getUserInfoUseCase = getUserInfoUseCase
-        self.changeLocalMicStateUseCase = changeLocalMicStateUseCase
+        self.toggleLocalMicStateUseCase = toggleLocalMicStateUseCase
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -80,7 +80,7 @@ public final class PhotoRoomViewModel {
     }
     
     private func handleMicButtonDidTap() {
-        changeLocalMicStateUseCase.execute()
+        toggleLocalMicStateUseCase.execute()
             .sink { [weak self] state in
                 self?.output.send(.micMuteState(state))
             }.store(in: &cancellables)

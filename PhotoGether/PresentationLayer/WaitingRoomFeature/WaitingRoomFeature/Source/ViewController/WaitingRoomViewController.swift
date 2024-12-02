@@ -102,7 +102,7 @@ public final class WaitingRoomViewController: BaseViewController {
             
             // MARK: 마이크 음소거 UI 업데이트
             case .micMuteState(let isOn):
-                waitingRoomView.changeMicButtonState(isOn: isOn)
+                waitingRoomView.toggleMicButtonState(isOn: isOn)
                 return
                 
             // MARK: 초대를 위한 공유시트 present
