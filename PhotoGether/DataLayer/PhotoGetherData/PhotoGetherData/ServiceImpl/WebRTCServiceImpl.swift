@@ -42,7 +42,11 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         let audioConfig = RTCAudioSessionConfiguration.webRTC()
         audioConfig.category = AVAudioSession.Category.playAndRecord.rawValue
         audioConfig.mode = AVAudioSession.Mode.voiceChat.rawValue
-        audioConfig.categoryOptions = [.defaultToSpeaker]
+        audioConfig.categoryOptions = [
+            .defaultToSpeaker,
+            .allowBluetooth,
+            .allowAirPlay
+        ]
         RTCAudioSessionConfiguration.setWebRTC(audioConfig)
         
         let mediaConstraint = PeerConnectionSupport.mediaConstraint()
@@ -222,12 +226,12 @@ public extension WebRTCServiceImpl {
     private func configureAudioSession() {
         self.rtcAudioSession.lockForConfiguration()
         do {
+            
             try self.rtcAudioSession.setCategory(
                 .playAndRecord,
                 mode: .voiceChat,
                 options: .defaultToSpeaker
             )
-            try self.rtcAudioSession.overrideOutputAudioPort(.speaker)
             try self.rtcAudioSession.setActive(true)
         } catch let error {
             PTGLogger.default.log("Error changeing AVAudioSession category: \(error)")
