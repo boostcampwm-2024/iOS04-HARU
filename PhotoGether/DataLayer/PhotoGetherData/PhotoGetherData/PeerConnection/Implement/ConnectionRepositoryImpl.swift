@@ -69,12 +69,16 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     
     private func initVideoCapturer() {
         guard let videoSource else { return }
-        self.videoCapturer = RTCCameraVideoCapturer(delegate: videoSource)
+        self.videoCapturer = RTCVideoFlipableCapturer(videoSource: videoSource)
+        //self.videoCapturer = RTCVideoFlipableCapturer(delegate: videoSource)
     }
     
     /// local Video 캡쳐를 중지합니다.
-    public func stopCaptureLocalVideo() -> Bool {
-        localVideoCaptureManager.stopCaptureLocalVideo()
+    public func stopCaptureLocalVideo()-> Bool {
+        Task {
+            await localVideoCaptureManager.stopCaptureLocalVideo()
+        }
+        return true
     }
     
     /// 카메라 전후면을 전환하고 다시 비디오 캡쳐를 시작합니다.
