@@ -34,4 +34,5 @@ public protocol WebRTCService: RTCPeerConnectionDelegate, RTCDataChannelDelegate
     // MARK: Audio
     func muteAudio()
     func unmuteAudio()
+    func setLocalAudioState(_ isEnabled: Bool)
 }

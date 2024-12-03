@@ -8,11 +8,13 @@ public final class PhotoRoomViewModel {
     
     enum Input {
         case cameraButtonTapped
+        case micButtonTapped
     }
     
     enum Output {
         case timer(count: Int)
         case timerCompleted(images: [UIImage], userInfo: UserInfo?)
+        case voiceInputState(Bool)
     }
     
     private var output = PassthroughSubject<Output, Never>()
@@ -20,15 +22,21 @@ public final class PhotoRoomViewModel {
     private let captureVideosUseCase: CaptureVideosUseCase
     private let stopVideoCaptureUseCase: StopVideoCaptureUseCase
     private let getUserInfoUseCase: GetLocalVideoUseCase
+    private let toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
+    private let getVoiceInputStateUseCase: GetVoiceInputStateUseCase
     
     public init(
         captureVideosUseCase: CaptureVideosUseCase,
         stopVideoCaptureUseCase: StopVideoCaptureUseCase,
-        getUserInfoUseCase: GetLocalVideoUseCase
+        getUserInfoUseCase: GetLocalVideoUseCase,
+        toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase,
+        getVoiceInputStateUseCase: GetVoiceInputStateUseCase
     ) {
         self.captureVideosUseCase = captureVideosUseCase
         self.stopVideoCaptureUseCase = stopVideoCaptureUseCase
         self.getUserInfoUseCase = getUserInfoUseCase
+        self.toggleLocalMicStateUseCase = toggleLocalMicStateUseCase
+        self.getVoiceInputStateUseCase  = getVoiceInputStateUseCase
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -38,11 +46,15 @@ public final class PhotoRoomViewModel {
             switch $0 {
             case .cameraButtonTapped:
                 self.startTimer()
+            case .micButtonTapped:
+                self.handleMicButtonDidTap()
             }
         }.store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
     }
+    
+    func fetchLocalVideoInputState() -> Bool { getVoiceInputStateUseCase.execute() }
     
     private func startTimer() {
         guard let userInfo = getUserInfoUseCase.execute().0 else { return }
@@ -70,5 +82,12 @@ public final class PhotoRoomViewModel {
                 timer.invalidate()
             }
         }
+    }
+    
+    private func handleMicButtonDidTap() {
+        toggleLocalMicStateUseCase.execute()
+            .sink { [weak self] state in
+                self?.output.send(.voiceInputState(state))
+            }.store(in: &cancellables)
     }
 }

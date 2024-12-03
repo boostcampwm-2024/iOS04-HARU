@@ -5,7 +5,7 @@ import CoreModule
 
 final class WaitingRoomView: UIView {
     let bottomBarView = UIView()
-    let micButton = PTGMicButton(micState: .on)
+    let micButton = PTGMicButton(micState: .off)
     let linkButton = PTGCircleButton(type: .link)
     let startButton = PTGPrimaryButton()
     let particiapntsGridView = PTGParticipantsGridView()
@@ -22,8 +22,8 @@ final class WaitingRoomView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func toggleMicButtonState() {
-        micButton.toggleMicState()
+    func toggleMicButtonState(isOn: Bool) {
+        micButton.toggleMicState(isOn)
     }
     
     func updateStartButtonTitle(count: Int) {

@@ -14,6 +14,14 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
     public var didEnterNewUserPublisher: AnyPublisher<(UserInfo, UIView), Never> {
         didEnterNewUserSubject.eraseToAnyPublisher()
     }
+    private let didChangeLocalAudioTrackStateSubject = CurrentValueSubject<Bool, Never>(false)
+    public var didChangeLocalAudioTrackStatePublisher: AnyPublisher<Bool, Never> {
+        didChangeLocalAudioTrackStateSubject
+            .eraseToAnyPublisher()
+    }
+    public var currentLocalVideoInputState: Bool {
+        didChangeLocalAudioTrackStateSubject.value
+    }
     private let _localVideoView = CapturableVideoView()
     public private(set) var localUserInfo: UserInfo?
     
@@ -73,7 +81,6 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
                 let width2 = CMVideoFormatDescriptionGetDimensions(frame2.formatDescription).width
                 return width1 < width2
             }).first else { return }
-
         // 가장 높은 fps 선택
         guard let fps = (format.videoSupportedFrameRateRanges
             .sorted { return $0.maxFrameRate < $1.maxFrameRate })
@@ -143,6 +150,14 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
                 answerID: remoteUserInfo.id
             )
         }
+    }
+    
+    public func switchLocalAudioTrackState() {
+        let presentAudioState = didChangeLocalAudioTrackStateSubject.value
+        clients.forEach {
+            $0.toggleLocalAudioTrackState(isEnable: !presentAudioState)
+        }
+        didChangeLocalAudioTrackStateSubject.send(!presentAudioState)
     }
 }
 

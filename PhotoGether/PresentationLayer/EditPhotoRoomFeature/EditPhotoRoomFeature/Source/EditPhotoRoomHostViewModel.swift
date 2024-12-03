@@ -13,12 +13,14 @@ public final class EditPhotoRoomHostViewModel {
         case dragSticker(StickerEntity, PanGestureState)
         case resizeSticker(StickerEntity, PanGestureState)
         case stickerViewDidTap(UUID)
+        case micButtonDidTap
     }
     
     enum Output {
         case stickerList([StickerEntity])
         case frameImage(image: UIImage)
         case presentStickerBottomSheet
+        case voiceInputState(Bool)
     }
     
     private var frameImageGenerator: FrameImageGenerator?
@@ -26,6 +28,8 @@ public final class EditPhotoRoomHostViewModel {
     private let receiveFrameUseCase: ReceiveFrameUseCase
     private let sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase
     private let sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
+    private let toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
+    private let getVoiceInputStateUseCase: GetVoiceInputStateUseCase
     
     private(set) var userInfo: UserInfo!
     
@@ -39,12 +43,16 @@ public final class EditPhotoRoomHostViewModel {
         receiveStickerListUseCase: ReceiveStickerListUseCase,
         receiveFrameUseCase: ReceiveFrameUseCase,
         sendStickerToRepositoryUseCase: SendStickerToRepositoryUseCase,
-        sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase
+        sendFrameToRepositoryUseCase: SendFrameToRepositoryUseCase,
+        toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase,
+        getVoiceInputStateUseCase: GetVoiceInputStateUseCase
     ) {
         self.receiveStickerListUseCase = receiveStickerListUseCase
         self.receiveFrameUseCase = receiveFrameUseCase
         self.sendStickerToRepositoryUseCase = sendStickerToRepositoryUseCase
         self.sendFrameToRepositoryUseCase = sendFrameToRepositoryUseCase
+        self.toggleLocalMicStateUseCase = toggleLocalMicStateUseCase
+        self.getVoiceInputStateUseCase = getVoiceInputStateUseCase
         bind()
     }
     
@@ -101,11 +109,17 @@ public final class EditPhotoRoomHostViewModel {
                 self?.handleDragSticker(sticker: sticker, state: dragState)
             case .resizeSticker(let sticker, let resizeState):
                 self?.handleResizeSticker(sticker: sticker, state: resizeState)
+            case .micButtonDidTap:
+                self?.handleMicButtonDidTap()
             }
         }
         .store(in: &cancellables)
         
         return output.eraseToAnyPublisher()
+    }
+    
+    func fetchLocalVoiceInputState() -> Bool {
+        getVoiceInputStateUseCase.execute()
     }
 }
 
@@ -309,5 +323,15 @@ extension EditPhotoRoomHostViewModel {
 extension EditPhotoRoomHostViewModel {
     private func presentStickerBottomSheet() {
         output.send(.presentStickerBottomSheet)
+    }
+}
+
+// MARK: Voice Input Control
+extension EditPhotoRoomHostViewModel {
+    private func handleMicButtonDidTap() {
+        toggleLocalMicStateUseCase.execute()
+            .sink { [weak self] state in
+                self?.output.send(.voiceInputState(state))
+            }.store(in: &cancellables)
     }
 }

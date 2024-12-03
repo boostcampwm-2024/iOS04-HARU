@@ -33,6 +33,7 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
     ]
     private var localVideoTrack: RTCVideoTrack?
     private var remoteVideoTrack: RTCVideoTrack?
+    private var localAudioTrack: RTCAudioTrack
     private var localDataChannel: RTCDataChannel?
     private var remoteDataChannel: RTCDataChannel?
     
@@ -42,7 +43,11 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         let audioConfig = RTCAudioSessionConfiguration.webRTC()
         audioConfig.category = AVAudioSession.Category.playAndRecord.rawValue
         audioConfig.mode = AVAudioSession.Mode.voiceChat.rawValue
-        audioConfig.categoryOptions = [.defaultToSpeaker]
+        audioConfig.categoryOptions = [
+            .defaultToSpeaker, // 하단 스피커를 기본으로 설정
+            .allowBluetooth, // 블루투스 기기의 음성 입출력 지원
+            .allowAirPlay // AirPlay를 통해 연결된 다른 기기로 음성 출력 지원
+        ]
         RTCAudioSessionConfiguration.setWebRTC(audioConfig)
         
         let mediaConstraint = PeerConnectionSupport.mediaConstraint()
@@ -57,6 +62,8 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         }
         
         self.peerConnection = peerConnection
+        // MARK: AudioTrack 생성
+        self.localAudioTrack = PeerConnectionSupport.createAudioTrack()
         
         super.init()
         
@@ -64,9 +71,9 @@ public final class WebRTCServiceImpl: NSObject, WebRTCService {
         self.connectDataChannel(dataChannel: createDataChannel())
         
         // MARK: AudioTrack 연결
-        let audioTrack = PeerConnectionSupport.createAudioTrack()
-        self.connectAudioTrack(audioTrack: audioTrack)
+        self.connectAudioTrack(audioTrack: self.localAudioTrack)
         self.configureAudioSession()
+        self.localAudioTrack.isEnabled = false
         
         self.peerConnection.delegate = self
         self.bindNoti()
@@ -222,12 +229,12 @@ public extension WebRTCServiceImpl {
     private func configureAudioSession() {
         self.rtcAudioSession.lockForConfiguration()
         do {
+            
             try self.rtcAudioSession.setCategory(
                 .playAndRecord,
                 mode: .voiceChat,
                 options: .defaultToSpeaker
             )
-            try self.rtcAudioSession.overrideOutputAudioPort(.speaker)
             try self.rtcAudioSession.setActive(true)
         } catch let error {
             PTGLogger.default.log("Error changeing AVAudioSession category: \(error)")
@@ -267,6 +274,10 @@ public extension WebRTCServiceImpl {
     
     func unmuteAudio() {
         self.setAudioEnabled(true)
+    }
+    
+    func setLocalAudioState(_ isEnabled: Bool) {
+        self.localAudioTrack.isEnabled = isEnabled
     }
     
     private func setAudioEnabled(_ isEnabled: Bool) {

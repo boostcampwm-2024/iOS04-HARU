@@ -11,6 +11,7 @@ import SharePhotoFeature
 public class EditPhotoRoomHostViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
+    private let micButton = PTGMicButton(micState: .on)
     private let bottomView = EditPhotoHostBottomView()
     private let bottomSheetViewController: StickerBottomSheetViewController
     
@@ -41,11 +42,14 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         configureUI()
         bindInput()
         bindOutput()
+        micButton.toggleMicState(
+            viewModel.fetchLocalVoiceInputState()
+        )
         input.send(.initialState)
     }
     
     public func addViews() {
-        [navigationView, canvasScrollView, bottomView].forEach {
+        [navigationView, canvasScrollView, bottomView, micButton].forEach {
             view.addSubview($0)
         }
     }
@@ -67,6 +71,12 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(80)
+        }
+        
+        micButton.snp.makeConstraints {
+            $0.bottom.equalTo(bottomView.snp.top).offset(-4)
+            $0.leading.equalToSuperview().offset(16)
+            $0.size.equalTo(52)
         }
     }
     
@@ -97,6 +107,12 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
                 self?.showNextView()
             }
             .store(in: &cancellables)
+        
+        micButton.tapPublisher
+            .sink { [weak self] in
+                self?.input.send(.micButtonDidTap)
+            }
+            .store(in: &cancellables)
     }
     
     public func bindOutput() {
@@ -112,6 +128,8 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
                     self?.updateFrameImage(to: image)
                 case .presentStickerBottomSheet:
                     self?.presentStickerBottomSheet()
+                case .voiceInputState(let isOn):
+                    self?.micButton.toggleMicState(isOn)
                 }
             }
             .store(in: &cancellables)

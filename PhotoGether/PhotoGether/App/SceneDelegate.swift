@@ -30,14 +30,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             roomOwnerEntity = DeepLinkParser.parseRoomInfo(from: urlContext.url)
         }
         
-        let webScoketClient: WebSocketClient = WebSocketClientImpl(url: url)
+        let webSocketClient: WebSocketClient = WebSocketClientImpl(url: url)
         
         let roomService: RoomService = RoomServiceImpl(
-            webSocketClient: webScoketClient
+            webSocketClient: webSocketClient
         )
         
         let signalingService: SignalingService = SignalingServiceImpl(
-            webSocketClient: webScoketClient
+            webSocketClient: webSocketClient
         )
         
         let connectionRepository: ConnectionRepository = ConnectionRepositoryImpl(
@@ -90,10 +90,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let toggleLocalMicStateUseCaseImpl = ToggleLocalMicStateUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
+        let getVoiceInputStateUseCaseImpl = GetVoiceInputStateUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase,
             stopVideoCaptureUseCase: stopVideoCaptureUseCase,
-            getUserInfoUseCase: getLocalVideoUseCase
+            getUserInfoUseCase: getLocalVideoUseCase,
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl,
+            getVoiceInputStateUseCase: getVoiceInputStateUseCaseImpl
         )
         
         let localDataSource = LocalShapeDataSourceImpl()
@@ -150,7 +160,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             receiveStickerListUseCase: receiveStickerListHostUseCase,
             receiveFrameUseCase: receiveFrameHostUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase,
-            sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase,
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl,
+            getVoiceInputStateUseCase: getVoiceInputStateUseCaseImpl
         )
         
         let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
@@ -174,7 +186,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             receiveStickerListUseCase: receiveStickerListGuestUseCase,
             receiveFrameUseCase: receiveFrameGuestUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase,
-            sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase,
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl,
+            getVoiceInputStateUseCase: getVoiceInputStateUseCaseImpl
         )
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(
@@ -196,7 +210,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             getLocalVideoUseCase: getLocalVideoUseCase,
             getRemoteVideoUseCase: getRemoteVideoUseCase,
             createRoomUseCase: createRoomUseCase,
-            didEnterNewUserPublisherUseCase: didEnterNewUserPublisherUseCase
+            didEnterNewUserPublisherUseCase: didEnterNewUserPublisherUseCase,
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl
         )
         
         let waitingRoomViewController: WaitingRoomViewController = WaitingRoomViewController(

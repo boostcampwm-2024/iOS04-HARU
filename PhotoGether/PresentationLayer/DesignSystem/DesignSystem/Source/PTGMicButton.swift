@@ -42,13 +42,8 @@ public final class PTGMicButton: UIButton {
         layer.cornerRadius = bounds.width / 2
     }
     
-    public func toggleMicState() {
-        switch micState {
-        case .on:
-            micState = .off
-        case .off:
-            micState = .on
-        }
+    public func toggleMicState(_ isOn: Bool) {
+        micState = isOn ? .on : .off
         
         buttonImage.image = UIImage(systemName: micState.image)
         buttonImage.tintColor = micState.color
