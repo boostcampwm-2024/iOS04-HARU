@@ -125,8 +125,9 @@ public class EditPhotoRoomHostViewController: BaseViewController, ViewController
         let component = SharePhotoComponent(imageData: imageData)
         let viewModel = SharePhotoViewModel(component: component)
         let viewController = SharePhotoViewController(viewModel: viewModel)
-        
-        self.navigationController?.pushViewController(viewController, animated: true)
+        bottomSheetViewController.dismiss(animated: true) { [weak self] in
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }
     }
     
     private func renderCanvasImageView() -> Data? {
