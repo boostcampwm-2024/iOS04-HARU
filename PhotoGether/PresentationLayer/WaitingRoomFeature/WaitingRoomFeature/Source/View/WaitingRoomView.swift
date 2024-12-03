@@ -30,6 +30,11 @@ final class WaitingRoomView: UIView {
         guard let title = StartButtonTitle(from: count) else { return }
         startButton.setTitle(to: title.rawValue)
     }
+    
+    func enableStartButton() {
+        self.startButton.isEnabled = true
+        self.startButton.backgroundColor = PTGColor.primaryGreen.color
+    }
 }
 
 private extension WaitingRoomView {
@@ -81,6 +86,8 @@ private extension WaitingRoomView {
     func configureUI() {
         self.backgroundColor = PTGColor.gray90.color
         startButton.setTitle(to: "촬영시작")
+        startButton.isEnabled = false
+        startButton.backgroundColor = .gray
     }
 }
 

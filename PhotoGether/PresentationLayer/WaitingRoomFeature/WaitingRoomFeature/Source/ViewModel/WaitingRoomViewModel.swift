@@ -18,6 +18,7 @@ public final class WaitingRoomViewModel {
         case shouldShowShareSheet(String)
         case navigateToPhotoRoom
         case shouldShowToast(String)
+        case readyToStart
     }
     
     private let sendOfferUseCase: SendOfferUseCase
@@ -139,6 +140,7 @@ public final class WaitingRoomViewModel {
                 }
             }, receiveValue: { [weak self] roomLink in
                 self?.output.send(.shouldShowShareSheet(roomLink))
+                self?.output.send(.readyToStart)
             })
             .store(in: &cancellables)
     }

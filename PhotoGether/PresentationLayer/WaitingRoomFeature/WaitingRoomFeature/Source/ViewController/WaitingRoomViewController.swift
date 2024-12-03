@@ -112,6 +112,9 @@ public final class WaitingRoomViewController: BaseViewController {
             // MARK: 토스트 메시지 노출
             case .shouldShowToast(let message):
                 self.showToast(message: message, duration: 3.0)
+                
+            case .readyToStart:
+                self.waitingRoomView.enableStartButton()
             }
         }.store(in: &cancellables)
     }
