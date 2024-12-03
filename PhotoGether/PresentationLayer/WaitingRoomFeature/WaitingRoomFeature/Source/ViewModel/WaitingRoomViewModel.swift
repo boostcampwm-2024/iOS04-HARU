@@ -29,6 +29,7 @@ public final class WaitingRoomViewModel {
     private let toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
     
     private var isHost: Bool
+    private var inviteLinkMessage: String?
     private var cancellables = Set<AnyCancellable>()
     private let output = PassthroughSubject<Output, Never>()
     
@@ -131,6 +132,10 @@ public final class WaitingRoomViewModel {
     }
     
     private func handleLinkButtonDidTap() {
+        if let inviteLinkMessage {
+            self.output.send(.shouldShowShareSheet(inviteLinkMessage))
+            return
+        }
         createRoomUseCase.execute()
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
@@ -138,8 +143,9 @@ public final class WaitingRoomViewModel {
                     debugPrint(error.localizedDescription)
                     self?.output.send(.shouldShowToast("Failed to create room"))
                 }
-            }, receiveValue: { [weak self] roomLink in
-                self?.output.send(.shouldShowShareSheet(roomLink))
+            }, receiveValue: { [weak self] inviteLinkMessage in
+                self?.inviteLinkMessage = inviteLinkMessage
+                self?.output.send(.shouldShowShareSheet(inviteLinkMessage))
                 self?.output.send(.readyToStart)
             })
             .store(in: &cancellables)
