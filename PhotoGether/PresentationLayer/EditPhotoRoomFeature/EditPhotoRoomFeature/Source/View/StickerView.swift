@@ -206,8 +206,11 @@ final class StickerView: UIView {
         
         if owner == user {
             layerView.layer.borderColor = PTGColor.primaryGreen.color.cgColor
+            nicknameLabel.backgroundColor = PTGColor.primaryGreen.color
         } else {
-            layerView.layer.borderColor = PTGColor.gray70.color.cgColor
+            guard let hexColor = owner?.viewPosition.color.rawValue else { return }
+            layerView.layer.borderColor = UIColor(hex: hexColor).cgColor
+            nicknameLabel.backgroundColor = UIColor(hex: hexColor)
         }
     }
 
