@@ -1,6 +1,5 @@
 import UIKit
 import PhotoGetherDomainInterface
-import DesignSystem
 
 public final class CaptureVideosUseCaseImpl: CaptureVideosUseCase {
     public func execute() -> [UIImage] {
