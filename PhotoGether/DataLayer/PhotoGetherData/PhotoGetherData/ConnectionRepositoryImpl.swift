@@ -19,6 +19,9 @@ public final class ConnectionRepositoryImpl: ConnectionRepository {
         didChangeLocalAudioTrackStateSubject
             .eraseToAnyPublisher()
     }
+    public var currentLocalVideoInputState: Bool {
+        didChangeLocalAudioTrackStateSubject.value
+    }
     private let _localVideoView = CapturableVideoView()
     public private(set) var localUserInfo: UserInfo?
     

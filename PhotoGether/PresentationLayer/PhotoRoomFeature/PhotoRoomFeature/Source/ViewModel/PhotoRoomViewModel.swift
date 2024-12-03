@@ -23,17 +23,20 @@ public final class PhotoRoomViewModel {
     private let stopVideoCaptureUseCase: StopVideoCaptureUseCase
     private let getUserInfoUseCase: GetLocalVideoUseCase
     private let toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
+    private let getVoiceInputStateUseCase: GetVoiceInputStateUseCase
     
     public init(
         captureVideosUseCase: CaptureVideosUseCase,
         stopVideoCaptureUseCase: StopVideoCaptureUseCase,
         getUserInfoUseCase: GetLocalVideoUseCase,
-        toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase
+        toggleLocalMicStateUseCase: ToggleLocalMicStateUseCase,
+        getVoiceInputStateUseCase: GetVoiceInputStateUseCase
     ) {
         self.captureVideosUseCase = captureVideosUseCase
         self.stopVideoCaptureUseCase = stopVideoCaptureUseCase
         self.getUserInfoUseCase = getUserInfoUseCase
         self.toggleLocalMicStateUseCase = toggleLocalMicStateUseCase
+        self.getVoiceInputStateUseCase  = getVoiceInputStateUseCase
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -50,6 +53,8 @@ public final class PhotoRoomViewModel {
         
         return output.eraseToAnyPublisher()
     }
+    
+    func fetchLocalVideoInputState() -> Bool { getVoiceInputStateUseCase.execute() }
     
     private func startTimer() {
         guard let userInfo = getUserInfoUseCase.execute().0 else { return }
