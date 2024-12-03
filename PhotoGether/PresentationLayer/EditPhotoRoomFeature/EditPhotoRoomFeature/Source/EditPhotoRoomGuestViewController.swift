@@ -11,6 +11,7 @@ import SharePhotoFeature
 public class EditPhotoRoomGuestViewController: BaseViewController, ViewControllerConfigure {
     private let navigationView = UIView()
     private let canvasScrollView = CanvasScrollView()
+    private let micButton = PTGMicButton(micState: .on)
     private let bottomView = EditPhotoGuestBottomView()
     private let bottomSheetViewController: StickerBottomSheetViewController
     
@@ -55,7 +56,7 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
     }
     
     public func addViews() {
-        [navigationView, canvasScrollView, bottomView].forEach {
+        [navigationView, canvasScrollView, bottomView, micButton].forEach {
             view.addSubview($0)
         }
     }
@@ -77,6 +78,12 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(80)
+        }
+        
+        micButton.snp.makeConstraints {
+            $0.bottom.equalTo(bottomView.snp.top).offset(-4)
+            $0.leading.equalToSuperview().offset(16)
+            $0.size.equalTo(52)
         }
     }
     
