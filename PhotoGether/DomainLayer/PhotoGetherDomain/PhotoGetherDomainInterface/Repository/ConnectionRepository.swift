@@ -10,6 +10,7 @@ public protocol ConnectionRepository {
     var clients: [ConnectionClient] { get }
     var localVideoView: UIView { get }
     var capturedLocalVideo: UIImage? { get }
+    var currentLocalVideoInputState: Bool { get }
     
     func createRoom() -> AnyPublisher<RoomOwnerEntity, Error>
     func joinRoom(to roomID: String, hostID: String) -> AnyPublisher<Bool, Error>

@@ -94,11 +94,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             connectionRepository: connectionRepository
         )
         
+        let getVoiceInputStateUseCaseImpl = GetVoiceInputStateUseCaseImpl(
+            connectionRepository: connectionRepository
+        )
+        
         let photoRoomViewModel: PhotoRoomViewModel = PhotoRoomViewModel(
             captureVideosUseCase: captureVideosUseCase,
             stopVideoCaptureUseCase: stopVideoCaptureUseCase,
             getUserInfoUseCase: getLocalVideoUseCase,
-            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl,
+            getVoiceInputStateUseCase: getVoiceInputStateUseCaseImpl
         )
         
         let localDataSource = LocalShapeDataSourceImpl()
