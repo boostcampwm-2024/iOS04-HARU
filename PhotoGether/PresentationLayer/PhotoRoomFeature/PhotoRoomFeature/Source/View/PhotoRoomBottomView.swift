@@ -68,6 +68,10 @@ final class PhotoRoomBottomView: UIView {
     func stopCameraButtonTimer() {
         cameraButton.stopTimer()
     }
+    
+    func highlightCameraButton() {
+        cameraButton.layer.borderColor = PTGColor.primaryGreen.color.cgColor
+    }
 }
 
 extension PhotoRoomBottomView {
