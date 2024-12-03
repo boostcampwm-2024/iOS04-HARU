@@ -35,7 +35,7 @@ public final class CaptureVideosUseCaseImpl: CaptureVideosUseCase {
     }
 }
 
-// case의 순서는 참가자의 참가 순서에 따른 화면 배치이고 sequence는 이미지 데이터 전달할 때의 배열 순서입니다
+/// case의 순서는 참가자의 참가 순서에 따른 화면 배치이고 sequence는 이미지 데이터 전달할 때의 배열 순서입니다
 private enum PositionOder: Int {
     case topLeading
     case bottomTrailing
