@@ -14,7 +14,7 @@ public final class PhotoRoomViewModel {
     enum Output {
         case timer(count: Int)
         case timerCompleted(images: [UIImage], userInfo: UserInfo?)
-        case micMuteState(Bool)
+        case voiceInputState(Bool)
     }
     
     private var output = PassthroughSubject<Output, Never>()
@@ -82,7 +82,7 @@ public final class PhotoRoomViewModel {
     private func handleMicButtonDidTap() {
         toggleLocalMicStateUseCase.execute()
             .sink { [weak self] state in
-                self?.output.send(.micMuteState(state))
+                self?.output.send(.voiceInputState(state))
             }.store(in: &cancellables)
     }
 }

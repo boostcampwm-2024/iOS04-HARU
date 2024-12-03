@@ -146,7 +146,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
                     editPhotoRoomGuestViewController.inject(frameImageGenerator, userInfo: userInfo)
                     self.navigationController?.pushViewController(editPhotoRoomGuestViewController, animated: true)
                 }
-            case .micMuteState(let isOn):
+            case .voiceInputState(let isOn):
                 micButton.toggleMicState(isOn)
                 return
             }
