@@ -59,6 +59,9 @@ final class PhotoRoomBottomView: UIView {
         filterButton.imageView?.tintColor = isHost ? .white : PTGColor.gray85.color
         
         switchCameraButton.setImage(PTGImage.switchIcon.image, for: .normal)
+        
+        switchCameraButton.isHidden = true
+        filterButton.isHidden = true
     }
     
     func setCameraButtonTimer(_ count: Int) {
