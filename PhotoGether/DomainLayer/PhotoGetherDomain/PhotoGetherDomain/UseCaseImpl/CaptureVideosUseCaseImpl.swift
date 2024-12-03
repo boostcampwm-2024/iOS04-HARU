@@ -4,17 +4,11 @@ import DesignSystem
 
 public final class CaptureVideosUseCaseImpl: CaptureVideosUseCase {
     public func execute() -> [UIImage] {
-        guard let localImage = connectionRepository.capturedLocalVideo
-        else { return [
-            PTGImage.temp1.image,
-            PTGImage.temp2.image,
-            PTGImage.temp3.image,
-            PTGImage.temp4.image]
-        }
+        let localImage = connectionRepository.capturedLocalVideo ?? UIImage()
         
-        let localUserImageInfo = [(connectionRepository.localUserInfo, localImage)]
+        let localUserImageInfo = [(connectionRepository.localUserInfo?.viewPosition, localImage)]
         let remoteUserImagesInfo = connectionRepository.clients
-            .map { ($0.remoteUserInfo, $0.captureVideo()) }
+            .map { ($0.remoteUserInfo?.viewPosition, $0.captureVideo()) }
         
         return sortImages(localUserImageInfo + remoteUserImagesInfo)
     }
@@ -25,9 +19,9 @@ public final class CaptureVideosUseCaseImpl: CaptureVideosUseCase {
         self.connectionRepository = connectionRepository
     }
     
-    private func sortImages(_ images: [(user: UserInfo?, image: UIImage)]) -> [UIImage] {
+    private func sortImages(_ images: [(viewPosition: UserInfo.ViewPosition?, image: UIImage)]) -> [UIImage] {
         let convertedArray = images.map {
-            (position: PositionOder(rawValue: $0.user?.viewPosition.rawValue ?? -1),
+            (position: PositionOder(rawValue: $0.viewPosition?.rawValue ?? -1),
              image: $0.image)
         }
         
@@ -41,7 +35,6 @@ public final class CaptureVideosUseCaseImpl: CaptureVideosUseCase {
         return sortedByViewPosition.map { $0.image }
     }
 }
-
 
 // case의 순서는 참가자의 참가 순서에 따른 화면 배치이고 sequence는 이미지 데이터 전달할 때의 배열 순서입니다
 private enum PositionOder: Int {
