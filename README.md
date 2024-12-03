@@ -122,7 +122,7 @@ WebRTC P2P 연결 중 음성 연결은 되었으나 화면 연결이 되지 않�
 
 ## ✨ 아키텍쳐 구조
 
-<img width="80%" alt="Image from Notion" src="https://github.com/user-attachments/assets/fd2573f6-71a5-4109-8386-04e8a0ae46c9">
+<img width="100%" alt="Image from Notion" src="https://github.com/user-attachments/assets/fd2573f6-71a5-4109-8386-04e8a0ae46c9">
 
 > [!NOTE]
 > 저희의 프로젝트는 **3-Layer 기반 클린 아키텍쳐**를 채택하여 명확한 구조와 확장성을 중점에 두었습니다.
@@ -135,7 +135,7 @@ WebRTC P2P 연결 중 음성 연결은 되었으나 화면 연결이 되지 않�
 
 ## ✨ 프레젠테이션 레이어 구조
 
-<img width="80%" alt="image" src="https://github.com/user-attachments/assets/13d75a37-2ac1-4e72-a708-d12b7dc6dd7a">
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/13d75a37-2ac1-4e72-a708-d12b7dc6dd7a">
 
 > [!NOTE]
 > 현재 저희의 Presentation Layer는 위와 같이 커뮤니케이션 하고 있습니다.
@@ -153,7 +153,7 @@ WebRTC P2P 연결 중 음성 연결은 되었으나 화면 연결이 되지 않�
 
 ## ✨ 모듈 구조
 
-<img width="80%" alt="Group 1000003128" src="https://github.com/user-attachments/assets/6f1d3921-5a41-4034-a3cb-dea1dfbf493f">
+<img width="100%" alt="Group 1000003128" src="https://github.com/user-attachments/assets/6f1d3921-5a41-4034-a3cb-dea1dfbf493f">
 
 > [!NOTE]
 > 저희의 모듈 구조는 다음과 같습니다. 모듈을 분리함으로써 접근제어자 설정을 통해 특정 모듈을 수정하거나 기능을 확장할 때 다른 모듈에 미치는 영향을 최소화할 수 있었습니다. 이로 인해 안전하게 개발을 할 수 있었습니다.
