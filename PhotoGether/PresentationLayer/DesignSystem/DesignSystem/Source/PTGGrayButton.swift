@@ -40,6 +40,7 @@ public final class PTGGrayButton: UIButton {
     private func configureUI() {
         backgroundColor = .gray85
         layer.cornerRadius = 12
+        isExclusiveTouch = true
         
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing

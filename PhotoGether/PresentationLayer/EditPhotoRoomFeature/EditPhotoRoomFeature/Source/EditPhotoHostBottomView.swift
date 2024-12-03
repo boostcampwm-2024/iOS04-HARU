@@ -69,5 +69,6 @@ final class EditPhotoHostBottomView: UIView {
         nextButton.backgroundColor = PTGColor.primaryGreen.color
         nextButton.setImage(PTGImage.chevronRightBlack.image, for: .normal)
         nextButton.layer.cornerRadius = 8
+        nextButton.isExclusiveTouch = true
     }
 }
