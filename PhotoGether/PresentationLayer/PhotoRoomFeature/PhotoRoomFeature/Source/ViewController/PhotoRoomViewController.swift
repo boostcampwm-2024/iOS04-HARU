@@ -54,7 +54,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
         bindInput()
         bindOutput()
         bindNoti()
-        configureMicButtonState(
+        micButton.toggleMicState(
             viewModel.fetchLocalVideoInputState()
         )
     }
@@ -108,10 +108,6 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
     
     public func configureUI() {
         navigationView.backgroundColor = PTGColor.gray90.color
-    }
-    
-    private func configureMicButtonState(_ isOn: Bool) {
-        micButton.toggleMicState(isOn)
     }
     
     public func bindInput() {

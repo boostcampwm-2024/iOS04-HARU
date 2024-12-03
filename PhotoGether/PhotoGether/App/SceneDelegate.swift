@@ -160,7 +160,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             receiveStickerListUseCase: receiveStickerListHostUseCase,
             receiveFrameUseCase: receiveFrameHostUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryHostUseCase,
-            sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryHostUseCase,
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl,
+            getVoiceInputStateUseCase: getVoiceInputStateUseCaseImpl
         )
         
         let stickerBottomSheetViewModel = StickerBottomSheetViewModel(
@@ -184,7 +186,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             receiveStickerListUseCase: receiveStickerListGuestUseCase,
             receiveFrameUseCase: receiveFrameGuestUseCase,
             sendStickerToRepositoryUseCase: sendStickerToRepositoryGuestUseCase,
-            sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase
+            sendFrameToRepositoryUseCase: sendFrameToRepositoryGuestUseCase,
+            toggleLocalMicStateUseCase: toggleLocalMicStateUseCaseImpl,
+            getVoiceInputStateUseCase: getVoiceInputStateUseCaseImpl
         )
         
         let editPhotoRoomGuestViewController = EditPhotoRoomGuestViewController(

@@ -44,6 +44,9 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
         bindInput()
         bindOutput()
         bindNoti()
+        micButton.toggleMicState(
+            viewModel.fetchLocalVoiceInputState()
+        )
         input.send(.initialState)
     }
     
@@ -107,6 +110,12 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
                 self?.input.send(.frameButtonDidTap)
             }
             .store(in: &cancellables)
+        
+        micButton.tapPublisher
+            .sink { [weak self] in
+                self?.input.send(.micButtonDidTap)
+            }
+            .store(in: &cancellables)
     }
     
     public func bindOutput() {
@@ -122,6 +131,8 @@ public class EditPhotoRoomGuestViewController: BaseViewController, ViewControlle
                 self?.updateFrameImage(to: image)
             case .presentStickerBottomSheet:
                 self?.presentStickerBottomSheet()
+            case .voiceInputState(let isOn):
+                self?.micButton.toggleMicState(isOn)
             }
         }
         .store(in: &cancellables)
