@@ -66,6 +66,7 @@ final class CameraButton: UIButton {
     
     func configureTimer(_ count: Int) {
         innerCircle.isHidden = true
+        innerEllipsis.isHidden = true
         timerLabel.isHidden = false
         timerLabel.text = "\(count)"
     }
