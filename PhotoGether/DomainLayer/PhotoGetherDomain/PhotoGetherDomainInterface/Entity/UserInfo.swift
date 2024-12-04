@@ -16,6 +16,15 @@ public struct UserInfo: Identifiable, Equatable, Codable {
         case bottomTrailing
         case topTrailing
         case bottomLeading
+        
+        public var color: UserColor {
+            switch self {
+            case .topLeading: return .orange
+            case .bottomTrailing: return .brown
+            case .topTrailing: return .blue
+            case .bottomLeading: return .gray
+            }
+        }
     }
     
     public init(
@@ -30,5 +39,12 @@ public struct UserInfo: Identifiable, Equatable, Codable {
         self.isHost = isHost
         self.viewPosition = viewPosition
         self.roomID = roomID
+    }
+    
+    public enum UserColor: String, Codable {
+        case orange = "#FF7561"
+        case brown = "#E7C892"
+        case blue = "#82BBE6"
+        case gray = "#7D7C84"
     }
 }

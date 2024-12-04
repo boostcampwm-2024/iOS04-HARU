@@ -137,6 +137,7 @@ public final class PhotoRoomViewController: BaseViewController, ViewControllerCo
             switch $0 {
             case .timer(let count):
                 self.photoRoomBottomView.setCameraButtonTimer(count)
+                self.photoRoomBottomView.highlightCameraButton()
             case .timerCompleted(let images, let userInfo):
                 self.photoRoomBottomView.stopCameraButtonTimer()
                 
